@@ -67,7 +67,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun updateDb(currentSleep: Sleep): Maybe<Sleep> {
-        if (currentSleep.wakeUpTime == null) {
+        if (currentSleep.toDate == null) {
             return updateSleepInDb(currentSleep)
         } else {
             return insertNewSleepInDb()
@@ -75,14 +75,14 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun insertNewSleepInDb(): Maybe<Sleep> {
-        val newSleep = Sleep(null, OffsetDateTime.now(), null)
+        val newSleep = Sleep(OffsetDateTime.now())
         return Completable.fromAction({ sleepDao.insertSleep(newSleep) })
                 .andThen(sleepDao.getCurrentSleep())
                 .subscribeOn(Schedulers.io())
     }
 
     private fun updateSleepInDb(currentSleep: Sleep): Maybe<Sleep> {
-        val updatedSleep = currentSleep.copy(wakeUpTime = OffsetDateTime.now())
+        val updatedSleep = currentSleep.copy(toDate = OffsetDateTime.now(), hours = 8.2f)
         return Completable.fromAction({ sleepDao.updateSleep(updatedSleep) })
                 .andThen(Maybe.just(updatedSleep))
                 .subscribeOn(Schedulers.io())
@@ -91,23 +91,40 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
     private fun renderSleep(context: Context,
                             sleep: Sleep?) {
 
+        sleepDao.getAverageSleepInHours()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ Timber.d("Average sleep: %f", it) },
+                           {})
+
+        sleepDao.getSleep()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ Timber.d("Sleep size: %d", it.size) },
+                           {})
+
+        sleepDao.getLongestSleep()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                               Timber.d("Sleep wakeup time: %f", it)
+                           },
+                           {})
+
         // Construct the RemoteViews object
         val views = RemoteViews(context.packageName,
                                 R.layout.example_appwidget)
 
-        val owlAsleep = sleep != null && sleep.wakeUpTime == null
+        val owlAsleep = sleep != null && sleep.toDate == null
 
         val imageResId = if (owlAsleep) R.drawable.owl_asleep else R.drawable.own_awake
-
-        views.setTextViewText(R.id.update,
-                              mCounter.toString())
 
         views.setImageViewResource(R.id.button, imageResId)
 
         // This time we dont have widgetId. Reaching our widget with that way.
         val appWidget = ComponentName(context, ExampleAppWidgetProvider::class.java)
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        // Instruct the widget manager to update the widget
+        // Instruct the widget manager toDate update the widget
         appWidgetManager.updateAppWidget(appWidget, views)
     }
 
@@ -118,9 +135,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
 
     companion object {
 
-
         private val ACTION_SIMPLEAPPWIDGET = "ACTION_BROADCASTWIDGETSAMPLE_TEST"
-        private var mCounter = 0
 
         internal fun setAppWidgetClickListener(context: Context,
                                                appWidgetManager: AppWidgetManager,
@@ -135,7 +150,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
                                                            PendingIntent.FLAG_UPDATE_CURRENT)
 
             views.setOnClickPendingIntent(R.id.button, pendingIntent)
-            // Instruct the widget manager to update the widget
+            // Instruct the widget manager toDate update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }

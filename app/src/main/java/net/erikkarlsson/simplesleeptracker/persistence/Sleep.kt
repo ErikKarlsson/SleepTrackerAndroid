@@ -6,9 +6,11 @@ import android.arch.persistence.room.PrimaryKey
 import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "sleep")
-data class Sleep(@PrimaryKey(autoGenerate = true)
-                 var id: Int? = null,
-                 @ColumnInfo(name = "bed_time")
-                 var bedTime: OffsetDateTime? = null,
-                 @ColumnInfo(name = "wake_up_time")
-                 var wakeUpTime: OffsetDateTime? = null)
+data class Sleep(@ColumnInfo(name = "from_date")
+                 var fromDate: OffsetDateTime? = null,
+                 @ColumnInfo(name = "to_date")
+                 var toDate: OffsetDateTime? = null,
+                 @ColumnInfo(name = "hours")
+                 var hours: Float = 0.0f,
+                 @PrimaryKey(autoGenerate = true)
+                 var id: Int? = null)
