@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.persistence
+package net.erikkarlsson.simplesleeptracker.data
 
 import android.arch.persistence.room.TypeConverter
 import org.threeten.bp.OffsetDateTime

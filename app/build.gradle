@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion build_versions.target_sdk
     buildToolsVersion build_versions.build_tools
@@ -21,43 +23,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kapt {
+        javacOptions {
+            option("-Xmaxerrs", 500)
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Kotlin
-    implementation deps.kotlin.stdlib
-    implementation 'androidx.core:core-ktx:0.1'
-
-    // Support libraries
-    implementation deps.support.app_compat
-    implementation deps.support.v4
-    implementation deps.support.design
-
-    // Room
-    implementation deps.room.runtime
-    implementation deps.room.rxjava2
-    kapt deps.room.compiler
-
-    //Timber
-    implementation deps.timber
-
-    // Lifecycle
-    implementation deps.lifecycle.extensions
-    kapt deps.lifecycle.compiler
-
-    // Constraint layout
-    implementation deps.constraint_layout
-
-    // RxJava
-    implementation deps.rxjava2
-    implementation deps.rx_android
-
-    // Dependencies for local unit tests
-    testImplementation deps.junit
-    testImplementation deps.mockito.all
-    testImplementation deps.hamcrest
 
     // Android Testing Support Library's runner and rules
     androidTestCompile deps.atsl.runner
@@ -65,15 +40,41 @@ dependencies {
     androidTestCompile deps.room.testing
     androidTestCompile deps.arch_core.testing
 
+    // Constraint layout
+    implementation deps.constraint_layout
+
+    // Dagger
+    implementation deps.dagger.runtime
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
+    kapt deps.dagger.compiler
+    kapt deps.dagger.android_support_compiler
+
     // Dependencies for Android unit tests
     androidTestCompile deps.junit
     androidTestCompile deps.mockito.core, { exclude group: 'net.bytebuddy' }
     androidTestCompile deps.dexmaker
 
+    // Dependencies for local unit tests
+    testImplementation deps.junit
+    testImplementation deps.mockito.all
+    testImplementation deps.hamcrest
+
     // Espresso UI Testing
     androidTestCompile deps.espresso.core
     androidTestCompile deps.espresso.contrib
     androidTestCompile deps.espresso.intents
+
+    // Guava
+    implementation "com.google.guava:guava:20.0"
+
+    // Kotlin
+    implementation deps.kotlin.stdlib
+    implementation 'androidx.core:core-ktx:0.1'
+
+    // Lifecycle
+    implementation deps.lifecycle.extensions
+    kapt deps.lifecycle.compiler
 
     // Resolve conflicts between main and test APK:
     androidTestCompile deps.support.annotations
@@ -81,7 +82,24 @@ dependencies {
     androidTestCompile deps.support.app_compat
     androidTestCompile deps.support.design
 
+    // Room
+    implementation deps.room.runtime
+    implementation deps.room.rxjava2
+    kapt deps.room.compiler
+
+    // RxJava
+    implementation deps.rxjava2
+    implementation deps.rx_android
+
+    // Support libraries
+    implementation deps.support.app_compat
+    implementation deps.support.v4
+    implementation deps.support.design
+
     // ThreeTen Backport
     compile 'org.threeten:threetenbp:1.3.6'
+
+    //Timber
+    implementation deps.timber
 
 }
