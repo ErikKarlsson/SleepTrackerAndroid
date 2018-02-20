@@ -90,6 +90,8 @@ dependencies {
     // RxJava
     implementation deps.rxjava2
     implementation deps.rx_android
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
 
     // Support libraries
     implementation deps.support.app_compat
