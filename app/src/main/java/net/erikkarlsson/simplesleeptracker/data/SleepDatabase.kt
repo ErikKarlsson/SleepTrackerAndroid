@@ -9,7 +9,7 @@ import android.content.Context
 /**
  * The Room database that contains the Sleep table
  */
-@Database(entities = arrayOf(Sleep::class), version = 1)
+@Database(entities = arrayOf(SleepEntity::class), version = 1)
 @TypeConverters(TiviTypeConverters::class)
 abstract class SleepDatabase : RoomDatabase() {
 

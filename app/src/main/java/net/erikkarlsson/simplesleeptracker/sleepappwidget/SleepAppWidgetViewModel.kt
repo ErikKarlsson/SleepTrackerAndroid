@@ -4,7 +4,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import net.erikkarlsson.simplesleeptracker.data.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

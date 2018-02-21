@@ -1,25 +1,28 @@
 package net.erikkarlsson.simplesleeptracker.data
 
-import io.reactivex.Flowable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import javax.inject.Inject
 
-class SleepRepository @Inject constructor(private val sleepDao: SleepDao)  {
+class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
+                                          private val sleepMapper: SleepMapper): SleepDataSource {
 
-    fun getCurrentSleep(): Single<Sleep> {
-        return sleepDao.getCurrentSleep().toSingle().onErrorReturnItem(Sleep.empty())
+    override fun getCurrentSleep(): Single<Sleep> {
+        return sleepDao.getCurrentSleep()
+            .map { sleepMapper.mapFromEntity(it) }
+            .toSingle()
+            .onErrorReturnItem(Sleep.empty())
     }
 
-    fun getSleep(): Flowable<List<Sleep>> {
-        return sleepDao.getSleep()
+    override fun insertSleep(newSleep: Sleep): Long {
+        val sleepEntity = sleepMapper.mapToEntity(newSleep)
+        return sleepDao.insertSleep(sleepEntity)
     }
 
-    fun insertSleep(newSleep: Sleep): Long {
-        return sleepDao.insertSleep(newSleep)
-    }
-
-    fun updateSleep(updatedSleep: Sleep): Int {
-        return sleepDao.updateSleep(updatedSleep)
+    override fun updateSleep(updatedSleep: Sleep): Int {
+        val sleepEntity = sleepMapper.mapToEntity(updatedSleep)
+        return sleepDao.updateSleep(sleepEntity)
     }
 
 }

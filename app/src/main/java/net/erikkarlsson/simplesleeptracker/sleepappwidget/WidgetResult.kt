@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
-import net.erikkarlsson.simplesleeptracker.data.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.Sleep
 
 sealed class WidgetResult : MviResult {
 

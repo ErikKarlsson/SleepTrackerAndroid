@@ -12,10 +12,10 @@ import io.reactivex.Single
 interface SleepDao {
 
     @Query("SELECT * FROM Sleep ORDER BY datetime(to_date) DESC")
-    fun getSleep(): Flowable<List<Sleep>>
+    fun getSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC LIMIT 1")
-    fun getCurrentSleep(): Maybe<Sleep>
+    fun getCurrentSleep(): Maybe<SleepEntity>
 
     @Query("SELECT ROUND(avg(hours),3) FROM Sleep")
     fun getAverageSleepInHours(): Single<Float>
@@ -36,7 +36,7 @@ interface SleepDao {
     fun getAverageWakeupMidnightOffsetInSecondsBetweenDates(from: String, to: String): Single<Int>
 
     @Query("SELECT * FROM Sleep WHERE datetime(to_date)>=datetime('now', '-2 hour')")
-    fun getSleepLastMonth(): Flowable<List<Sleep>>
+    fun getSleepLastMonth(): Flowable<List<SleepEntity>>
 
     /**
      * Insert a sleep in the database. If the sleep already exists, replace it.
@@ -44,10 +44,10 @@ interface SleepDao {
      * @param sleep the user toDate be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSleep(sleep: Sleep): Long
+    fun insertSleep(sleep: SleepEntity): Long
 
     @Update
-    fun updateSleep(sleep: Sleep): Int
+    fun updateSleep(sleep: SleepEntity): Int
 
     /**
      * Delete all sleep.

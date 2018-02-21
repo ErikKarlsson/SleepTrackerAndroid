@@ -4,9 +4,8 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.data.Sleep
 import net.erikkarlsson.simplesleeptracker.data.SleepRepository
-import net.erikkarlsson.simplesleeptracker.util.DateTimeUtils
+import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 import javax.inject.Inject
@@ -65,23 +64,12 @@ class SleepActionProcessorHolder @Inject constructor(private val sleepRepository
     }
 
     private fun insertNewSleepInDb() {
-        val fromDate = OffsetDateTime.now()
-        val fromDateMidnightOffset = DateTimeUtils.calculateOffsetFromMidnightInSeconds(fromDate)
-        val newSleep = Sleep(fromDate = fromDate, fromDateMidnightOffsetSeconds = fromDateMidnightOffset)
-        sleepRepository.insertSleep(newSleep)
+        val sleep = Sleep(fromDate = OffsetDateTime.now())
+        sleepRepository.insertSleep(sleep)
     }
 
     private fun updateSleepInDb(currentSleep: Sleep) {
-        val fromDate = currentSleep.fromDate
-
-        if (fromDate == null) {
-            throw RuntimeException("currentSleep has invalid state, fromDate is null")
-        }
-
-        val toDate = OffsetDateTime.now()
-        val hours = DateTimeUtils.calculateHoursBetweenDates(fromDate, toDate)
-        val toDateMidnightOffset = DateTimeUtils.calculateOffsetFromMidnightInSeconds(toDate)
-        val updatedSleep = currentSleep.copy(toDate = toDate, toDateMidnightOffsetSeconds = toDateMidnightOffset, hours = hours)
+        val updatedSleep = currentSleep.copy(toDate = OffsetDateTime.now())
         sleepRepository.updateSleep(updatedSleep)
     }
 }
