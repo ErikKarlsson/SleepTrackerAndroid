@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET
 import timber.log.Timber
 import javax.inject.Inject
@@ -24,10 +23,8 @@ class SleepWidgetView @Inject constructor(private val context: Context,
 
     private fun render(state: WidgetViewState) {
         Timber.d("render")
-        val sleep = state.sleep
         val views = RemoteViews(context.packageName, R.layout.example_appwidget)
-        val owlAsleep = sleep != Sleep.empty() && sleep.toDate == null
-        val imageResId = if (owlAsleep) R.drawable.owl_asleep else R.drawable.own_awake
+        val imageResId = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
 
         views.setImageViewResource(R.id.button, imageResId)
 

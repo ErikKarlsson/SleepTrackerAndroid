@@ -4,7 +4,6 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,10 +42,10 @@ class SleepAppWidgetViewModel @Inject constructor(private val actionProcessorHol
         private val reducer = BiFunction { previousState: WidgetViewState, result: WidgetResult ->
             Timber.d("reducer")
             when (result) {
-                is WidgetResult.ToggleSleepResult.Success -> previousState.copy(sleep = result.sleep)
-                is WidgetResult.LoadCurrentSleepResult.Success -> previousState.copy(sleep = result.sleep)
-                is WidgetResult.LoadCurrentSleepResult.Failure -> previousState.copy(sleep = Sleep.empty())
-                is WidgetResult.ToggleSleepResult.Failure -> previousState.copy(sleep = Sleep.empty())
+                is WidgetResult.ToggleSleepResult.Success -> previousState.copy(isSleeping = result.sleep.isSleeping)
+                is WidgetResult.LoadCurrentSleepResult.Success -> previousState.copy(isSleeping = result.sleep.isSleeping)
+                is WidgetResult.LoadCurrentSleepResult.Failure -> previousState.copy(isSleeping = false)
+                is WidgetResult.ToggleSleepResult.Failure -> previousState.copy(isSleeping = false)
             }
         }
     }
