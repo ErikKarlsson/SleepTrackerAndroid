@@ -1,13 +1,12 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.data.SleepRepository
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import org.threeten.bp.OffsetDateTime
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,49 +26,48 @@ class SleepActionProcessorHolder @Inject constructor(private val sleepRepository
     private val loadCurrentSleepProcessor =
             ObservableTransformer<WidgetAction.LoadCurrentSleepAction, WidgetResult.LoadCurrentSleepResult> { actions ->
                 actions.flatMap {
-                    sleepRepository.getCurrentSleep()
-                        .toObservable()
-                        .doOnNext{ Timber.d("Load current sleep %s: ", it.toString() ) }
+                    getCurrentSleep()
                         .map { WidgetResult.LoadCurrentSleepResult.Success(it) }
                         .cast(WidgetResult.LoadCurrentSleepResult::class.java)
                         .onErrorReturn(WidgetResult.LoadCurrentSleepResult::Failure)
                         .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
                 }
             }
 
     private val toggleSleepProcessor =
             ObservableTransformer<WidgetAction.ToggleSleepAction, WidgetResult.ToggleSleepResult> { actions ->
                 actions.flatMap {
-                    sleepRepository.getCurrentSleep()
-                        .toObservable()
-                        .flatMap { sleep -> toggleSleep(sleep) }
-                        .onErrorReturn(WidgetResult.ToggleSleepResult::Failure)
+                    getCurrentSleep()
+                        .flatMap {
+                            Completable.fromAction { this.toggleSleep(it) }
+                                .andThen(getCurrentSleep()
+                                    .map { WidgetResult.ToggleSleepResult.Success(it) }
+                                    .cast(WidgetResult.ToggleSleepResult::class.java))
+                        }
+                        .onErrorReturn { WidgetResult.ToggleSleepResult.Failure(it) }
                         .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
                 }
             }
 
-    private fun toggleSleep(currentSleep: Sleep): Observable<WidgetResult.ToggleSleepResult> {
-        if (currentSleep != Sleep.empty() && currentSleep.toDate == null) {
-            updateSleepInDb(currentSleep)
+    private fun getCurrentSleep(): Observable<Sleep> {
+        return sleepRepository.getCurrent().toObservable()
+    }
+
+    private fun toggleSleep(currentSleep: Sleep) {
+        if (currentSleep.isSleeping) {
+            stopSleeping(currentSleep)
         } else {
-            insertNewSleepInDb()
+            startSleeping()
         }
-
-        return sleepRepository.getCurrentSleep()
-            .toObservable()
-            .subscribeOn(Schedulers.io())
-            .map { WidgetResult.ToggleSleepResult.Success(it) }
     }
 
-    private fun insertNewSleepInDb() {
+    private fun startSleeping() {
         val sleep = Sleep(fromDate = OffsetDateTime.now())
-        sleepRepository.insertSleep(sleep)
+        sleepRepository.insert(sleep)
     }
 
-    private fun updateSleepInDb(currentSleep: Sleep) {
-        val updatedSleep = currentSleep.copy(toDate = OffsetDateTime.now())
-        sleepRepository.updateSleep(updatedSleep)
+    private fun stopSleeping(currentSleep: Sleep) {
+        val sleep = currentSleep.copy(toDate = OffsetDateTime.now())
+        sleepRepository.update(sleep)
     }
 }

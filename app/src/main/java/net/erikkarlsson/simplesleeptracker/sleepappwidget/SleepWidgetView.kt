@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import io.reactivex.android.schedulers.AndroidSchedulers
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET
 import timber.log.Timber
@@ -17,6 +18,7 @@ class SleepWidgetView @Inject constructor(private val context: Context,
                                           sleepAppWidgetViewModel: SleepAppWidgetViewModel) {
     init {
         sleepAppWidgetViewModel.states()
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::render,
                     { Timber.e(it, "Error getting states") })
     }
