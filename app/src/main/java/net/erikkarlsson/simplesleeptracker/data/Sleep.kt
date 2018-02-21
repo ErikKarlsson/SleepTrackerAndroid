@@ -17,4 +17,9 @@ data class Sleep(@ColumnInfo(name = "from_date")
                  @ColumnInfo(name = "hours")
                  var hours: Float = 0.0f,
                  @PrimaryKey(autoGenerate = true)
-                 var id: Int? = null)
+                 var id: Int? = null) {
+    companion object {
+        fun empty() = Sleep()
+    }
+}
+

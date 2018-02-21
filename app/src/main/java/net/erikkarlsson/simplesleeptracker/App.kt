@@ -8,6 +8,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
+import net.erikkarlsson.simplesleeptracker.sleepappwidget.SleepWidgetView
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject
@@ -20,6 +21,9 @@ class App : Application(), HasActivityInjector, HasBroadcastReceiverInjector {
 
     @Inject
     lateinit var broadcastInjector : DispatchingAndroidInjector<BroadcastReceiver>
+
+    @Inject
+    lateinit var sleepWidgetView : SleepWidgetView
 
     override fun onCreate() {
         super.onCreate()

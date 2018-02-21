@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker
+package net.erikkarlsson.simplesleeptracker.util
 
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.temporal.ChronoUnit
@@ -32,6 +32,5 @@ object DateTimeUtils {
             return seconds - secondsInADay
         }
     }
-
 
 }

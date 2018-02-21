@@ -1,13 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.data
 
 import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.Single
 import javax.inject.Inject
 
 class SleepRepository @Inject constructor(private val sleepDao: SleepDao)  {
 
-    fun getCurrentSleep(): Maybe<Sleep> {
-        return sleepDao.getCurrentSleep()
+    fun getCurrentSleep(): Single<Sleep> {
+        return sleepDao.getCurrentSleep().toSingle().onErrorReturnItem(Sleep.empty())
     }
 
     fun getSleep(): Flowable<List<Sleep>> {
@@ -21,14 +21,5 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao)  {
     fun updateSleep(updatedSleep: Sleep): Int {
         return sleepDao.updateSleep(updatedSleep)
     }
-    /*
-    fun getAverageSleepInHours(): Single<Int> {
-
-    }
-
-    fun insertSleep() {
-
-    }
-    */
 
 }
