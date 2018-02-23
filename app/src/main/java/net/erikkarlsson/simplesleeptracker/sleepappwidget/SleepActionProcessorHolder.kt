@@ -41,17 +41,14 @@ class SleepActionProcessorHolder @Inject constructor(
                 actions.flatMap {
                     getCurrentSleep()
                         .flatMap {
-                            Completable.fromAction { this.toggleSleep(it) }
-                                .andThen(Observable.defer {
-                                    getCurrentSleep()
-                                        .map { WidgetResult.ToggleSleepResult.Success(it) }
-                                        .cast(WidgetResult.ToggleSleepResult::class.java)
-                                })
+                            Completable.fromAction { toggleSleep(it) }
+                                .andThen(getToggleSleepResult())
                         }
                         .onErrorReturn { WidgetResult.ToggleSleepResult.Failure(it) }
                         .subscribeOn(schedulerProvider.io())
                 }
             }
+
 
     private fun getCurrentSleep(): Observable<Sleep> {
         return sleepRepository.getCurrent().toObservable()
@@ -73,5 +70,13 @@ class SleepActionProcessorHolder @Inject constructor(
     private fun stopSleeping(currentSleep: Sleep) {
         val sleep = currentSleep.copy(toDate = OffsetDateTime.now())
         sleepRepository.update(sleep)
+    }
+
+    private fun getToggleSleepResult(): Observable<WidgetResult.ToggleSleepResult> {
+        return Observable.defer {
+            getCurrentSleep()
+                .map { WidgetResult.ToggleSleepResult.Success(it) }
+                .cast(WidgetResult.ToggleSleepResult::class.java)
+        }
     }
 }
