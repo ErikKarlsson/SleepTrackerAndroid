@@ -7,7 +7,8 @@ import net.erikkarlsson.simplesleeptracker.App
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, AndroidInjectionModule::class, AndroidBindingModule::class, SleepModule::class])
+@Component(modules = [AndroidInjectionModule::class, AndroidBindingModule::class, AppModule::class,
+RxModule::class, SleepModule::class])
 
 interface AppComponent {
     @Component.Builder

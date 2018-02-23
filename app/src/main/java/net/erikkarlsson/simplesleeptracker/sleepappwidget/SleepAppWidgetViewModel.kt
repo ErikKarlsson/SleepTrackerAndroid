@@ -26,6 +26,7 @@ class SleepAppWidgetViewModel @Inject constructor(private val actionProcessorHol
             .map(this::actionFromIntent)
             .compose(actionProcessorHolder.actionProcessor)
             .scan(WidgetViewState.idle(), reducer)
+            .skip(1)
             .replay(1)
             .autoConnect(0)
     }
