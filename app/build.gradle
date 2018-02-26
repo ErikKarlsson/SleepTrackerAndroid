@@ -9,14 +9,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion build_versions.target_sdk
-    buildToolsVersion build_versions.build_tools
+    compileSdkVersion Versions.compile_sdk
+    buildToolsVersion Versions.build_tools
     defaultConfig {
         applicationId "net.erikkarlsson.simplesleeptracker"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Versions.min_sdk
+        targetSdkVersion Versions.target_sdk
+        versionCode Versions.version_code
+        versionName Versions.version_name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -45,65 +45,65 @@ dependencies {
     testCompileOnly junit5.unitTestsRuntime()
 
     // Android Testing Support Library's runner and rules
-    androidTestCompile deps.atsl.runner
-    androidTestCompile deps.atsl.rules
-    androidTestCompile deps.room.testing
-    androidTestCompile deps.arch_core.testing
+    androidTestCompile Deps.atsl_runner
+    androidTestCompile Deps.atsl_rules
+    androidTestCompile Deps.room_testing
+    androidTestCompile Deps.arch_core_testing
 
     // Dependencies for Android unit tests
-    androidTestCompile deps.junit
-    androidTestCompile deps.mockito.core, { exclude group: 'net.bytebuddy' }
-    androidTestCompile deps.dexmaker
-    androidTestCompile deps.espresso.core
-    androidTestCompile deps.espresso.contrib
-    androidTestCompile deps.espresso.intents
+    androidTestCompile Deps.junit
+    androidTestCompile Deps.mockito_core, { exclude group: 'net.bytebuddy' }
+    androidTestCompile Deps.dexmaker
+    androidTestCompile Deps.espresso_core
+    androidTestCompile Deps.espresso_contrib
+    androidTestCompile Deps.espresso_intents
 
     // Dependencies for local unit tests
-    testImplementation deps.junit
-    testImplementation deps.mockito.all
-    testImplementation deps.hamcrest
-    testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
+    testImplementation Deps.junit
+    testImplementation Deps.mockito_all
+    testImplementation Deps.hamcrest
+    testImplementation Deps.mockito_kotlin
 
     // Constraint layout
-    implementation deps.constraint_layout
+    implementation Deps.constraint_layout
 
     // Dagger
-    implementation deps.dagger.runtime
-    implementation deps.dagger.android
-    implementation deps.dagger.android_support
-    kapt deps.dagger.compiler
-    kapt deps.dagger.android_support_compiler
+    implementation Deps.dagger_runtime
+    implementation Deps.dagger_android
+    implementation Deps.dagger_android_support
+    kapt Deps.dagger_compiler
+    kapt Deps.dagger_android_support_compiler
 
     // Guava
-    implementation "com.google.guava:guava:20.0"
+    implementation Deps.guava
 
     // Kotlin
-    implementation deps.kotlin.stdlib
-    implementation 'androidx.core:core-ktx:0.1'
+    implementation Deps.kotlin_stdlib
+    implementation Deps.core_ktx
 
     // Lifecycle
-    implementation deps.lifecycle.extensions
-    kapt deps.lifecycle.compiler
+    implementation Deps.lifecycle_extensions
+    kapt Deps.lifecycle_compiler
     // Room
-    implementation deps.room.runtime
-    implementation deps.room.rxjava2
-    kapt deps.room.compiler
+    implementation Deps.room_runtime
+    implementation Deps.room_rxjava2
+    kapt Deps.room_compiler
 
     // RxJava
-    implementation deps.rxjava2
-    implementation deps.rx_android
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
-    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
+    implementation Deps.rxjava2
+    implementation Deps.rx_android
+    implementation Deps.rx_relay
+    implementation Deps.rx_binding
 
     // Support libraries
-    implementation deps.support.app_compat
-    implementation deps.support.v4
-    implementation deps.support.design
+    implementation Deps.support_app_compat
+    implementation Deps.support_v4
+    implementation Deps.support_design
 
     // ThreeTen Backport
-    compile 'org.threeten:threetenbp:1.3.6'
+    implementation Deps.threeten_backport
 
     //Timber
-    implementation deps.timber
+    implementation Deps.timber
 
 }

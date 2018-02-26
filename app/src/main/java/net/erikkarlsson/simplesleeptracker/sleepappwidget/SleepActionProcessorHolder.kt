@@ -21,7 +21,6 @@ class SleepActionProcessorHolder @Inject constructor(
                     Observable.merge(
                             shared.ofType(WidgetAction.LoadCurrentSleepAction::class.java).compose(loadCurrentSleepProcessor),
                             shared.ofType(WidgetAction.ToggleSleepAction::class.java).compose(toggleSleepProcessor))
-
                 }
             }
 
@@ -48,7 +47,6 @@ class SleepActionProcessorHolder @Inject constructor(
                         .subscribeOn(schedulerProvider.io())
                 }
             }
-
 
     private fun getCurrentSleep(): Observable<Sleep> {
         return sleepRepository.getCurrent().toObservable()
