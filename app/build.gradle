@@ -81,9 +81,13 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
+    // Kotterknife
+    implementation Deps.kotterknife
+
     // Lifecycle
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
+
     // Room
     implementation Deps.room_runtime
     implementation Deps.room_rxjava2
