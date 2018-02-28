@@ -1,9 +1,9 @@
 package net.erikkarlsson.simplesleeptracker.statistics
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -11,15 +11,15 @@ import net.erikkarlsson.simplesleeptracker.domain.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.statistics.processor.LoadStatistics
 import net.erikkarlsson.simplesleeptracker.util.ImmediateSchedulerProvider
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.extension.ExtendWith
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(InstantTaskExecutorExtension::class)
 class StatisticsViewModelTest {
-
-    @Rule
-    @JvmField
-    val rule = InstantTaskExecutorRule()
 
     lateinit var viewModel: StatisticsViewModel
 
@@ -28,8 +28,9 @@ class StatisticsViewModelTest {
     val statisticsRepository: StatisticsDataSource = mock()
     val observer: Observer<StatisticsViewState> = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
+        reset(statisticsRepository, observer)
         val loadStatistics = LoadStatistics(statisticsRepository, schedulerProvider)
         val statisticsProcessorHolder = StatisticsProcessorHolder(loadStatistics)
 
