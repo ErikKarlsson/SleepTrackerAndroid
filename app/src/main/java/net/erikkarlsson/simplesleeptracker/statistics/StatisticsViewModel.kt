@@ -15,7 +15,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class StatisticsViewModel @Inject constructor(private val actionProcessorHolder: StatisticsProcessorHolder,
-                                              schedulerProvider: SchedulerProvider) :
+                                              private val schedulerProvider: SchedulerProvider) :
         ViewModel(), MviViewModel<StatisticsIntent, StatisticsViewState> {
 
     private val disposables = CompositeDisposable()

@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     // (Required) Writing and executing Unit Tests on the JUnit Platform.
     testImplementation junit5.unitTests()
 
@@ -45,24 +46,23 @@ dependencies {
     testCompileOnly junit5.unitTestsRuntime()
 
     // Android Testing Support Library's runner and rules
-    androidTestCompile Deps.atsl_runner
-    androidTestCompile Deps.atsl_rules
-    androidTestCompile Deps.room_testing
-    androidTestCompile Deps.arch_core_testing
-
-    // Dependencies for Android unit tests
-    androidTestCompile Deps.junit
-    androidTestCompile Deps.mockito_core, { exclude group: 'net.bytebuddy' }
-    androidTestCompile Deps.dexmaker
-    androidTestCompile Deps.espresso_core
-    androidTestCompile Deps.espresso_contrib
-    androidTestCompile Deps.espresso_intents
+    androidTestImplementation Deps.atsl_runner
+    androidTestImplementation Deps.atsl_rules
+    androidTestImplementation Deps.room_testing
+    androidTestImplementation Deps.arch_core_testing
+    androidTestImplementation Deps.junit
+    androidTestImplementation Deps.mockito_core, { exclude group: 'net.bytebuddy' }
+    androidTestImplementation Deps.dexmaker
+    androidTestImplementation Deps.espresso_core
+    androidTestImplementation Deps.espresso_contrib
+    androidTestImplementation Deps.espresso_intents
 
     // Dependencies for local unit tests
     testImplementation Deps.junit
     testImplementation Deps.mockito_all
     testImplementation Deps.hamcrest
     testImplementation Deps.mockito_kotlin
+    testImplementation Deps.arch_core_testing
 
     // Constraint layout
     implementation Deps.constraint_layout
