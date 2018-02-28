@@ -35,7 +35,7 @@ object Versions {
     val rx_binding = "2.0.0"
     val rx_relay = "2.0.0"
     val rxjava2 = "2.1.3"
-    val support = "27.0.2"
+    val support = "27.1.0"
     val threeten_backport = "1.3.6"
     val timber = "4.5.1"
 }

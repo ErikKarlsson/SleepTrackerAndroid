@@ -1,0 +1,3 @@
+package net.erikkarlsson.simplesleeptracker.statistics
+
+internal class StatisticsViewModelTest

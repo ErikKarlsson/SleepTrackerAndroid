@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget
+package net.erikkarlsson.simplesleeptracker.statistics
 
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviAction
 
