@@ -13,6 +13,9 @@
         <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".statistics.StatisticsActivity">
+        </activity>
+
+        <activity android:name=".statisticselm.StatisticsElmActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

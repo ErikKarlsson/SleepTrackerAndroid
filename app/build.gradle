@@ -35,16 +35,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // (Required) Writing and executing Unit Tests on the JUnit Platform.
-    testImplementation junit5.unitTests()
-
-    // (Optional) If you need "Parameterized Tests".
-    testImplementation junit5.parameterized()
-
-    // (Optional) For running tests inside Android Studio 3
-    // Please refer to the "Android Studio Workarounds" section for more insight on this.
-    testCompileOnly junit5.unitTestsRuntime()
-
     // Android Testing Support Library's runner and rules
     androidTestImplementation Deps.atsl_runner
     androidTestImplementation Deps.atsl_rules
@@ -64,6 +54,16 @@ dependencies {
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
 
+    // (Required) Writing and executing Unit Tests on the JUnit Platform.
+    testImplementation junit5.unitTests()
+
+    // (Optional) If you need "Parameterized Tests".
+    testImplementation junit5.parameterized()
+
+    // (Optional) For running tests inside Android Studio 3
+    // Please refer to the "Android Studio Workarounds" section for more insight on this.
+    testCompileOnly junit5.unitTestsRuntime()
+
     // Constraint layout
     implementation Deps.constraint_layout
 
@@ -76,6 +76,9 @@ dependencies {
 
     // Guava
     implementation Deps.guava
+
+    // Elmdroid
+    implementation Deps.elmdroid
 
     // Kotlin
     implementation Deps.kotlin_stdlib

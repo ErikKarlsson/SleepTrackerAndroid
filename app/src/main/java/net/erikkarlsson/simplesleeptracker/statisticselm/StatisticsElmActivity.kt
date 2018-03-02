@@ -1,27 +1,24 @@
-package net.erikkarlsson.simplesleeptracker.statistics
+package net.erikkarlsson.simplesleeptracker.statisticselm
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
 import kotterknife.bindView
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class StatisticsActivity : AppCompatActivity(), MviView<StatisticsIntent, StatisticsViewState> {
+class StatisticsElmActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val statisticsViewModel: StatisticsViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(StatisticsViewModel::class.java)
+    private val statisticsElmViewModel: StatisticsElmViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(StatisticsElmViewModel::class.java)
     }
 
     private val averageSleepText: TextView by bindView(R.id.average_sleep_text)
@@ -31,22 +28,15 @@ class StatisticsActivity : AppCompatActivity(), MviView<StatisticsIntent, Statis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
 
-        statisticsViewModel.statesLiveData().observe(this, Observer { renderLiveData(it) })
-        statisticsViewModel.processIntents(intents())
+        statisticsElmViewModel.state().observe(this, Observer { renderLiveData(it) })
+        statisticsElmViewModel.dispatch(StatisticsMsg.InitialIntent)
     }
 
-    override fun intents(): Observable<StatisticsIntent> {
-        return Observable.just(StatisticsIntent.InitialIntent)
-    }
-
-    fun renderLiveData(state: StatisticsViewState?) {
+    fun renderLiveData(state: StatisticsState?) {
         state?.let {
             Timber.d("render %f", state.statistics.avgSleep)
             averageSleepText.setText(state.statistics.avgSleep.toString())
         }
-    }
-
-    override fun render(state: StatisticsViewState) {
     }
 
 }
