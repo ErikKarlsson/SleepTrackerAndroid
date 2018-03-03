@@ -8,14 +8,14 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.util.getDistinct
 
 /**
  *  Implementation of ComponentRuntime based on RxJava and RxRelay
  */
-internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd> (component: Component<STATE, MSG, CMD>, private val logLevel: LogLevel = LogLevel.NONE) : ComponentRuntime<STATE, MSG> {
+internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd>(component: Component<STATE, MSG, CMD>, private val logLevel: LogLevel = LogLevel.NONE) : ComponentRuntime<STATE, MSG> {
 
     private val msgRelay: BehaviorRelay<MSG> = BehaviorRelay.create()
     private val stateRelay: BehaviorRelay<STATE> = BehaviorRelay.create()
@@ -28,26 +28,24 @@ internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd> (component: Com
         updateStateValue(component.initState())
 
         val sharedStateRelay = stateRelay.publish()
-                .autoConnect(component.subscriptions().filter { it is StatefulSub<STATE, MSG> }.size + 1)
+            .autoConnect(component.subscriptions().filter { it is StatefulSub<STATE, MSG> }.size + 1)
 
         // setup main app "loop" without subscriptions
-        compositeDisposable.add(
-            msgRelay.zipWith(sharedStateRelay)
-                .map { (msg, prevState) -> component.update(msg, prevState) }
-                .subscribeNewObserveMain()
-                .doOnNext { (newState, _) -> updateStateValue(newState) }
-                .compose(cmdToMsg(component))
-                .subscribe{ msg -> dispatch(msg) }
-        )
+        msgRelay.zipWith(sharedStateRelay)
+            .map { (msg, prevState) -> component.update(msg, prevState) }
+            .subscribeNewObserveMain()
+            .doOnNext { (newState, _) -> updateStateValue(newState) }
+            .compose(cmdToMsg(component))
+            .subscribe { msg -> dispatch(msg) }
+            .addTo(compositeDisposable)
 
         // handle subscriptions
         component.subscriptions().forEach { sub ->
-            val subObs: Observable<MSG> = createSubObs(sub, sharedStateRelay)
-            val subDisposable = subObs
+            createSubObs(sub, sharedStateRelay)
                 .subscribeNewObserveMain()
-                .doOnSubscribe { log(LogLevel.FULL,"Subscribed sub: $sub") }
+                .doOnSubscribe { log(LogLevel.FULL, "Subscribed sub: $sub") }
                 .subscribe { msg -> dispatch(msg) }
-            compositeDisposable.add(subDisposable)
+                .addTo(compositeDisposable)
         }
     }
 
@@ -60,7 +58,7 @@ internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd> (component: Com
 
     override fun dispatch(msg: MSG) {
         msgRelay.accept(msg)
-        log(LogLevel.BASIC,"Msg dispatched: $msg")
+        log(LogLevel.BASIC, "Msg dispatched: $msg")
     }
 
     private fun updateStateValue(stateVal: STATE) {
@@ -71,11 +69,11 @@ internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd> (component: Com
 
     private fun cmdToMsg(component: Component<STATE, MSG, CMD>): ObservableTransformer<Pair<STATE, CMD?>, MSG> {
         return ObservableTransformer { obs ->
-            obs.filter{ (_, maybeCmd) -> maybeCmd != null }
+            obs.filter { (_, maybeCmd) -> maybeCmd != null }
                 .map { (_, cmd) -> cmd }
                 .observeOn(Schedulers.newThread())
                 .doOnNext { cmd -> log(LogLevel.BASIC, "Calling cmd: $cmd") }
-                .flatMap { cmd -> component.call(cmd).toObservable()}
+                .flatMap { cmd -> component.call(cmd).toObservable() }
                 .observeOn(AndroidSchedulers.mainThread())
         }
     }
@@ -89,7 +87,7 @@ internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd> (component: Com
             is StatefulSub<STATE, MSG> -> {
                 sharedStateRelay
                     .distinctUntilChanged { s1, s2 -> !sub.isDistinct(s1, s2) }
-                    .doOnNext{ state -> log(LogLevel.FULL, "New state $state for StatefulSub $sub to handle")}
+                    .doOnNext { state -> log(LogLevel.FULL, "New state $state for StatefulSub $sub to handle") }
                     .switchMap { state -> sub(state) }
             }
         }
