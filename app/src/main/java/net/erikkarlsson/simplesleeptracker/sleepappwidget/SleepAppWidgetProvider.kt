@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET
 import javax.inject.Inject
 
@@ -19,7 +18,7 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         AndroidInjection.inject(this, context)
-        sleepAppWidgetViewModel.processIntents(Observable.just(WidgetIntent.InitialIntent))
+        sleepAppWidgetViewModel.dispatch(WidgetMsg.InitialMsg)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -27,7 +26,7 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         if (ACTION_SIMPLEAPPWIDGET == intent.action) {
-            sleepAppWidgetViewModel.processIntents(Observable.just(WidgetIntent.ToggleSleepIntent))
+            sleepAppWidgetViewModel.dispatch(WidgetMsg.ToggleSleepMsg)
         }
     }
 }
