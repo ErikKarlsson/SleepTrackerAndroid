@@ -77,9 +77,6 @@ dependencies {
     // Guava
     implementation Deps.guava
 
-    // Elmdroid
-    implementation Deps.elmdroid
-
     // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
@@ -101,6 +98,7 @@ dependencies {
     implementation Deps.rx_android
     implementation Deps.rx_relay
     implementation Deps.rx_binding
+    implementation Deps.rxkotlin
 
     // Support libraries
     implementation Deps.support_app_compat

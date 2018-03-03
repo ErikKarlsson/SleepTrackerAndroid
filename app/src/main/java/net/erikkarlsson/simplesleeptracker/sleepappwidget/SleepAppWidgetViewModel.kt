@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
 import android.arch.lifecycle.LiveData
-import cz.inventi.elmdroid.RuntimeFactory
+import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 

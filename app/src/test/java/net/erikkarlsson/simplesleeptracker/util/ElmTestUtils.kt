@@ -1,9 +1,9 @@
 package net.erikkarlsson.simplesleeptracker.util
 
 import android.arch.lifecycle.Observer
-import cz.inventi.elmdroid.ComponentRuntime
-import cz.inventi.elmdroid.Msg
-import cz.inventi.elmdroid.State
+import net.erikkarlsson.simplesleeptracker.elm.ComponentRuntime
+import net.erikkarlsson.simplesleeptracker.elm.Msg
+import net.erikkarlsson.simplesleeptracker.elm.State
 import org.mockito.Mockito
 
 fun <M: Msg> ComponentRuntime<*, M>.dispatchMultiple(msgList: List<M>) {

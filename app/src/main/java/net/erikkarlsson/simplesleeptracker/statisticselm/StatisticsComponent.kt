@@ -1,11 +1,11 @@
 package net.erikkarlsson.simplesleeptracker.statisticselm
 
-import cz.inventi.elmdroid.Cmd
-import cz.inventi.elmdroid.Component
-import cz.inventi.elmdroid.Msg
-import cz.inventi.elmdroid.State
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
+import net.erikkarlsson.simplesleeptracker.elm.Cmd
+import net.erikkarlsson.simplesleeptracker.elm.Component
+import net.erikkarlsson.simplesleeptracker.elm.Msg
+import net.erikkarlsson.simplesleeptracker.elm.State
 import net.erikkarlsson.simplesleeptracker.statisticselm.StatisticsMsg.LoadStatisticsResult.LoadStatisticsFailure
 import net.erikkarlsson.simplesleeptracker.statisticselm.StatisticsMsg.LoadStatisticsResult.LoadStatisticsSuccess
 import javax.inject.Inject

@@ -1,7 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.statisticselm
 
 import android.arch.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockito_kotlin.inOrder
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.reset
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
@@ -42,7 +45,7 @@ class StatisticsElmViewModelTest {
         viewModel.dispatch(InitialIntent)
 
         inOrder(observer) {
-            verify(observer, times(2)).onChanged(StatisticsState.empty())
+            verify(observer).onChanged(StatisticsState.empty())
             verify(observer).onChanged(StatisticsState(expectedStatistics))
         }
     }

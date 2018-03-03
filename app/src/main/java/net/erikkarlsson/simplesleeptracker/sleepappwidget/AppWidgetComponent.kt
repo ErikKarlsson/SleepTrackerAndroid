@@ -1,11 +1,11 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
-import cz.inventi.elmdroid.Cmd
-import cz.inventi.elmdroid.Component
-import cz.inventi.elmdroid.Msg
-import cz.inventi.elmdroid.State
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.elm.Cmd
+import net.erikkarlsson.simplesleeptracker.elm.Component
+import net.erikkarlsson.simplesleeptracker.elm.Msg
+import net.erikkarlsson.simplesleeptracker.elm.State
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetMsg.*
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.processor.LoadCurrentSleep
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.processor.ToggleSleep

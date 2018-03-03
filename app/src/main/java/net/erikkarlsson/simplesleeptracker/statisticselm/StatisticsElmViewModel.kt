@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.statisticselm
 
-import cz.inventi.elmdroid.ElmViewModel
+import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import javax.inject.Inject
 
 class StatisticsElmViewModel @Inject constructor(statisticsComponent: StatisticsComponent) :
