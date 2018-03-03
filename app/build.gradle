@@ -100,6 +100,9 @@ dependencies {
     implementation Deps.rx_binding
     implementation Deps.rxkotlin
 
+    // Reactive Network
+    implementation Deps.reactive_network
+
     // Support libraries
     implementation Deps.support_app_compat
     implementation Deps.support_v4

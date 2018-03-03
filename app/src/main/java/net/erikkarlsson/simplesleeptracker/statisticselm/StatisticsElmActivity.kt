@@ -29,13 +29,17 @@ class StatisticsElmActivity : AppCompatActivity() {
         setContentView(R.layout.activity_statistics)
 
         statisticsElmViewModel.state().observe(this, Observer { renderLiveData(it) })
+    }
+
+    override fun onStart() {
+        super.onStart()
         statisticsElmViewModel.dispatch(StatisticsMsg.InitialIntent)
     }
 
     fun renderLiveData(state: StatisticsState?) {
         state?.let {
             Timber.d("render %f", state.statistics.avgSleep)
-            averageSleepText.setText(state.statistics.avgSleep.toString())
+            averageSleepText.setText(String.format("%f : %b", state.statistics.avgSleep, state.isConnectedToInternet))
         }
     }
 

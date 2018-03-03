@@ -1,5 +1,6 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget.processor
+package net.erikkarlsson.simplesleeptracker.sleepappwidget.task
 
+import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetMsg
 import net.erikkarlsson.simplesleeptracker.util.SchedulerProvider
@@ -9,7 +10,7 @@ class LoadCurrentSleep @Inject constructor(
         private val sleepRepository: SleepDataSource,
         private val schedulerProvider: SchedulerProvider) {
 
-    internal fun task() =
+    internal fun task(): Single<WidgetMsg> =
             sleepRepository.getCurrent()
                 .map { WidgetMsg.LoadCurrentSleepResult.Success(it) }
                 .cast(WidgetMsg::class.java)

@@ -7,8 +7,8 @@ import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg
 import net.erikkarlsson.simplesleeptracker.elm.State
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetMsg.*
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.processor.LoadCurrentSleep
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.processor.ToggleSleep
+import net.erikkarlsson.simplesleeptracker.sleepappwidget.task.LoadCurrentSleep
+import net.erikkarlsson.simplesleeptracker.sleepappwidget.task.ToggleSleep
 import javax.inject.Inject
 
 class AppWidgetComponent @Inject constructor(private val loadCurrentSleep: LoadCurrentSleep,

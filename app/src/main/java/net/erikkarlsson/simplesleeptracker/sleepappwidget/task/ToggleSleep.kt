@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget.processor
+package net.erikkarlsson.simplesleeptracker.sleepappwidget.task
 
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -21,7 +21,6 @@ class ToggleSleep @Inject constructor(
                 }
                 .onErrorReturn { WidgetMsg.ToggleSleepResult.Failure(it) }
                 .subscribeOn(schedulerProvider.io())
-
 
     private fun getCurrentSleep(): Single<Sleep> {
         return sleepRepository.getCurrent()
