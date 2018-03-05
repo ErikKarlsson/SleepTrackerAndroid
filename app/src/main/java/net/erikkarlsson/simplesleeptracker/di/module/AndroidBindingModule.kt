@@ -7,7 +7,6 @@ import net.erikkarlsson.simplesleeptracker.di.scope.ActivityScope
 import net.erikkarlsson.simplesleeptracker.di.scope.BroadcastRecieverScope
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsActivity
-import net.erikkarlsson.simplesleeptracker.statisticselm.StatisticsElmActivity
 
 @Module
 abstract class AndroidBindingModule {
@@ -19,10 +18,6 @@ abstract class AndroidBindingModule {
     @ActivityScope
     @ContributesAndroidInjector
     abstract fun bindStatisticsActivity(): StatisticsActivity
-
-    @ActivityScope
-    @ContributesAndroidInjector
-    abstract fun bindStatisticsElmActivity(): StatisticsElmActivity
 
     @BroadcastRecieverScope
     @ContributesAndroidInjector(modules = [AppWidgetModule::class])

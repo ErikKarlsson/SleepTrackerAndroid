@@ -5,8 +5,6 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.task.LoadCurrentSleep
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.task.ToggleSleep
 import net.erikkarlsson.simplesleeptracker.util.ImmediateSchedulerProvider
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension
@@ -49,7 +47,7 @@ class SleepAppWidgetViewModelTest {
         @Test
         fun `load empty shows awake in view`() {
             given(sleepRepository.getCurrent()).willReturn(Single.just(Sleep.empty()))
-            viewModel.dispatch(WidgetMsg.InitialMsg)
+            viewModel.dispatch(WidgetMsg.UpdateMsg)
             verify(sleepRepository).getCurrent()
             verify(observer).onChanged(WidgetState(false))
         }
@@ -57,7 +55,7 @@ class SleepAppWidgetViewModelTest {
         @Test
         fun `load sleeping shows sleeping in view`() {
             given(sleepRepository.getCurrent()).willReturn(Single.just(sleeping))
-            viewModel.dispatch(WidgetMsg.InitialMsg)
+            viewModel.dispatch(WidgetMsg.UpdateMsg)
             verify(sleepRepository).getCurrent()
             verify(observer).onChanged(WidgetState(true))
         }
@@ -65,7 +63,7 @@ class SleepAppWidgetViewModelTest {
         @Test
         fun `load awake shows awake in view`() {
             given(sleepRepository.getCurrent()).willReturn(Single.just(awake))
-            viewModel.dispatch(WidgetMsg.InitialMsg)
+            viewModel.dispatch(WidgetMsg.UpdateMsg)
             verify(sleepRepository).getCurrent()
             verify(observer).onChanged(WidgetState(false))
         }
@@ -73,7 +71,7 @@ class SleepAppWidgetViewModelTest {
         @Test
         fun `load error shows awake in view`() {
             given(sleepRepository.getCurrent()).willReturn(Single.error(Exception()))
-            viewModel.dispatch(WidgetMsg.InitialMsg)
+            viewModel.dispatch(WidgetMsg.UpdateMsg)
             verify(sleepRepository).getCurrent()
             verify(observer).onChanged(WidgetState(false))
         }

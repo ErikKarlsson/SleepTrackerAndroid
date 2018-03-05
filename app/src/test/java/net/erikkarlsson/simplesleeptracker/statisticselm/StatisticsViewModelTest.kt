@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.statisticselm
+package net.erikkarlsson.simplesleeptracker.statistics
 
 import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.given
@@ -8,8 +8,11 @@ import com.nhaarman.mockito_kotlin.reset
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
-import net.erikkarlsson.simplesleeptracker.statisticselm.StatisticsMsg.InitialIntent
-import net.erikkarlsson.simplesleeptracker.statisticselm.task.LoadStatistics
+import net.erikkarlsson.simplesleeptracker.statistics.LoadStatistics
+import net.erikkarlsson.simplesleeptracker.statistics.StatisticsComponent
+import net.erikkarlsson.simplesleeptracker.statistics.StatisticsViewModel
+import net.erikkarlsson.simplesleeptracker.statistics.StatisticsMsg.InitialIntent
+import net.erikkarlsson.simplesleeptracker.statistics.StatisticsState
 import net.erikkarlsson.simplesleeptracker.util.ImmediateSchedulerProvider
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension
@@ -20,9 +23,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
-class StatisticsElmViewModelTest {
+class StatisticsViewModelTest {
 
-    lateinit var viewModel: StatisticsElmViewModel
+    lateinit var viewModel: StatisticsViewModel
 
     val schedulerProvider = ImmediateSchedulerProvider()
 
@@ -34,7 +37,7 @@ class StatisticsElmViewModelTest {
         reset(statisticsRepository, observer)
         val loadStatistics = LoadStatistics(statisticsRepository, schedulerProvider)
         val statisticsComponent = StatisticsComponent(loadStatistics)
-        viewModel = StatisticsElmViewModel(statisticsComponent)
+        viewModel = StatisticsViewModel(statisticsComponent)
         viewModel.state().observeForever(observer)
     }
 

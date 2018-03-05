@@ -5,7 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET
+import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET_TOGGLE
 import javax.inject.Inject
 
 class SleepAppWidgetProvider : AppWidgetProvider() {
@@ -18,14 +18,14 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         AndroidInjection.inject(this, context)
-        sleepAppWidgetViewModel.dispatch(WidgetMsg.InitialMsg)
+        sleepAppWidgetViewModel.dispatch(WidgetMsg.UpdateMsg)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
         super.onReceive(context, intent)
 
-        if (ACTION_SIMPLEAPPWIDGET == intent.action) {
+        if (ACTION_SIMPLEAPPWIDGET_TOGGLE == intent.action) {
             sleepAppWidgetViewModel.dispatch(WidgetMsg.ToggleSleepMsg)
         }
     }

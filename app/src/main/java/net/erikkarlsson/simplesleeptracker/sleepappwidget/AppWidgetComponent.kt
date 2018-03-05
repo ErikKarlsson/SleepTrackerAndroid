@@ -1,14 +1,14 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.base.LoadCurrentSleepTask
+import net.erikkarlsson.simplesleeptracker.base.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.elm.Cmd
 import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg
 import net.erikkarlsson.simplesleeptracker.elm.State
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetMsg.*
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.task.LoadCurrentSleep
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.task.ToggleSleep
 import javax.inject.Inject
 
 class AppWidgetComponent @Inject constructor(private val loadCurrentSleep: LoadCurrentSleep,
@@ -23,7 +23,7 @@ class AppWidgetComponent @Inject constructor(private val loadCurrentSleep: LoadC
     override fun initState(): WidgetState = WidgetState.empty()
 
     override fun update(msg: WidgetMsg, prevState: WidgetState): Pair<WidgetState, WidgetCmd?> = when (msg) {
-        InitialMsg -> prevState.withCmd(WidgetCmd.LoadCurrentSleepAction)
+        UpdateMsg -> prevState.withCmd(WidgetCmd.LoadCurrentSleepAction)
         ToggleSleepMsg -> prevState.withCmd(WidgetCmd.ToggleSleepAction)
         is LoadCurrentSleepResult.Success -> prevState.copy(isSleeping = msg.sleep.isSleeping).noCmd()
         is LoadCurrentSleepResult.Failure -> prevState.copy(isSleeping = false).noCmd()
@@ -42,7 +42,7 @@ data class WidgetState(val isSleeping: Boolean) : State {
 
 // Msg
 sealed class WidgetMsg : Msg {
-    object InitialMsg : WidgetMsg()
+    object UpdateMsg : WidgetMsg()
     object ToggleSleepMsg : WidgetMsg()
 
     sealed class LoadCurrentSleepResult() : WidgetMsg() {
@@ -60,4 +60,21 @@ sealed class WidgetMsg : Msg {
 sealed class WidgetCmd : Cmd {
     object LoadCurrentSleepAction : WidgetCmd()
     object ToggleSleepAction : WidgetCmd()
+}
+
+// Tasks
+class LoadCurrentSleep @Inject constructor(private val loadCurrentSleepTask: LoadCurrentSleepTask) {
+
+    internal fun task(): Single<WidgetMsg> = loadCurrentSleepTask.execute()
+        .map { WidgetMsg.LoadCurrentSleepResult.Success(it) }
+        .cast(WidgetMsg::class.java)
+        .onErrorReturn(WidgetMsg.LoadCurrentSleepResult::Failure)
+}
+
+class ToggleSleep @Inject constructor(private val toggleSleepTask: ToggleSleepTask) {
+
+    internal fun task() = toggleSleepTask.execute()
+        .map { WidgetMsg.ToggleSleepResult.Success(it) }
+        .cast(WidgetMsg::class.java)
+        .onErrorReturn { WidgetMsg.ToggleSleepResult.Failure(it) }
 }

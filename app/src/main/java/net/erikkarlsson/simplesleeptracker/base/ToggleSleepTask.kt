@@ -1,25 +1,23 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget.task
+package net.erikkarlsson.simplesleeptracker.base
 
 import io.reactivex.Completable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetMsg
 import net.erikkarlsson.simplesleeptracker.util.SchedulerProvider
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
-class ToggleSleep @Inject constructor(
+class ToggleSleepTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
         private val schedulerProvider: SchedulerProvider) {
 
-    internal fun task() =
+    internal fun execute(): Single<Sleep> =
             getCurrentSleep()
                 .flatMap {
                     Completable.fromAction { toggleSleep(it) }
-                        .andThen(getToggleSleepResult())
+                        .andThen(getCurrentSleep())
                 }
-                .onErrorReturn { WidgetMsg.ToggleSleepResult.Failure(it) }
                 .subscribeOn(schedulerProvider.io())
 
     private fun getCurrentSleep(): Single<Sleep> {
@@ -42,13 +40,5 @@ class ToggleSleep @Inject constructor(
     private fun stopSleeping(currentSleep: Sleep) {
         val sleep = currentSleep.copy(toDate = OffsetDateTime.now())
         sleepRepository.update(sleep)
-    }
-
-    private fun getToggleSleepResult(): Single<WidgetMsg> {
-        return Single.defer {
-            getCurrentSleep()
-                .map { WidgetMsg.ToggleSleepResult.Success(it) }
-                .cast(WidgetMsg::class.java)
-        }
     }
 }

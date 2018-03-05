@@ -4,49 +4,56 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Button
 import android.widget.TextView
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
+import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import kotterknife.bindView
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class StatisticsActivity : AppCompatActivity(), MviView<StatisticsIntent, StatisticsViewState> {
+class StatisticsActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val statisticsViewModel: StatisticsViewModel by lazy {
+    private val viewModel: StatisticsViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(StatisticsViewModel::class.java)
     }
 
     private val averageSleepText: TextView by bindView(R.id.average_sleep_text)
+    private val toggleSleepButton: Button by bindView(R.id.toggle_sleep_button)
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
 
-        statisticsViewModel.statesLiveData().observe(this, Observer { renderLiveData(it) })
-        statisticsViewModel.processIntents(intents())
+        RxView.clicks(toggleSleepButton).subscribe({ viewModel.dispatch(StatisticsMsg.ToggleSleepMsg) }).addTo(disposables)
+        viewModel.state().observe(this, Observer { renderLiveData(it) })
     }
 
-    override fun intents(): Observable<StatisticsIntent> {
-        return Observable.just(StatisticsIntent.InitialIntent)
+    override fun onStart() {
+        super.onStart()
+        viewModel.dispatch(StatisticsMsg.InitialIntent)
     }
 
-    fun renderLiveData(state: StatisticsViewState?) {
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
+    }
+
+    fun renderLiveData(state: StatisticsState?) {
         state?.let {
             Timber.d("render %f", state.statistics.avgSleep)
-            averageSleepText.setText(state.statistics.avgSleep.toString())
+            averageSleepText.setText(String.format("%f : %b : %d", state.statistics.avgSleep, state.isConnectedToInternet, state.count))
         }
-    }
-
-    override fun render(state: StatisticsViewState) {
     }
 
 }

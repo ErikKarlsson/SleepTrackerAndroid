@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class RxNetworkProvider @Inject constructor(private val context: Context) : NetworkProvider {
 
-    override fun isConnectedToNetworkStream(): Observable<Boolean> {
+    override fun isConnectedToNetwork(): Observable<Boolean> {
         return ReactiveNetwork.observeNetworkConnectivity(context)
             .map { it.getState() == NetworkInfo.State.CONNECTED }
     }
