@@ -18,7 +18,7 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         AndroidInjection.inject(this, context)
-        sleepAppWidgetViewModel.dispatch(WidgetMsg.UpdateMsg)
+        sleepAppWidgetViewModel.dispatch(UpdateMsg)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -26,7 +26,7 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         if (ACTION_SIMPLEAPPWIDGET_TOGGLE == intent.action) {
-            sleepAppWidgetViewModel.dispatch(WidgetMsg.ToggleSleepMsg)
+            sleepAppWidgetViewModel.dispatch(ToggleSleepMsg)
         }
     }
 }

@@ -8,7 +8,6 @@ import net.erikkarlsson.simplesleeptracker.elm.Cmd
 import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg
 import net.erikkarlsson.simplesleeptracker.elm.State
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetMsg.*
 import javax.inject.Inject
 
 class AppWidgetComponent @Inject constructor(private val loadCurrentSleep: LoadCurrentSleep,
@@ -41,19 +40,19 @@ data class WidgetState(val isSleeping: Boolean) : State {
 }
 
 // Msg
-sealed class WidgetMsg : Msg {
-    object UpdateMsg : WidgetMsg()
-    object ToggleSleepMsg : WidgetMsg()
+sealed class WidgetMsg : Msg
 
-    sealed class LoadCurrentSleepResult() : WidgetMsg() {
-        data class Success(val sleep: Sleep) : LoadCurrentSleepResult()
-        data class Failure(val error: Throwable) : LoadCurrentSleepResult()
-    }
+object UpdateMsg : WidgetMsg()
+object ToggleSleepMsg : WidgetMsg()
 
-    sealed class ToggleSleepResult() : WidgetMsg() {
-        data class Success(val sleep: Sleep) : ToggleSleepResult()
-        data class Failure(val error: Throwable) : ToggleSleepResult()
-    }
+sealed class LoadCurrentSleepResult() : WidgetMsg() {
+    data class Success(val sleep: Sleep) : LoadCurrentSleepResult()
+    data class Failure(val error: Throwable) : LoadCurrentSleepResult()
+}
+
+sealed class ToggleSleepResult() : WidgetMsg() {
+    data class Success(val sleep: Sleep) : ToggleSleepResult()
+    data class Failure(val error: Throwable) : ToggleSleepResult()
 }
 
 // Cmd
@@ -66,15 +65,15 @@ sealed class WidgetCmd : Cmd {
 class LoadCurrentSleep @Inject constructor(private val loadCurrentSleepTask: LoadCurrentSleepTask) {
 
     internal fun task(): Single<WidgetMsg> = loadCurrentSleepTask.execute()
-        .map { WidgetMsg.LoadCurrentSleepResult.Success(it) }
+        .map { LoadCurrentSleepResult.Success(it) }
         .cast(WidgetMsg::class.java)
-        .onErrorReturn(WidgetMsg.LoadCurrentSleepResult::Failure)
+        .onErrorReturn(LoadCurrentSleepResult::Failure)
 }
 
 class ToggleSleep @Inject constructor(private val toggleSleepTask: ToggleSleepTask) {
 
     internal fun task() = toggleSleepTask.execute()
-        .map { WidgetMsg.ToggleSleepResult.Success(it) }
+        .map { ToggleSleepResult.Success(it) }
         .cast(WidgetMsg::class.java)
-        .onErrorReturn { WidgetMsg.ToggleSleepResult.Failure(it) }
+        .onErrorReturn { ToggleSleepResult.Failure(it) }
 }

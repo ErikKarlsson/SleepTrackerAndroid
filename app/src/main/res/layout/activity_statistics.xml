@@ -7,8 +7,14 @@
     android:layout_height="match_parent"
     tools:context="net.erikkarlsson.simplesleeptracker.MainActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:background="@android:color/holo_purple"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
-        android:id="@+id/average_sleep_text"
+        android:id="@+id/averageSleepText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="8"
@@ -18,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
-        android:id="@+id/toggle_sleep_button"
+        android:id="@+id/toggleSleepButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Toggle sleep"/>
