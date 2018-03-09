@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker.statistics
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
@@ -15,6 +16,8 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
+import net.erikkarlsson.simplesleeptracker.details.DetailsActivity
+import net.erikkarlsson.simplesleeptracker.details.EXTRA_SLEEP_ID
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.util.scanMap
@@ -31,9 +34,7 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private val disposables = CompositeDisposable()
-
-    private val adapter = SleepAdapter { Timber.d("Clicked sleep id: %d", it.id) }
-
+    private val adapter = SleepAdapter { navigateToDetails(it.id) }
     private val sleepListRelay: PublishRelay<List<Sleep>> = PublishRelay.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class StatisticsActivity : AppCompatActivity() {
                     { Timber.e(it, "Error calculating diff result") })
             .addTo(disposables)
 
-        viewModel.state().observe(this, Observer { renderLiveData(it) })
+        viewModel.state().observe(this, Observer { render(it) })
     }
 
     override fun onStart() {
@@ -72,12 +73,20 @@ class StatisticsActivity : AppCompatActivity() {
         disposables.dispose()
     }
 
-    fun renderLiveData(state: StatisticsState?) {
+    private fun render(state: StatisticsState?) {
         state?.let {
             sleepListRelay.accept(state.sleepList)
             Timber.d("sleepList size %d", state.sleepList.size)
             Timber.d("render %f", state.statistics.avgSleep)
             averageSleepText.text = String.format("%f : %b : %d", state.statistics.avgSleep, state.isConnectedToInternet, state.count)
+        }
+    }
+
+    private fun navigateToDetails(id: Int?) {
+        id?.let {
+            val intent = Intent(this, DetailsActivity::class.java)
+            intent.putExtra(EXTRA_SLEEP_ID, id)
+            startActivity(intent)
         }
     }
 

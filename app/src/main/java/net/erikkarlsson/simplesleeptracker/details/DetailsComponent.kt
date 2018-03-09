@@ -11,12 +11,14 @@ class DetailsComponent : Component<DetailsState, Msg, DetailsCmd> {
     override fun initState(): DetailsState = DetailsState.empty()
 
     override fun update(msg: Msg, prevState: DetailsState): Pair<DetailsState, DetailsCmd?> = when (msg) {
-        DetailsMsg.NoOp -> TODO()
+        NoOp -> TODO()
         else -> prevState.noCmd()
     }
 
     override fun call(cmd: DetailsCmd): Single<Msg> = when (cmd) {
-        else -> { Single.just(DetailsMsg.NoOp) }
+        else -> {
+            Single.just(NoOp)
+        }
     }
 }
 
@@ -28,9 +30,9 @@ data class DetailsState(val sleep: Sleep) : State {
 }
 
 // Msg
-sealed class DetailsMsg : Msg {
-    object NoOp : DetailsMsg()
-}
+object NoOp : Msg
+data class LoadDetails(val id: Int): Msg
+data class LoadResult(val sleep: Sleep): Msg
 
 // Cmd
 sealed class DetailsCmd : Cmd {

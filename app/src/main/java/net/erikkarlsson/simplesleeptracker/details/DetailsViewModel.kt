@@ -1,11 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.details
 
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsComponent
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsMsg
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsState
+import net.erikkarlsson.simplesleeptracker.elm.Msg
 import javax.inject.Inject
 
-class DetailsViewModel @Inject constructor(statisticsComponent: StatisticsComponent) :
-        ElmViewModel<StatisticsState, StatisticsMsg, StatisticsCmd>(statisticsComponent)
+class DetailsViewModel @Inject constructor(detailsComponent: DetailsComponent) :
+        ElmViewModel<DetailsState, Msg, DetailsCmd>(detailsComponent)
