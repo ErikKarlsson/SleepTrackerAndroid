@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker.elm
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.os.Looper
 import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
@@ -62,7 +63,13 @@ internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd>(component: Comp
     }
 
     private fun updateStateValue(stateVal: STATE) {
-        state.value = stateVal
+        // Live data requires value to be posted on main thread
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            state.value = stateVal
+        } else {
+            state.postValue(stateVal)
+        }
+
         stateRelay.accept(stateVal)
         log(LogLevel.BASIC, "State updated to: $stateVal")
     }

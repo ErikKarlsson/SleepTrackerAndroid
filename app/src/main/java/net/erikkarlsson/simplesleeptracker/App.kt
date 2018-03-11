@@ -14,7 +14,7 @@ import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 
-class App : Application(), HasActivityInjector, HasBroadcastReceiverInjector {
+open class App : Application(), HasActivityInjector, HasBroadcastReceiverInjector {
 
     @Inject
     lateinit var activityInjector : DispatchingAndroidInjector<Activity>
@@ -30,38 +30,14 @@ class App : Application(), HasActivityInjector, HasBroadcastReceiverInjector {
 
         DaggerAppComponent.builder().application(this).build().inject(this)
 
-        Timber.plant(DebugTree())
-
-        /*
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         } else {
-            Timber.plant(CrashReportingTree())
+            TODO("erikkarlsson: Plant crash reporting tree")
         }
-        */
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastInjector
-
-    /** A tree which logs important information for crash reporting.  */
-    /*private class CrashReportingTree : Timber.Tree() {
-        override fun log(priority: Int, tag: String, @NonNull message: String, t: Throwable?) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
-                return
-            }
-
-            FakeCrashLibrary.log(priority, tag, message)
-
-            if (t != null) {
-                if (priority == Log.ERROR) {
-                    FakeCrashLibrary.logError(t)
-                } else if (priority == Log.WARN) {
-                    FakeCrashLibrary.logWarning(t)
-                }
-            }
-        }
-    }
-    */
 }

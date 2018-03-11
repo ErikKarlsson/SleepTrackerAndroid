@@ -17,14 +17,19 @@ android {
         targetSdkVersion Versions.target_sdk
         versionCode Versions.version_code
         versionName Versions.version_name
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "${applicationId}.runner.TestRunner"
     }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        acceptance.initWith(debug)
     }
+    testBuildType "acceptance"
     kapt {
         javacOptions {
             option("-Xmaxerrs", 500)
@@ -50,6 +55,13 @@ dependencies {
     androidTestImplementation Deps.espresso_core
     androidTestImplementation Deps.espresso_contrib
     androidTestImplementation Deps.espresso_intents
+    androidTestImplementation Deps.daggermock_android
+    androidTestImplementation Deps.daggermock_kotlin
+    androidTestImplementation Deps.dagger_runtime
+    androidTestImplementation Deps.dagger_android
+    androidTestImplementation Deps.dagger_android_support
+    kaptAndroidTest Deps.dagger_compiler
+    kaptAndroidTest Deps.dagger_android_support_compiler
 
     // Dependencies for local unit tests
     testImplementation Deps.junit

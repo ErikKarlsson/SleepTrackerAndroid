@@ -6,8 +6,9 @@ import net.erikkarlsson.simplesleeptracker.elm.Cmd
 import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg
 import net.erikkarlsson.simplesleeptracker.elm.State
+import javax.inject.Inject
 
-class DetailsComponent : Component<DetailsState, Msg, DetailsCmd> {
+class DetailsComponent @Inject constructor() : Component<DetailsState, Msg, DetailsCmd> {
     override fun initState(): DetailsState = DetailsState.empty()
 
     override fun update(msg: Msg, prevState: DetailsState): Pair<DetailsState, DetailsCmd?> = when (msg) {
