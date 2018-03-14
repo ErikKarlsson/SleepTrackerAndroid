@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import io.reactivex.Single
+import io.reactivex.Observable
 
 interface StatisticsDataSource {
-    fun getStatistics(): Single<Statistics>
+    fun getStatistics(): Observable<Statistics>
 }

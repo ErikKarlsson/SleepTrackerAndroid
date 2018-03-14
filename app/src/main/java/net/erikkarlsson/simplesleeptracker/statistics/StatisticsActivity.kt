@@ -43,7 +43,7 @@ class StatisticsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_statistics)
 
         RxView.clicks(toggleSleepButton)
-            .subscribe({ viewModel.dispatch(ToggleSleepIntent) })
+            .subscribe({ viewModel.dispatch(ToggleSleepClicked) })
             .addTo(disposables)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -61,11 +61,6 @@ class StatisticsActivity : AppCompatActivity() {
             .addTo(disposables)
 
         viewModel.state().observe(this, Observer { render(it) })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.dispatch(InitialIntent)
     }
 
     override fun onDestroy() {

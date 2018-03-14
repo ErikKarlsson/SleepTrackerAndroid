@@ -3,7 +3,6 @@ package net.erikkarlsson.simplesleeptracker.data
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.Single
 
 /**
  * Data Access Object for the sleep table.
@@ -18,22 +17,22 @@ interface SleepDao {
     fun getCurrentSleep(): Maybe<SleepEntity>
 
     @Query("SELECT ROUND(avg(hours),3) FROM Sleep")
-    fun getAverageSleepInHours(): Single<Float>
+    fun getAverageSleepInHours(): Flowable<Float>
 
     @Query("SELECT max(hours) FROM Sleep")
-    fun getLongestSleepInHours(): Single<Float>
+    fun getLongestSleepInHours(): Flowable<Float>
 
     @Query("SELECT min(hours) FROM Sleep")
-    fun getShortestSleepInHours(): Single<Float>
+    fun getShortestSleepInHours(): Flowable<Float>
 
     @Query("SELECT avg(from_date_midnight_offset_seconds) FROM Sleep WHERE from_date_midnight_offset_seconds != 0")
-    fun getAverageBedtimeMidnightOffsetInSeconds(): Single<Int>
+    fun getAverageBedtimeMidnightOffsetInSeconds(): Flowable<Int>
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) FROM Sleep WHERE to_date_midnight_offset_seconds != 0")
-    fun getAverageWakeupMidnightOffsetInSeconds(): Single<Int>
+    fun getAverageWakeupMidnightOffsetInSeconds(): Flowable<Int>
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) FROM Sleep WHERE to_date_midnight_offset_seconds != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
-    fun getAverageWakeupMidnightOffsetInSecondsBetweenDates(from: String, to: String): Single<Int>
+    fun getAverageWakeupMidnightOffsetInSecondsBetweenDates(from: String, to: String): Flowable<Int>
 
     @Query("SELECT * FROM Sleep WHERE datetime(to_date)>=datetime('now', '-2 hour')")
     fun getSleepLastMonth(): Flowable<List<SleepEntity>>
