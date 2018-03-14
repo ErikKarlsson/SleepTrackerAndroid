@@ -19,10 +19,16 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
             }
     }
 
-    override fun getCurrent(): Single<Sleep> {
+    override fun getCurrentSingle(): Single<Sleep> {
+        return sleepDao.getCurrentSleepSingle()
+            .map { sleepMapper.mapFromEntity(it) }
+            .onErrorReturnItem(Sleep.empty())
+    }
+
+    override fun getCurrent(): Observable<Sleep> {
         return sleepDao.getCurrentSleep()
             .map { sleepMapper.mapFromEntity(it) }
-            .toSingle()
+            .toObservable()
             .onErrorReturnItem(Sleep.empty())
     }
 
@@ -36,7 +42,7 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
         return sleepDao.updateSleep(sleepEntity)
     }
 
-    override fun deleteAll(): Unit {
+    override fun deleteAll() {
         sleepDao.deleteAllSleep()
     }
 

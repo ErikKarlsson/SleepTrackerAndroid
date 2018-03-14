@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker.data
 
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.Single
 
 /**
  * Data Access Object for the sleep table.
@@ -14,7 +14,10 @@ interface SleepDao {
     fun getSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC LIMIT 1")
-    fun getCurrentSleep(): Maybe<SleepEntity>
+    fun getCurrentSleep(): Flowable<SleepEntity>
+
+    @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC LIMIT 1")
+    fun getCurrentSleepSingle(): Single<SleepEntity>
 
     @Query("SELECT ROUND(avg(hours),3) FROM Sleep")
     fun getAverageSleepInHours(): Flowable<Float>

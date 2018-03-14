@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.statistics
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.base.ToggleSleepTaskNew
+import net.erikkarlsson.simplesleeptracker.base.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.data.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -12,13 +12,13 @@ import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd.ToggleSleepCmd
 import javax.inject.Inject
 
-class StatisticsComponent @Inject constructor(private val toggleSleepTaskNew: ToggleSleepTaskNew,
+class StatisticsComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,
                                               private val sleepSubscription: SleepSubscription,
                                               private val statisticsSubscription: StatisticsSubscription)
     : Component<StatisticsState, StatisticsMsg, StatisticsCmd> {
 
     override fun call(cmd: StatisticsCmd): Single<StatisticsMsg> = when (cmd) {
-        ToggleSleepCmd -> toggleSleepTaskNew.execute().toSingleDefault(NoOp)
+        ToggleSleepCmd -> toggleSleepTask.execute().toSingleDefault(NoOp)
     }
 
     override fun initState(): StatisticsState = StatisticsState.empty()

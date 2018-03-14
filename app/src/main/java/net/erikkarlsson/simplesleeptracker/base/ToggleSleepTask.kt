@@ -1,28 +1,17 @@
 package net.erikkarlsson.simplesleeptracker.base
 
 import io.reactivex.Completable
-import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.util.SchedulerProvider
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
-class ToggleSleepTask @Inject constructor(
-        private val sleepRepository: SleepDataSource,
-        private val schedulerProvider: SchedulerProvider) {
+class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource) {
 
-    internal fun execute(): Single<Sleep> =
-            getCurrentSleep()
-                .flatMap {
-                    Completable.fromAction { toggleSleep(it) }
-                        .andThen(getCurrentSleep())
-                }
-                .subscribeOn(schedulerProvider.io())
-
-    private fun getCurrentSleep(): Single<Sleep> {
-        return sleepRepository.getCurrent()
-    }
+    internal fun execute(): Completable =
+            sleepRepository.getCurrentSingle()
+                .map { toggleSleep(it) }
+                .toCompletable()
 
     private fun toggleSleep(currentSleep: Sleep) {
         if (currentSleep.isSleeping) {
