@@ -76,9 +76,14 @@ class StatisticsActivity : AppCompatActivity() {
     private fun render(state: StatisticsState?) {
         state?.let {
             sleepListRelay.accept(state.sleepList)
-            Timber.d("sleepList size %d", state.sleepList.size)
-            Timber.d("render %f", state.statistics.avgSleep)
-            averageSleepText.text = String.format("%f : %b : %d", state.statistics.avgSleep, state.isConnectedToInternet, state.count)
+            with(state.statistics) {
+                averageSleepText.text = String.format("Average sleep: %f\n" +
+                        "Longest sleep: %f\n" +
+                        "Shortest sleep: %f\n" +
+                        "Average bed time: %s\n" +
+                        "Average wake up time: %s",
+                        avgSleep, longestSleep, shortestSleep, averageBedTime.toString(), averageWakeUpTime.toString())
+            }
         }
     }
 

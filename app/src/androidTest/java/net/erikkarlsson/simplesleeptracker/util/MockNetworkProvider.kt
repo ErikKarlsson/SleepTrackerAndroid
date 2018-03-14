@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker
+package net.erikkarlsson.simplesleeptracker.util
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable

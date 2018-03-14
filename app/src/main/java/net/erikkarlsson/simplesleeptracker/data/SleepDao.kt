@@ -21,10 +21,10 @@ interface SleepDao {
     fun getAverageSleepInHours(): Single<Float>
 
     @Query("SELECT max(hours) FROM Sleep")
-    fun getLongestSleep(): Single<Float>
+    fun getLongestSleepInHours(): Single<Float>
 
     @Query("SELECT min(hours) FROM Sleep")
-    fun getShortestSleep(): Single<Float>
+    fun getShortestSleepInHours(): Single<Float>
 
     @Query("SELECT avg(from_date_midnight_offset_seconds) FROM Sleep WHERE from_date_midnight_offset_seconds != 0")
     fun getAverageBedtimeMidnightOffsetInSeconds(): Single<Int>

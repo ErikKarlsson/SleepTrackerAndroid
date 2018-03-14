@@ -18,7 +18,7 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     .subscribeOn(Schedulers.computation())
             }
     }
-
+    
     override fun getCurrent(): Single<Sleep> {
         return sleepDao.getCurrentSleep()
             .map { sleepMapper.mapFromEntity(it) }
@@ -34,6 +34,10 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
     override fun update(updatedSleep: Sleep): Int {
         val sleepEntity = sleepMapper.mapToEntity(updatedSleep)
         return sleepDao.updateSleep(sleepEntity)
+    }
+
+    override fun deleteAll(): Unit {
+        sleepDao.deleteAllSleep()
     }
 
 }
