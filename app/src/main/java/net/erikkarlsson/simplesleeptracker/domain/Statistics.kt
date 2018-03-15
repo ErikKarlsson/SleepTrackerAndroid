@@ -2,12 +2,16 @@ package net.erikkarlsson.simplesleeptracker.domain
 
 import org.threeten.bp.LocalTime
 
-data class Statistics(val avgSleepHours: Float,
+data class Statistics(val sleepCount: Int,
+                      val avgSleepHours: Float,
                       val longestSleep: Sleep,
                       val shortestSleep: Sleep,
                       val averageWakeUpTime: LocalTime,
                       val averageBedTime: LocalTime) {
+
+    val timeSleeping get(): Int = Math.min(Math.round(avgSleepHours / 24 * 100), 24)
+
     companion object {
-        fun empty() = Statistics(-1.0f, Sleep.empty(), Sleep.empty(), LocalTime.MAX, LocalTime.MAX)
+        fun empty() = Statistics(0, 0.0f, Sleep.empty(), Sleep.empty(), LocalTime.MAX, LocalTime.MAX)
     }
 }

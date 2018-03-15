@@ -78,12 +78,16 @@ class StatisticsActivity : AppCompatActivity() {
                 averageSleepText.text = if (this == Statistics.empty()) {
                     "No sleep tracked yet"
                 } else {
-                    String.format("Avg. duration: %s\n" +
-                            "Longest night: %s %s\n" +
-                            "Shortest night: %s %s\n" +
-                            "Average bed time: %s\n" +
-                            "Average wake up time: %s",
+                    String.format("Tracked Nights: %d\n" +
+                            "Avg. Duration: %s\n" +
+                            "Time Sleeping: %d%%\n" +
+                            "Longest Night: %s %s\n" +
+                            "Shortest Night: %s %s\n" +
+                            "Average Bed Time: %s\n" +
+                            "Average Wake Up Time: %s",
+                            sleepCount,
                             avgSleepHours.formatHHMM(),
+                            timeSleeping,
                             longestSleep.hours.formatHHMM(),
                             longestSleep.toDate?.formatYYYYMMDD(),
                             shortestSleep.hours.formatHHMM(),

@@ -10,6 +10,9 @@ import io.reactivex.Single
 @Dao
 interface SleepDao {
 
+    @Query("SELECT count(*) FROM Sleep")
+    fun getSleepCount(): Flowable<Int>
+
     @Query("SELECT * FROM Sleep ORDER BY datetime(to_date) DESC")
     fun getSleep(): Flowable<List<SleepEntity>>
 

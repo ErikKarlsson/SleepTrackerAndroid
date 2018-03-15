@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data
 
 import io.reactivex.Observable
-import io.reactivex.functions.Function5
+import io.reactivex.functions.Function6
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import org.threeten.bp.LocalTime
@@ -12,15 +12,15 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
         StatisticsDataSource {
 
     override fun getStatistics(): Observable<Statistics> {
-        return Observable.zip(sleepDao.getAverageSleepInHours().toObservable(),
+        return Observable.zip(sleepDao.getSleepCount().toObservable(),
+                sleepDao.getAverageSleepInHours().toObservable(),
                 sleepDao.getLongestSleep().map { sleepMapper.mapFromEntity(it) }.toObservable(),
                 sleepDao.getShortestSleep().map { sleepMapper.mapFromEntity(it) }.toObservable(),
                 sleepDao.getAverageWakeupMidnightOffsetInSeconds().toObservable().map { midnightOffsetToLocalTime(it) },
                 sleepDao.getAverageBedtimeMidnightOffsetInSeconds().toObservable().map { midnightOffsetToLocalTime(it) },
-                Function5 { averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime ->
-                    Statistics(averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime)
+                Function6 { sleepCount, averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime ->
+                    Statistics(sleepCount, averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime)
                 })
-
     }
 
     fun midnightOffsetToLocalTime(offsetSeconds: Int): LocalTime {
