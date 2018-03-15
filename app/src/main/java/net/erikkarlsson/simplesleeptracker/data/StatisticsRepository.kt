@@ -7,13 +7,14 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
-class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao) :
+class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
+                                               private val sleepMapper: SleepMapper) :
         StatisticsDataSource {
 
     override fun getStatistics(): Observable<Statistics> {
         return Observable.zip(sleepDao.getAverageSleepInHours().toObservable(),
-                sleepDao.getLongestSleepInHours().toObservable(),
-                sleepDao.getShortestSleepInHours().toObservable(),
+                sleepDao.getLongestSleep().map { sleepMapper.mapFromEntity(it) }.toObservable(),
+                sleepDao.getShortestSleep().map { sleepMapper.mapFromEntity(it) }.toObservable(),
                 sleepDao.getAverageWakeupMidnightOffsetInSeconds().toObservable().map { midnightOffsetToLocalTime(it) },
                 sleepDao.getAverageBedtimeMidnightOffsetInSeconds().toObservable().map { midnightOffsetToLocalTime(it) },
                 Function5 { averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime ->

@@ -1,6 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.format.DateTimeFormatter.ofPattern
 import org.threeten.bp.temporal.ChronoUnit
 import java.math.BigDecimal
 
@@ -31,3 +33,7 @@ fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
         .setScale(3, BigDecimal.ROUND_HALF_UP)
         .toFloat()
 }
+
+fun OffsetDateTime.formatYYYYMMDD() = this.format(ofPattern("yyyy-MM-dd"))
+
+fun LocalTime.formatHHMM(): String = this.format(ofPattern("HH:mm"))

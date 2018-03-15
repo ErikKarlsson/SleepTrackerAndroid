@@ -2,12 +2,11 @@ package net.erikkarlsson.simplesleeptracker.statistics
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.base.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.data.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
+import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd.ToggleSleepCmd
 import javax.inject.Inject
@@ -43,26 +42,14 @@ data class StatisticsState(val statistics: Statistics,
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource)
-    : StatelessSub<StatisticsState, StatisticsMsg>() {
+class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
-    override fun invoke(): Observable<StatisticsMsg> {
-        return sleepRepository.getSleep()
-            .subscribeOn(Schedulers.io())
-            .map { SleepLoaded(it) }
-    }
-
+    override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getSleep().map { SleepLoaded(it) }
 }
 
-class StatisticsSubscription @Inject constructor(private val statisticsRepository: StatisticsRepository)
-    : StatelessSub<StatisticsState, StatisticsMsg>() {
+class StatisticsSubscription @Inject constructor(private val statisticsRepository: StatisticsRepository) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
-    override fun invoke(): Observable<StatisticsMsg> {
-        return statisticsRepository.getStatistics()
-            .subscribeOn(Schedulers.io())
-            .map { StatisticsLoaded(it) }
-    }
-
+    override fun invoke(): Observable<StatisticsMsg> = statisticsRepository.getStatistics().map { StatisticsLoaded(it) }
 }
 
 // Msg

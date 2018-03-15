@@ -1,8 +1,6 @@
-package net.erikkarlsson.simplesleeptracker.base
+package net.erikkarlsson.simplesleeptracker.domain
 
 import io.reactivex.Completable
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 

@@ -20,6 +20,9 @@ import net.erikkarlsson.simplesleeptracker.details.DetailsActivity
 import net.erikkarlsson.simplesleeptracker.details.EXTRA_SLEEP_ID
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.Statistics
+import net.erikkarlsson.simplesleeptracker.util.formatHHMM
+import net.erikkarlsson.simplesleeptracker.util.formatYYYYMMDD
 import net.erikkarlsson.simplesleeptracker.util.scanMap
 import timber.log.Timber
 import javax.inject.Inject
@@ -72,12 +75,22 @@ class StatisticsActivity : AppCompatActivity() {
         state?.let {
             sleepListRelay.accept(state.sleepList)
             with(state.statistics) {
-                averageSleepText.text = String.format("Average sleep: %f\n" +
-                        "Longest sleep: %f\n" +
-                        "Shortest sleep: %f\n" +
-                        "Average bed time: %s\n" +
-                        "Average wake up time: %s",
-                        avgSleep, longestSleep, shortestSleep, averageBedTime.toString(), averageWakeUpTime.toString())
+                averageSleepText.text = if (this == Statistics.empty()) {
+                    "No sleep tracked yet"
+                } else {
+                    String.format("Avg. duration: %s\n" +
+                            "Longest night: %s %s\n" +
+                            "Shortest night: %s %s\n" +
+                            "Average bed time: %s\n" +
+                            "Average wake up time: %s",
+                            avgSleepHours.formatHHMM(),
+                            longestSleep.hours.formatHHMM(),
+                            longestSleep.toDate?.formatYYYYMMDD(),
+                            shortestSleep.hours.formatHHMM(),
+                            shortestSleep.toDate?.formatYYYYMMDD(),
+                            averageBedTime.formatHHMM(),
+                            averageWakeUpTime.formatHHMM())
+                }
             }
         }
     }

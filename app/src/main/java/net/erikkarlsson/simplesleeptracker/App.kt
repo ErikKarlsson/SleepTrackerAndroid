@@ -8,6 +8,8 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
+import net.erikkarlsson.simplesleeptracker.elm.LogLevel
+import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import net.erikkarlsson.simplesleeptracker.sleepappwidget.SleepWidgetView
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -35,6 +37,8 @@ open class App : Application(), HasActivityInjector, HasBroadcastReceiverInjecto
         } else {
             TODO("erikkarlsson: Plant crash reporting tree")
         }
+
+        RuntimeFactory.defaultLogLevel = if (BuildConfig.DEBUG) LogLevel.FULL else LogLevel.NONE
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
