@@ -16,7 +16,7 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     .map { sleepMapper.mapFromEntity(it) }
                     .toList().toObservable()
                     .subscribeOn(Schedulers.computation())
-            }
+              }
     }
 
     override fun getCurrentSingle(): Single<Sleep> {

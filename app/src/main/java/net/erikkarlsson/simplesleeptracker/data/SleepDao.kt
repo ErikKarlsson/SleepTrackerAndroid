@@ -31,6 +31,9 @@ interface SleepDao {
     @Query("SELECT * FROM Sleep WHERE hours != 0 AND hours = (SELECT min(hours) FROM Sleep WHERE hours != 0) ORDER BY datetime(to_date) ASC LIMIT 1")
     fun getShortestSleep(): Flowable<SleepEntity>
 
+    @Query("SELECT avg(from_date_midnight_offset_seconds) as 'midnightOffsetInSeconds', strftime('%w', to_date) as 'dayOfWeek' FROM Sleep WHERE hours != 0 GROUP BY strftime('%w', to_date)")
+    fun getAverageBedtimeMidnightOffsetInSecondsForDaysOfWeek(): Flowable<List<DayOfWeekMidnightOffset>>
+
     @Query("SELECT avg(from_date_midnight_offset_seconds) FROM Sleep WHERE from_date_midnight_offset_seconds != 0")
     fun getAverageBedtimeMidnightOffsetInSeconds(): Flowable<Int>
 

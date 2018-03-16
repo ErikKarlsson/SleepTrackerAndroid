@@ -37,3 +37,5 @@ fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
 fun OffsetDateTime.formatYYYYMMDD() = this.format(ofPattern("yyyy-MM-dd"))
 
 fun LocalTime.formatHHMM(): String = this.format(ofPattern("HH:mm"))
+
+val Int.toLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())

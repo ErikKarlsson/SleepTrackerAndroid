@@ -78,13 +78,22 @@ class StatisticsActivity : AppCompatActivity() {
                 averageSleepText.text = if (this == Statistics.empty()) {
                     "No sleep tracked yet"
                 } else {
+                    var bedTimeDaysOfWeek = ""
+
+                    for (dayOfWeekLocalTime in averageBedTimeDayOfWeek) {
+                        bedTimeDaysOfWeek += String.format("%s %s\n",
+                                dayOfWeekLocalTime.dayOfWeek,
+                                dayOfWeekLocalTime.localTime.formatHHMM())
+                    }
+
                     String.format("Tracked Nights: %d\n" +
                             "Avg. Duration: %s\n" +
                             "Time Sleeping: %d%%\n" +
                             "Longest Night: %s %s\n" +
                             "Shortest Night: %s %s\n" +
                             "Average Bed Time: %s\n" +
-                            "Average Wake Up Time: %s",
+                            "Average Wake Up Time: %s\n" +
+                            "%s",
                             sleepCount,
                             avgSleepHours.formatHHMM(),
                             timeSleeping,
@@ -93,7 +102,8 @@ class StatisticsActivity : AppCompatActivity() {
                             shortestSleep.hours.formatHHMM(),
                             shortestSleep.toDate?.formatYYYYMMDD(),
                             averageBedTime.formatHHMM(),
-                            averageWakeUpTime.formatHHMM())
+                            averageWakeUpTime.formatHHMM(),
+                            bedTimeDaysOfWeek)
                 }
             }
         }
