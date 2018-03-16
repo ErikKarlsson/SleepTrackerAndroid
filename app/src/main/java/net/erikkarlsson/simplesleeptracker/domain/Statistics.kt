@@ -8,11 +8,12 @@ data class Statistics(val sleepCount: Int,
                       val shortestSleep: Sleep,
                       val averageWakeUpTime: LocalTime,
                       val averageBedTime: LocalTime,
-                      val averageBedTimeDayOfWeek: List<DayOfWeekLocalTime>) {
+                      val averageBedTimeDayOfWeek: List<DayOfWeekLocalTime>,
+                      val averageWakeupTimeDayOfWeek: List<DayOfWeekLocalTime>) {
 
     val timeSleeping get(): Int = Math.min(Math.round(avgSleepHours / 24 * 100), 24)
 
     companion object {
-        fun empty() = Statistics(0, 0.0f, Sleep.empty(), Sleep.empty(), LocalTime.MAX, LocalTime.MAX, emptyList())
+        fun empty() = Statistics(0, 0.0f, Sleep.empty(), Sleep.empty(), LocalTime.MAX, LocalTime.MAX, emptyList(), emptyList())
     }
 }
