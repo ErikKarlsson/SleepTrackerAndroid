@@ -24,7 +24,10 @@ import net.erikkarlsson.simplesleeptracker.domain.Statistics
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.util.formatYYYYMMDD
 import net.erikkarlsson.simplesleeptracker.util.scanMap
+import org.threeten.bp.DayOfWeek
+import org.threeten.bp.format.TextStyle
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class StatisticsActivity : AppCompatActivity() {
@@ -81,16 +84,16 @@ class StatisticsActivity : AppCompatActivity() {
                     var bedTimeDaysOfWeek = ""
                     var wakeupTimeDaysOfWeek = ""
 
-                    for (dayOfWeekLocalTime in averageBedTimeDayOfWeek) {
-                        bedTimeDaysOfWeek += String.format("%s %s\n",
-                                dayOfWeekLocalTime.dayOfWeek,
-                                dayOfWeekLocalTime.localTime.formatHHMM())
+                    for (averageBedtime in averageBedTimeDayOfWeek) {
+                        bedTimeDaysOfWeek += String.format("%s: %s\n",
+                                DayOfWeek.of(averageBedtime.dayOfWeek).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
+                                averageBedtime.localTime.formatHHMM())
                     }
 
-                    for (dayOfWeekLocalTime in averageWakeupTimeDayOfWeek) {
-                        wakeupTimeDaysOfWeek += String.format("%s %s\n",
-                                dayOfWeekLocalTime.dayOfWeek,
-                                dayOfWeekLocalTime.localTime.formatHHMM())
+                    for (averageWakeupTime in averageWakeupTimeDayOfWeek) {
+                        wakeupTimeDaysOfWeek += String.format("%s: %s\n",
+                                DayOfWeek.of(averageWakeupTime.dayOfWeek).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
+                                averageWakeupTime.localTime.formatHHMM())
                     }
 
                     String.format("Tracked Nights: %d\n" +
