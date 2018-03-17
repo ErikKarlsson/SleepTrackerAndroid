@@ -16,10 +16,10 @@ interface SleepDao {
     @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC")
     fun getSleep(): Flowable<List<SleepEntity>>
 
-    @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC LIMIT 1")
+    @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     fun getCurrentSleep(): Flowable<SleepEntity>
 
-    @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC LIMIT 1")
+    @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     fun getCurrentSleepSingle(): Single<SleepEntity>
 
     @Query("SELECT ROUND(avg(hours),3) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
