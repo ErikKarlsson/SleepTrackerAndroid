@@ -4,18 +4,22 @@ import io.reactivex.Observable
 import org.threeten.bp.LocalDate
 
 interface StatisticsDataSource {
+
     /**
-     * Get statistic comparison between two date ranges
+     * Get stream of overall statistics
      */
     fun getStatistics(): Observable<Statistics>
 
     /**
-     * Get statistics between dates
+     * Get stream of statistics for date range
      */
     fun getStatisticsBetweenDates(startDate: LocalDate, endDate: LocalDate): Observable<Statistics>
 
     /**
-     * Get overall statistics
+     * Get stream of statistic comparison between two date ranges
      */
-    fun getStatisticComparison(startDateFirst: LocalDate, endDateFirst: LocalDate, startDateSecond: LocalDate, endDateSecond: LocalDate): Observable<StatisticComparison>
+    fun getStatisticComparison(startDateFirst: LocalDate,
+                               endDateFirst: LocalDate,
+                               startDateSecond: LocalDate,
+                               endDateSecond: LocalDate): Observable<StatisticComparison>
 }
