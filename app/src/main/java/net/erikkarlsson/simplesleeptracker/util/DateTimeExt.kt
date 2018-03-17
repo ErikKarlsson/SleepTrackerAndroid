@@ -1,11 +1,15 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import net.erikkarlsson.simplesleeptracker.domain.DayOfWeekLocalTime
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter.ofPattern
+import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.ChronoUnit
 import java.math.BigDecimal
+import java.util.*
 
 /**
  * Calculates offset from midnight in minutes.
@@ -40,11 +44,12 @@ val OffsetDateTime.formatYYYYMMDDHHMM: String get() = this.format(ofPattern("yyy
 
 val LocalTime.formatHHMM: String get() = this.format(ofPattern("HH:mm"))
 
-val Float.formatHHMM: String get() {
-    val hours = Math.floor(this.toDouble()).toInt()
-    val minutes = Math.floor(((this - hours) * 60).toDouble()).toInt()
-    return String.format("%dh %dmin", hours, minutes)
-}
+val Float.formatHHMM: String
+    get() {
+        val hours = Math.floor(this.toDouble()).toInt()
+        val minutes = Math.floor(((this - hours) * 60).toDouble()).toInt()
+        return String.format("%dh %dmin", hours, minutes)
+    }
 
 fun Float.formatDiffPercentage(other: Float): String {
     val diff = this - other
@@ -66,9 +71,10 @@ fun Float.formatDiffHHMM(other: Float): String {
     return prefix + diffHHMM
 }
 
-val Float.formatMM: String get() {
-    return String.format("%dmin", Math.floor((this * 60).toDouble()).toInt())
-}
+val Float.formatMM: String
+    get() {
+        return String.format("%dmin", Math.floor((this * 60).toDouble()).toInt())
+    }
 
 fun Int.formatPercentageDiff(other: Int): String {
     val diff = other - this
@@ -77,3 +83,9 @@ fun Int.formatPercentageDiff(other: Int): String {
 }
 
 val Int.toLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
+
+val DayOfWeekLocalTime.formatDisplayName: String
+    get() = String.format("%s: %s",
+            DayOfWeek.of(this.dayOfWeek).getDisplayName(TextStyle.FULL,
+                    Locale.getDefault()).capitalize(),
+            this.localTime.formatHHMM)

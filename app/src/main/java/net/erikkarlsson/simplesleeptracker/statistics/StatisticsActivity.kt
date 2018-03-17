@@ -21,13 +21,11 @@ import net.erikkarlsson.simplesleeptracker.details.EXTRA_SLEEP_ID
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
+import net.erikkarlsson.simplesleeptracker.util.formatDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.util.formatYYYYMMDD
 import net.erikkarlsson.simplesleeptracker.util.scanMap
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.format.TextStyle
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class StatisticsActivity : AppCompatActivity() {
@@ -81,28 +79,16 @@ class StatisticsActivity : AppCompatActivity() {
                 averageSleepText.text = if (this == Statistics.empty()) {
                     "No sleep tracked yet"
                 } else {
-                    var bedTimeDaysOfWeek = ""
-                    var wakeupTimeDaysOfWeek = ""
-
-                    for (averageBedtime in averageBedTimeDayOfWeek) {
-                        bedTimeDaysOfWeek += String.format("%s: %s\n",
-                                DayOfWeek.of(averageBedtime.dayOfWeek).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
-                                averageBedtime.localTime.formatHHMM)
-                    }
-
-                    for (averageWakeupTime in averageWakeupTimeDayOfWeek) {
-                        wakeupTimeDaysOfWeek += String.format("%s: %s\n",
-                                DayOfWeek.of(averageWakeupTime.dayOfWeek).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
-                                averageWakeupTime.localTime.formatHHMM)
-                    }
+                    val bedTimeDaysOfWeek = averageBedTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
+                    val wakeupTimeDaysOfWeek = averageWakeupTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
 
                     String.format("Tracked Nights: %d\n" +
                             "Avg. Duration: %s (%s)\n" +
                             "Time Sleeping: %d%% (%s)\n" +
                             "Longest Night: %s %s\n" +
                             "Shortest Night: %s %s\n" +
-                            "Average Bed Time: %s (%s)\n%s" +
-                            "Average Wake Up Time: %s (%s)\n%s",
+                            "Average Bed Time: %s (%s)\n%s\n" +
+                            "Average Wake Up Time: %s (%s)\n%s\n",
                             sleepCount,
                             avgSleepHours.formatHHMM,
                             state.statistics.avgSleepDiffHHMM,
