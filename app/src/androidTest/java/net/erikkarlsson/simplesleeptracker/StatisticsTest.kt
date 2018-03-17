@@ -28,15 +28,17 @@ class StatisticsTest {
 
     @Test
     fun testLaunch() {
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusWeeks(1), toDate = OffsetDateTime.now().minusWeeks(1).plusHours(7)))
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusWeeks(1), toDate = OffsetDateTime.now().minusWeeks(1).plusHours(8)))
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusWeeks(1), toDate = OffsetDateTime.now().minusWeeks(1).plusHours(7)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusDays(9), toDate = OffsetDateTime.now().minusDays(9).plusHours(7)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusDays(10), toDate = OffsetDateTime.now().minusDays(10).plusHours(8)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusDays(11), toDate = OffsetDateTime.now().minusDays(11).plusHours(7)))
 
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(8)))
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(9)))
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(8)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().plusMinutes(80), toDate = OffsetDateTime.now().plusHours(8)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().plusDays(1).plusMinutes(90), toDate = OffsetDateTime.now().plusDays(1).plusHours(15).plusMinutes(25)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().plusDays(2).plusMinutes(133), toDate = OffsetDateTime.now().plusDays(2).plusHours(8)))
 
         main.launchActivity(null)
+
+        Thread.sleep(9999999)
 
         robot.clickItem(2)
 

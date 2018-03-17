@@ -5,10 +5,11 @@ import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.data.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.Statistics
+import net.erikkarlsson.simplesleeptracker.domain.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd.ToggleSleepCmd
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class StatisticsComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,
@@ -34,10 +35,10 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
 }
 
 // State
-data class StatisticsState(val statistics: Statistics,
+data class StatisticsState(val statistics: StatisticComparison,
                            val sleepList: List<Sleep>) : State {
     companion object {
-        fun empty() = StatisticsState(Statistics.empty(), listOf())
+        fun empty() = StatisticsState(StatisticComparison.empty(), listOf())
     }
 }
 
@@ -49,7 +50,13 @@ class SleepSubscription @Inject constructor(private val sleepRepository: SleepDa
 
 class StatisticsSubscription @Inject constructor(private val statisticsRepository: StatisticsRepository) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
-    override fun invoke(): Observable<StatisticsMsg> = statisticsRepository.getStatistics().map { StatisticsLoaded(it) }
+    override fun invoke(): Observable<StatisticsMsg>
+            = statisticsRepository.getStatisticComparison(
+            LocalDate.of(2018, 3, 12),
+            LocalDate.of(2018, 3, 20),
+            LocalDate.of(2018, 3, 5),
+            LocalDate.of(2018, 3, 11))
+        .map { StatisticsLoaded(it) }
 }
 
 // Msg
@@ -57,7 +64,7 @@ sealed class StatisticsMsg : Msg
 
 object ToggleSleepClicked : StatisticsMsg()
 data class SleepLoaded(val sleepList: List<Sleep>) : StatisticsMsg()
-data class StatisticsLoaded(val statistics: Statistics) : StatisticsMsg()
+data class StatisticsLoaded(val statistics: StatisticComparison) : StatisticsMsg()
 object NoOp : StatisticsMsg()
 
 // Cmd

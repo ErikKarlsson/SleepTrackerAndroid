@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_sleep.view.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.util.formatHHMM
+import net.erikkarlsson.simplesleeptracker.util.formatYYYYMMDDHHMM
 
 class SleepAdapter(private val itemClick: (Sleep) -> Unit) : RecyclerView.Adapter<SleepAdapter.ViewHolder>() {
 
@@ -33,7 +35,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : RecyclerView.Adapte
         : RecyclerView.ViewHolder(v) {
 
         fun bindSleep(sleep: Sleep) {
-            itemView.sleepText.text = sleep.hours.toString()
+            itemView.sleepText.text = String.format("%s %s - %s", sleep.hours.formatHHMM, sleep.fromDate.formatYYYYMMDDHHMM, sleep.toDate?.formatYYYYMMDDHHMM ?: "")
             itemView.setOnClickListener { itemClick(sleep) }
         }
     }

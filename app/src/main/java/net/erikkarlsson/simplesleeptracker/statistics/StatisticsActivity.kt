@@ -77,7 +77,7 @@ class StatisticsActivity : AppCompatActivity() {
     private fun render(state: StatisticsState?) {
         state?.let {
             sleepListRelay.accept(state.sleepList)
-            with(state.statistics) {
+            with(state.statistics.first) {
                 averageSleepText.text = if (this == Statistics.empty()) {
                     "No sleep tracked yet"
                 } else {
@@ -87,32 +87,36 @@ class StatisticsActivity : AppCompatActivity() {
                     for (averageBedtime in averageBedTimeDayOfWeek) {
                         bedTimeDaysOfWeek += String.format("%s: %s\n",
                                 DayOfWeek.of(averageBedtime.dayOfWeek).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
-                                averageBedtime.localTime.formatHHMM())
+                                averageBedtime.localTime.formatHHMM)
                     }
 
                     for (averageWakeupTime in averageWakeupTimeDayOfWeek) {
                         wakeupTimeDaysOfWeek += String.format("%s: %s\n",
                                 DayOfWeek.of(averageWakeupTime.dayOfWeek).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
-                                averageWakeupTime.localTime.formatHHMM())
+                                averageWakeupTime.localTime.formatHHMM)
                     }
 
                     String.format("Tracked Nights: %d\n" +
-                            "Avg. Duration: %s\n" +
-                            "Time Sleeping: %d%%\n" +
+                            "Avg. Duration: %s (%s)\n" +
+                            "Time Sleeping: %d%% (%s)\n" +
                             "Longest Night: %s %s\n" +
                             "Shortest Night: %s %s\n" +
-                            "Average Bed Time: %s\n%s" +
-                            "Average Wake Up Time: %s\n%s",
+                            "Average Bed Time: %s (%s)\n%s" +
+                            "Average Wake Up Time: %s (%s)\n%s",
                             sleepCount,
-                            avgSleepHours.formatHHMM(),
+                            avgSleepHours.formatHHMM,
+                            state.statistics.avgSleepDiffHHMM,
                             timeSleeping,
-                            longestSleep.hours.formatHHMM(),
-                            longestSleep.toDate?.formatYYYYMMDD(),
-                            shortestSleep.hours.formatHHMM(),
-                            shortestSleep.toDate?.formatYYYYMMDD(),
-                            averageBedTime.formatHHMM(),
+                            state.statistics.timeSleepingDiffPercentage,
+                            longestSleep.hours.formatHHMM,
+                            longestSleep.toDate?.formatYYYYMMDD,
+                            shortestSleep.hours.formatHHMM,
+                            shortestSleep.toDate?.formatYYYYMMDD,
+                            averageBedTime.formatHHMM,
+                            state.statistics.avgBedTimeDiffHHMM,
                             bedTimeDaysOfWeek,
-                            averageWakeUpTime.formatHHMM(),
+                            averageWakeUpTime.formatHHMM,
+                            state.statistics.avgWakeUpTimeDiffHHMM,
                             wakeupTimeDaysOfWeek)
                 }
             }

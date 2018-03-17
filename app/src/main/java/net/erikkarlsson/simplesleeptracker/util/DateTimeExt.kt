@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter.ofPattern
@@ -34,8 +35,45 @@ fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
         .toFloat()
 }
 
-fun OffsetDateTime.formatYYYYMMDD() = this.format(ofPattern("yyyy-MM-dd"))
+val OffsetDateTime.formatYYYYMMDD: String get() = this.format(ofPattern("yyyy-MM-dd"))
+val OffsetDateTime.formatYYYYMMDDHHMM: String get() = this.format(ofPattern("yyyy-MM-dd HH:mm"))
 
-fun LocalTime.formatHHMM(): String = this.format(ofPattern("HH:mm"))
+val LocalTime.formatHHMM: String get() = this.format(ofPattern("HH:mm"))
+
+val Float.formatHHMM: String get() {
+    val hours = Math.floor(this.toDouble()).toInt()
+    val minutes = Math.floor(((this - hours) * 60).toDouble()).toInt()
+    return String.format("%dh %dmin", hours, minutes)
+}
+
+fun Float.formatDiffPercentage(other: Float): String {
+    val diff = this - other
+    val prefix = if (diff > 0) "+" else if (diff < 0) "-" else ""
+    return String.format("%s%d%%", prefix, Math.round((diff) / other * 100))
+}
+
+fun LocalTime.formatDiffHHMM(other: LocalTime): String {
+    val diffHours = Duration.between(other, this).toMinutes().toFloat() / 60f
+    val prefix = if (diffHours > 0) "+" else if (diffHours < 0) "-" else ""
+    val diffHHMM = if (Math.abs(diffHours) > 1f) diffHours.formatHHMM else diffHours.formatMM
+    return prefix + diffHHMM
+}
+
+fun Float.formatDiffHHMM(other: Float): String {
+    val diff = this - other
+    val prefix = if (diff > 0) "+" else if (diff < 0) "-" else ""
+    val diffHHMM = if (Math.abs(diff) > 1f) diff.formatHHMM else diff.formatMM
+    return prefix + diffHHMM
+}
+
+val Float.formatMM: String get() {
+    return String.format("%dmin", Math.floor((this * 60).toDouble()).toInt())
+}
+
+fun Int.formatPercentageDiff(other: Int): String {
+    val diff = other - this
+    val prefix = if (diff > 0) "+" else if (diff < 0) "-" else ""
+    return String.format("%s%s%%", prefix, diff)
+}
 
 val Int.toLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
