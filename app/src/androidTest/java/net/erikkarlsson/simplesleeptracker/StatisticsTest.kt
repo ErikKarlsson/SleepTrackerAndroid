@@ -28,9 +28,13 @@ class StatisticsTest {
 
     @Test
     fun testLaunch() {
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(7)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusWeeks(1), toDate = OffsetDateTime.now().minusWeeks(1).plusHours(7)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusWeeks(1), toDate = OffsetDateTime.now().minusWeeks(1).plusHours(8)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now().minusWeeks(1), toDate = OffsetDateTime.now().minusWeeks(1).plusHours(7)))
+
         component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(8)))
-        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(7)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(9)))
+        component.insertSleep(Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusHours(8)))
 
         main.launchActivity(null)
 
