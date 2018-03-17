@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/toggleSleepButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toggle sleep" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -23,12 +29,6 @@
             android:layout_margin="8dp"
             android:singleLine="false"
             tools:text="8" />
-
-        <Button
-            android:id="@+id/toggleSleepButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Toggle sleep" />
 
     </LinearLayout>
 </ScrollView>
