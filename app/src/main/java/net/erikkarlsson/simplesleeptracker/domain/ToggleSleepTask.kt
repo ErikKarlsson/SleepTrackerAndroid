@@ -1,10 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
 import io.reactivex.Completable
-import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
-class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource) {
+class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
+                                          private val dateTimeProvider: DateTimeProvider) {
 
     internal fun execute(): Completable =
             sleepRepository.getCurrentSingle()
@@ -20,12 +20,12 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
     }
 
     private fun startSleeping() {
-        val sleep = Sleep(fromDate = OffsetDateTime.now())
+        val sleep = Sleep(fromDate = dateTimeProvider.now())
         sleepRepository.insert(sleep)
     }
 
     private fun stopSleeping(currentSleep: Sleep) {
-        val sleep = currentSleep.copy(toDate = OffsetDateTime.now())
+        val sleep = currentSleep.copy(toDate = dateTimeProvider.now())
         sleepRepository.update(sleep)
     }
 }

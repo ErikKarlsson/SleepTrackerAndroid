@@ -89,3 +89,5 @@ val DayOfWeekLocalTime.formatDisplayName: String
             DayOfWeek.of(this.dayOfWeek).getDisplayName(TextStyle.FULL,
                     Locale.getDefault()).capitalize(),
             this.localTime.formatHHMM)
+
+val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)

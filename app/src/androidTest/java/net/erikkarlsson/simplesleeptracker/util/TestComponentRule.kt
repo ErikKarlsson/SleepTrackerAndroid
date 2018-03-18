@@ -6,6 +6,7 @@ import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import org.threeten.bp.OffsetDateTime
 
 class TestComponentRule() : TestRule {
 
@@ -15,8 +16,8 @@ class TestComponentRule() : TestRule {
         application = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestableApplication
     }
 
-    fun setMockNetwork(connected: Boolean) {
-
+    fun mockDateTimeNow(offsetDateTime: OffsetDateTime) {
+        application.mockDateTimeNow(offsetDateTime)
     }
 
     fun insertSleep(sleep: Sleep) {
