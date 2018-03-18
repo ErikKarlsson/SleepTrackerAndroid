@@ -2,8 +2,8 @@ package net.erikkarlsson.simplesleeptracker.di
 
 import dagger.Binds
 import dagger.Module
+import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
-import net.erikkarlsson.simplesleeptracker.util.MockDateTimeProvider
 import javax.inject.Singleton
 
 @Module

@@ -1,11 +1,16 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
 import android.arch.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.verify
+import io.reactivex.Observable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.util.ImmediateSchedulerProvider
+import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach
@@ -19,26 +24,14 @@ import org.threeten.bp.OffsetDateTime
 @ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
 class SleepAppWidgetViewModelTest {
 
-    private lateinit var viewModel: SleepAppWidgetViewModel
-
+    val dateTimeProvider = MockDateTimeProvider()
     val sleepRepository: SleepDataSource = mock()
     val observer: Observer<WidgetState> = mock()
-
-    private val schedulerProvider = ImmediateSchedulerProvider()
-    private val sleeping = Sleep(fromDate = OffsetDateTime.now())
-    private val awake = Sleep(fromDate = OffsetDateTime.now(),
-            toDate = OffsetDateTime.now().plusDays(1))
 
     @BeforeEach
     fun setUp() {
         reset(sleepRepository, observer)
-
-        val loadCurrentSleep = LoadCurrentSleep(sleepRepository, schedulerProvider)
-        val toggleSleep = ToggleSleep(sleepRepository, schedulerProvider)
-        val widgetComponent = AppWidgetComponent(loadCurrentSleep, toggleSleep)
-
-        viewModel = SleepAppWidgetViewModel(widgetComponent)
-        viewModel.state().observeForever(observer)
+        dateTimeProvider.reset()
     }
 
     @Nested
@@ -46,34 +39,40 @@ class SleepAppWidgetViewModelTest {
 
         @Test
         fun `load empty shows awake in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.just(Sleep.empty()))
-            viewModel.dispatch(WidgetMsg.UpdateMsg)
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+            val viewModel = createViewModel()
+            viewModel.state().observeForever(observer)
             verify(sleepRepository).getCurrent()
-            verify(observer).onChanged(WidgetState(false))
+            verify(observer).onChanged(WidgetState(false, 0))
         }
 
         @Test
         fun `load sleeping shows sleeping in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.just(sleeping))
-            viewModel.dispatch(WidgetMsg.UpdateMsg)
+            val sleeping = Sleep(fromDate = OffsetDateTime.now())
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(sleeping))
+            val viewModel = createViewModel()
+            viewModel.state().observeForever(observer)
             verify(sleepRepository).getCurrent()
-            verify(observer).onChanged(WidgetState(true))
+            verify(observer).onChanged(WidgetState(true, 0))
         }
 
         @Test
         fun `load awake shows awake in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.just(awake))
-            viewModel.dispatch(WidgetMsg.UpdateMsg)
+            val awake = Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusDays(1))
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(awake))
+            val viewModel = createViewModel()
+            viewModel.state().observeForever(observer)
             verify(sleepRepository).getCurrent()
-            verify(observer).onChanged(WidgetState(false))
+            verify(observer).onChanged(WidgetState(false, 0))
         }
 
         @Test
         fun `load error shows awake in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.error(Exception()))
-            viewModel.dispatch(WidgetMsg.UpdateMsg)
+            given(sleepRepository.getCurrent()).willReturn(Observable.error(Exception()))
+            val viewModel = createViewModel()
+            viewModel.state().observeForever(observer)
             verify(sleepRepository).getCurrent()
-            verify(observer).onChanged(WidgetState(false))
+            verify(observer).onChanged(WidgetState(false, 0))
         }
 
     }
@@ -83,39 +82,46 @@ class SleepAppWidgetViewModelTest {
 
         @Test
         fun `toggle from empty shows sleeping in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.just(Sleep.empty()), Single.just(sleeping))
-            viewModel.dispatch(WidgetMsg.ToggleSleepMsg)
-            inOrder(sleepRepository) {
-                verify(sleepRepository).getCurrent()
-                verify(sleepRepository).insert(any())
-                verify(sleepRepository).getCurrent()
-            }
-            verify(observer).onChanged(WidgetState(true))
+            given(sleepRepository.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+            val now = dateTimeProvider.mockDateTime()
+            val sleeping = Sleep(fromDate = now)
+            val viewModel = createViewModel()
+            viewModel.dispatch(ToggleSleepClicked)
+            verify(sleepRepository).insert(sleeping)
         }
 
         @Test
         fun `toggle from awake shows sleeping in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.just(awake), Single.just(sleeping))
-            viewModel.dispatch(WidgetMsg.ToggleSleepMsg)
-            inOrder(sleepRepository) {
-                verify(sleepRepository).getCurrent()
-                verify(sleepRepository).insert(any())
-                verify(sleepRepository).getCurrent()
-            }
-            verify(observer).onChanged(WidgetState(true))
+            val awake = Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusDays(1))
+            given(sleepRepository.getCurrentSingle()).willReturn(Single.just(awake))
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+            val now = dateTimeProvider.mockDateTime()
+            val sleeping = Sleep(fromDate = now)
+            val viewModel = createViewModel()
+            viewModel.dispatch(ToggleSleepClicked)
+            verify(sleepRepository).insert(sleeping)
         }
 
         @Test
         fun `toggle from sleeping shows awake in view`() {
-            given(sleepRepository.getCurrent()).willReturn(Single.just(sleeping), Single.just(awake))
-            viewModel.dispatch(WidgetMsg.ToggleSleepMsg)
-            inOrder(sleepRepository) {
-                verify(sleepRepository).getCurrent()
-                verify(sleepRepository).update(any())
-                verify(sleepRepository).getCurrent()
-            }
-            verify(observer).onChanged(WidgetState(false))
+            val now = dateTimeProvider.mockDateTime()
+            val anHourAgo = now.minusHours(1)
+            val sleeping = Sleep(fromDate = anHourAgo)
+            val awake = Sleep(fromDate = anHourAgo, toDate = now)
+            given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+            val viewModel = createViewModel()
+            viewModel.dispatch(ToggleSleepClicked)
+            verify(sleepRepository).update(awake)
         }
+    }
+
+    private fun createViewModel(): SleepAppWidgetViewModel {
+        val toggleSleep = ToggleSleepTask(sleepRepository, dateTimeProvider)
+        val sleepSubscription = SleepSubscription(sleepRepository)
+        val widgetComponent = AppWidgetComponent(toggleSleep, sleepSubscription)
+        return SleepAppWidgetViewModel(widgetComponent)
     }
 
 }

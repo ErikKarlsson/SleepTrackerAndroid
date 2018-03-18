@@ -35,6 +35,19 @@ android {
             option("-Xmaxerrs", 500)
         }
     }
+    sourceSets {
+        String sharedTestJavaDir = 'src/sharedTest/java'
+        String sharedTestResourcesDir = 'src/sharedTest/resources'
+
+        test {
+            java.srcDir sharedTestJavaDir
+            resources.srcDir sharedTestResourcesDir
+        }
+        androidTest {
+            java.srcDir sharedTestJavaDir
+            resources.srcDir sharedTestResourcesDir
+        }
+    }
 }
 
 androidExtensions {
