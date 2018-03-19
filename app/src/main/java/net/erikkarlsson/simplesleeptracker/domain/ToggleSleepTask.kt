@@ -3,6 +3,9 @@ package net.erikkarlsson.simplesleeptracker.domain
 import io.reactivex.Completable
 import javax.inject.Inject
 
+/**
+ * Toggle between awake and asleep state
+ */
 class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
                                           private val dateTimeProvider: DateTimeProvider) {
 

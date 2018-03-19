@@ -43,9 +43,9 @@ class SleepSubscription @Inject constructor(private val sleepRepository: SleepDa
     override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getSleep().map { SleepLoaded(it) }
 }
 
-class StatisticsSubscription @Inject constructor(private val statisticsRepository: StatisticsDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
+class StatisticsSubscription @Inject constructor(private val statisticComparisonTask: StatisticComparisonTask) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
-    override fun invoke(): Observable<StatisticsMsg> = statisticsRepository.getStatisticComparisonBetweenCurrentAndPreviousWeek().map { StatisticsLoaded(it) }
+    override fun invoke(): Observable<StatisticsMsg> = statisticComparisonTask.execute().map { StatisticsLoaded(it) }
 }
 
 // Msg

@@ -4,8 +4,6 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.util.toLocalTime
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
@@ -14,26 +12,9 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
                                                private val dateTimeProvider: DateTimeProvider)
     : StatisticsDataSource {
 
-    override fun getStatisticComparisonBetweenCurrentAndPreviousWeek(): Observable<StatisticComparison> {
-        val now = dateTimeProvider.now().toLocalDate()
-        val monday = now.with(DayOfWeek.MONDAY)
-        val sunday = now.with(DayOfWeek.SUNDAY)
-        val currentWeek = DateRange(monday, sunday)
-        val previousWeek = DateRange(monday.minusWeeks(1), sunday.minusWeeks(1))
-
-        return getStatisticComparisonBetween(currentWeek, previousWeek)
-    }
-
-    override fun getStatisticComparisonBetween(first: DateRange, second: DateRange): Observable<StatisticComparison> {
-        return Observables.zip(
-                getStatisticsBetween(first.from, first.to),
-                getStatisticsBetween(second.from, second.to))
-                { firstWeek, secondWeek -> StatisticComparison(firstWeek, secondWeek) }
-    }
-
-    override fun getStatisticsBetween(startDate: LocalDate, endDate: LocalDate): Observable<Statistics> {
-        val from = startDate.toString()
-        val to = endDate.toString()
+    override fun getStatistics(dateRange: DateRange): Observable<Statistics> {
+        val from = dateRange.from.toString()
+        val to = dateRange.to.toString()
 
         return Observables.zip(getSleepCount(from, to),
                 getAverageSleepInHours(from, to),
