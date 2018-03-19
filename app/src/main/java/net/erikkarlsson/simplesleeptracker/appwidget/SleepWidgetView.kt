@@ -20,7 +20,7 @@ class SleepWidgetView @Inject constructor(private val context: Context,
 
     private fun render(state: WidgetState?) {
         state?.let {
-            val views = RemoteViews(context.packageName, R.layout.example_appwidget)
+            val views = RemoteViews(context.packageName, R.layout.app_widget)
             val imageResId = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
 
             views.setImageViewResource(R.id.button, imageResId)

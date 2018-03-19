@@ -27,9 +27,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        acceptance.initWith(debug)
     }
-    testBuildType "debug"
     kapt {
         javacOptions {
             option("-Xmaxerrs", 500)
@@ -57,7 +55,7 @@ androidExtensions {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Android Testing Support Library's runner and rules
+    // Dependencies for Android tests
     androidTestImplementation Deps.atsl_runner
     androidTestImplementation Deps.atsl_rules
     androidTestImplementation Deps.room_testing
