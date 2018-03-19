@@ -6,7 +6,6 @@ import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.threeten.bp.OffsetDateTime
 
 class TestComponentRule() : TestRule {
 
@@ -16,11 +15,12 @@ class TestComponentRule() : TestRule {
         application = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestableApplication
     }
 
-    fun mockDateTimeNow(offsetDateTime: OffsetDateTime) {
-        application.mockDateTimeNow(offsetDateTime)
+    fun mockDateTimeNow(dateTimeIso: String) {
+        application.mockDateTimeNow(dateTimeIso.offsetDateTime)
     }
 
-    fun insertSleep(sleep: Sleep) {
+    fun insertSleep(fromDate: String, toDate: String) {
+        val sleep = Sleep(fromDate = fromDate.offsetDateTime, toDate = toDate.offsetDateTime)
         application.insertSleep(sleep)
     }
 

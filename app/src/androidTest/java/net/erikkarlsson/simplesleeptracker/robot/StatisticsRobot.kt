@@ -6,9 +6,9 @@ import net.erikkarlsson.simplesleeptracker.espresso.ViewActions.clickViewWithId
 
 class StatisticsRobot {
 
-    fun clickItem(position: Int): StatisticsRobot {
+    fun clickItem(position: Int): DetailsRobot {
         clickRecyclerViewItemAtPosition(R.id.recyclerView, position)
-        return this
+        return DetailsRobot()
     }
 
     fun clickToggleSleepButton(): StatisticsRobot {
