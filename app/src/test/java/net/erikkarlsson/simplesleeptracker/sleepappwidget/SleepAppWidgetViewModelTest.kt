@@ -1,10 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.sleepappwidget
 
 import android.arch.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
@@ -72,6 +69,23 @@ class SleepAppWidgetViewModelTest {
             viewModel.state().observeForever(observer)
             verify(sleepRepository).getCurrent()
             verify(observer).onChanged(WidgetState(false, 0))
+        }
+
+    }
+
+    @Nested
+    inner class UpdateCases {
+
+        @Test
+        fun `on widget update renders view`() {
+            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+            val viewModel = createViewModel()
+            viewModel.state().observeForever(observer)
+            viewModel.dispatch(WidgetOnUpdate)
+            inOrder(observer) {
+                verify(observer).onChanged(WidgetState.empty())
+                verify(observer).onChanged(WidgetState(false, 1))
+            }
         }
 
     }
