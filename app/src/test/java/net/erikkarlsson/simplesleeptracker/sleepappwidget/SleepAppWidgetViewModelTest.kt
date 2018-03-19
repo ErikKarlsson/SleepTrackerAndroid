@@ -85,6 +85,7 @@ class SleepAppWidgetViewModelTest {
             inOrder(observer) {
                 verify(observer).onChanged(WidgetState.empty())
                 verify(observer).onChanged(WidgetState(false, 1))
+                verify(observer, never()).onChanged(any())
             }
         }
 
