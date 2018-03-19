@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget
+package net.erikkarlsson.simplesleeptracker.appwidget
 
 import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.*
@@ -107,6 +107,7 @@ class SleepAppWidgetViewModelTest {
             viewModel.dispatch(ToggleSleepClicked)
             verify(toggleSleepTask).execute()
         }
+
     }
 
     private fun createViewModel(): SleepAppWidgetViewModel {

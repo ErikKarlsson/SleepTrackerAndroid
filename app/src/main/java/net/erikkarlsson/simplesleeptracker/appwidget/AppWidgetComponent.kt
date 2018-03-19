@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget
+package net.erikkarlsson.simplesleeptracker.appwidget
 
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -6,7 +6,7 @@ import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetCmd.ToggleSleepCmd
+import net.erikkarlsson.simplesleeptracker.appwidget.WidgetCmd.ToggleSleepCmd
 import javax.inject.Inject
 
 class AppWidgetComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,

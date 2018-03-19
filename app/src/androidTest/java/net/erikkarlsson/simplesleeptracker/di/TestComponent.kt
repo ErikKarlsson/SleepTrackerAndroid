@@ -5,13 +5,15 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.TestApp
-import net.erikkarlsson.simplesleeptracker.di.module.*
+import net.erikkarlsson.simplesleeptracker.di.module.AndroidBindingModule
+import net.erikkarlsson.simplesleeptracker.di.module.AppModule
+import net.erikkarlsson.simplesleeptracker.di.module.SleepModule
+import net.erikkarlsson.simplesleeptracker.di.module.ViewModelModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AndroidBindingModule::class, AndroidInjectionModule::class,
-AppModule::class, MockDateTimeModule::class, NetworkModule::class, RxModule::class,
-SleepModule::class, ViewModelModule::class])
+AppModule::class, MockDateTimeModule::class, SleepModule::class, ViewModelModule::class])
 interface TestComponent : AppComponent {
     @Component.Builder
     interface Builder {

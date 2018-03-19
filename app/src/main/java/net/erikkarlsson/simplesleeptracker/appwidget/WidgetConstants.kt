@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget
+package net.erikkarlsson.simplesleeptracker.appwidget
 
 class WidgetConstants {
     companion object {

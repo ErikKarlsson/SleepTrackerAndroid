@@ -10,7 +10,7 @@ import dagger.android.HasBroadcastReceiverInjector
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.elm.LogLevel
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.SleepWidgetView
+import net.erikkarlsson.simplesleeptracker.appwidget.SleepWidgetView
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject

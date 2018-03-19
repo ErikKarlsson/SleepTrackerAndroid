@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.sleepappwidget
+package net.erikkarlsson.simplesleeptracker.appwidget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.sleepappwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET_TOGGLE
+import net.erikkarlsson.simplesleeptracker.appwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET_TOGGLE
 import javax.inject.Inject
 import javax.inject.Singleton
 
