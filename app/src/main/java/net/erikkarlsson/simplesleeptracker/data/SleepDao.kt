@@ -38,13 +38,13 @@ interface SleepDao {
     fun getAverageBedtimeMidnightOffsetInSeconds(from: String, to: String): Flowable<Int>
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) as 'midnightOffsetInSeconds', strftime('%w', to_date) as 'dayOfWeek' FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to) GROUP BY strftime('%w', to_date)")
-    fun getAverageWakeupMidnightOffsetInSecondsForDaysOfWeek(from: String, to: String): Flowable<List<DayOfWeekMidnightOffset>>
+    fun getAverageWakeUpMidnightOffsetInSecondsForDaysOfWeek(from: String, to: String): Flowable<List<DayOfWeekMidnightOffset>>
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
-    fun getAverageWakeupMidnightOffsetInSeconds(from: String, to: String): Flowable<Int>
+    fun getAverageWakeUpMidnightOffsetInSeconds(from: String, to: String): Flowable<Int>
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
-    fun getAverageWakeupMidnightOffsetInSecondsBetweenDates(from: String, to: String): Flowable<Int>
+    fun getAverageWakeUpMidnightOffsetInSecondsBetweenDates(from: String, to: String): Flowable<Int>
 
     @Query("SELECT * FROM Sleep WHERE datetime(to_date)>=datetime('now', '-2 hour')")
     fun getSleepLastMonth(): Flowable<List<SleepEntity>>
