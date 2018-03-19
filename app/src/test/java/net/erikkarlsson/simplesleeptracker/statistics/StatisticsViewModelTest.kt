@@ -1,50 +1,71 @@
 package net.erikkarlsson.simplesleeptracker.statistics
-/*
+
 import android.arch.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.Statistics
-import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
-import net.erikkarlsson.simplesleeptracker.statistics.processor.LoadStatistics
-import net.erikkarlsson.simplesleeptracker.util.ImmediateSchedulerProvider
+import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
+import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(InstantTaskExecutorExtension::class)
+@ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
 class StatisticsViewModelTest {
 
-    lateinit var viewModel: StatisticsViewModel
-
-    val schedulerProvider = ImmediateSchedulerProvider()
-
     val statisticsRepository: StatisticsDataSource = mock()
-    val observer: Observer<StatisticsViewState> = mock()
+    val sleepRepository: SleepDataSource = mock()
+    val observer: Observer<StatisticsState> = mock()
+    val toggleSleepTask: ToggleSleepTask = mock()
 
     @BeforeEach
     fun setUp() {
-        reset(statisticsRepository, observer)
-        val loadStatistics = LoadStatistics(statisticsRepository, schedulerProvider)
-        val statisticsProcessorHolder = StatisticsProcessorHolder(loadStatistics)
-
-        viewModel = StatisticsViewModel(statisticsProcessorHolder, schedulerProvider)
-        viewModel.statesLiveData().observeForever(observer)
+        reset(statisticsRepository, observer, toggleSleepTask)
     }
 
     @Test
     fun `load statistics shows statistics in view`() {
-        val expectedStatistics = Statistics(2.2f)
-        given(statisticsRepository.getStatistics()).willReturn(Single.just(expectedStatistics))
-        viewModel.processIntents(Observable.just(StatisticsIntent.InitialIntent))
-        verify(statisticsRepository).getStatistics()
-        verify(observer).onChanged(StatisticsViewState(expectedStatistics))
+        val expectedStatistics = StatisticComparison(Statistics.empty(), Statistics.empty())
+
+        given(statisticsRepository.getStatisticComparison(any(), any(), any(), any()))
+            .willReturn(Observable.just(expectedStatistics))
+        given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+        given(sleepRepository.getSleep()).willReturn(Observable.just(emptyList()))
+
+        val viewModel = createViewModel()
+        viewModel.state().observeForever(observer)
+
+        verify(observer).onChanged(StatisticsState(expectedStatistics, emptyList()))
+    }
+
+    @Nested
+    inner class ToggleCases {
+
+        /**
+         * See [ToggleSleepTaskTest] for extensive coverage of toggle cases.
+         */
+
+        @Test
+        fun `clicking toggle sleep button toggles sleep`() {
+            given(toggleSleepTask.execute()).willReturn(Completable.complete())
+            given(statisticsRepository.getStatisticComparison(any(), any(), any(), any()))
+                .willReturn(Observable.just(StatisticComparison.empty()))
+            given(sleepRepository.getSleep()).willReturn(Observable.just(emptyList()))
+            val viewModel = createViewModel()
+            viewModel.dispatch(ToggleSleepClicked)
+            verify(toggleSleepTask).execute()
+        }
+
+    }
+
+    private fun createViewModel(): StatisticsViewModel {
+        val sleepSubscription = SleepSubscription(sleepRepository)
+        val statisticsSubscription = StatisticsSubscription(statisticsRepository)
+        val statisticsComponent = StatisticsComponent(toggleSleepTask, sleepSubscription, statisticsSubscription)
+        return StatisticsViewModel(statisticsComponent)
     }
 }
-        */

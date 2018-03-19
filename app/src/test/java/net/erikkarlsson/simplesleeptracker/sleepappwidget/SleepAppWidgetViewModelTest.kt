@@ -5,12 +5,12 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
+import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach
@@ -24,14 +24,13 @@ import org.threeten.bp.OffsetDateTime
 @ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
 class SleepAppWidgetViewModelTest {
 
-    val dateTimeProvider = MockDateTimeProvider()
     val sleepRepository: SleepDataSource = mock()
     val observer: Observer<WidgetState> = mock()
+    val toggleSleepTask: ToggleSleepTask = mock()
 
     @BeforeEach
     fun setUp() {
-        reset(sleepRepository, observer)
-        dateTimeProvider.reset()
+        reset(sleepRepository, observer, toggleSleepTask)
     }
 
     @Nested
@@ -80,47 +79,24 @@ class SleepAppWidgetViewModelTest {
     @Nested
     inner class ToggleCases {
 
-        @Test
-        fun `toggle from empty shows sleeping in view`() {
-            given(sleepRepository.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
-            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-            val now = dateTimeProvider.mockDateTime()
-            val sleeping = Sleep(fromDate = now)
-            val viewModel = createViewModel()
-            viewModel.dispatch(ToggleSleepClicked)
-            verify(sleepRepository).insert(sleeping)
-        }
+        /**
+         * Verifies that clicking sleep toggle will execute task.
+         * See [ToggleSleepTaskTest] for extensive coverage of toggle cases.
+         */
 
         @Test
-        fun `toggle from awake shows sleeping in view`() {
-            val awake = Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusDays(1))
-            given(sleepRepository.getCurrentSingle()).willReturn(Single.just(awake))
-            given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-            val now = dateTimeProvider.mockDateTime()
-            val sleeping = Sleep(fromDate = now)
-            val viewModel = createViewModel()
-            viewModel.dispatch(ToggleSleepClicked)
-            verify(sleepRepository).insert(sleeping)
-        }
-
-        @Test
-        fun `toggle from sleeping shows awake in view`() {
-            val now = dateTimeProvider.mockDateTime()
-            val anHourAgo = now.minusHours(1)
-            val sleeping = Sleep(fromDate = anHourAgo)
-            val awake = Sleep(fromDate = anHourAgo, toDate = now)
-            given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+        fun `clicking toggle sleep button toggles sleep`() {
+            given(toggleSleepTask.execute()).willReturn(Completable.complete())
             given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
             val viewModel = createViewModel()
             viewModel.dispatch(ToggleSleepClicked)
-            verify(sleepRepository).update(awake)
+            verify(toggleSleepTask).execute()
         }
     }
 
     private fun createViewModel(): SleepAppWidgetViewModel {
-        val toggleSleep = ToggleSleepTask(sleepRepository, dateTimeProvider)
         val sleepSubscription = SleepSubscription(sleepRepository)
-        val widgetComponent = AppWidgetComponent(toggleSleep, sleepSubscription)
+        val widgetComponent = AppWidgetComponent(toggleSleepTask, sleepSubscription)
         return SleepAppWidgetViewModel(widgetComponent)
     }
 

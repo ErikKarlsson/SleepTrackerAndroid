@@ -6,7 +6,7 @@ import javax.inject.Inject
 class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
                                           private val dateTimeProvider: DateTimeProvider) {
 
-    internal fun execute(): Completable =
+    fun execute(): Completable =
             sleepRepository.getCurrentSingle()
                 .map { toggleSleep(it) }
                 .toCompletable()

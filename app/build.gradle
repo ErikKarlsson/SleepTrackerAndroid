@@ -29,7 +29,7 @@ android {
         }
         acceptance.initWith(debug)
     }
-    testBuildType "acceptance"
+    testBuildType "debug"
     kapt {
         javacOptions {
             option("-Xmaxerrs", 500)
@@ -82,6 +82,7 @@ dependencies {
     testImplementation Deps.hamcrest
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
+    testImplementation Deps.mockito_inline
 
     // (Required) Writing and executing Unit Tests on the JUnit Platform.
     testImplementation junit5.unitTests()

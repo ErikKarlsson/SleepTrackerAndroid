@@ -2,11 +2,7 @@ package net.erikkarlsson.simplesleeptracker.statistics
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.data.StatisticsRepository
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.StatisticComparison
-import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd.ToggleSleepCmd
 import org.threeten.bp.LocalDate
@@ -48,7 +44,7 @@ class SleepSubscription @Inject constructor(private val sleepRepository: SleepDa
     override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getSleep().map { SleepLoaded(it) }
 }
 
-class StatisticsSubscription @Inject constructor(private val statisticsRepository: StatisticsRepository) : StatelessSub<StatisticsState, StatisticsMsg>() {
+class StatisticsSubscription @Inject constructor(private val statisticsRepository: StatisticsDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
     override fun invoke(): Observable<StatisticsMsg>
             = statisticsRepository.getStatisticComparison(
