@@ -25,11 +25,16 @@ class StatisticsTest {
     fun testToggleSleepNavigateToDetailsFlow() {
         main.launchActivity(null)
 
-        component.mockDateTimeNow("2018-03-17T22:30:00+01:00") // Given is evening
+        with(component) {
+            // Given is evening
+            mockDateTimeNow("2018-03-17T22:30:00+01:00")
 
-        robot.clickToggleSleepButton() // toggle to sleeping
+            // toggle to sleeping
+            robot.clickToggleSleepButton()
 
-        component.mockDateTimeNow("2018-03-18T06:30:00+01:00") // is morning the following day
+            // is morning the following day
+            mockDateTimeNow("2018-03-18T06:30:00+01:00")
+        }
 
         robot.clickToggleSleepButton() // toggle to awake
             .clickItem(0) // When clicking newly added sleep item
@@ -55,6 +60,6 @@ class StatisticsTest {
 
         main.launchActivity(null)
 
-        // TODO(erikkarlsson): Verify statistics are rendered in view
+        // TODO (erikkarlsson): Verify statistics are rendered in view
     }
 }

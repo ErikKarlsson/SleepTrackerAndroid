@@ -75,6 +75,7 @@ class StatisticsActivity : AppCompatActivity() {
     private fun render(state: StatisticsState?) {
         state?.let {
             sleepListRelay.accept(state.sleepList)
+
             with(state.statistics.first) {
                 averageSleepText.text = if (this == Statistics.empty()) {
                     "No sleep tracked yet"

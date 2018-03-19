@@ -44,6 +44,21 @@ val OffsetDateTime.formatYYYYMMDDHHMM: String get() = this.format(ofPattern("yyy
 
 val LocalTime.formatHHMM: String get() = this.format(ofPattern("HH:mm"))
 
+fun LocalTime.formatDiffHHMM(other: LocalTime): String {
+    val diffHours = Duration.between(other, this).toMinutes().toFloat() / 60f
+    val prefix = if (diffHours > 0) "+" else if (diffHours < 0) "-" else ""
+    val diffHHMM = if (Math.abs(diffHours) > 1f) diffHours.formatHHMM else diffHours.formatMM
+    return prefix + diffHHMM
+}
+
+val DayOfWeekLocalTime.formatDisplayName: String
+    get() = String.format("%s: %s",
+            DayOfWeek.of(this.dayOfWeek).getDisplayName(TextStyle.FULL,
+                    Locale.getDefault()).capitalize(),
+            this.localTime.formatHHMM)
+
+val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
+
 val Float.formatHHMM: String
     get() {
         val hours = Math.floor(this.toDouble()).toInt()
@@ -55,13 +70,6 @@ fun Float.formatDiffPercentage(other: Float): String {
     val diff = this - other
     val prefix = if (diff > 0) "+" else if (diff < 0) "-" else ""
     return String.format("%s%d%%", prefix, Math.round((diff) / other * 100))
-}
-
-fun LocalTime.formatDiffHHMM(other: LocalTime): String {
-    val diffHours = Duration.between(other, this).toMinutes().toFloat() / 60f
-    val prefix = if (diffHours > 0) "+" else if (diffHours < 0) "-" else ""
-    val diffHHMM = if (Math.abs(diffHours) > 1f) diffHours.formatHHMM else diffHours.formatMM
-    return prefix + diffHHMM
 }
 
 fun Float.formatDiffHHMM(other: Float): String {
@@ -83,11 +91,3 @@ fun Int.formatPercentageDiff(other: Int): String {
 }
 
 val Int.toLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
-
-val DayOfWeekLocalTime.formatDisplayName: String
-    get() = String.format("%s: %s",
-            DayOfWeek.of(this.dayOfWeek).getDisplayName(TextStyle.FULL,
-                    Locale.getDefault()).capitalize(),
-            this.localTime.formatHHMM)
-
-val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
