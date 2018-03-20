@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import net.erikkarlsson.simplesleeptracker.base.HOURS_PRECISION
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -25,7 +26,7 @@ val OffsetDateTime.midnightOffsetInSeconds: Int
 fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
     val secondsBetweenDates = ChronoUnit.SECONDS.between(this, dateTime)
     return BigDecimal.valueOf(secondsBetweenDates / 3600.0)
-        .setScale(3, BigDecimal.ROUND_HALF_UP)
+        .setScale(HOURS_PRECISION, BigDecimal.ROUND_HALF_UP)
         .toFloat()
 }
 
