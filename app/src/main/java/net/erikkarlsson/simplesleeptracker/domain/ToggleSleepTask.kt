@@ -16,18 +16,18 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
 
     private fun toggleSleep(currentSleep: Sleep) {
         if (currentSleep.isSleeping) {
-            stopSleeping(currentSleep)
+            awake(currentSleep)
         } else {
-            startSleeping()
+            asleep()
         }
     }
 
-    private fun startSleeping() {
+    private fun asleep() {
         val sleep = Sleep(fromDate = dateTimeProvider.now())
         sleepRepository.insert(sleep)
     }
 
-    private fun stopSleeping(currentSleep: Sleep) {
+    private fun awake(currentSleep: Sleep) {
         val sleep = currentSleep.copy(toDate = dateTimeProvider.now())
         sleepRepository.update(sleep)
     }

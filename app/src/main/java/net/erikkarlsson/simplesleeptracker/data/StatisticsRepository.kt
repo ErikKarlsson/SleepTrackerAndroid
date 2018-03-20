@@ -8,8 +8,7 @@ import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
-                                               private val sleepMapper: SleepMapper,
-                                               private val dateTimeProvider: DateTimeProvider)
+                                               private val sleepMapper: SleepMapper)
     : StatisticsDataSource {
 
     override fun getStatistics(dateRange: DateRange): Observable<Statistics> {
@@ -55,6 +54,6 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
 
     private fun toDayOfWeekLocalTimeListObservable(dayOfWeekMidnightOffset: List<DayOfWeekMidnightOffset>)
             : Observable<List<DayOfWeekLocalTime>> =
-            Observable.fromIterable(dayOfWeekMidnightOffset).map { it.dayOfWeekLocalTime }.toList().toObservable()
+            Observable.fromIterable(dayOfWeekMidnightOffset).map { it.toDayOfWeekLocalTime }.toList().toObservable()
 
 }

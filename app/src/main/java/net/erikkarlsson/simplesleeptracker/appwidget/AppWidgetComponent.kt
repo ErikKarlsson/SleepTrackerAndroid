@@ -2,11 +2,11 @@ package net.erikkarlsson.simplesleeptracker.appwidget
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.appwidget.WidgetCmd.ToggleSleepCmd
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
-import net.erikkarlsson.simplesleeptracker.appwidget.WidgetCmd.ToggleSleepCmd
 import javax.inject.Inject
 
 class AppWidgetComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,
@@ -24,7 +24,7 @@ class AppWidgetComponent @Inject constructor(private val toggleSleepTask: Toggle
     override fun update(msg: WidgetMsg, prevState: WidgetState): Pair<WidgetState, WidgetCmd?> = when (msg) {
         ToggleSleepClicked -> prevState.withCmd(ToggleSleepCmd)
         is CurrentSleepLoaded -> prevState.copy(isSleeping = msg.sleep.isSleeping).noCmd()
-        WidgetOnUpdate -> prevState.copy(updateCount = (prevState.updateCount + 1)).noCmd() // Increase counter to re-render widget on update
+        WidgetOnUpdate -> prevState.copy(updateCount = (prevState.updateCount + 1)).noCmd() // Increase counter to re-render app widget on update
         NoOp -> prevState.noCmd()
     }
 

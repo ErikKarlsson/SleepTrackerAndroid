@@ -1,7 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.util
 
 import net.erikkarlsson.simplesleeptracker.domain.DayOfWeekLocalTime
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -53,7 +52,7 @@ fun LocalTime.formatDiffHHMM(other: LocalTime): String {
 
 val DayOfWeekLocalTime.formatDisplayName: String
     get() = String.format("%s: %s",
-            DayOfWeek.of(this.dayOfWeek).getDisplayName(TextStyle.FULL,
+            this.dayOfWeek.getDisplayName(TextStyle.FULL,
                     Locale.getDefault()).capitalize(),
             this.localTime.formatHHMM)
 
