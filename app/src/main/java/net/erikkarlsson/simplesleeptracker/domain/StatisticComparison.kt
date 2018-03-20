@@ -1,17 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import net.erikkarlsson.simplesleeptracker.util.formatDiffHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatDiffPercentage
-import net.erikkarlsson.simplesleeptracker.util.formatPercentageDiff
+import net.erikkarlsson.simplesleeptracker.util.diffHours
 
 data class StatisticComparison(val first: Statistics, val second: Statistics) {
 
-    // TODO (erikkarlsson): Formatting does not belong in domain
-    val avgSleepDiffPercentage: String get() = first.avgSleepHours.formatDiffPercentage(second.avgSleepHours)
-    val avgSleepDiffHHMM: String get() = first.avgSleepHours.formatDiffHHMM(second.avgSleepHours)
-    val avgBedTimeDiffHHMM: String get() = first.averageBedTime.formatDiffHHMM(second.averageBedTime)
-    val avgWakeUpTimeDiffHHMM: String get() = first.averageWakeUpTime.formatDiffHHMM(second.averageWakeUpTime)
-    val timeSleepingDiffPercentage: String get() = first.timeSleeping.formatPercentageDiff(second.timeSleeping)
+    val avgSleepDiffHours: Float get() = first.avgSleepHours - second.avgSleepHours
+    val avgBedTimeDiffHours: Float get() = first.averageBedTime.diffHours(second.averageBedTime)
+    val avgWakeUpTimeDiffHours: Float get() = first.averageWakeUpTime.diffHours(second.averageWakeUpTime)
+    val timeSleepingDiffPercentage: Int get() = first.timeSleepingPercentage - second.timeSleepingPercentage
 
     companion object {
         fun empty() = StatisticComparison(Statistics.empty(), Statistics.empty())

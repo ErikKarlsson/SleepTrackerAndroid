@@ -43,6 +43,8 @@ val OffsetDateTime.formatYYYYMMDDHHMM: String get() = this.format(ofPattern("yyy
 
 val LocalTime.formatHHMM: String get() = this.format(ofPattern("HH:mm"))
 
+fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(other, this).toMinutes().toFloat() / 60f
+
 fun LocalTime.formatDiffHHMM(other: LocalTime): String {
     val diffHours = Duration.between(other, this).toMinutes().toFloat() / 60f
     val prefix = if (diffHours > 0) "+" else if (diffHours < 0) "-" else ""
@@ -64,6 +66,11 @@ val Float.formatHHMM: String
         val minutes = Math.floor(((this - hours) * 60).toDouble()).toInt()
         return String.format("%dh %dmin", hours, minutes)
     }
+
+val Int.formatPercentage: String  get() {
+    val prefix = if (this > 0) "+" else if (this < 0) "-" else ""
+    return String.format("%s%d%%", prefix, this)
+}
 
 fun Float.formatDiffPercentage(other: Float): String {
     val diff = this - other

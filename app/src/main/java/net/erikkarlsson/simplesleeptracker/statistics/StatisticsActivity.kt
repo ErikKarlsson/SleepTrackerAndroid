@@ -21,10 +21,7 @@ import net.erikkarlsson.simplesleeptracker.details.EXTRA_SLEEP_ID
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
-import net.erikkarlsson.simplesleeptracker.util.formatDisplayName
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatYYYYMMDD
-import net.erikkarlsson.simplesleeptracker.util.scanMap
+import net.erikkarlsson.simplesleeptracker.util.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -81,7 +78,7 @@ class StatisticsActivity : AppCompatActivity() {
                     "No sleep tracked yet"
                 } else {
                     val bedTimeDaysOfWeek = averageBedTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
-                    val wakeupTimeDaysOfWeek = averageWakeupTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
+                    val wakeupTimeDaysOfWeek = averageWakeUpTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
 
                     String.format("Tracked Nights: %d\n" +
                             "Avg. Duration: %s (%s)\n" +
@@ -92,18 +89,18 @@ class StatisticsActivity : AppCompatActivity() {
                             "Average Wake Up Time: %s (%s)\n%s\n",
                             sleepCount,
                             avgSleepHours.formatHHMM,
-                            state.statistics.avgSleepDiffHHMM,
-                            timeSleeping,
-                            state.statistics.timeSleepingDiffPercentage,
+                            state.statistics.avgSleepDiffHours.formatHHMM,
+                            timeSleepingPercentage,
+                            state.statistics.timeSleepingDiffPercentage.formatPercentage,
                             longestSleep.hours.formatHHMM,
                             longestSleep.toDate?.formatYYYYMMDD,
                             shortestSleep.hours.formatHHMM,
                             shortestSleep.toDate?.formatYYYYMMDD,
                             averageBedTime.formatHHMM,
-                            state.statistics.avgBedTimeDiffHHMM,
+                            state.statistics.avgBedTimeDiffHours.formatHHMM,
                             bedTimeDaysOfWeek,
                             averageWakeUpTime.formatHHMM,
-                            state.statistics.avgWakeUpTimeDiffHHMM,
+                            state.statistics.avgWakeUpTimeDiffHours.formatHHMM,
                             wakeupTimeDaysOfWeek)
                 }
             }
