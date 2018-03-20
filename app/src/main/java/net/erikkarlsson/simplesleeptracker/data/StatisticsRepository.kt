@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.data
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import net.erikkarlsson.simplesleeptracker.domain.*
-import net.erikkarlsson.simplesleeptracker.util.toLocalTime
+import net.erikkarlsson.simplesleeptracker.util.localTime
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
@@ -41,10 +41,10 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
             sleepDao.getShortestSleep(from, to).map { sleepMapper.mapFromEntity(it) }.toObservable()
 
     private fun getAverageWakeUpTime(from: String, to: String): Observable<LocalTime> =
-            sleepDao.getAverageWakeUpMidnightOffsetInSeconds(from, to).toObservable().map { it.toLocalTime }
+            sleepDao.getAverageWakeUpMidnightOffsetInSeconds(from, to).toObservable().map { it.localTime }
 
     private fun getAverageBedtime(from: String, to: String): Observable<LocalTime> =
-            sleepDao.getAverageBedtimeMidnightOffsetInSeconds(from, to).toObservable().map { it.toLocalTime }
+            sleepDao.getAverageBedtimeMidnightOffsetInSeconds(from, to).toObservable().map { it.localTime }
 
     private fun getAverageBedtimeDayOfWeek(from: String, to: String): Observable<List<DayOfWeekLocalTime>> =
             sleepDao.getAverageBedtimeMidnightOffsetInSecondsForDaysOfWeek(from, to).toObservable().flatMap { toDayOfWeekLocalTimeListObservable(it) }

@@ -2,17 +2,18 @@ package net.erikkarlsson.simplesleeptracker.util
 
 import io.reactivex.Observable
 
-
-fun <T, R> Observable<T>.scanMap(func2: (T?, T) -> R): Observable<R> {
-    return this.startWith(null as T?) // Emit a null value first, otherwise the .buffer() below won't emit at first (needs 2 emissions to emit)
-        .buffer(2, 1) // Buffer the previous and current emission
-        .filter { it.size >= 2 }
-        .map { func2.invoke(it[0], it[1]) }
-}
-
-fun <T, R> Observable<T>.scanMap(initialValue: T, func2: (T, T) -> R): Observable<R> {
-    return this.startWith(initialValue) // Use initially provided value instead of null
+/**
+ * Whereas [Observable.scan] aggregates all items over time,
+ * scanMap only cares about the previous and next item.
+ *
+ * @param initialValue the initial value with type of upstream observable item.
+ * @param biFunc the function that is invoked with the previous and next item,
+ * passing the result down the stream.
+ *
+ */
+fun <T, R> Observable<T>.scanMap(initialValue: T, biFunc: (T, T) -> R): Observable<R> {
+    return this.startWith(initialValue)
         .buffer(2, 1)
         .filter { it.size >= 2 }
-        .map { func2.invoke(it[0], it[1]) }
+        .map { biFunc.invoke(it[0], it[1]) }
 }
