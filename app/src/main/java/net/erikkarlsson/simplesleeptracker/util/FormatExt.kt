@@ -7,8 +7,6 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.TextStyle
 import java.util.*
 
-val OffsetDateTime.formatYYYYMMDD: String get() = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-val OffsetDateTime.formatYYYYMMDDHHMM: String get() = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
 val OffsetDateTime.formatHHMM: String get() = this.format(DateTimeFormatter.ofPattern("HH:mm"))
 val OffsetDateTime.formatDateDisplayName: String get() = this.format(DateTimeFormatter.ofPattern("EEE, MMM d"))
 
