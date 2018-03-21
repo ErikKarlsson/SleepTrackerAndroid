@@ -10,5 +10,5 @@
     <string name="average_wake_up_time">Average Wake Up Time</string>
     <string name="not_implemented_yet">Not implemented yet</string>
     <string name="toggle_sleep">Toggle sleep</string>
-    <string name="statistics">Statistics</string>
+    <string name="statistics">Statistics This Week</string>
 </resources>

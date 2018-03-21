@@ -15,7 +15,8 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
         val from = dateRange.from.toString()
         val to = dateRange.to.toString()
 
-        return Observables.zip(getSleepCount(from, to),
+        return Observables.combineLatest(
+                getSleepCount(from, to),
                 getAverageSleepInHours(from, to),
                 getLongestSleep(from, to),
                 getShortestSleep(from, to),

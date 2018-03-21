@@ -21,9 +21,9 @@ class StatisticComparisonTask @Inject constructor(
                 monday.minusWeeks(1),
                 sunday.minusWeeks(1))
 
-        return Observables.zip(
-                statisticsRepository.getStatistics(currentWeek),
-                statisticsRepository.getStatistics(previousWeek))
+        return Observables.combineLatest(
+                statisticsRepository.getStatistics(currentWeek).startWith(Statistics.empty()),
+                statisticsRepository.getStatistics(previousWeek).startWith(Statistics.empty()))
         { firstWeek, secondWeek -> StatisticComparison(firstWeek, secondWeek) }
     }
 
