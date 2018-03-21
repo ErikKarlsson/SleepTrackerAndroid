@@ -33,15 +33,15 @@ class StatisticsViewModelTest {
     fun `load statistics shows statistics in view`() {
         val expectedStatisticComparison = StatisticComparison(Statistics.empty(), Statistics.empty())
 
-        given(statisticComparisonTask.execute())
-            .willReturn(Observable.just(expectedStatisticComparison))
+        given(statisticComparisonTask.execute()).willReturn(Observable.just(expectedStatisticComparison))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
         given(sleepRepository.getSleep()).willReturn(Observable.just(emptyList()))
 
         val viewModel = createViewModel()
+
         viewModel.state().observeForever(observer)
 
-        verify(observer).onChanged(StatisticsState(expectedStatisticComparison, emptyList()))
+        verify(observer).onChanged(StatisticsState(false, expectedStatisticComparison, emptyList()))
     }
 
     /**
@@ -50,18 +50,23 @@ class StatisticsViewModelTest {
     @Test
     fun `clicking toggle sleep button toggles sleep`() {
         given(toggleSleepTask.execute()).willReturn(Completable.complete())
-        given(statisticComparisonTask.execute())
-            .willReturn(Observable.just(StatisticComparison.empty()))
+        given(statisticComparisonTask.execute()).willReturn(Observable.just(StatisticComparison.empty()))
         given(sleepRepository.getSleep()).willReturn(Observable.just(emptyList()))
+        given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+
         val viewModel = createViewModel()
+
         viewModel.dispatch(ToggleSleepClicked)
+
         verify(toggleSleepTask).execute()
     }
 
     private fun createViewModel(): StatisticsViewModel {
         val sleepSubscription = SleepSubscription(sleepRepository)
+        val currentSleepSubscription = CurrentSleepSubscription(sleepRepository)
         val statisticsSubscription = StatisticsSubscription(statisticComparisonTask)
-        val statisticsComponent = StatisticsComponent(toggleSleepTask, sleepSubscription, statisticsSubscription)
+        val statisticsComponent = StatisticsComponent(toggleSleepTask, sleepSubscription,
+                currentSleepSubscription, statisticsSubscription)
         return StatisticsViewModel(statisticsComponent)
     }
 }

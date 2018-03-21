@@ -83,20 +83,24 @@ class StatisticsActivity : AppCompatActivity() {
                 } else {
                     String.format(Locale.getDefault(),
                             "%s: %d\n" +
-                            "%s: %s (%s)\n" +
-                            "%s: %d%% (%s)\n" +
-                            "%s: %s, %s\n" +
-                            "%s: %s, %s\n" +
-                            "%s: %s (%s)\n%s\n" +
-                            "%s: %s (%s)\n%s",
+                                    "%s: %s %s\n" +
+                                    "%s: %d%% %s\n" +
+                                    "%s: %s, %s\n" +
+                                    "%s: %s, %s\n" +
+                                    "%s: %s %s\n%s\n" +
+                                    "%s: %s %s\n%s",
                             getString(R.string.tracked_nights),
                             sleepCount,
                             getString(R.string.avg_duration),
                             avgSleepHours.formatHoursMinutes,
-                            state.statistics.avgSleepDiffHours.formatHoursMinutesWithPrefix,
+                            with(state.statistics.avgSleepDiffHours) {
+                                if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                            },
                             getString(R.string.time_sleeping),
                             timeSleepingPercentage,
-                            state.statistics.timeSleepingDiffPercentage.formatPercentage,
+                            with(state.statistics.timeSleepingDiffPercentage) {
+                                if (this == 0) "" else String.format("(%s)", formatPercentage)
+                            },
                             getString(R.string.longest_night),
                             longestSleep.hours.formatHoursMinutes,
                             longestSleep.toDate?.formatDateDisplayName,
@@ -105,11 +109,15 @@ class StatisticsActivity : AppCompatActivity() {
                             shortestSleep.toDate?.formatDateDisplayName,
                             getString(R.string.average_bed_time),
                             averageBedTime.formatHHMM,
-                            state.statistics.avgBedTimeDiffHours.formatHoursMinutesWithPrefix,
+                            with(state.statistics.avgBedTimeDiffHours) {
+                                if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                            },
                             averageBedTimeDayOfWeek.formatDisplayName,
                             getString(R.string.average_wake_up_time),
                             averageWakeUpTime.formatHHMM,
-                            state.statistics.avgWakeUpTimeDiffHours.formatHoursMinutesWithPrefix,
+                            with(state.statistics.avgWakeUpTimeDiffHours) {
+                                if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                            },
                             averageWakeUpTimeDayOfWeek.formatDisplayName)
                 }
             }
