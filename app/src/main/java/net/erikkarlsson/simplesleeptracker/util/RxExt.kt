@@ -3,12 +3,11 @@ package net.erikkarlsson.simplesleeptracker.util
 import io.reactivex.Observable
 
 /**
- * Whereas [Observable.scan] aggregates all items over time,
- * scanMap only cares about the previous and next item.
+ * The results of scanMap are only aggregations of the previous and next item,
+ * whereas [Observable.scan] accumulates aggregations of all items over time.
  *
  * @param initialValue the initial value with type of upstream observable item.
- * @param biFunc the function that is invoked with the previous and next item,
- * passing the result down the stream.
+ * @param biFunc the aggregation function that is invoked with the previous and next item.
  *
  */
 fun <T, R> Observable<T>.scanMap(initialValue: T, biFunc: (T, T) -> R): Observable<R> {
