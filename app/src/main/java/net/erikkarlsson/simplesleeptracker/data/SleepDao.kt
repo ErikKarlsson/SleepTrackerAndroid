@@ -13,7 +13,7 @@ interface SleepDao {
     @Query("SELECT count(*) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
     fun getSleepCount(from: String, to: String): Flowable<Int>
 
-    @Query("SELECT * FROM Sleep ORDER BY datetime(from_date) DESC")
+    @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
     fun getSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")

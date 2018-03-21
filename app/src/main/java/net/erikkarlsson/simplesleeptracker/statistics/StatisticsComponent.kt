@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 class StatisticsComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,
                                               private val sleepSubscription: SleepSubscription,
+                                              private val currentSleepSubscription: CurrentSleepSubscription,
                                               private val statisticsSubscription: StatisticsSubscription)
     : Component<StatisticsState, StatisticsMsg, StatisticsCmd> {
 
@@ -18,11 +19,12 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
 
     override fun initState(): StatisticsState = StatisticsState.empty()
 
-    override fun subscriptions(): List<Sub<StatisticsState, StatisticsMsg>> = listOf(sleepSubscription, statisticsSubscription)
+    override fun subscriptions(): List<Sub<StatisticsState, StatisticsMsg>> = listOf(sleepSubscription, currentSleepSubscription, statisticsSubscription)
 
     override fun update(msg: StatisticsMsg, prevState: StatisticsState): Pair<StatisticsState, StatisticsCmd?> = when (msg) {
         ToggleSleepClicked -> prevState withCmd ToggleSleepCmd
         is SleepLoaded -> prevState.copy(sleepList = msg.sleepList).noCmd()
+        is CurrentSleepLoaded -> prevState.copy(isSleeping = msg.sleep.isSleeping).noCmd()
         is StatisticsLoaded -> prevState.copy(statistics = msg.statistics).noCmd()
         NoOp -> prevState.noCmd()
     }
@@ -30,15 +32,14 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
 }
 
 // State
-data class StatisticsState(val statistics: StatisticComparison,
+data class StatisticsState(val isSleeping: Boolean,
+                           val statistics: StatisticComparison,
                            val sleepList: List<Sleep>) : State {
-
-    val isSleeping get(): Boolean = sleepList.isNotEmpty() && sleepList.first().isSleeping
 
     val isListEmpty get(): Boolean = sleepList.isEmpty()
 
     companion object {
-        fun empty() = StatisticsState(StatisticComparison.empty(), listOf())
+        fun empty() = StatisticsState(false, StatisticComparison.empty(), listOf())
     }
 }
 
@@ -46,6 +47,11 @@ data class StatisticsState(val statistics: StatisticComparison,
 class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
     override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getSleep().map { SleepLoaded(it) }
+}
+
+class CurrentSleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
+
+    override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getCurrent().map { CurrentSleepLoaded(it) }
 }
 
 class StatisticsSubscription @Inject constructor(private val statisticComparisonTask: StatisticComparisonTask) : StatelessSub<StatisticsState, StatisticsMsg>() {
@@ -58,6 +64,7 @@ sealed class StatisticsMsg : Msg
 
 object ToggleSleepClicked : StatisticsMsg()
 data class SleepLoaded(val sleepList: List<Sleep>) : StatisticsMsg()
+data class CurrentSleepLoaded(val sleep: Sleep) : StatisticsMsg()
 data class StatisticsLoaded(val statistics: StatisticComparison) : StatisticsMsg()
 object NoOp : StatisticsMsg()
 
