@@ -18,9 +18,9 @@ import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.Statistics
 import net.erikkarlsson.simplesleeptracker.util.*
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class StatisticsActivity : AppCompatActivity() {
@@ -72,34 +72,39 @@ class StatisticsActivity : AppCompatActivity() {
             sleepListRelay.accept(state.sleepList)
 
             with(state.statistics.first) {
-                averageSleepText.text = if (this == Statistics.empty()) {
-                    "No sleep tracked yet"
+                averageSleepText.text = if (this.isEmpty) {
+                    getString(R.string.no_sleep_tracked_this_week)
                 } else {
-                    val bedTimeDaysOfWeek = averageBedTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
-                    val wakeupTimeDaysOfWeek = averageWakeUpTimeDayOfWeek.map { it.formatDisplayName }.joinToString(separator = "\n")
-
-                    String.format("Tracked Nights: %d\n" +
-                            "Avg. Duration: %s (%s)\n" +
-                            "Time Sleeping: %d%% (%s)\n" +
-                            "Longest Night: %s %s\n" +
-                            "Shortest Night: %s %s\n" +
-                            "Average Bed Time: %s (%s)\n%s\n" +
-                            "Average Wake Up Time: %s (%s)\n%s\n",
+                    String.format(Locale.getDefault(),
+                            "%s: %d\n" +
+                            "%s: %s (%s)\n" +
+                            "%s: %d%% (%s)\n" +
+                            "%s: %s %s\n" +
+                            "%s: %s %s\n" +
+                            "%s: %s (%s)\n%s\n" +
+                            "%s: %s (%s)\n%s\n",
+                            getString(R.string.tracked_nights_this_week),
                             sleepCount,
+                            getString(R.string.avg_duration),
                             avgSleepHours.formatHHMM,
                             state.statistics.avgSleepDiffHours.formatHHMM,
+                            getString(R.string.time_sleeping),
                             timeSleepingPercentage,
                             state.statistics.timeSleepingDiffPercentage.formatPercentage,
+                            getString(R.string.longest_night),
                             longestSleep.hours.formatHHMM,
                             longestSleep.toDate?.formatYYYYMMDD,
+                            getString(R.string.shortest_night),
                             shortestSleep.hours.formatHHMM,
                             shortestSleep.toDate?.formatYYYYMMDD,
+                            getString(R.string.average_bed_time),
                             averageBedTime.formatHHMM,
                             state.statistics.avgBedTimeDiffHours.formatHHMM,
-                            bedTimeDaysOfWeek,
+                            averageBedTimeDayOfWeek.formatDisplayName,
+                            getString(R.string.average_wake_up_time),
                             averageWakeUpTime.formatHHMM,
                             state.statistics.avgWakeUpTimeDiffHours.formatHHMM,
-                            wakeupTimeDaysOfWeek)
+                            averageWakeUpTimeDayOfWeek.formatDisplayName)
                 }
             }
         }

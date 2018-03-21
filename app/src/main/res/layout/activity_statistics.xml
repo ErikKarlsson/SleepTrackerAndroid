@@ -14,7 +14,7 @@
             android:id="@+id/toggleSleepButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Toggle sleep" />
+            android:text="@string/toggle_sleep" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"

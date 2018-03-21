@@ -16,6 +16,8 @@ val DayOfWeekLocalTime.formatDisplayName: String
                     Locale.getDefault()).capitalize(),
             this.localTime.formatHHMM)
 
+val List<DayOfWeekLocalTime>.formatDisplayName: String
+    get() = this.map { it.formatDisplayName }.joinToString(separator = "\n")
 
 val LocalTime.formatHHMM: String get() = this.format(DateTimeFormatter.ofPattern("HH:mm"))
 
