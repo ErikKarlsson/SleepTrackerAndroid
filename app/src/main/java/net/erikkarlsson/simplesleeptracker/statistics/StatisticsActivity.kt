@@ -85,8 +85,8 @@ class StatisticsActivity : AppCompatActivity() {
                             "%s: %d\n" +
                             "%s: %s (%s)\n" +
                             "%s: %d%% (%s)\n" +
-                            "%s: %s %s\n" +
-                            "%s: %s %s\n" +
+                            "%s: %s, %s\n" +
+                            "%s: %s, %s\n" +
                             "%s: %s (%s)\n%s\n" +
                             "%s: %s (%s)\n%s",
                             getString(R.string.tracked_nights),
@@ -99,10 +99,10 @@ class StatisticsActivity : AppCompatActivity() {
                             state.statistics.timeSleepingDiffPercentage.formatPercentage,
                             getString(R.string.longest_night),
                             longestSleep.hours.formatHoursMinutes,
-                            longestSleep.toDate?.formatYYYYMMDD,
+                            longestSleep.toDate?.formatDateDisplayName,
                             getString(R.string.shortest_night),
                             shortestSleep.hours.formatHoursMinutes,
-                            shortestSleep.toDate?.formatYYYYMMDD,
+                            shortestSleep.toDate?.formatDateDisplayName,
                             getString(R.string.average_bed_time),
                             averageBedTime.formatHHMM,
                             state.statistics.avgBedTimeDiffHours.formatHoursMinutesWithPrefix,
