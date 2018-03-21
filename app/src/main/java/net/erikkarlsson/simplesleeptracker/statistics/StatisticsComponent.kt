@@ -8,9 +8,7 @@ import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd.ToggleSleepC
 import javax.inject.Inject
 
 class StatisticsComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,
-                                              private val sleepSubscription: SleepSubscription,
-                                              private val currentSleepSubscription: CurrentSleepSubscription,
-                                              private val statisticsSubscription: StatisticsSubscription)
+                                              private val statisticsDataSubscription: StatisticsDataSubscription)
     : Component<StatisticsState, StatisticsMsg, StatisticsCmd> {
 
     override fun call(cmd: StatisticsCmd): Single<StatisticsMsg> = when (cmd) {
@@ -19,7 +17,7 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
 
     override fun initState(): StatisticsState = StatisticsState.empty()
 
-    override fun subscriptions(): List<Sub<StatisticsState, StatisticsMsg>> = listOf(sleepSubscription, currentSleepSubscription, statisticsSubscription)
+    override fun subscriptions(): List<Sub<StatisticsState, StatisticsMsg>> = listOf(statisticsDataSubscription)
 
     override fun update(msg: StatisticsMsg, prevState: StatisticsState): Pair<StatisticsState, StatisticsCmd?> = when (msg) {
         ToggleSleepClicked -> prevState withCmd ToggleSleepCmd
@@ -44,19 +42,15 @@ data class StatisticsState(val isSleeping: Boolean,
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
+class StatisticsDataSubscription @Inject constructor(private val sleepRepository: SleepDataSource,
+                                                     private val statisticComparisonTask: StatisticComparisonTask) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
-    override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getSleep().map { SleepLoaded(it) }
-}
-
-class CurrentSleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
-
-    override fun invoke(): Observable<StatisticsMsg> = sleepRepository.getCurrent().map { CurrentSleepLoaded(it) }
-}
-
-class StatisticsSubscription @Inject constructor(private val statisticComparisonTask: StatisticComparisonTask) : StatelessSub<StatisticsState, StatisticsMsg>() {
-
-    override fun invoke(): Observable<StatisticsMsg> = statisticComparisonTask.execute().map { StatisticsLoaded(it) }
+    override fun invoke(): Observable<StatisticsMsg> =
+            Observable.merge(
+                    sleepRepository.getSleep().map { SleepLoaded(it) },
+                    sleepRepository.getCurrent().map { CurrentSleepLoaded(it) },
+                    statisticComparisonTask.execute().map { StatisticsLoaded(it) }
+            )
 }
 
 // Msg

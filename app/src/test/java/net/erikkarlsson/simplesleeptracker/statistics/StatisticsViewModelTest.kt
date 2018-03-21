@@ -62,11 +62,8 @@ class StatisticsViewModelTest {
     }
 
     private fun createViewModel(): StatisticsViewModel {
-        val sleepSubscription = SleepSubscription(sleepRepository)
-        val currentSleepSubscription = CurrentSleepSubscription(sleepRepository)
-        val statisticsSubscription = StatisticsSubscription(statisticComparisonTask)
-        val statisticsComponent = StatisticsComponent(toggleSleepTask, sleepSubscription,
-                currentSleepSubscription, statisticsSubscription)
+        val sleepDataSubscription = StatisticsDataSubscription(sleepRepository, statisticComparisonTask)
+        val statisticsComponent = StatisticsComponent(toggleSleepTask, sleepDataSubscription)
         return StatisticsViewModel(statisticsComponent)
     }
 }
