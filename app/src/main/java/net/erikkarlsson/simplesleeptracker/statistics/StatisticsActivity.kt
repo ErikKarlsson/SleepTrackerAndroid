@@ -2,7 +2,6 @@ package net.erikkarlsson.simplesleeptracker.statistics
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
@@ -16,8 +15,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.details.DetailsActivity
-import net.erikkarlsson.simplesleeptracker.details.EXTRA_SLEEP_ID
+import net.erikkarlsson.simplesleeptracker.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.Statistics
@@ -108,11 +106,7 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun navigateToDetails(id: Int?) {
-        id?.let {
-            val intent = Intent(this, DetailsActivity::class.java)
-            intent.putExtra(EXTRA_SLEEP_ID, id)
-            startActivity(intent)
-        }
+        id?.let { startActivity(DetailIntent(id)) }
     }
 
 }
