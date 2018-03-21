@@ -132,6 +132,7 @@ dependencies {
     implementation Deps.support_app_compat
     implementation Deps.support_v4
     implementation Deps.support_design
+    implementation Deps.support_cardview
 
     // ThreeTen Backport
     implementation Deps.threeten_backport

@@ -72,7 +72,7 @@ class StatisticsActivity : AppCompatActivity() {
             sleepListRelay.accept(state.sleepList)
 
             with(state.statistics.first) {
-                averageSleepText.text = if (this.isEmpty) {
+                statisticsText.text = if (this.isEmpty) {
                     getString(R.string.no_sleep_tracked_this_week)
                 } else {
                     String.format(Locale.getDefault(),
@@ -82,8 +82,8 @@ class StatisticsActivity : AppCompatActivity() {
                             "%s: %s %s\n" +
                             "%s: %s %s\n" +
                             "%s: %s (%s)\n%s\n" +
-                            "%s: %s (%s)\n%s\n",
-                            getString(R.string.tracked_nights_this_week),
+                            "%s: %s (%s)\n%s",
+                            getString(R.string.tracked_nights),
                             sleepCount,
                             getString(R.string.avg_duration),
                             avgSleepHours.formatHHMM,
