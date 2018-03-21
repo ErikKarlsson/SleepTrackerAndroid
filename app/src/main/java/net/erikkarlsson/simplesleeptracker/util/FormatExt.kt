@@ -26,9 +26,21 @@ val Int.formatPercentage: String  get() {
     return String.format("%s%d%%", prefix, this)
 }
 
-val Float.formatHHMM: String
+val Float.formatHoursMinutes: String
     get() {
-        val hours = Math.floor(this.toDouble()).toInt()
-        val minutes = Math.floor(((this - hours) * 60).toDouble()).toInt()
-        return String.format("%dh %dmin", hours, minutes)
+        val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
+        val minutes: Int = Math.floor(((Math.abs(this) - hours) * 60).toDouble()).toInt()
+        return when {
+            hours == 0 && minutes > 0 -> String.format("%dmin", minutes)
+            hours > 0 && minutes == 0 -> String.format("%dh", hours)
+            hours > 0 && minutes > 0 -> String.format("%dh %dmin", hours, minutes)
+            else -> "0h"
+        }
     }
+
+val Float.formatHoursMinutesWithPrefix: String
+    get() {
+        val prefix = if (this > 0) "+" else "-"
+        return prefix + this.formatHoursMinutes
+    }
+
