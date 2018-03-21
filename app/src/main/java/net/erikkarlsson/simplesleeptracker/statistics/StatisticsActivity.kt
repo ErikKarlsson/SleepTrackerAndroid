@@ -7,9 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.android.AndroidInjection
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -21,7 +22,6 @@ import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.util.*
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class StatisticsActivity : AppCompatActivity() {
@@ -42,7 +42,7 @@ class StatisticsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
 
-        RxView.clicks(toggleSleepButton)
+        Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
             .subscribe({ viewModel.dispatch(ToggleSleepClicked) })
             .addTo(disposables)
 
@@ -73,7 +73,7 @@ class StatisticsActivity : AppCompatActivity() {
             sleepListRelay.accept(state.sleepList)
 
             val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
-            ownImage.setImageResource(imageRes)
+            owlImage.setImageResource(imageRes)
 
             trackedNightsCard.visibility = if (state.isListEmpty) View.GONE else View.VISIBLE
 
@@ -81,14 +81,13 @@ class StatisticsActivity : AppCompatActivity() {
                 statisticsText.text = if (this.isEmpty) {
                     getString(R.string.no_sleep_tracked_this_week)
                 } else {
-                    String.format(Locale.getDefault(),
-                            "%s: %d\n" +
-                                    "%s: %s %s\n" +
-                                    "%s: %d%% %s\n" +
-                                    "%s: %s, %s\n" +
-                                    "%s: %s, %s\n" +
-                                    "%s: %s %s\n%s\n" +
-                                    "%s: %s %s\n%s",
+                    String.format("%s: %d\n" +
+                            "%s: %s %s\n" +
+                            "%s: %d%% %s\n" +
+                            "%s: %s, %s\n" +
+                            "%s: %s, %s\n" +
+                            "%s: %s %s\n%s\n" +
+                            "%s: %s %s\n%s",
                             getString(R.string.tracked_nights),
                             sleepCount,
                             getString(R.string.avg_duration),

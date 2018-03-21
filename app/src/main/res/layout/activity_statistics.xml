@@ -28,7 +28,7 @@
                     android:background="@color/colorPrimaryDark">
 
                     <ImageView
-                        android:id="@+id/ownImage"
+                        android:id="@+id/owlImage"
                         android:layout_width="@dimen/statistics_owl_image_size"
                         android:layout_height="@dimen/statistics_owl_image_size"
                         android:layout_gravity="center_horizontal"
