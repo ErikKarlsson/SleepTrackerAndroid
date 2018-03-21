@@ -9,9 +9,9 @@ import java.math.BigDecimal
 
 /**
  * Calculates seconds from midnight.
- * For time between 00:00 - 12:00 the offset will be positive. eg. 60 seconds for 00:01
- * For time between 12:00 - 00:00 the offset will be negative. eg. -60 seconds for 23:59
- * The result can be used to calculate an average time for a set of times.
+ * For time between 00:00 - 12:00 the offset will be positive. e.g. 60 for 00:01
+ * For time between 12:00 - 00:00 the offset will be negative. e.g. -60 for 23:59
+ * The result can be used to calculate average time for a set of times.
  */
 val OffsetDateTime.midnightOffsetInSeconds: Int
     get() {
@@ -21,7 +21,7 @@ val OffsetDateTime.midnightOffsetInSeconds: Int
     }
 
 /**
- * Calculates amount of hours with 3 decimal precision between two dates. eg. 7.850
+ * Calculates amount of hours between two dates. e.g. 7.850
  */
 fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
     val secondsBetweenDates = ChronoUnit.SECONDS.between(this, dateTime)
@@ -41,6 +41,6 @@ fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(other, this)
 val Int.localTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
 
 /**
- * Converts a string containing a ISO date into OffsetDateTime. eg. "2018-03-07T21:30:00+01:00"
+ * Converts a string containing ISO date into OffsetDateTime. e.g. "2018-03-07T21:30:00+01:00"
  */
 val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
