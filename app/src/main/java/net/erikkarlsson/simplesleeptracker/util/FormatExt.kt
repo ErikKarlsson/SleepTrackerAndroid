@@ -9,11 +9,12 @@ import java.util.*
 
 val OffsetDateTime.formatYYYYMMDD: String get() = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 val OffsetDateTime.formatYYYYMMDDHHMM: String get() = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+val OffsetDateTime.formatHHMM: String get() = this.format(DateTimeFormatter.ofPattern("HH:mm"))
+val OffsetDateTime.formatDateDisplayName: String get() = this.format(DateTimeFormatter.ofPattern("EEE, MMM d"))
 
 val DayOfWeekLocalTime.formatDisplayName: String
     get() = String.format("%s: %s",
-            this.dayOfWeek.getDisplayName(TextStyle.FULL,
-                    Locale.getDefault()).capitalize(),
+            this.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
             this.localTime.formatHHMM)
 
 val List<DayOfWeekLocalTime>.formatDisplayName: String
