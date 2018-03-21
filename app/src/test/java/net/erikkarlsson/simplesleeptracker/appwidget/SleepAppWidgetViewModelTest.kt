@@ -4,9 +4,9 @@ import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Observable
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension

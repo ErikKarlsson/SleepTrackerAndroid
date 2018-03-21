@@ -8,6 +8,11 @@ import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Completable
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.*
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
+import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
+import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.util.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.util.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach

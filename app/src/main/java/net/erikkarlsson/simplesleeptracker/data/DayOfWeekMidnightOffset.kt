@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.data
 
-import net.erikkarlsson.simplesleeptracker.domain.DayOfWeekLocalTime
+import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import net.erikkarlsson.simplesleeptracker.util.localTime
 import org.threeten.bp.DayOfWeek
 

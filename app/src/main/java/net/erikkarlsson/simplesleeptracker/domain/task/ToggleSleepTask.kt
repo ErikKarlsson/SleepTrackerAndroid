@@ -1,15 +1,18 @@
-package net.erikkarlsson.simplesleeptracker.domain
+package net.erikkarlsson.simplesleeptracker.domain.task
 
 import io.reactivex.Completable
+import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import javax.inject.Inject
 
 /**
  * Toggle between awake and asleep state
  */
 class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
-                                          private val dateTimeProvider: DateTimeProvider) {
+                                          private val dateTimeProvider: DateTimeProvider) : CompletableTask {
 
-    fun execute(): Completable =
+    override fun execute(): Completable =
             sleepRepository.getCurrentSingle()
                 .map { toggleSleep(it) }
                 .toCompletable()

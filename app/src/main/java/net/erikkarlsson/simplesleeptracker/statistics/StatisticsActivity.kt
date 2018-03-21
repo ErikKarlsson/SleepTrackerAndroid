@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.util.*
 import timber.log.Timber
 import javax.inject.Inject

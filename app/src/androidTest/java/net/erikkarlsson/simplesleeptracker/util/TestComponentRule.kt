@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker.util
 
 import android.support.test.InstrumentationRegistry
 import net.erikkarlsson.simplesleeptracker.TestableApplication
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement

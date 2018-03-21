@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.data
 
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import javax.inject.Inject
 
 class SleepMapper @Inject constructor() : Mapper<SleepEntity, Sleep> {

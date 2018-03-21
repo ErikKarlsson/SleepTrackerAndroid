@@ -4,7 +4,7 @@ import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.data.SleepRepository
 import net.erikkarlsson.simplesleeptracker.di.DaggerTestComponent
 import net.erikkarlsson.simplesleeptracker.di.TestComponent
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 import javax.inject.Inject

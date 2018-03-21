@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker
 
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.OffsetDateTime
 
 interface TestableApplication {

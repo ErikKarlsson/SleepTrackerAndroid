@@ -1,7 +1,12 @@
-package net.erikkarlsson.simplesleeptracker.domain
+package net.erikkarlsson.simplesleeptracker.domain.task
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
+import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
+import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
+import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
+import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import org.threeten.bp.DayOfWeek
 import javax.inject.Inject
 
@@ -10,9 +15,9 @@ import javax.inject.Inject
  */
 class StatisticComparisonTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSource,
-        private val dateTimeProvider: DateTimeProvider) {
+        private val dateTimeProvider: DateTimeProvider) : ObservableTask<StatisticComparison> {
 
-    fun execute(): Observable<StatisticComparison> {
+    override fun execute(): Observable<StatisticComparison> {
         val now = dateTimeProvider.now().toLocalDate()
         val monday = now.with(DayOfWeek.MONDAY)
         val sunday = now.with(DayOfWeek.SUNDAY)

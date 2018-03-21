@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain
+package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import org.threeten.bp.LocalDate
 

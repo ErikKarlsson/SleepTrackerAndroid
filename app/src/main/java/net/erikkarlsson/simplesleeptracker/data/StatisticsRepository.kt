@@ -3,6 +3,10 @@ package net.erikkarlsson.simplesleeptracker.data
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import net.erikkarlsson.simplesleeptracker.domain.*
+import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
+import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.util.localTime
 import org.threeten.bp.LocalTime
 import javax.inject.Inject

@@ -3,9 +3,9 @@ package net.erikkarlsson.simplesleeptracker.appwidget
 import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.appwidget.WidgetCmd.ToggleSleepCmd
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
 import javax.inject.Inject
 

@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.data
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.domain.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import javax.inject.Inject
 

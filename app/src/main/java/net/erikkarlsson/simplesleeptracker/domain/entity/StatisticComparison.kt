@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain
+package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import net.erikkarlsson.simplesleeptracker.util.diffHours
 
