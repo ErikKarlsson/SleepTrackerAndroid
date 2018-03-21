@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.android.AndroidInjection
@@ -70,6 +71,11 @@ class StatisticsActivity : AppCompatActivity() {
     private fun render(state: StatisticsState?) {
         state?.let {
             sleepListRelay.accept(state.sleepList)
+
+            val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
+            ownImage.setImageResource(imageRes)
+
+            trackedNightsCard.visibility = if (state.isListEmpty) View.GONE else View.VISIBLE
 
             with(state.statistics.first) {
                 statisticsText.text = if (this.isEmpty) {

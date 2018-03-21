@@ -33,6 +33,10 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
 data class StatisticsState(val statistics: StatisticComparison,
                            val sleepList: List<Sleep>) : State {
 
+    val isSleeping get(): Boolean = sleepList.isNotEmpty() && sleepList.first().isSleeping
+
+    val isListEmpty get(): Boolean = sleepList.isEmpty()
+
     companion object {
         fun empty() = StatisticsState(StatisticComparison.empty(), listOf())
     }
