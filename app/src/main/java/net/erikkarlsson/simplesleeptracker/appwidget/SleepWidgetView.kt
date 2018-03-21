@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.appwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET_TOGGLE
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,8 +31,10 @@ class SleepWidgetView @Inject constructor(private val context: Context,
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
             views.setOnClickPendingIntent(R.id.button, pendingIntent)
+
             val appWidget = ComponentName(context, SleepAppWidgetProvider::class.java)
             val appWidgetManager = AppWidgetManager.getInstance(context)
+
             appWidgetManager.updateAppWidget(appWidget, views)
         }
     }

@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
-import net.erikkarlsson.simplesleeptracker.appwidget.WidgetConstants.Companion.ACTION_SIMPLEAPPWIDGET_TOGGLE
 import javax.inject.Inject
 
 class SleepAppWidgetProvider : AppWidgetProvider() {
