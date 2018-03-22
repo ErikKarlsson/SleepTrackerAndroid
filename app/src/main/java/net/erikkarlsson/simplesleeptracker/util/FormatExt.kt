@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import net.erikkarlsson.simplesleeptracker.base.MINUTES_IN_AN_HOUR
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -28,7 +29,8 @@ val Int.formatPercentage: String  get() {
 val Float.formatHoursMinutes: String
     get() {
         val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
-        val minutes: Int = Math.floor(((Math.abs(this) - hours) * 60).toDouble()).toInt()
+        val minutes: Int = Math.floor(((Math.abs(this) - hours) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+
         return when {
             hours == 0 && minutes > 0 -> String.format("%dmin", minutes)
             hours > 0 && minutes == 0 -> String.format("%dh", hours)

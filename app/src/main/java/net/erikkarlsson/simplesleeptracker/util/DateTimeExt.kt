@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.util
 
-import net.erikkarlsson.simplesleeptracker.base.HOURS_PRECISION
+import net.erikkarlsson.simplesleeptracker.base.*
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -15,9 +15,8 @@ import java.math.BigDecimal
  */
 val OffsetDateTime.midnightOffsetInSeconds: Int
     get() {
-        val seconds = this.hour * 3600 + this.minute * 60 + this.second
-        val secondsInADay = 86400
-        return if (this.hour <= 12) seconds else seconds - secondsInADay
+        val seconds = this.hour.hoursToSeconds + this.minute.minutesToSeconds + this.second
+        return if (this.hour <= TWELVE_IN_THE_AFTERNOON) seconds else seconds - SECONDS_IN_A_DAY
     }
 
 /**
@@ -25,7 +24,7 @@ val OffsetDateTime.midnightOffsetInSeconds: Int
  */
 fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
     val secondsBetweenDates = ChronoUnit.SECONDS.between(this, dateTime)
-    return BigDecimal.valueOf(secondsBetweenDates / 3600.0)
+    return BigDecimal.valueOf(secondsBetweenDates / SECONDS_IN_AN_HOUR.toDouble())
         .setScale(HOURS_PRECISION, BigDecimal.ROUND_HALF_UP)
         .toFloat()
 }
@@ -33,7 +32,7 @@ fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
 /**
  * Amount of hours between two points in time.
  */
-fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(other, this).toMinutes().toFloat() / 60f
+fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(other, this).toMinutes().toFloat() / MINUTES_IN_AN_HOUR
 
 /**
  * Converts midnight offset in seconds to LocalTime.
@@ -44,3 +43,9 @@ val Int.localTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong(
  * Converts a string containing ISO date into OffsetDateTime. e.g. "2018-03-07T21:30:00+01:00"
  */
 val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
+
+/**
+ * Time unit conversion
+ */
+val Int.hoursToSeconds: Int get() = this * SECONDS_IN_AN_HOUR
+val Int.minutesToSeconds: Int get() = this * SECONDS_IN_A_MINUTE
