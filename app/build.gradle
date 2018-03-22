@@ -106,9 +106,6 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Kotterknife
-    implementation Deps.kotterknife
-
     // Lifecycle
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
@@ -120,13 +117,10 @@ dependencies {
 
     // RxJava
     implementation Deps.rxjava2
-    implementation Deps.rx_android
-    implementation Deps.rx_relay
-    implementation Deps.rx_binding
+    implementation Deps.rxandroid
+    implementation Deps.rxrelay
+    implementation Deps.rxbinding
     implementation Deps.rxkotlin
-
-    // Reactive Network
-    implementation Deps.reactive_network
 
     // Support libraries
     implementation Deps.support_app_compat
@@ -137,7 +131,7 @@ dependencies {
     // ThreeTen Backport
     implementation Deps.threeten_backport
 
-    //Timber
+    // Timber
     implementation Deps.timber
 
 }
