@@ -1,13 +1,15 @@
 package net.erikkarlsson.simplesleeptracker.statistics
 
 import android.arch.lifecycle.Observer
+import com.google.common.collect.ImmutableList
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Completable
 import io.reactivex.Observable
-import net.erikkarlsson.simplesleeptracker.domain.*
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
@@ -40,13 +42,13 @@ class StatisticsViewModelTest {
 
         given(statisticComparisonTask.execute()).willReturn(Observable.just(expectedStatisticComparison))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-        given(sleepRepository.getSleep()).willReturn(Observable.just(emptyList()))
+        given(sleepRepository.getSleep()).willReturn(Observable.just(ImmutableList.of()))
 
         val viewModel = createViewModel()
 
         viewModel.state().observeForever(observer)
 
-        verify(observer).onChanged(StatisticsState(false, expectedStatisticComparison, emptyList()))
+        verify(observer).onChanged(StatisticsState(false, expectedStatisticComparison, ImmutableList.of()))
     }
 
     /**
@@ -56,7 +58,7 @@ class StatisticsViewModelTest {
     fun `clicking toggle sleep button toggles sleep`() {
         given(toggleSleepTask.execute()).willReturn(Completable.complete())
         given(statisticComparisonTask.execute()).willReturn(Observable.just(StatisticComparison.empty()))
-        given(sleepRepository.getSleep()).willReturn(Observable.just(emptyList()))
+        given(sleepRepository.getSleep()).willReturn(Observable.just(ImmutableList.of()))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
 
         val viewModel = createViewModel()

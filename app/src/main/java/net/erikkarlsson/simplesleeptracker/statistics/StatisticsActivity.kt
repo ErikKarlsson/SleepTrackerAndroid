@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.google.common.collect.ImmutableList
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.android.AndroidInjection
@@ -35,7 +36,7 @@ class StatisticsActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
     private val adapter = SleepAdapter { navigateToDetails(it.id) }
-    private val sleepListRelay: PublishRelay<List<Sleep>> = PublishRelay.create()
+    private val sleepListRelay: PublishRelay<ImmutableList<Sleep>> = PublishRelay.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -49,7 +50,7 @@ class StatisticsActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        sleepListRelay.scanMap(emptyList(), { old, new ->
+        sleepListRelay.scanMap(ImmutableList.of(), { old, new ->
             val callback = SleepAdapter.DiffCallback(old, new)
             val result = DiffUtil.calculateDiff(callback)
             Pair(new, result)

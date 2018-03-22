@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.common.collect.ImmutableList
 import kotlinx.android.synthetic.main.item_sleep.view.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -14,7 +15,7 @@ import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
 
 class SleepAdapter(private val itemClick: (Sleep) -> Unit) : RecyclerView.Adapter<SleepAdapter.ViewHolder>() {
 
-    private var sleepList: List<Sleep> = listOf()
+    private var sleepList: ImmutableList<Sleep> = ImmutableList.of()
 
     override fun getItemCount(): Int = sleepList.size
 
@@ -27,7 +28,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : RecyclerView.Adapte
         holder.bindSleep(sleepList[position])
     }
 
-    fun swapData(sleepList: List<Sleep>, diffResult: DiffUtil.DiffResult) {
+    fun swapData(sleepList: ImmutableList<Sleep>, diffResult: DiffUtil.DiffResult) {
         this.sleepList = sleepList
         diffResult.dispatchUpdatesTo(this)
     }
@@ -43,7 +44,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : RecyclerView.Adapte
         }
     }
 
-    class DiffCallback(private val oldSleepList: List<Sleep>, private val newSleepList: List<Sleep>)
+    class DiffCallback(private val oldSleepList: ImmutableList<Sleep>, private val newSleepList: ImmutableList<Sleep>)
         : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int = oldSleepList.size

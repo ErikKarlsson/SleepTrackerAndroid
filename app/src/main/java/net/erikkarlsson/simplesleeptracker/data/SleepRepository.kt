@@ -1,20 +1,22 @@
 package net.erikkarlsson.simplesleeptracker.data
 
+import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.util.toImmutableList
 import javax.inject.Inject
 
 class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                                           private val sleepMapper: SleepMapper) : SleepDataSource {
-    override fun getSleep(): Observable<List<Sleep>> {
+    override fun getSleep(): Observable<ImmutableList<Sleep>> {
         return sleepDao.getSleep().toObservable()
             .switchMap {
                 Observable.fromIterable(it)
                     .map { sleepMapper.mapFromEntity(it) }
-                    .toList().toObservable()
+                    .toImmutableList().toObservable()
                     .subscribeOn(Schedulers.computation())
               }
     }

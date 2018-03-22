@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.statistics
 
+import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -36,12 +37,12 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
 // State
 data class StatisticsState(val isSleeping: Boolean,
                            val statistics: StatisticComparison,
-                           val sleepList: List<Sleep>) : State {
+                           val sleepList: ImmutableList<Sleep>) : State {
 
     val isListEmpty get(): Boolean = sleepList.isEmpty()
 
     companion object {
-        fun empty() = StatisticsState(false, StatisticComparison.empty(), listOf())
+        fun empty() = StatisticsState(false, StatisticComparison.empty(), ImmutableList.of())
     }
 }
 
@@ -61,7 +62,7 @@ class StatisticsDataSubscription @Inject constructor(private val sleepRepository
 sealed class StatisticsMsg : Msg
 
 object ToggleSleepClicked : StatisticsMsg()
-data class SleepLoaded(val sleepList: List<Sleep>) : StatisticsMsg()
+data class SleepLoaded(val sleepList: ImmutableList<Sleep>) : StatisticsMsg()
 data class CurrentSleepLoaded(val sleep: Sleep) : StatisticsMsg()
 data class StatisticsLoaded(val statistics: StatisticComparison) : StatisticsMsg()
 object NoOp : StatisticsMsg()

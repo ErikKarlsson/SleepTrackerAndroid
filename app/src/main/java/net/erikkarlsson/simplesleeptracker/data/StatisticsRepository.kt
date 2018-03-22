@@ -1,13 +1,15 @@
 package net.erikkarlsson.simplesleeptracker.data
 
+import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import net.erikkarlsson.simplesleeptracker.domain.*
+import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.util.localTime
+import net.erikkarlsson.simplesleeptracker.util.toImmutableList
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
@@ -51,14 +53,14 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
     private fun getAverageBedtime(from: String, to: String): Observable<LocalTime> =
             sleepDao.getAverageBedtimeMidnightOffsetInSeconds(from, to).toObservable().map { it.localTime }
 
-    private fun getAverageBedtimeDayOfWeek(from: String, to: String): Observable<List<DayOfWeekLocalTime>> =
+    private fun getAverageBedtimeDayOfWeek(from: String, to: String): Observable<ImmutableList<DayOfWeekLocalTime>> =
             sleepDao.getAverageBedtimeMidnightOffsetInSecondsForDaysOfWeek(from, to).toObservable().flatMap { toDayOfWeekLocalTimeListObservable(it) }
 
-    private fun getAverageWakeUpTimeDayOfWeek(from: String, to: String): Observable<List<DayOfWeekLocalTime>> =
+    private fun getAverageWakeUpTimeDayOfWeek(from: String, to: String): Observable<ImmutableList<DayOfWeekLocalTime>> =
             sleepDao.getAverageWakeUpMidnightOffsetInSecondsForDaysOfWeek(from, to).toObservable().flatMap { toDayOfWeekLocalTimeListObservable(it) }
 
     private fun toDayOfWeekLocalTimeListObservable(dayOfWeekMidnightOffset: List<DayOfWeekMidnightOffset>)
-            : Observable<List<DayOfWeekLocalTime>> =
-            Observable.fromIterable(dayOfWeekMidnightOffset).map { it.toDayOfWeekLocalTime }.toList().toObservable()
+            : Observable<ImmutableList<DayOfWeekLocalTime>> =
+            Observable.fromIterable(dayOfWeekMidnightOffset).map { it.toDayOfWeekLocalTime }.toImmutableList().toObservable()
 
 }
