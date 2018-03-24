@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'io.fabric'
+
 apply plugin: "de.mannodermaus.android-junit5"
 
 apply plugin: 'kotlin-android'
@@ -92,12 +94,18 @@ dependencies {
     // Constraint layout
     implementation Deps.constraint_layout
 
+    // Crashlytics
+    implementation Deps.crashlytics
+
     // Dagger
     implementation Deps.dagger_runtime
     implementation Deps.dagger_android
     implementation Deps.dagger_android_support
     kapt Deps.dagger_compiler
     kapt Deps.dagger_android_support_compiler
+
+    // Firebase
+    implementation Deps.firebase_core
 
     // Guava
     implementation Deps.guava
@@ -133,5 +141,6 @@ dependencies {
 
     // Timber
     implementation Deps.timber
-
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "513153680889",
+    "firebase_url": "https://simplesleeptracker.firebaseio.com",
+    "project_id": "simplesleeptracker",
+    "storage_bucket": "simplesleeptracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513153680889:android:9275847f99e1001e",
+        "android_client_info": {
+          "package_name": "net.erikkarlsson.simplesleeptracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513153680889-4dfcercp6vfq016lsbvtaib42rq8sl7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0ixDCjtvaGKlwhj7fEprCAyj9IMfdMh0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
