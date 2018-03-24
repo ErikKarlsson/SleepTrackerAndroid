@@ -13,7 +13,7 @@ import javax.inject.Inject
 /**
  * Get stream of statistic comparison between current and previous week
  */
-class StatisticComparisonTask @Inject constructor(
+class StatisticComparisonWeekTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSource,
         private val dateTimeProvider: DateTimeProvider) : ObservableTask<StatisticComparison> {
 

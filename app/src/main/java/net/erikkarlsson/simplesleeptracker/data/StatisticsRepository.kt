@@ -10,12 +10,17 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.util.localTime
 import net.erikkarlsson.simplesleeptracker.util.toImmutableList
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
                                                private val sleepMapper: SleepMapper)
     : StatisticsDataSource {
+
+    override fun getStatistics(): Observable<Statistics> {
+        return getStatistics(DateRange(LocalDate.parse("1000-01-01"), LocalDate.parse("9999-01-01"))) // Infinite date range
+    }
 
     override fun getStatistics(dateRange: DateRange): Observable<Statistics> {
         val from = dateRange.from.toString()

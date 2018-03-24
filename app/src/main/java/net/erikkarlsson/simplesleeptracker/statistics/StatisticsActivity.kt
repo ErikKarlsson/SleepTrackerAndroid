@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.ArrayAdapter
 import com.google.common.collect.ImmutableList
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.itemSelections
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -17,6 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_statistics.*
+import kotlinx.android.synthetic.main.toolbar.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
@@ -42,13 +45,20 @@ class StatisticsActivity : AppCompatActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
+        setSupportActionBar(toolbar)
+        toolbar.setTitle(R.string.app_name)
+
+        val spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
+        spinner.itemSelections().subscribe({ selectFilter(it) }).addTo(disposables)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
             .subscribe({ viewModel.dispatch(ToggleSleepClicked) })
             .addTo(disposables)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
 
         sleepListRelay.scanMap(ImmutableList.of(), { old, new ->
             val callback = SleepAdapter.DiffCallback(old, new)
@@ -80,7 +90,7 @@ class StatisticsActivity : AppCompatActivity() {
 
             with(state.statistics.first) {
                 statisticsText.text = if (this.isEmpty) {
-                    getString(R.string.no_sleep_tracked_this_week)
+                    getString(R.string.no_sleep_tracked)
                 } else {
                     String.format("%s: %d\n" +
                             "%s: %s %s\n" +
@@ -122,6 +132,11 @@ class StatisticsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun selectFilter(index: Int) {
+        val statisticsFilter = StatisticsFilter.values()[index]
+        viewModel.dispatch(StatisticsFilterSelected(statisticsFilter))
     }
 
     private fun navigateToDetails(id: Int?) {
