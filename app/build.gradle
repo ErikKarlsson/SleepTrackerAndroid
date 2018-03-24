@@ -20,6 +20,7 @@ android {
         versionCode Versions.version_code
         versionName Versions.version_name
         testInstrumentationRunner "${applicationId}.runner.TestRunner"
+        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -28,6 +29,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        beta {
+            initWith(release)
+            applicationIdSuffix = ".beta"
+            matchingFallbacks = ['release', 'debug']
         }
     }
     kapt {
@@ -106,6 +112,7 @@ dependencies {
 
     // Firebase
     implementation Deps.firebase_core
+    implementation Deps.firebase_crash
 
     // Guava
     implementation Deps.guava
@@ -117,6 +124,9 @@ dependencies {
     // Lifecycle
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
+
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.1'
 
     // Room
     implementation Deps.room_runtime

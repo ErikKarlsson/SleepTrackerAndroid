@@ -68,6 +68,7 @@ object Deps {
     val espresso_intents = "com.android.support.test.espresso:espresso-intents:${Versions.espresso}"
     val fabric_plugin = "io.fabric.tools:gradle:${Versions.fabric}"
     val firebase_core = "com.google.firebase:firebase-core:${Versions.firebase}"
+    val firebase_crash = "com.google.firebase:firebase-crash:${Versions.firebase}"
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     val google_services_plugin = "com.google.gms:google-services:${Versions.google_services_plugin}"
     val guava = "com.google.guava:guava:${Versions.guava}"

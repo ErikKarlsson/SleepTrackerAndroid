@@ -1,22 +1,24 @@
 package net.erikkarlsson.simplesleeptracker
 
 import android.app.Activity
-import android.app.Application
 import android.content.BroadcastReceiver
+import android.support.multidex.MultiDexApplication
+import com.google.firebase.crash.FirebaseCrash
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
+import net.erikkarlsson.simplesleeptracker.appwidget.SleepWidgetView
+import net.erikkarlsson.simplesleeptracker.base.FirebaseTree
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.elm.LogLevel
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
-import net.erikkarlsson.simplesleeptracker.appwidget.SleepWidgetView
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 
-open class App : Application(), HasActivityInjector, HasBroadcastReceiverInjector {
+open class App : MultiDexApplication(), HasActivityInjector, HasBroadcastReceiverInjector {
 
     @Inject
     lateinit var activityInjector : DispatchingAndroidInjector<Activity>
@@ -30,12 +32,14 @@ open class App : Application(), HasActivityInjector, HasBroadcastReceiverInjecto
     override fun onCreate() {
         super.onCreate()
 
+        FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
+
         DaggerAppComponent.builder().application(this).build().inject(this)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         } else {
-            TODO("erikkarlsson: Plant crash reporting tree")
+            Timber.plant(FirebaseTree())
         }
 
         RuntimeFactory.defaultLogLevel = if (BuildConfig.DEBUG) LogLevel.FULL else LogLevel.NONE
