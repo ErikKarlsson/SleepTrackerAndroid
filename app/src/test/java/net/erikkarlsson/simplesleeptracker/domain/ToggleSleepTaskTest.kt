@@ -34,8 +34,7 @@ class ToggleSleepTaskTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
-        val observer = toggleSleepTask.execute().test()
-        observer.assertComplete()
+        toggleSleepTask.execute().test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -51,8 +50,7 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = anHourAgo)
         val awake = Sleep(fromDate = anHourAgo, toDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        val observer = toggleSleepTask.execute().test()
-        observer.assertComplete()
+        toggleSleepTask.execute().test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -67,12 +65,26 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = now)
         val awake = Sleep(fromDate = now, toDate = now.plusDays(1))
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(awake))
-        val observer = toggleSleepTask.execute().test()
-        observer.assertComplete()
+        toggleSleepTask.execute().test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
             verify(sleepRepository).insert(sleeping)
+            verifyNoMoreInteractions()
+        }
+    }
+
+    @Test
+    fun `sleep duration less than an hour should not count as tracked night`() {
+        val now = dateTimeProvider.mockDateTime()
+        val sleeping = Sleep(fromDate = now)
+        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+        dateTimeProvider.nowValue = now.plusMinutes(59)
+        toggleSleepTask.execute().test().assertComplete()
+
+        inOrder(sleepRepository) {
+            verify(sleepRepository).getCurrentSingle()
+            verify(sleepRepository).delete(sleeping)
             verifyNoMoreInteractions()
         }
     }

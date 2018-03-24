@@ -60,6 +60,9 @@ interface SleepDao {
     @Update
     fun updateSleep(sleep: SleepEntity): Int
 
+    @Delete
+    fun deleteSleep(sleep: SleepEntity)
+
     /**
      * Delete all sleep.
      */

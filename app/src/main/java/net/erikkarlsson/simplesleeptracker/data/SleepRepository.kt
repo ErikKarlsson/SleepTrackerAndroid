@@ -44,6 +44,10 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
         return sleepDao.updateSleep(sleepEntity)
     }
 
+    override fun delete(sleep: Sleep) {
+        sleepDao.deleteSleep(sleepMapper.mapToEntity(sleep))
+    }
+
     override fun deleteAll() {
         sleepDao.deleteAllSleep()
     }

@@ -6,8 +6,10 @@ import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import javax.inject.Inject
 
+private const val MINIMUM_SLEEP_DURATION_HOURS = 1 // Minimum hours to count as tracked sleep.
+
 /**
- * Toggle between awake and asleep state
+ * Toggle between awake and asleep state.
  */
 class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
                                           private val dateTimeProvider: DateTimeProvider) : CompletableTask {
@@ -32,6 +34,11 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
 
     private fun awake(currentSleep: Sleep) {
         val sleep = currentSleep.copy(toDate = dateTimeProvider.now())
-        sleepRepository.update(sleep)
+
+        if (sleep.hours >= MINIMUM_SLEEP_DURATION_HOURS) {
+            sleepRepository.update(sleep)
+        } else {
+            sleepRepository.delete(currentSleep)
+        }
     }
 }

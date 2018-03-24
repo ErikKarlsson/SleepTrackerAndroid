@@ -11,5 +11,6 @@ interface SleepDataSource {
     fun getCurrentSingle(): Single<Sleep>
     fun insert(newSleep: Sleep): Long
     fun update(updatedSleep: Sleep): Int
+    fun delete(sleep: Sleep)
     fun deleteAll()
 }
