@@ -17,7 +17,7 @@ interface SleepDao {
     fun getSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
-    fun getCurrentSleep(): Flowable<SleepEntity>
+    fun getCurrentSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     fun getCurrentSleepSingle(): Single<SleepEntity>

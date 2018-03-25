@@ -18,7 +18,7 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     .map { sleepMapper.mapFromEntity(it) }
                     .toImmutableList().toObservable()
                     .subscribeOn(Schedulers.computation())
-              }
+            }
     }
 
     override fun getCurrentSingle(): Single<Sleep> {
@@ -29,7 +29,10 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
 
     override fun getCurrent(): Observable<Sleep> {
         return sleepDao.getCurrentSleep()
-            .map { sleepMapper.mapFromEntity(it) }
+            .map {
+                if (it.isEmpty()) Sleep.empty()
+                else sleepMapper.mapFromEntity(it[0])
+            }
             .toObservable()
             .onErrorReturnItem(Sleep.empty())
     }
