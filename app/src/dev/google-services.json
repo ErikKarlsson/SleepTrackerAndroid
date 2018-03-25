@@ -39,9 +39,40 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:513153680889:android:ba2baf5224544609",
+        "mobilesdk_app_id": "1:513153680889:android:0af2ad6d30194b9e",
         "android_client_info": {
-          "package_name": "net.erikkarlsson.simplesleeptracker.debug"
+          "package_name": "net.erikkarlsson.simplesleeptracker.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513153680889-4dfcercp6vfq016lsbvtaib42rq8sl7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0ixDCjtvaGKlwhj7fEprCAyj9IMfdMh0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513153680889:android:2693737d6f2a0fbd",
+        "android_client_info": {
+          "package_name": "net.erikkarlsson.simplesleeptracker.dev"
         }
       },
       "oauth_client": [

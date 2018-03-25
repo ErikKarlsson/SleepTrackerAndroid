@@ -10,9 +10,12 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply from: "$project.rootDir/git-version.gradle"
+
 android {
     compileSdkVersion Versions.compile_sdk
     buildToolsVersion Versions.build_tools
+
     defaultConfig {
         applicationId "net.erikkarlsson.simplesleeptracker"
         minSdkVersion Versions.min_sdk
@@ -22,25 +25,43 @@ android {
         testInstrumentationRunner "${applicationId}.runner.TestRunner"
         multiDexEnabled true
     }
+
     buildTypes {
         debug {
-            applicationIdSuffix = ".debug"
+            crunchPngs false
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            applicationIdSuffix = ".dev"
+            versionCode 1
+            versionName "dev"
+            resConfigs "en", "xxhdpi"
+        }
         beta {
-            initWith(release)
             applicationIdSuffix = ".beta"
-            matchingFallbacks = ['release', 'debug']
+            versionCode gitVersionCodeTime
+            versionName gitVersionName
+        }
+        playstore {
+            versionCode gitVersionCode
+            versionName gitVersionName
         }
     }
+
     kapt {
         javacOptions {
             option("-Xmaxerrs", 500)
         }
     }
+
     sourceSets {
         String sharedTestJavaDir = 'src/sharedTest/java'
 
@@ -112,7 +133,6 @@ dependencies {
 
     // Firebase
     implementation Deps.firebase_core
-    implementation Deps.firebase_crash
 
     // Guava
     implementation Deps.guava
@@ -126,7 +146,7 @@ dependencies {
     kapt Deps.lifecycle_compiler
 
     // Multidex
-    implementation 'com.android.support:multidex:1.0.1'
+    implementation Deps.multidex
 
     // Room
     implementation Deps.room_runtime
