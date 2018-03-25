@@ -29,6 +29,7 @@ android {
     buildTypes {
         debug {
             crunchPngs false
+            ext.alwaysUpdateBuildId = false
         }
         release {
             minifyEnabled false
