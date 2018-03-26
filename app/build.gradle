@@ -12,6 +12,10 @@ apply plugin: 'kotlin-kapt'
 
 apply from: "$project.rootDir/git-version.gradle"
 
+def keystorePropertiesFile = new File(System.getProperty("user.home") + '/android/files/simplesleeptracker/keystore.properties')
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion Versions.compile_sdk
     buildToolsVersion Versions.build_tools
@@ -26,6 +30,15 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         debug {
             crunchPngs false
@@ -34,6 +47,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -46,8 +60,7 @@ android {
             versionName "dev"
             resConfigs "en", "xxhdpi"
         }
-        beta {
-            applicationIdSuffix = ".beta"
+        internal {
             versionCode gitVersionCodeTime
             versionName gitVersionName
         }
