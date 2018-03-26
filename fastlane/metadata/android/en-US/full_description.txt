@@ -1,0 +1,1 @@
+Easy-to-use sleep tracker with extensive statistics. Toggle sleep from the App Widget or inside the app.
