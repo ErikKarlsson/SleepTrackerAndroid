@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.util
+package net.erikkarlsson.simplesleeptracker.testutil
 
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins

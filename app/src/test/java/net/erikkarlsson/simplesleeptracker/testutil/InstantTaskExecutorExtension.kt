@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.util
+package net.erikkarlsson.simplesleeptracker.testutil
 
 import android.arch.core.executor.ArchTaskExecutor
 import android.arch.core.executor.TaskExecutor

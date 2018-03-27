@@ -22,7 +22,7 @@ val OffsetDateTime.midnightOffsetInSeconds: Int
 /**
  * Calculates amount of hours between two dates. e.g. 7.850
  */
-fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
+fun OffsetDateTime.hoursBetween(dateTime: OffsetDateTime): Float {
     val secondsBetweenDates = ChronoUnit.SECONDS.between(this, dateTime)
     return BigDecimal.valueOf(secondsBetweenDates / SECONDS_IN_AN_HOUR.toDouble())
         .setScale(HOURS_PRECISION, BigDecimal.ROUND_HALF_UP)
@@ -30,14 +30,14 @@ fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
 }
 
 /**
- * Amount of hours between two points in time.
+ * Amount of hours between two points in time. e.g. 7.850
  */
-fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(other, this).toMinutes().toFloat() / MINUTES_IN_AN_HOUR
+fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(this, other).toMinutes().toFloat() / MINUTES_IN_AN_HOUR
 
 /**
  * Converts midnight offset in seconds to LocalTime.
  */
-val Int.localTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
+val Int.midnightOffsetToLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
 
 /**
  * Converts a string containing ISO date into OffsetDateTime. e.g. "2018-03-07T21:30:00+01:00"

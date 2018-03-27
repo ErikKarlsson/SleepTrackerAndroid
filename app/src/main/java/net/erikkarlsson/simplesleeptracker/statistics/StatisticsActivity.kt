@@ -57,7 +57,8 @@ class StatisticsActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
-            .subscribe({ viewModel.dispatch(ToggleSleepClicked) })
+            .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
+                    { Timber.e(it, "Error merging clicks") })
             .addTo(disposables)
 
         sleepListRelay.scanMap(ImmutableList.of(), { old, new ->

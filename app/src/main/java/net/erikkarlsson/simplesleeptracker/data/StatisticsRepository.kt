@@ -8,7 +8,7 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.util.localTime
+import net.erikkarlsson.simplesleeptracker.util.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.util.toImmutableList
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -53,10 +53,10 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
             sleepDao.getShortestSleep(from, to).map { sleepMapper.mapFromEntity(it) }.toObservable()
 
     private fun getAverageWakeUpTime(from: String, to: String): Observable<LocalTime> =
-            sleepDao.getAverageWakeUpMidnightOffsetInSeconds(from, to).toObservable().map { it.localTime }
+            sleepDao.getAverageWakeUpMidnightOffsetInSeconds(from, to).toObservable().map { it.midnightOffsetToLocalTime }
 
     private fun getAverageBedtime(from: String, to: String): Observable<LocalTime> =
-            sleepDao.getAverageBedtimeMidnightOffsetInSeconds(from, to).toObservable().map { it.localTime }
+            sleepDao.getAverageBedtimeMidnightOffsetInSeconds(from, to).toObservable().map { it.midnightOffsetToLocalTime }
 
     private fun getAverageBedtimeDayOfWeek(from: String, to: String): Observable<ImmutableList<DayOfWeekLocalTime>> =
             sleepDao.getAverageBedtimeMidnightOffsetInSecondsForDaysOfWeek(from, to).toObservable().flatMap { toDayOfWeekLocalTimeListObservable(it) }

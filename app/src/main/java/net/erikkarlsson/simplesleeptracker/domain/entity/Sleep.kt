@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
-import net.erikkarlsson.simplesleeptracker.util.hoursTo
+import net.erikkarlsson.simplesleeptracker.util.hoursBetween
 import net.erikkarlsson.simplesleeptracker.util.midnightOffsetInSeconds
 import org.threeten.bp.OffsetDateTime
 
@@ -15,7 +15,7 @@ data class Sleep(val id: Int? = null,
         get() = toDate?.midnightOffsetInSeconds ?: 0
 
     val hours: Float
-        get() = toDate?.let { fromDate.hoursTo(toDate) } ?: 0.0f
+        get() = toDate?.let { fromDate.hoursBetween(toDate) } ?: 0.0f
 
     val isSleeping: Boolean
         get() = this != empty() && toDate == null
