@@ -1,17 +1,19 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
 
     dependencies {
         classpath Deps.android_gradle_plugin
-        classpath Deps.kotlin_plugin
-        classpath Deps.junit5_plugin
-        classpath Deps.google_services_plugin
         classpath Deps.fabric_plugin
+        classpath Deps.google_services_plugin
+        classpath Deps.gradle_version_plugin
+        classpath Deps.junit5_plugin
+        classpath Deps.kotlin_plugin
     }
 
     repositories {
         google()
+        mavenCentral()
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://maven.fabric.io/public' }
@@ -21,6 +23,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://jitpack.io' }

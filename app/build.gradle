@@ -88,6 +88,10 @@ android {
     }
 }
 
+configurations.all() {
+    resolutionStrategy.force Deps.kotlin_stdlib
+}
+
 androidExtensions {
     experimental = true
 }
