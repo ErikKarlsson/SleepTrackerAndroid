@@ -1,12 +1,9 @@
-apply plugin: "com.github.ben-manes.versions"
-
 buildscript {
 
     dependencies {
         classpath Deps.android_gradle_plugin
         classpath Deps.fabric_plugin
         classpath Deps.google_services_plugin
-        classpath Deps.gradle_version_plugin
         classpath Deps.junit5_plugin
         classpath Deps.kotlin_plugin
     }
@@ -17,6 +14,21 @@ buildscript {
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://maven.fabric.io/public' }
+    }
+}
+
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-4"
+    id "com.github.ben-manes.versions" version "0.17.0"
+}
+
+detekt {
+    version = "1.0.0.RC6-4"
+    profile("main") {
+        input = "$projectDir/app/src/main/java"
+        config = "$projectDir/code-quality/detekt-config.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+        output = "$projectDir/app/build/reports"
     }
 }
 
