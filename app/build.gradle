@@ -120,7 +120,6 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation Deps.junit
-    testImplementation Deps.mockito_all
     testImplementation Deps.hamcrest
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
