@@ -40,7 +40,8 @@
                             android:layout_height="@dimen/statistics_owl_image_size"
                             android:layout_gravity="center_horizontal"
                             android:layout_margin="@dimen/statistics_owl_image_margin"
-                            android:src="@drawable/own_awake" />
+                            android:src="@drawable/own_awake"
+                            android:contentDescription="@string/owl_image_content_description"/>
 
                     </FrameLayout>
 

@@ -11,4 +11,5 @@
     <string name="not_implemented_yet">Not implemented yet</string>
     <string name="toggle_sleep">Toggle sleep</string>
     <string name="statistics">Statistics</string>
+    <string name="owl_image_content_description">Owl image</string>
 </resources>

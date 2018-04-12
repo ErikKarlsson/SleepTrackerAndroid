@@ -2,7 +2,6 @@ package net.erikkarlsson.simplesleeptracker.elm
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -11,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  *  Implementation of ComponentRuntime based on RxJava and RxRelay
@@ -98,7 +98,7 @@ internal class RxRuntime<STATE : State, in MSG : Msg, CMD : Cmd>(component: Comp
             logMsg: String
     ) {
         if (minLogLevel.logLevelIndex <= logLevel.logLevelIndex) {
-            Log.d("ComponentRuntime", logMsg)
+            Timber.d(logMsg)
         }
     }
 }

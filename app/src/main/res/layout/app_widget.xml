@@ -7,6 +7,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/own_awake"/>
+        android:src="@drawable/own_awake"
+        android:contentDescription="@string/owl_image_content_description"/>
 
 </FrameLayout>

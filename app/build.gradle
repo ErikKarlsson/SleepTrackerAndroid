@@ -86,6 +86,16 @@ android {
             java.srcDir sharedTestJavaDir
         }
     }
+
+    lintOptions {
+        lintConfig rootProject.file("code-quality/lint.xml")
+        abortOnError true
+        warningsAsErrors true
+        quiet false
+        showAll true
+        explainIssues true
+        textReport true
+    }
 }
 
 configurations.all() {
