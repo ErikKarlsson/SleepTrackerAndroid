@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -17,7 +18,6 @@ import net.erikkarlsson.simplesleeptracker.elm.LogLevel
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import timber.log.Timber
 import javax.inject.Inject
-
 
 open class App : MultiDexApplication(), HasActivityInjector, HasBroadcastReceiverInjector {
 
@@ -32,6 +32,11 @@ open class App : MultiDexApplication(), HasActivityInjector, HasBroadcastReceive
 
     override fun onCreate() {
         super.onCreate()
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+        LeakCanary.install(this)
 
         val core = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
         Fabric.with(this, Crashlytics.Builder().core(core).build())
