@@ -10,23 +10,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".statistics.StatisticsActivity">
+
+        <activity android:name=".details.DetailActivity"/>
+
+        <receiver android:name=".appwidget.SleepAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_info"/>
+        </receiver>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
-        <activity android:name=".details.DetailActivity" />
-
-        <receiver android:name=".appwidget.SleepAppWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                       android:resource="@xml/appwidget_info" />
-        </receiver>
-
     </application>
 
 </manifest>

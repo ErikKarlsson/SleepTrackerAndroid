@@ -3,19 +3,17 @@ package net.erikkarlsson.simplesleeptracker
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import net.erikkarlsson.simplesleeptracker.robot.StatisticsRobot
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsActivity
 import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import timber.log.Timber
 
 @RunWith(AndroidJUnit4::class)
 class StatisticsTest {
 
-    val main = ActivityTestRule(StatisticsActivity::class.java, false, false)
+    val main = ActivityTestRule(MainActivity::class.java, false, false)
     val component = TestComponentRule()
     val robot = StatisticsRobot()
 

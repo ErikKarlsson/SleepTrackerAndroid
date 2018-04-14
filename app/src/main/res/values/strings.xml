@@ -12,4 +12,8 @@
     <string name="toggle_sleep">Toggle sleep</string>
     <string name="statistics">Statistics</string>
     <string name="owl_image_content_description">Owl image</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="title_diary">Diary</string>
+    <string name="title_settings">Settings</string>
 </resources>

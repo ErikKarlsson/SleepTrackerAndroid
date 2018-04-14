@@ -3,6 +3,7 @@ package net.erikkarlsson.simplesleeptracker
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.support.multidex.MultiDexApplication
+import android.support.v4.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.squareup.leakcanary.LeakCanary
@@ -10,6 +11,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
+import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.appwidget.SleepWidgetView
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
@@ -19,10 +21,13 @@ import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import timber.log.Timber
 import javax.inject.Inject
 
-open class App : MultiDexApplication(), HasActivityInjector, HasBroadcastReceiverInjector {
+open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentInjector, HasBroadcastReceiverInjector {
 
     @Inject
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject
     lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
@@ -53,6 +58,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasBroadcastReceive
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastInjector
 }

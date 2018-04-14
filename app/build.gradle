@@ -28,6 +28,7 @@ android {
         versionName Versions.version_name
         testInstrumentationRunner "${applicationId}.runner.TestRunner"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
 
     signingConfigs {
@@ -156,9 +157,6 @@ dependencies {
     // Please refer to the "Android Studio Workarounds" section for more insight on this.
     testCompileOnly junit5.unitTestsRuntime()
 
-    // Constraint layout
-    implementation Deps.constraint_layout
-
     // Crashlytics
     implementation Deps.crashlytics
 
@@ -204,9 +202,11 @@ dependencies {
 
     // Support libraries
     implementation Deps.support_app_compat
-    implementation Deps.support_v4
-    implementation Deps.support_design
     implementation Deps.support_cardview
+    implementation Deps.support_constraint_layout
+    implementation Deps.support_design
+    implementation Deps.support_v4
+    implementation Deps.support_vector_drawable
 
     // ThreeTen Backport
     implementation Deps.threeten_backport
