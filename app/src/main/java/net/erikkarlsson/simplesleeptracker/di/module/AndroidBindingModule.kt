@@ -7,6 +7,7 @@ import net.erikkarlsson.simplesleeptracker.details.DetailActivity
 import net.erikkarlsson.simplesleeptracker.di.scope.ActivityScope
 import net.erikkarlsson.simplesleeptracker.di.scope.BroadcastRecieverScope
 import net.erikkarlsson.simplesleeptracker.di.scope.FragmentScope
+import net.erikkarlsson.simplesleeptracker.diary.DiaryFragment
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsFragment
 
 @Module
@@ -19,6 +20,10 @@ abstract class AndroidBindingModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract fun bindsStatisticsFragment(): StatisticsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun bindsDiaryFragment(): DiaryFragment
     
     @BroadcastRecieverScope
     @ContributesAndroidInjector

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
+import net.erikkarlsson.simplesleeptracker.diary.DiaryFragment
 import net.erikkarlsson.simplesleeptracker.statistics.StatisticsFragment
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +18,9 @@ class MainActivity : AppCompatActivity() {
                 openFragment(statisticsFragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_diary -> {
+                val diaryFragment = DiaryFragment.newInstance()
+                openFragment(diaryFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
