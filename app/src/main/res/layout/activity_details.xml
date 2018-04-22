@@ -4,7 +4,13 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/details_text"
+        android:id="@+id/time_asleep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/not_implemented_yet" />
+
+    <TextView
+        android:id="@+id/time_awake"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/not_implemented_yet" />

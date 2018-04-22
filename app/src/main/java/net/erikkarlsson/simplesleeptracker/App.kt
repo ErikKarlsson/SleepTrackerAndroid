@@ -43,8 +43,11 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
         }
         LeakCanary.install(this)
 
-        val core = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
-        Fabric.with(this, Crashlytics.Builder().core(core).build())
+        val crashlytics = Crashlytics.Builder()
+                .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build()
+
+        Fabric.with(this, crashlytics)
 
         DaggerAppComponent.builder().application(this).build().inject(this)
 

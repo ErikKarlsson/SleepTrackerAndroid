@@ -15,7 +15,7 @@ abstract class AndroidBindingModule {
 
     @ActivityScope
     @ContributesAndroidInjector
-    abstract fun bindDetailsActivity(): DetailActivity
+    abstract fun bindDetailActivity(): DetailActivity
 
     @FragmentScope
     @ContributesAndroidInjector
