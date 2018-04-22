@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.appwidget
+package net.erikkarlsson.simplesleeptracker.feature.appwidget
 
 import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.*

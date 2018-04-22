@@ -5,11 +5,11 @@ import android.arch.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import net.erikkarlsson.simplesleeptracker.details.DetailViewModel
+import net.erikkarlsson.simplesleeptracker.feature.details.DetailViewModel
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.di.ViewModelKey
-import net.erikkarlsson.simplesleeptracker.diary.DiaryViewModel
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsViewModel
+import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryViewModel
+import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsViewModel
 
 @Module
 abstract class ViewModelModule {

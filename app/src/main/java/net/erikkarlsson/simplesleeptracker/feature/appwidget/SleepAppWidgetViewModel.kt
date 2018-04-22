@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.appwidget
+package net.erikkarlsson.simplesleeptracker.feature.appwidget
 
 import android.arch.lifecycle.LiveData
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory

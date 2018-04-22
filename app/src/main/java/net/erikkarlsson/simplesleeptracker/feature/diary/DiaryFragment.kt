@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.diary
+package net.erikkarlsson.simplesleeptracker.feature.diary
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -19,10 +19,10 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.details.DetailIntent
+import net.erikkarlsson.simplesleeptracker.feature.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.statistics.SleepAdapter
+import net.erikkarlsson.simplesleeptracker.feature.statistics.SleepAdapter
 import net.erikkarlsson.simplesleeptracker.util.scanMap
 import timber.log.Timber
 import javax.inject.Inject

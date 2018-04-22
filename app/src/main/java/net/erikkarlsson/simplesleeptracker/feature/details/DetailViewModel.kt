@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.details
+package net.erikkarlsson.simplesleeptracker.feature.details
 
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import javax.inject.Inject

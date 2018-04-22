@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.details
+package net.erikkarlsson.simplesleeptracker.feature.details
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider

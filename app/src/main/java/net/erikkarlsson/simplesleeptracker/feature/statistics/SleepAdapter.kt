@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.statistics
+package net.erikkarlsson.simplesleeptracker.feature.statistics
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView

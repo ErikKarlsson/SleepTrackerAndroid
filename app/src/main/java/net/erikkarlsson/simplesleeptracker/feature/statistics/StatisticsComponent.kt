@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.statistics
+package net.erikkarlsson.simplesleeptracker.feature.statistics
 
 import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
@@ -10,7 +10,7 @@ import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonOveral
 import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonWeekTask
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsCmd.ToggleSleepCmd
+import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsCmd.ToggleSleepCmd
 import javax.inject.Inject
 
 class StatisticsComponent @Inject constructor(private val toggleSleepTask: ToggleSleepTask,

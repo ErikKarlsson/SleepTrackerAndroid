@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.diary
+package net.erikkarlsson.simplesleeptracker.feature.diary
 
 import com.google.common.collect.ImmutableList
 import io.reactivex.Observable

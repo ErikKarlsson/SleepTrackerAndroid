@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.statistics
+package net.erikkarlsson.simplesleeptracker.feature.statistics
 
 import android.arch.lifecycle.Observer
 import com.google.common.collect.ImmutableList

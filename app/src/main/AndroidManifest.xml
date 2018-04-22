@@ -11,9 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".details.DetailActivity"/>
+        <activity android:name="net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity"/>
 
-        <receiver android:name=".appwidget.SleepAppWidgetProvider">
+        <receiver android:name="net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>

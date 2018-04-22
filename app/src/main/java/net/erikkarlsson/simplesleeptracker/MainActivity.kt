@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
-import net.erikkarlsson.simplesleeptracker.diary.DiaryFragment
-import net.erikkarlsson.simplesleeptracker.statistics.StatisticsFragment
+import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment
+import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment
 
 class MainActivity : AppCompatActivity() {
 
