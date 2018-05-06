@@ -6,6 +6,7 @@ import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonOverallTask
 import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonWeekTask
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
@@ -19,7 +20,7 @@ class StatisticsComponent @Inject constructor(private val toggleSleepTask: Toggl
     : Component<StatisticsState, StatisticsMsg, StatisticsCmd> {
 
     override fun call(cmd: StatisticsCmd): Single<StatisticsMsg> = when (cmd) {
-        ToggleSleepCmd -> toggleSleepTask.execute().toSingleDefault(NoOp)
+        ToggleSleepCmd -> toggleSleepTask.execute(None()).toSingleDefault(NoOp)
     }
 
     override fun initState(): StatisticsState = StatisticsState.empty()

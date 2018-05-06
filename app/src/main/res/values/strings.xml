@@ -4,6 +4,9 @@
     <string name="tracked_nights">Tracked Nights</string>
     <string name="avg_duration">Avg. Duration</string>
     <string name="time_sleeping">Time Sleeping</string>
+    <string name="start_date">Start date</string>
+    <string name="time_asleep">Time asleep</string>
+    <string name="time_awake">Time awake</string>
     <string name="longest_night">Longest Night</string>
     <string name="shortest_night">Shortest Night</string>
     <string name="average_bed_time">Average Bed Time</string>

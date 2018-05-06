@@ -23,9 +23,10 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.feature.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
+import net.erikkarlsson.simplesleeptracker.feature.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.util.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -167,3 +168,6 @@ class StatisticsFragment : Fragment() {
         fun newInstance() = StatisticsFragment()
     }
 }
+
+class StatisticsViewModel @Inject constructor(statisticsComponent: StatisticsComponent) :
+        ElmViewModel<StatisticsState, StatisticsMsg, StatisticsCmd>(statisticsComponent)

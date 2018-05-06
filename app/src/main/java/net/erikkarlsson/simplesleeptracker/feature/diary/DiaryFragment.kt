@@ -19,9 +19,10 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.feature.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
+import net.erikkarlsson.simplesleeptracker.feature.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.feature.statistics.SleepAdapter
 import net.erikkarlsson.simplesleeptracker.util.scanMap
 import timber.log.Timber
@@ -99,3 +100,6 @@ class DiaryFragment : Fragment() {
         fun newInstance() = DiaryFragment()
     }
 }
+
+class DiaryViewModel @Inject constructor(diaryComponent: DiaryComponent) :
+        ElmViewModel<DiaryState, DiaryMsg, DiaryCmd>(diaryComponent)

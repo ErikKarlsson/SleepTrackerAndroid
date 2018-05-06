@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.WidgetCmd.ToggleSleepCmd
@@ -14,7 +15,7 @@ class AppWidgetComponent @Inject constructor(private val toggleSleepTask: Toggle
     : Component<WidgetState, WidgetMsg, WidgetCmd> {
 
     override fun call(cmd: WidgetCmd): Single<WidgetMsg> = when (cmd) {
-        ToggleSleepCmd -> toggleSleepTask.execute().toSingleDefault(NoOp)
+        ToggleSleepCmd -> toggleSleepTask.execute(None()).toSingleDefault(NoOp)
     }
 
     override fun subscriptions(): List<Sub<WidgetState, WidgetMsg>> = listOf(sleepSubscription)

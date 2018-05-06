@@ -10,6 +10,7 @@ import java.util.*
 
 val OffsetDateTime.formatHHMM: String get() = this.format(DateTimeFormatter.ofPattern("HH:mm"))
 val OffsetDateTime.formatDateDisplayName: String get() = this.format(DateTimeFormatter.ofPattern("EEE, MMM d"))
+val OffsetDateTime.formatDateDisplayName2: String get() = this.format(DateTimeFormatter.ofPattern("EEEE d MMMM"))
 
 val DayOfWeekLocalTime.formatDisplayName: String
     get() = String.format("%s: %s",

@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import javax.inject.Inject
 
 private const val MINIMUM_SLEEP_DURATION_HOURS = 1 // Minimum hours to count as tracked sleep.
@@ -12,9 +13,9 @@ private const val MINIMUM_SLEEP_DURATION_HOURS = 1 // Minimum hours to count as 
  * Toggle between awake and asleep state.
  */
 class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
-                                          private val dateTimeProvider: DateTimeProvider) : CompletableTask {
+                                          private val dateTimeProvider: DateTimeProvider) : CompletableTask<None> {
 
-    override fun execute(): Completable =
+    override fun execute(params: None): Completable =
             sleepRepository.getCurrentSingle()
                 .map { toggleSleep(it) }
                 .toCompletable()
