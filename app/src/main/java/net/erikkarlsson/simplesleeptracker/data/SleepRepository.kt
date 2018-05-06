@@ -12,29 +12,40 @@ import javax.inject.Inject
 class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                                           private val sleepMapper: SleepMapper) : SleepDataSource {
     override fun getSleep(): Observable<ImmutableList<Sleep>> {
-        return sleepDao.getSleep().toObservable()
-            .switchMap {
-                Observable.fromIterable(it)
-                    .map { sleepMapper.mapFromEntity(it) }
-                    .toImmutableList().toObservable()
-                    .subscribeOn(Schedulers.computation())
-            }
+        return sleepDao.getSleep()
+                .toObservable()
+                .switchMap {
+                    Observable.fromIterable(it)
+                            .map { sleepMapper.mapFromEntity(it) }
+                            .toImmutableList().toObservable()
+                            .subscribeOn(Schedulers.computation())
+                }
+    }
+
+    override fun getSleep(id: Int): Observable<Sleep> {
+        return sleepDao.getSleep(id)
+                .map {
+                    if (it.isEmpty()) Sleep.empty()
+                    else sleepMapper.mapFromEntity(it[0])
+                }
+                .toObservable()
+                .onErrorReturnItem(Sleep.empty())
     }
 
     override fun getCurrentSingle(): Single<Sleep> {
         return sleepDao.getCurrentSleepSingle()
-            .map { sleepMapper.mapFromEntity(it) }
-            .onErrorReturnItem(Sleep.empty())
+                .map { sleepMapper.mapFromEntity(it) }
+                .onErrorReturnItem(Sleep.empty())
     }
 
     override fun getCurrent(): Observable<Sleep> {
         return sleepDao.getCurrentSleep()
-            .map {
-                if (it.isEmpty()) Sleep.empty()
-                else sleepMapper.mapFromEntity(it[0])
-            }
-            .toObservable()
-            .onErrorReturnItem(Sleep.empty())
+                .map {
+                    if (it.isEmpty()) Sleep.empty()
+                    else sleepMapper.mapFromEntity(it[0])
+                }
+                .toObservable()
+                .onErrorReturnItem(Sleep.empty())
     }
 
     override fun insert(newSleep: Sleep): Long {

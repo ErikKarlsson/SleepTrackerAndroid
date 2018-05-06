@@ -16,6 +16,9 @@ interface SleepDao {
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
     fun getSleep(): Flowable<List<SleepEntity>>
 
+    @Query("SELECT * FROM Sleep WHERE id == :id")
+    fun getSleep(id: Int): Flowable<List<SleepEntity>>
+
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     fun getCurrentSleep(): Flowable<List<SleepEntity>>
 
