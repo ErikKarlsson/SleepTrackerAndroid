@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.data
 
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -15,6 +16,9 @@ interface SleepDao {
 
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
     fun getSleep(): Flowable<List<SleepEntity>>
+
+    @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
+    fun getSleepFactory(): DataSource.Factory<Int, SleepEntity>
 
     @Query("SELECT * FROM Sleep WHERE id == :id")
     fun getSleep(id: Int): Flowable<List<SleepEntity>>

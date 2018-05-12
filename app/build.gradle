@@ -196,6 +196,10 @@ dependencies {
     implementation Deps.navigation_ui
     androidTestImplementation Deps.navigation_testing
 
+    // Paging
+    implementation Deps.paging
+    implementation Deps.paging_rx
+
     // Room
     implementation Deps.room_runtime
     implementation Deps.room_rxjava2

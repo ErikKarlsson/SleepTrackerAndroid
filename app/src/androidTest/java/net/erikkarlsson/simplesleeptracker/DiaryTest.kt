@@ -40,5 +40,7 @@ class DiaryTest {
         diaryRobot = mainRobot.clickDiaryTab()
         diaryRobot.clickItem(0) // When clicking newly added sleep item
                 .isShowingDetailsScreen() // Then should navigate to details screen
+
+        Thread.sleep(999999)
     }
 }

@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import com.google.common.collect.ImmutableList
+import android.arch.paging.PagedList
 import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -27,12 +27,12 @@ class DiaryComponent @Inject constructor(private val sleepSubscription: SleepSub
 }
 
 // State
-data class DiaryState(val sleepList: ImmutableList<Sleep>) : State {
+data class DiaryState(val sleepList: PagedList<Sleep>?) : State {
 
-    val isListEmpty get(): Boolean = sleepList.isEmpty()
+    val isListEmpty get(): Boolean = sleepList != null
 
     companion object {
-        fun empty() = DiaryState(ImmutableList.of())
+        fun empty() = DiaryState(null)
     }
 }
 
@@ -40,13 +40,13 @@ data class DiaryState(val sleepList: ImmutableList<Sleep>) : State {
 class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<DiaryState, DiaryMsg>() {
 
     override fun invoke(): Observable<DiaryMsg> =
-            sleepRepository.getSleep().map { SleepLoaded(it) }
+            sleepRepository.getSleepPaged().map { SleepLoaded(it) }
 }
 
 // Msg
 sealed class DiaryMsg : Msg
 
-data class SleepLoaded(val sleepList: ImmutableList<Sleep>) : DiaryMsg()
+data class SleepLoaded(val sleepList: PagedList<Sleep>) : DiaryMsg()
 object NoOp : DiaryMsg()
 
 // Cmd

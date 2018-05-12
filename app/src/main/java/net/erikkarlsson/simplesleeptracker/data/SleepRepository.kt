@@ -1,5 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data
 
+import android.arch.paging.PagedList
+import android.arch.paging.RxPagedListBuilder
 import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -11,6 +13,7 @@ import javax.inject.Inject
 
 class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                                           private val sleepMapper: SleepMapper) : SleepDataSource {
+
     override fun getSleep(): Observable<ImmutableList<Sleep>> {
         return sleepDao.getSleep()
                 .toObservable()
@@ -20,6 +23,13 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                             .toImmutableList().toObservable()
                             .subscribeOn(Schedulers.computation())
                 }
+    }
+
+    override fun getSleepPaged(): Observable<PagedList<Sleep>> {
+        return RxPagedListBuilder(
+                sleepDao.getSleepFactory().map { sleepMapper.mapFromEntity(it) },
+                50)
+                .buildObservable()
     }
 
     override fun getSleep(id: Int): Observable<Sleep> {

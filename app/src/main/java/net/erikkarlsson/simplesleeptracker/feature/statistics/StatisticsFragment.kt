@@ -5,27 +5,21 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.navigation.fragment.NavHostFragment
-import com.google.common.collect.ImmutableList
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
-import com.jakewharton.rxrelay2.PublishRelay
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragmentDirections
 import net.erikkarlsson.simplesleeptracker.util.*
@@ -47,7 +41,6 @@ class StatisticsFragment : Fragment() {
     private val disposables = CompositeDisposable()
 
     private val adapter = SleepAdapter { navigateToDetails(it.id) }
-    private val sleepListRelay: PublishRelay<ImmutableList<Sleep>> = PublishRelay.create()
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -81,17 +74,6 @@ class StatisticsFragment : Fragment() {
                 .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
                            { Timber.e(it, "Error merging clicks") })
                 .addTo(disposables)
-
-        sleepListRelay.scanMap(ImmutableList.of(), { old, new ->
-            val callback = SleepAdapter.DiffCallback(old, new)
-            val result = DiffUtil.calculateDiff(callback)
-            Pair(new, result)
-        })
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ adapter.swapData(it.first, it.second) },
-                           { Timber.e(it, "Error calculating diff result") })
-                .addTo(disposables)
     }
 
     override fun onStop() {
@@ -101,8 +83,6 @@ class StatisticsFragment : Fragment() {
 
     private fun render(state: StatisticsState?) {
         state?.let {
-            sleepListRelay.accept(state.sleepList)
-
             val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
             owlImage.setImageResource(imageRes)
 
