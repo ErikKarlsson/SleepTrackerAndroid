@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import com.google.common.collect.ImmutableList
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.android.support.AndroidSupportInjection
@@ -22,7 +24,6 @@ import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.feature.details.DetailIntent
 import net.erikkarlsson.simplesleeptracker.feature.statistics.SleepAdapter
 import net.erikkarlsson.simplesleeptracker.util.scanMap
 import timber.log.Timber
@@ -91,13 +92,10 @@ class DiaryFragment : Fragment() {
     }
 
     private fun navigateToDetails(id: Int?) {
-        id?.let { startActivity(ctx.DetailIntent(id)) }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = DiaryFragment()
+        id?.let {
+            val action = DiaryFragmentDirections.actionDiaryToDetail().setSleepId(id)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
     }
 }
 

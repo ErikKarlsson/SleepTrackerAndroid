@@ -10,6 +10,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'androidx.navigation.safeargs'
+
 apply from: "$project.rootDir/git-version.gradle"
 
 def keystorePropertiesFile = new File(System.getProperty("user.home") + '/android/files/simplesleeptracker/keystore.properties')
@@ -188,6 +190,11 @@ dependencies {
 
     // Multidex
     implementation Deps.multidex
+
+    // Navigation
+    implementation Deps.navigation_fragment
+    implementation Deps.navigation_ui
+    androidTestImplementation Deps.navigation_testing
 
     // Room
     implementation Deps.room_runtime

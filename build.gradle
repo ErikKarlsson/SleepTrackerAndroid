@@ -6,6 +6,7 @@ buildscript {
         classpath Deps.google_services_plugin
         classpath Deps.junit5_plugin
         classpath Deps.kotlin_plugin
+        classpath Deps.navigation_plugin
     }
 
     repositories {

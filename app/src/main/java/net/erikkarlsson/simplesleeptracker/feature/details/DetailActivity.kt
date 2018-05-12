@@ -6,8 +6,6 @@ import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -25,14 +23,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
-
-const val INTENT_SLEEP_ID = "INTENT_SLEEP_ID"
-
-fun Context.DetailIntent(id: Int): Intent {
-    return Intent(this, DetailActivity::class.java).apply {
-        putExtra(INTENT_SLEEP_ID, id)
-    }
-}
 
 class DetailActivity : AppCompatActivity() {
 
@@ -52,8 +42,10 @@ class DetailActivity : AppCompatActivity() {
         AndroidInjection.inject(this)
         setContentView(R.layout.activity_details)
 
+        val sleepId = DetailActivityArgs.fromBundle(intent.extras).sleepId
+
         viewModel.state().observe(this, Observer { render(it) })
-        viewModel.dispatch(LoadDetailIntent(getSleepId()))
+        viewModel.dispatch(LoadDetailIntent(sleepId))
 
         startDateText.clicksThrottle(disposables) { onStartDateClick() }
         timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
@@ -63,10 +55,6 @@ class DetailActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         disposables.dispose()
-    }
-
-    fun getSleepId(): Int {
-        return intent.getIntExtra(INTENT_SLEEP_ID, 0)
     }
 
     private fun onStartDateClick() {

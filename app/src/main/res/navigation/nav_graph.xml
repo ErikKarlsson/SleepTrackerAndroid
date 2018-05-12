@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:startDestination="@+id/statistics">
+    <fragment
+        android:id="@+id/statistics"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment"
+        android:label="StatisticsFragment">
+        <action
+            android:id="@+id/actionDiaryToDetail"
+            app:destination="@id/detail"/>
+    </fragment>
+    <fragment
+        android:id="@+id/diary"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment"
+        android:label="DiaryFragment">
+        <action
+            android:id="@+id/actionDiaryToDetail"
+            app:destination="@id/detail"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/settings"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.settings.SettingsFragment"
+        android:label="SettingsFragment"/>
+
+    <activity
+        android:id="@+id/detail"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity"
+        android:label="DetailActivity">
+        <argument
+            android:name="sleepId"
+            android:defaultValue="0"
+            app:type="integer"/>
+    </activity>
+</navigation>
