@@ -101,11 +101,11 @@ class SleepAppWidgetViewModelTest {
 
         @Test
         fun `clicking toggle sleep button toggles sleep`() {
-            given(toggleSleepTask.execute()).willReturn(Completable.complete())
+            given(toggleSleepTask.execute(any())).willReturn(Completable.complete())
             given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
             val viewModel = createViewModel()
             viewModel.dispatch(ToggleSleepClicked)
-            verify(toggleSleepTask).execute()
+            verify(toggleSleepTask).execute(any())
         }
 
     }

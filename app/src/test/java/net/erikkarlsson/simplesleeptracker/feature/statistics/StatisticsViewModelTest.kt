@@ -2,10 +2,7 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 
 import android.arch.lifecycle.Observer
 import com.google.common.collect.ImmutableList
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -58,7 +55,7 @@ class StatisticsViewModelTest {
      */
     @Test
     fun `clicking toggle sleep button toggles sleep`() {
-        given(toggleSleepTask.execute()).willReturn(Completable.complete())
+        given(toggleSleepTask.execute(any())).willReturn(Completable.complete())
         given(statisticComparisonWeekTask.execute()).willReturn(Observable.just(StatisticComparison.empty()))
         given(sleepRepository.getSleep()).willReturn(Observable.just(ImmutableList.of()))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
@@ -67,7 +64,7 @@ class StatisticsViewModelTest {
 
         viewModel.dispatch(ToggleSleepClicked)
 
-        verify(toggleSleepTask).execute()
+        verify(toggleSleepTask).execute(any())
     }
 
     private fun createViewModel(): StatisticsViewModel {

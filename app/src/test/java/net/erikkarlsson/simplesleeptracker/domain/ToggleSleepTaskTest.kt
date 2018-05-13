@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.reset
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
@@ -34,7 +35,7 @@ class ToggleSleepTaskTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
-        toggleSleepTask.execute().test().assertComplete()
+        toggleSleepTask.execute(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -50,7 +51,7 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = anHourAgo)
         val awake = Sleep(fromDate = anHourAgo, toDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        toggleSleepTask.execute().test().assertComplete()
+        toggleSleepTask.execute(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -65,7 +66,7 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = now)
         val awake = Sleep(fromDate = now, toDate = now.plusDays(1))
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(awake))
-        toggleSleepTask.execute().test().assertComplete()
+        toggleSleepTask.execute(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -80,7 +81,7 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.execute().test().assertComplete()
+        toggleSleepTask.execute(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
