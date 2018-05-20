@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.LocalDate
+import org.threeten.bp.temporal.ChronoUnit
 import javax.inject.Inject
 
 class UpdateStartDateTask @Inject constructor(
@@ -16,8 +17,10 @@ class UpdateStartDateTask @Inject constructor(
                     .ignoreElements()
 
     private fun updateStartDate(sleep: Sleep, startDate: LocalDate) {
-        val fromDate = sleep.fromDate.with(startDate)
-        val updatedSleep = sleep.copy(fromDate = fromDate)
+        val days = ChronoUnit.DAYS.between(sleep.fromDate.toLocalDate(), startDate)
+        val fromDate = sleep.fromDate.plusDays(days)
+        val toDate = sleep.toDate?.plusDays(days)
+        val updatedSleep = sleep.copy(fromDate = fromDate, toDate = toDate)
         sleepRepository.update(updatedSleep)
     }
 
