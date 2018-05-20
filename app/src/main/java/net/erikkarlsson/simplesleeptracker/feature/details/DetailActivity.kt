@@ -4,15 +4,15 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_details.*
@@ -76,12 +76,12 @@ class DetailActivity : AppCompatActivity() {
     private fun showConfirmDeleteDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(getString(R.string.confirm_delete_sleep))
-        builder.setPositiveButton(getString(R.string.delete)) {
-            dialog, id -> onDeleteConfirmClick()
+        builder.setPositiveButton(getString(R.string.delete)) { dialog, id ->
+            onDeleteConfirmClick()
         }
 
-        builder.setNegativeButton(getString(R.string.cancel))  {
-            dialog, id -> dialog.cancel()
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, id ->
+            dialog.cancel()
         }
 
         val dialog = builder.create()

@@ -1,9 +1,9 @@
 package net.erikkarlsson.simplesleeptracker
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = host.navController
 
-        bottomNavigation.setupWithNavController(navController)
+        setupWithNavController(bottomNavigation, navController)
     }
 
 }

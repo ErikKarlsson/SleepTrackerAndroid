@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.appwidget
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Observable

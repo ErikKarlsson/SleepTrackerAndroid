@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import android.arch.paging.PagedList
+import androidx.paging.PagedList
 import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource

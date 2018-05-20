@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.statistics
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import com.google.common.collect.ImmutableList
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable

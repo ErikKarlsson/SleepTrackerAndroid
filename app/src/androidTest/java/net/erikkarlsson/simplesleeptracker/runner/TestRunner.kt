@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker.runner
 
 import android.app.Application
 import android.content.Context
-import android.support.test.runner.AndroidJUnitRunner
+import androidx.test.runner.AndroidJUnitRunner
 import net.erikkarlsson.simplesleeptracker.TestApp
 
 class TestRunner : AndroidJUnitRunner() {

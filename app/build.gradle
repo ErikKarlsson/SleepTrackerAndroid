@@ -132,21 +132,19 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Dependencies for Android tests
-    androidTestImplementation Deps.atsl_runner
-    androidTestImplementation Deps.atsl_rules
-    androidTestImplementation Deps.room_testing
     androidTestImplementation Deps.arch_core_testing
-    androidTestImplementation Deps.junit
-    androidTestImplementation Deps.mockito_core, { exclude group: 'net.bytebuddy' }
-    androidTestImplementation Deps.dexmaker
-    androidTestImplementation Deps.espresso_core
-    androidTestImplementation Deps.espresso_contrib
-    androidTestImplementation Deps.espresso_intents
-    androidTestImplementation Deps.daggermock_android
-    androidTestImplementation Deps.daggermock_kotlin
-    androidTestImplementation Deps.dagger_runtime
     androidTestImplementation Deps.dagger_android
     androidTestImplementation Deps.dagger_android_support
+    androidTestImplementation Deps.dagger_runtime
+    androidTestImplementation Deps.dexmaker
+    androidTestImplementation Deps.espresso_contrib
+    androidTestImplementation Deps.espresso_core
+    androidTestImplementation Deps.espresso_intents
+    androidTestImplementation Deps.junit
+    androidTestImplementation Deps.mockito_core, { exclude group: 'net.bytebuddy' }
+    androidTestImplementation Deps.room_testing
+    androidTestImplementation Deps.test_rules
+    androidTestImplementation Deps.test_runner
     kaptAndroidTest Deps.dagger_compiler
     kaptAndroidTest Deps.dagger_android_support_compiler
 
@@ -197,6 +195,7 @@ dependencies {
 
     // Multidex
     implementation Deps.multidex
+    implementation Deps.multidex_instrumentation
 
     // Navigation
     implementation Deps.navigation_fragment
@@ -222,11 +221,13 @@ dependencies {
     implementation Deps.rxbinding
     implementation Deps.rxkotlin
 
+    // Material Components
+    implementation Deps.material_components
+
     // Support libraries
     implementation Deps.support_app_compat
     implementation Deps.support_cardview
     implementation Deps.support_constraint_layout
-    implementation Deps.support_design
     implementation Deps.support_v4
     implementation Deps.support_vector_drawable
 

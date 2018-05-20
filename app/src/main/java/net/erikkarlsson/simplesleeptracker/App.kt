@@ -2,8 +2,8 @@ package net.erikkarlsson.simplesleeptracker
 
 import android.app.Activity
 import android.content.BroadcastReceiver
-import android.support.multidex.MultiDexApplication
-import android.support.v4.app.Fragment
+import androidx.multidex.MultiDexApplication
+import androidx.fragment.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.squareup.leakcanary.LeakCanary

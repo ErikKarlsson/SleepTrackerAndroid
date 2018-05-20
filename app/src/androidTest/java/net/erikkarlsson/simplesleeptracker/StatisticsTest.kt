@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker
 
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.AndroidJUnit4
 import net.erikkarlsson.simplesleeptracker.robot.StatisticsRobot
 import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
 import org.junit.Rule
