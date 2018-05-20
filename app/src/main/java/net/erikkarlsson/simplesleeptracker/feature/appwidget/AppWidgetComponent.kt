@@ -24,7 +24,7 @@ class AppWidgetComponent @Inject constructor(private val toggleSleepTask: Toggle
 
     override fun update(msg: WidgetMsg, prevState: WidgetState): Pair<WidgetState, WidgetCmd?> = when (msg) {
         ToggleSleepClicked -> prevState.withCmd(ToggleSleepCmd)
-        is CurrentSleepLoaded -> prevState.copy(isSleeping = msg.sleep.isSleeping).noCmd()
+        is CurrentSleepLoaded -> prevState.copy(isLoading = false, isSleeping = msg.sleep.isSleeping).noCmd()
         WidgetOnUpdate -> prevState.copy(updateCount = (prevState.updateCount + 1)).noCmd() // Increase counter to re-render app widget on update
         NoOp -> prevState.noCmd()
     }
@@ -32,9 +32,9 @@ class AppWidgetComponent @Inject constructor(private val toggleSleepTask: Toggle
 }
 
 // State
-data class WidgetState(val isSleeping: Boolean, val updateCount: Int) : State {
+data class WidgetState(val isLoading: Boolean, val isSleeping: Boolean, val updateCount: Int) : State {
     companion object {
-        fun empty() = WidgetState(false, 0)
+        fun empty() = WidgetState(true, false, 0)
     }
 }
 
