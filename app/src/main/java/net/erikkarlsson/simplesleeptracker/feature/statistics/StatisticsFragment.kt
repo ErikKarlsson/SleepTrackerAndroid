@@ -78,7 +78,7 @@ class StatisticsFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        disposables.dispose()
+        disposables.clear()
     }
 
     private fun render(state: StatisticsState?) {

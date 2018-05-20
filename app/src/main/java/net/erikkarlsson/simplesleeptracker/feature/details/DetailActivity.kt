@@ -55,7 +55,7 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        disposables.dispose()
+        disposables.clear()
     }
 
     private fun onStartDateClick() {
