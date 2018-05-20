@@ -8,7 +8,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.widget.DatePicker
+import android.widget.TimePicker
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_details.*
@@ -58,26 +59,29 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun onStartDateClick() {
-        pickDate(state.sleep.fromDate,
-                 OnDateSetListener { view, year, month, dayOfMonth ->
-                     onStartDatePicked(year, month, dayOfMonth)
-                 })
-    }
-
-    private fun onStartDatePicked(year: Int, month: Int, dayOfMonth: Int) {
-        viewModel.dispatch(PickedStartDate(LocalDate.of(year, month + 1, dayOfMonth)))
+        pickDate(state.sleep.fromDate, OnDateSetListener(this::onStartDateSet))
     }
 
     private fun onTimeAsleepClick() {
-        pickTime(state.sleep.fromDate.toLocalTime(),
-                 OnTimeSetListener { view, hour, minute -> Log.d("Original", "Got clicked") })
+        pickTime(state.sleep.fromDate.toLocalTime(), OnTimeSetListener(this::onTimeAsleepSet))
     }
 
     private fun onTimeAwakeClick() {
         state.sleep.toDate?.let {
-            pickTime(it.toLocalTime(),
-                     OnTimeSetListener { view, hour, minute -> Log.d("Original", "Got clicked") })
+            pickTime(it.toLocalTime(), OnTimeSetListener(this::onTimeAwakeSet))
         }
+    }
+
+    private fun onStartDateSet(datePicker: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
+        viewModel.dispatch(PickedStartDate(LocalDate.of(year, month + 1, dayOfMonth)))
+    }
+
+    private fun onTimeAsleepSet(timePicker: TimePicker, hour: Int, minute: Int) {
+        viewModel.dispatch(PickedTimeAsleep(LocalTime.of(hour, minute)))
+    }
+
+    private fun onTimeAwakeSet(timePicker: TimePicker, hour: Int, minute: Int) {
+        viewModel.dispatch(PickedTimeAwake(LocalTime.of(hour, minute)))
     }
 
     private fun pickDate(offsetDateTime: OffsetDateTime,
