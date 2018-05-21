@@ -8,11 +8,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_details.*
+import kotlinx.android.synthetic.main.toolbar.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -42,6 +45,8 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
         setContentView(R.layout.activity_details)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val sleepId = DetailActivityArgs.fromBundle(intent.extras).sleepId
 
@@ -51,6 +56,21 @@ class DetailActivity : AppCompatActivity() {
         startDateText.clicksThrottle(disposables) { onStartDateClick() }
         timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
         timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.delete_sleep) {
+            viewModel.dispatch(DeleteClick)
+            finish()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStop() {
@@ -109,7 +129,9 @@ class DetailActivity : AppCompatActivity() {
         nextState?.let {
             state = nextState
             if (state.sleep != Sleep.empty()) {
-                startDateText.text = state.sleep.fromDate.formatDateDisplayName2
+                val dateString = state.sleep.fromDate.formatDateDisplayName2
+                toolbar.setTitle(dateString)
+                startDateText.text = dateString
                 timeAsleepText.text = state.sleep.fromDate.formatHHMM
                 timeAwakeText.text = state.sleep.toDate?.formatHHMM
             }
