@@ -7,6 +7,7 @@ import android.app.TimePickerDialog.OnTimeSetListener
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -65,12 +66,31 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.delete_sleep) {
-            viewModel.dispatch(DeleteClick)
-            finish()
+            showConfirmDeleteDialog()
             return true
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showConfirmDeleteDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(getString(R.string.confirm_delete_sleep))
+        builder.setPositiveButton(getString(R.string.delete)) {
+            dialog, id -> onDeleteConfirmClick()
+        }
+
+        builder.setNegativeButton(getString(R.string.cancel))  {
+            dialog, id -> dialog.cancel()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun onDeleteConfirmClick() {
+        viewModel.dispatch(DeleteClick)
+        finish()
     }
 
     override fun onStop() {
