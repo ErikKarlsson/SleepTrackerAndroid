@@ -48,6 +48,7 @@ object Versions {
     val support = "27.1.1"
     val threeten_backport = "1.3.6"
     val timber = "4.7.0"
+    val work_manager = "1.0.0-alpha02"
 }
 
 object Deps {
@@ -122,4 +123,7 @@ object Deps {
     val support_vector_drawable = "com.android.support:support-vector-drawable:${Versions.support}"
     val threeten_backport = "org.threeten:threetenbp:${Versions.threeten_backport}"
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+    val work_manager_runtime = "android.arch.work:work-runtime-ktx:${Versions.work_manager}"
+    val work_manager_firebase = "android.arch.work:work-firebase:${Versions.work_manager}"
+    val work_manager_testing = "android.arch.work:work-testing:${Versions.work_manager}"
 }

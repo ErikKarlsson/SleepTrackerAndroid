@@ -225,6 +225,11 @@ dependencies {
 
     // Timber
     implementation Deps.timber
+
+    // Work Manager
+    implementation Deps.work_manager_runtime
+    implementation Deps.work_manager_firebase
+    androidTestImplementation Deps.work_manager_testing
 }
 
 apply plugin: 'com.google.gms.google-services'
