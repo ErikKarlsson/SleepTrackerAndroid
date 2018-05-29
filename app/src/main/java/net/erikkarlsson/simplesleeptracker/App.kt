@@ -13,11 +13,12 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
-import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
+import net.erikkarlsson.simplesleeptracker.base.PeriodicBackupScheduler
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.elm.LogLevel
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
+import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,6 +35,9 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
+
+    @Inject
+    lateinit var periodicBackupScheduler: PeriodicBackupScheduler
 
     override fun onCreate() {
         super.onCreate()

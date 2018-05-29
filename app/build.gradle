@@ -40,12 +40,19 @@ android {
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
         }
+        debug {
+            keyAlias keystoreProperties['debugKeyAlias']
+            keyPassword keystoreProperties['debugKeyPassword']
+            storeFile file(keystoreProperties['debugStoreFile'])
+            storePassword keystoreProperties['debugStorePassword']
+        }
     }
 
     buildTypes {
         debug {
             crunchPngs false
             ext.alwaysUpdateBuildId = false
+            signingConfig signingConfigs.debug
         }
         release {
             minifyEnabled false
@@ -122,7 +129,7 @@ androidExtensions {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Dependencies for Android tests
     androidTestImplementation Deps.atsl_runner
@@ -199,6 +206,9 @@ dependencies {
     // Paging
     implementation Deps.paging
     implementation Deps.paging_rx
+
+    // Play Services Auth
+    implementation Deps.play_services_auth
 
     // Room
     implementation Deps.room_runtime
