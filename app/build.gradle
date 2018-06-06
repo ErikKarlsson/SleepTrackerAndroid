@@ -177,6 +177,9 @@ dependencies {
     kapt Deps.dagger_compiler
     kapt Deps.dagger_android_support_compiler
 
+    // Fast CSV
+    implementation Deps.fast_csv
+
     // Firebase
     implementation Deps.firebase_core
 
@@ -207,8 +210,9 @@ dependencies {
     implementation Deps.paging
     implementation Deps.paging_rx
 
-    // Play Services Auth
+    // Play Services
     implementation Deps.play_services_auth
+    implementation Deps.play_services_drive
 
     // Room
     implementation Deps.room_runtime

@@ -1,6 +1,7 @@
-package net.erikkarlsson.simplesleeptracker.base
+package net.erikkarlsson.simplesleeptracker.feature.backup
 
 import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkStatus
@@ -26,6 +27,7 @@ class PeriodicBackupScheduler @Inject constructor(private val workManager: WorkM
     private fun schedulePeriodicBackup() {
         val constraints = Constraints.Builder()
                 .setRequiresCharging(true)
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
         val backupSleepData =

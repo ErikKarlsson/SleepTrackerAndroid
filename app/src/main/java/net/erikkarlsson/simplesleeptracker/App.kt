@@ -14,15 +14,19 @@ import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
-import net.erikkarlsson.simplesleeptracker.base.PeriodicBackupScheduler
+import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.elm.LogLevel
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
+import net.erikkarlsson.simplesleeptracker.feature.backup.PeriodicBackupScheduler
 import timber.log.Timber
 import javax.inject.Inject
 
 open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentInjector, HasBroadcastReceiverInjector {
+
+    // TODO (erikkarlsson): Only needed for injecting Worker, remove once Dagger has released WorkerInjector.
+    lateinit var appComponent: AppComponent
 
     @Inject
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
@@ -53,7 +57,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
         Fabric.with(this, crashlytics)
 
-        DaggerAppComponent.builder().application(this).build().inject(this)
+        appComponent = DaggerAppComponent.builder().application(this).build()
+        appComponent.inject(this)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
