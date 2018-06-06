@@ -1,7 +1,12 @@
 package net.erikkarlsson.simplesleeptracker.data
 
 import androidx.paging.DataSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -10,6 +15,9 @@ import io.reactivex.Single
  */
 @Dao
 interface SleepDao {
+
+    @Query("SELECT count(*) FROM Sleep")
+    fun getSleepCount(): Flowable<Int>
 
     @Query("SELECT count(*) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
     fun getSleepCount(from: String, to: String): Flowable<Int>
@@ -55,6 +63,9 @@ interface SleepDao {
 
     @Query("SELECT * FROM Sleep WHERE datetime(to_date)>=datetime('now', '-2 hour')")
     fun getSleepLastMonth(): Flowable<List<SleepEntity>>
+
+    @Insert
+    fun insertAll(sleepList: List<SleepEntity>)
 
     /**
      * Insert a sleep in the database. If the sleep already exists, replace it.

@@ -58,7 +58,7 @@ class StatisticsTest {
         }
 
         main.launchActivity(null)
-
+        
         // TODO (erikkarlsson): Verify statistics are rendered in view
     }
 }

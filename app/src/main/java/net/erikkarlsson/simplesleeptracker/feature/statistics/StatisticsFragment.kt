@@ -3,6 +3,7 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +23,12 @@ import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragmentDirections
-import net.erikkarlsson.simplesleeptracker.util.*
+import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
+import net.erikkarlsson.simplesleeptracker.util.formatDisplayName
+import net.erikkarlsson.simplesleeptracker.util.formatHHMM
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
+import net.erikkarlsson.simplesleeptracker.util.formatPercentage
 import timber.log.Timber
 import javax.inject.Inject
 

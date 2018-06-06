@@ -1,7 +1,7 @@
 object Versions {
     val build_tools = "27.0.3"
     val compile_sdk = 28
-    val min_sdk = 14
+    val min_sdk = 19
     val target_sdk = 28
     val version_code = 1
     val version_name = "1.0"
@@ -15,6 +15,7 @@ object Versions {
     val dexmaker = "2.16.0"
     val espresso = "3.1.0-alpha2"
     val fabric = "1.25.4"
+    val fast_csv = "1.0.2"
     val firebase = "16.0.0"
     val glide = "3.8.0"
     val google_services_plugin = "4.0.1"
@@ -34,7 +35,7 @@ object Versions {
     val navigation = "1.0.0-alpha02"
     val okhttp_logging_interceptor = "3.9.0"
     val paging = "2.0.0-alpha1"
-    val play_services_auth = "15.0.1"
+    val play_services = "15.0.1"
     val reactive_network = "0.12.3"
     val retrofit = "2.3.0"
     val room = "2.0.0-alpha1"
@@ -67,6 +68,7 @@ object Deps {
     val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso}"
     val espresso_intents = "androidx.test.espresso:espresso-intents:${Versions.espresso}"
     val fabric_plugin = "io.fabric.tools:gradle:${Versions.fabric}"
+    val fast_csv = "de.siegmar:fastcsv:${Versions.fast_csv}"
     val firebase_core = "com.google.firebase:firebase-core:${Versions.firebase}"
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     val google_services_plugin = "com.google.gms:google-services:${Versions.google_services_plugin}"
@@ -98,6 +100,7 @@ object Deps {
     val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     val paging_rx = "androidx.paging:paging-rxjava2:${Versions.paging}"
     val play_services_auth = "com.google.android.gms:play-services-auth:${Versions.play_services_auth}"
+    val play_services_drive = "com.google.android.gms:play-services-drive:${Versions.play_services}"
     val reactive_network = "com.github.pwittchen:reactivenetwork-rx2:${Versions.reactive_network}"
     val retrofit_gson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
     val retrofit_mock = "com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}"
