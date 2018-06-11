@@ -5,13 +5,14 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkStatus
+import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 const val TAG_DAILY_BACKUP = "tag_daily_backup"
 const val REPEAT_INTERVAL_DAYS = 1L
 
-class PeriodicBackupScheduler @Inject constructor(private val workManager: WorkManager) {
+class PeriodicBackupScheduler @Inject constructor(private val workManager: WorkManager) : TaskScheduler {
 
     init {
         workManager.getStatusesByTag(TAG_DAILY_BACKUP)
@@ -20,11 +21,11 @@ class PeriodicBackupScheduler @Inject constructor(private val workManager: WorkM
 
     private fun onWorkStatus(it: MutableList<WorkStatus>?) {
         if (it == null || it.isEmpty()) {
-            schedulePeriodicBackup()
+            schedule()
         }
     }
 
-    private fun schedulePeriodicBackup() {
+    override fun schedule() {
         val constraints = Constraints.Builder()
                 .setRequiresCharging(true)
                 .setRequiredNetworkType(NetworkType.CONNECTED)

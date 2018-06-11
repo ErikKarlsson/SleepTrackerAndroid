@@ -12,6 +12,7 @@ import net.erikkarlsson.simplesleeptracker.di.module.SignInModule
 import net.erikkarlsson.simplesleeptracker.di.module.SleepModule
 import net.erikkarlsson.simplesleeptracker.di.module.ViewModelModule
 import net.erikkarlsson.simplesleeptracker.feature.backup.BackupSleepWorker
+import net.erikkarlsson.simplesleeptracker.feature.backup.RestoreSleepWorker
 import javax.inject.Singleton
 
 @Singleton
@@ -32,4 +33,5 @@ interface AppComponent {
 
     // TODO (erikkarlsson): Only needed for injecting Worker, remove once Dagger has released WorkerInjector.
     fun inject(backupSleepWorker: BackupSleepWorker)
+    fun inject(restoreSleepWorker: RestoreSleepWorker)
 }

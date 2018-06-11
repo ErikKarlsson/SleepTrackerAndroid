@@ -6,6 +6,10 @@ import net.erikkarlsson.simplesleeptracker.data.DriveFileBackupRepository
 import net.erikkarlsson.simplesleeptracker.data.FastSleepToCsvFile
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.SleepToCsvFile
+import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
+import net.erikkarlsson.simplesleeptracker.feature.backup.PeriodicBackupScheduler
+import net.erikkarlsson.simplesleeptracker.feature.backup.RestoreBackupScheduler
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -19,15 +23,14 @@ abstract class BackupModule() {
     @Singleton
     abstract fun bindsFileBackupDataSource(driveFileBackupRepository: DriveFileBackupRepository): FileBackupDataSource
 
-/*
-    @Module
-    companion object {
+    @Binds
+    @Singleton
+    @Named("periodicBackupScheduler")
+    abstract fun bindsPeriodicBackupScheduler(periodicBackupScheduler: PeriodicBackupScheduler): TaskScheduler
 
-        @JvmStatic
-        @Provides
-        fun provides
-
-    }
-*/
+    @Binds
+    @Singleton
+    @Named("restoreBackupScheduler")
+    abstract fun bindsRestoreBackupScheduler(restBackupScheduler: RestoreBackupScheduler): TaskScheduler
 
 }
