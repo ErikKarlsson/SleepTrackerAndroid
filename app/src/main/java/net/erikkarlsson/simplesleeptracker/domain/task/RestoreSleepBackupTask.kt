@@ -2,9 +2,9 @@ package net.erikkarlsson.simplesleeptracker.domain.task
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepToCsvFile
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * Requires that user hasn't already created any sleep records.
  */
 class RestoreSleepBackupTask @Inject constructor(
-        private val sleepToCsvFile: SleepToCsvFile,
+        private val backupCsvFileReader: BackupCsvFileReader,
         private val sleepRepository: SleepDataSource,
         private val fileBackupRepository: FileBackupDataSource) : CompletableTask<None> {
 
@@ -27,7 +27,7 @@ class RestoreSleepBackupTask @Inject constructor(
     private fun restoreBackup(): Completable =
             fileBackupRepository.get()
                     .subscribeOn(Schedulers.io())
-                    .map(sleepToCsvFile::read)
+                    .map(backupCsvFileReader::read)
                     .flatMapCompletable {
                         sleepRepository.insertAll(it)
                                 .subscribeOn(Schedulers.io())

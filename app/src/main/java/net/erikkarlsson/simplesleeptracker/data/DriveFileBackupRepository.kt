@@ -6,11 +6,11 @@ import com.google.android.gms.drive.MetadataBuffer
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.base.BACKUP_FILE_NAME
-import net.erikkarlsson.simplesleeptracker.base.BACKUP_FOLDER_NAME
-import net.erikkarlsson.simplesleeptracker.base.BACKUP_MIME_TYPE
-import net.erikkarlsson.simplesleeptracker.base.RESTORE_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
+import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FILE_NAME
+import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FOLDER_NAME
+import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_MIME_TYPE
+import net.erikkarlsson.simplesleeptracker.feature.backup.RESTORE_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.util.toFile
 import java.io.File
 import javax.inject.Inject
