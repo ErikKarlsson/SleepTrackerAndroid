@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.feature.settings
+package net.erikkarlsson.simplesleeptracker.feature.profile
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import net.erikkarlsson.simplesleeptracker.R
 
-class SettingsFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 }

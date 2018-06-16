@@ -10,7 +10,9 @@ import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 import javax.inject.Named
 
-class FastBackupCsvFileWriter @Inject constructor(@Named("filePath") private val filePath: String) : BackupCsvFileWriter {
+class FastBackupCsvFileWriter
+@Inject constructor(@Named("filePath") private val filePath: String)
+    : BackupCsvFileWriter {
 
     override fun write(sleepList: ImmutableList<Sleep>): File {
         val file = File("$filePath/$BACKUP_FILE_NAME")

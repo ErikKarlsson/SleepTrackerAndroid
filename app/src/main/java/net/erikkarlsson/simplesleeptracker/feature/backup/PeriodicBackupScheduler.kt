@@ -12,7 +12,8 @@ import javax.inject.Inject
 const val TAG_DAILY_BACKUP = "tag_daily_backup"
 const val REPEAT_INTERVAL_DAYS = 1L
 
-class PeriodicBackupScheduler @Inject constructor(private val workManager: WorkManager) : TaskScheduler {
+class PeriodicBackupScheduler @Inject constructor(private val workManager: WorkManager)
+    : TaskScheduler {
 
     init {
         workManager.getStatusesByTag(TAG_DAILY_BACKUP)

@@ -5,11 +5,8 @@
     <fragment
         android:id="@+id/statistics"
         android:name="net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment"
-        android:label="StatisticsFragment">
-        <action
-            android:id="@+id/actionDiaryToDetail"
-            app:destination="@id/detail"/>
-    </fragment>
+        android:label="StatisticsFragment"/>
+
     <fragment
         android:id="@+id/diary"
         android:name="net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment"
@@ -19,10 +16,11 @@
             app:destination="@id/detail"/>
 
     </fragment>
+
     <fragment
-        android:id="@+id/settings"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.settings.SettingsFragment"
-        android:label="SettingsFragment"/>
+        android:id="@+id/profile"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.profile.ProfileFragment"
+        android:label="ProfileFragment"/>
 
     <activity
         android:id="@+id/detail"
