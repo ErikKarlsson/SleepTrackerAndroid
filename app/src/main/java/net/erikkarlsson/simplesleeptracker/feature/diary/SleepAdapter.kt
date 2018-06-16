@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.feature.statistics
+package net.erikkarlsson.simplesleeptracker.feature.diary
 
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil

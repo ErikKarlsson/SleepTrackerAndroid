@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.feature.statistics.SleepAdapter
 import javax.inject.Inject
 
 class DiaryFragment : Fragment() {

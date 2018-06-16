@@ -3,15 +3,12 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.navigation.fragment.NavHostFragment
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
@@ -22,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragmentDirections
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
@@ -46,8 +42,6 @@ class StatisticsFragment : Fragment() {
 
     private val disposables = CompositeDisposable()
 
-    private val adapter = SleepAdapter { navigateToDetails(it.id) }
-
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -64,9 +58,6 @@ class StatisticsFragment : Fragment() {
         val spinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-
-        recyclerView.layoutManager = LinearLayoutManager(ctx)
-        recyclerView.adapter = adapter
 
         viewModel.state().observe(this, Observer { render(it) })
     }
@@ -91,8 +82,6 @@ class StatisticsFragment : Fragment() {
         state?.let {
             val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
             owlImage.setImageResource(imageRes)
-
-            trackedNightsCard.visibility = if (state.isListEmpty) View.GONE else View.VISIBLE
 
             with(state.statistics.first) {
                 statisticsText.text = if (this.isEmpty) {
@@ -143,13 +132,6 @@ class StatisticsFragment : Fragment() {
     private fun onFilterSelected(index: Int) {
         val statisticsFilter = StatisticsFilter.values()[index]
         viewModel.dispatch(StatisticsFilterSelected(statisticsFilter))
-    }
-
-    private fun navigateToDetails(id: Int?) {
-        id?.let {
-            val action = DiaryFragmentDirections.actionDiaryToDetail().setSleepId(id)
-            NavHostFragment.findNavController(this).navigate(action)
-        }
     }
 }
 
