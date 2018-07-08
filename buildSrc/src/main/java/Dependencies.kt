@@ -6,7 +6,7 @@ object Versions {
     val version_code = 1
     val version_name = "1.0"
 
-    val android_gradle_plugin = "3.2.0-alpha18"
+    val android_gradle_plugin = "3.2.0-beta01"
     val arch_core = "1.1.0"
     val atsl_rules = "1.0.2"
     val atsl_runner = "1.0.2"
