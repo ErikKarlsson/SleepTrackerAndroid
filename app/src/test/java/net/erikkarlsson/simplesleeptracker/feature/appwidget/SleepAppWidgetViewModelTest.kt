@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach

@@ -53,10 +53,6 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.state().observe(this, Observer { render(it) })
         viewModel.dispatch(LoadDetailIntent(sleepId))
-
-        startDateText.clicksThrottle(disposables) { onStartDateClick() }
-        timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
-        timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -91,6 +87,13 @@ class DetailActivity : AppCompatActivity() {
     private fun onDeleteConfirmClick() {
         viewModel.dispatch(DeleteClick)
         finish()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        startDateText.clicksThrottle(disposables) { onStartDateClick() }
+        timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
+        timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
     }
 
     override fun onStop() {

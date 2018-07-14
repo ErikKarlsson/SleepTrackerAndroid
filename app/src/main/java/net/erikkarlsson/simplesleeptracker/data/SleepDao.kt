@@ -9,6 +9,7 @@ import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 import io.reactivex.Flowable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.data.sleep.SleepEntity
 
 /**
  * Data Access Object for the sleep table.

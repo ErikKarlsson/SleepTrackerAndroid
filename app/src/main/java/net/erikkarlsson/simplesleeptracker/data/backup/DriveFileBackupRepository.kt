@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.backup
 
 import com.google.android.gms.drive.DriveFile
 import com.google.android.gms.drive.DriveFolder

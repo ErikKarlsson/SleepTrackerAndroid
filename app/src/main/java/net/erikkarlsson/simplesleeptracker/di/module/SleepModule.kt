@@ -5,9 +5,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.data.SleepDao
-import net.erikkarlsson.simplesleeptracker.data.SleepDatabase
-import net.erikkarlsson.simplesleeptracker.data.SleepRepository
-import net.erikkarlsson.simplesleeptracker.data.StatisticsRepository
+import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDatabase
+import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepository
+import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import javax.inject.Singleton

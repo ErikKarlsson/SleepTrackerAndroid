@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task
+package net.erikkarlsson.simplesleeptracker.domain.task.statistics
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
@@ -7,6 +7,7 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
+import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import org.threeten.bp.DayOfWeek
 import javax.inject.Inject
 

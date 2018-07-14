@@ -1,8 +1,9 @@
-package net.erikkarlsson.simplesleeptracker.domain.task
+package net.erikkarlsson.simplesleeptracker.domain.task.sleep
 
 import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.ChronoUnit
 import javax.inject.Inject

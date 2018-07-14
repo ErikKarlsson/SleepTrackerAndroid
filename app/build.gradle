@@ -183,6 +183,10 @@ dependencies {
     // Firebase
     implementation Deps.firebase_core
 
+    // Glide
+    implementation Deps.glide
+    annotationProcessor Deps.glide_compiler
+
     // Guava
     implementation Deps.guava
 

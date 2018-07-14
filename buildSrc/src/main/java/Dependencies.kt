@@ -6,7 +6,7 @@ object Versions {
     val version_code = 1
     val version_name = "1.0"
 
-    val android_gradle_plugin = "3.2.0-beta01"
+    val android_gradle_plugin = "3.2.0-beta03"
     val arch_core = "1.1.0"
     val atsl_rules = "1.0.2"
     val atsl_runner = "1.0.2"
@@ -20,7 +20,7 @@ object Versions {
     val fabric = "1.25.4"
     val fast_csv = "1.0.2"
     val firebase = "16.0.0"
-    val glide = "3.8.0"
+    val glide = "4.7.1"
     val google_services_plugin = "4.0.1"
     val grgit_plugin = "1.5.0"
     val guava = "20.0"
@@ -76,6 +76,7 @@ object Deps {
     val fast_csv = "de.siegmar:fastcsv:${Versions.fast_csv}"
     val firebase_core = "com.google.firebase:firebase-core:${Versions.firebase}"
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+    val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
     val google_services_plugin = "com.google.gms:google-services:${Versions.google_services_plugin}"
     val grgit_plugin = "org.ajoberstar:grgit:${Versions.grgit_plugin}"
     val guava = "com.google.guava:guava:${Versions.guava}"

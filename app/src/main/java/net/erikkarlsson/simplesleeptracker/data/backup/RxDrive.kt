@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.backup
 
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn

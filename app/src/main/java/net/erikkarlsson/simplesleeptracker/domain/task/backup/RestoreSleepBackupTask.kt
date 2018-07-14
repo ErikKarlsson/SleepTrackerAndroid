@@ -1,10 +1,11 @@
-package net.erikkarlsson.simplesleeptracker.domain.task
+package net.erikkarlsson.simplesleeptracker.domain.task.backup
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import javax.inject.Inject
 

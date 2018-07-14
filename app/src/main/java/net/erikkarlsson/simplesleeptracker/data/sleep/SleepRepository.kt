@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.sleep
 
 import android.arch.paging.PagedList
 import android.arch.paging.RxPagedListBuilder
@@ -7,6 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import net.erikkarlsson.simplesleeptracker.data.SleepDao
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.util.toImmutableList

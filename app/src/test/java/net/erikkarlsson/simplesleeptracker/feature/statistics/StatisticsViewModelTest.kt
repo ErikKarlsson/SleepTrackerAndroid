@@ -10,9 +10,9 @@ import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonOverallTask
-import net.erikkarlsson.simplesleeptracker.domain.task.StatisticComparisonWeekTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.statistics.StatisticComparisonOverallTask
+import net.erikkarlsson.simplesleeptracker.domain.task.statistics.StatisticComparisonWeekTask
+import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach

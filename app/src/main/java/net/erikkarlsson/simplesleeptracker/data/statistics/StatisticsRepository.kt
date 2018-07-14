@@ -1,8 +1,11 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.statistics
 
 import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import net.erikkarlsson.simplesleeptracker.data.DayOfWeekMidnightOffset
+import net.erikkarlsson.simplesleeptracker.data.SleepDao
+import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime

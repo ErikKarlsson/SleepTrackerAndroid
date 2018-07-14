@@ -1,10 +1,11 @@
-package net.erikkarlsson.simplesleeptracker.domain.task
+package net.erikkarlsson.simplesleeptracker.domain.task.backup
 
 import com.google.common.collect.ImmutableList
 import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileWriter
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import javax.inject.Inject
 

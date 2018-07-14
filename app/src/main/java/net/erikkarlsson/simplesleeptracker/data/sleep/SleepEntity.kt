@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.sleep
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

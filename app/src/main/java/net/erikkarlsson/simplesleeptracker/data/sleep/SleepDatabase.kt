@@ -1,10 +1,12 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.sleep
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import net.erikkarlsson.simplesleeptracker.data.SleepDao
+import net.erikkarlsson.simplesleeptracker.data.TiviTypeConverters
 
 /**
  * The Room database that contains the Sleep table
@@ -20,8 +22,10 @@ abstract class SleepDatabase : RoomDatabase() {
         @Volatile private var INSTANCE: SleepDatabase? = null
 
         fun getInstance(context: Context): SleepDatabase =
-                INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                INSTANCE
+                        ?: synchronized(this) {
+                    INSTANCE
+                            ?: buildDatabase(context).also { INSTANCE = it }
                 }
 
         private fun buildDatabase(context: Context) =

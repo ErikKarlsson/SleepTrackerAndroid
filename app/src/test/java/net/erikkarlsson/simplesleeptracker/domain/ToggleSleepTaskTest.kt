@@ -8,7 +8,7 @@ import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
-import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach
