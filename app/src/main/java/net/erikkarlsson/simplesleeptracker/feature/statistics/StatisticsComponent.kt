@@ -2,10 +2,11 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
+import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.sleep.GetCurrentSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.statistics.StatisticComparisonOverallTask
 import net.erikkarlsson.simplesleeptracker.domain.task.statistics.StatisticComparisonWeekTask
@@ -53,19 +54,22 @@ data class StatisticsState(val isSleeping: Boolean,
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
+class SleepSubscription @Inject constructor(private val getCurrentSleepTask: GetCurrentSleepTask) : StatelessSub<StatisticsState, StatisticsMsg>() {
 
     override fun invoke(): Observable<StatisticsMsg> =
-            sleepRepository.getCurrent().map { CurrentSleepLoaded(it) }
+            getCurrentSleepTask.execute(ObservableTask.None())
+                    .map { CurrentSleepLoaded(it) }
 }
 
 class StatisticsSubscription @Inject constructor(private val statisticComparisonOverallTask: StatisticComparisonOverallTask,
                                                  private val statisticComparisonWeekTask: StatisticComparisonWeekTask) : StatefulSub<StatisticsState, StatisticsMsg>() {
     override fun invoke(state: StatisticsState): Observable<StatisticsMsg> {
         if (state.statisticFilter == StatisticsFilter.OVERALL) {
-            return statisticComparisonOverallTask.execute().map { StatisticsLoaded(it) }
+            return statisticComparisonOverallTask.execute(ObservableTask.None())
+                    .map { StatisticsLoaded(it) }
         } else {
-            return statisticComparisonWeekTask.execute().map { StatisticsLoaded(it) }
+            return statisticComparisonWeekTask.execute(ObservableTask.None())
+                    .map { StatisticsLoaded(it) }
         }
     }
 

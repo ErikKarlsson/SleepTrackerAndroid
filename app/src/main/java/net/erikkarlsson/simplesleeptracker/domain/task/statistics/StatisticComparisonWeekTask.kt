@@ -16,9 +16,10 @@ import javax.inject.Inject
  */
 class StatisticComparisonWeekTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSource,
-        private val dateTimeProvider: DateTimeProvider) : ObservableTask<StatisticComparison> {
+        private val dateTimeProvider: DateTimeProvider)
+    : ObservableTask<StatisticComparison, ObservableTask.None> {
 
-    override fun execute(): Observable<StatisticComparison> {
+    override fun execute(params: ObservableTask.None): Observable<StatisticComparison> {
         val now = dateTimeProvider.now().toLocalDate()
         val monday = now.with(DayOfWeek.MONDAY)
         val sunday = now.with(DayOfWeek.SUNDAY)

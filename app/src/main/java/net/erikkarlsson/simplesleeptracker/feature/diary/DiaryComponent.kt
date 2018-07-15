@@ -3,9 +3,15 @@ package net.erikkarlsson.simplesleeptracker.feature.diary
 import android.arch.paging.PagedList
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.elm.*
+import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.diary.GetSleepListTask
+import net.erikkarlsson.simplesleeptracker.elm.Cmd
+import net.erikkarlsson.simplesleeptracker.elm.Component
+import net.erikkarlsson.simplesleeptracker.elm.Msg
+import net.erikkarlsson.simplesleeptracker.elm.State
+import net.erikkarlsson.simplesleeptracker.elm.StatelessSub
+import net.erikkarlsson.simplesleeptracker.elm.Sub
 import javax.inject.Inject
 
 class DiaryComponent @Inject constructor(private val sleepSubscription: SleepSubscription)
@@ -37,10 +43,11 @@ data class DiaryState(val sleepList: PagedList<Sleep>?) : State {
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<DiaryState, DiaryMsg>() {
+class SleepSubscription @Inject constructor(private val getSleepListTask: GetSleepListTask) : StatelessSub<DiaryState, DiaryMsg>() {
 
     override fun invoke(): Observable<DiaryMsg> =
-            sleepRepository.getSleepPaged().map { SleepLoaded(it) }
+            getSleepListTask.execute(ObservableTask.None())
+                    .map { SleepLoaded(it) }
 }
 
 // Msg

@@ -25,17 +25,17 @@ class FastBackupCsvFileWriter
         val csvWriter = CsvWriter()
         csvWriter.setAlwaysDelimitText(true)
         csvWriter.append(file, StandardCharsets.UTF_8)
-                .use({ csvAppender ->
-                         // Header
-                         csvAppender.appendLine("From", "To", "Hours")
+                .use { csvAppender ->
+                    // Header
+                    csvAppender.appendLine("From", "To", "Hours")
 
-                         for (sleep in sleepList) {
-                             // Values
-                             csvAppender.appendLine(sleep.fromDate.toString(),
-                                                    sleep.toDate.toString(),
-                                                    sleep.hours.toString())
-                         }
-                     })
+                    for (sleep in sleepList) {
+                        // Values
+                        csvAppender.appendLine(sleep.fromDate.toString(),
+                                               sleep.toDate.toString(),
+                                               sleep.hours.toString())
+                    }
+                }
 
         return file
     }

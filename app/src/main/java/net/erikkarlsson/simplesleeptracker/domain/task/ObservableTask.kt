@@ -2,6 +2,8 @@ package net.erikkarlsson.simplesleeptracker.domain.task
 
 import io.reactivex.Observable
 
-interface ObservableTask<T> {
-    fun execute(): Observable<T>
+interface ObservableTask<T, Params> {
+    fun execute(params: Params): Observable<T>
+
+    class None
 }

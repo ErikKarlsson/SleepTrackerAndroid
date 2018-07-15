@@ -11,9 +11,10 @@ import javax.inject.Inject
  * Get stream of overall statistic, with no statistics to compare against.
  */
 class StatisticComparisonOverallTask @Inject constructor(
-        private val statisticsRepository: StatisticsDataSource) : ObservableTask<StatisticComparison> {
+        private val statisticsRepository: StatisticsDataSource)
+    : ObservableTask<StatisticComparison, ObservableTask.None> {
 
-    override fun execute(): Observable<StatisticComparison> {
+    override fun execute(params: ObservableTask.None): Observable<StatisticComparison> {
         return statisticsRepository.getStatistics().startWith(Statistics.empty())
             .map { StatisticComparison(it, Statistics.empty()) }
     }

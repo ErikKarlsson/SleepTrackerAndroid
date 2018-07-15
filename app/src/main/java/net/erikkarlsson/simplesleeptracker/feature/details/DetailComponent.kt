@@ -2,12 +2,12 @@ package net.erikkarlsson.simplesleeptracker.feature.details
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.DeleteSleepTask
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.UpdateStartDateTask
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.UpdateTimeAsleepTask
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.UpdateTimeAwakeTask
+import net.erikkarlsson.simplesleeptracker.domain.task.details.DeleteSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.details.GetSleepDetailsTask
+import net.erikkarlsson.simplesleeptracker.domain.task.details.UpdateStartDateTask
+import net.erikkarlsson.simplesleeptracker.domain.task.details.UpdateTimeAsleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.details.UpdateTimeAwakeTask
 import net.erikkarlsson.simplesleeptracker.elm.Cmd
 import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg
@@ -57,12 +57,13 @@ data class DetailState(val sleepId: Int, val sleep: Sleep) : State {
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatefulSub<DetailState, DetailMsg>() {
+class SleepSubscription @Inject constructor(private val getSleepDetailsTask: GetSleepDetailsTask) : StatefulSub<DetailState, DetailMsg>() {
     override fun invoke(state: DetailState): Observable<DetailMsg> {
         return if (state.sleepId == 0) {
             Observable.empty()
         } else {
-            sleepRepository.getSleep(state.sleepId).map { DetailLoaded(it) }
+            getSleepDetailsTask.execute(GetSleepDetailsTask.Params(state.sleepId))
+                    .map { DetailLoaded(it) }
         }
     }
 

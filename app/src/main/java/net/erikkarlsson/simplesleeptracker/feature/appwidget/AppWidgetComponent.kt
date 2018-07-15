@@ -2,11 +2,17 @@ package net.erikkarlsson.simplesleeptracker.feature.appwidget
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
+import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.sleep.GetCurrentSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
-import net.erikkarlsson.simplesleeptracker.elm.*
+import net.erikkarlsson.simplesleeptracker.elm.Cmd
+import net.erikkarlsson.simplesleeptracker.elm.Component
+import net.erikkarlsson.simplesleeptracker.elm.Msg
+import net.erikkarlsson.simplesleeptracker.elm.State
+import net.erikkarlsson.simplesleeptracker.elm.StatelessSub
+import net.erikkarlsson.simplesleeptracker.elm.Sub
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.WidgetCmd.ToggleSleepCmd
 import javax.inject.Inject
 
@@ -28,7 +34,6 @@ class AppWidgetComponent @Inject constructor(private val toggleSleepTask: Toggle
         WidgetOnUpdate -> prevState.copy(updateCount = (prevState.updateCount + 1)).noCmd() // Increase counter to re-render app widget on update
         NoOp -> prevState.noCmd()
     }
-
 }
 
 // State
@@ -39,9 +44,11 @@ data class WidgetState(val isLoading: Boolean, val isSleeping: Boolean, val upda
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<WidgetState, WidgetMsg>() {
+class SleepSubscription @Inject constructor(private val getCurrentSleepTask: GetCurrentSleepTask) : StatelessSub<WidgetState, WidgetMsg>() {
 
-    override fun invoke(): Observable<WidgetMsg> = sleepRepository.getCurrent().map { CurrentSleepLoaded(it) }
+    override fun invoke(): Observable<WidgetMsg> =
+            getCurrentSleepTask.execute(ObservableTask.None())
+                    .map { CurrentSleepLoaded(it) }
 }
 
 // Msg
