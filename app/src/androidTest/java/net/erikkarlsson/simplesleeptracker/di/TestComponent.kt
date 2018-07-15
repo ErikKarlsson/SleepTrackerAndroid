@@ -8,6 +8,7 @@ import net.erikkarlsson.simplesleeptracker.TestApp
 import net.erikkarlsson.simplesleeptracker.di.module.AndroidBindingModule
 import net.erikkarlsson.simplesleeptracker.di.module.AppModule
 import net.erikkarlsson.simplesleeptracker.di.module.BackupModule
+import net.erikkarlsson.simplesleeptracker.di.module.PreferencesModule
 import net.erikkarlsson.simplesleeptracker.di.module.SignInModule
 import net.erikkarlsson.simplesleeptracker.di.module.SleepModule
 import net.erikkarlsson.simplesleeptracker.di.module.ViewModelModule
@@ -15,8 +16,8 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AndroidBindingModule::class, AndroidInjectionModule::class,
-    AppModule::class, BackupModule::class, MockDateTimeModule::class, SignInModule::class,
-    SleepModule::class, ViewModelModule::class])
+    AppModule::class, BackupModule::class, MockDateTimeModule::class, PreferencesModule::class,
+    SignInModule::class, SleepModule::class, ViewModelModule::class])
 interface TestComponent : AppComponent {
     @Component.Builder
     interface Builder {

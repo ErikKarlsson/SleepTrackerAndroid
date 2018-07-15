@@ -6,9 +6,9 @@ import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import javax.inject.Inject
 import javax.inject.Named
 
-class ScheduleBackupTask @Inject constructor(
+class ScheduleRestoreBackupTask @Inject constructor(
         @Named("restoreBackupScheduler") private val restoreBackupScheduler: TaskScheduler
-                                            )
+                                                   )
     : CompletableTask<CompletableTask.None>
 {
     override fun execute(params: CompletableTask.None): Completable {

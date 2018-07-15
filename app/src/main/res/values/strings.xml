@@ -23,4 +23,6 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="sign_out">Sign out</string>
+    <string name="not_backed_up_yet">Not backed up yet.</string>
+    <string name="last_backup">Last backup</string>
 </resources>

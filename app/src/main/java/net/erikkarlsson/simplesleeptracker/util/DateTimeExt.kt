@@ -1,11 +1,18 @@
 package net.erikkarlsson.simplesleeptracker.util
 
-import net.erikkarlsson.simplesleeptracker.base.*
+import net.erikkarlsson.simplesleeptracker.base.HOURS_PRECISION
+import net.erikkarlsson.simplesleeptracker.base.MINUTES_IN_AN_HOUR
+import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_AN_HOUR
+import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_A_DAY
+import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_A_MINUTE
+import net.erikkarlsson.simplesleeptracker.base.TWELVE_IN_THE_AFTERNOON
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.temporal.ChronoUnit
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Calculates seconds from midnight.
@@ -49,3 +56,9 @@ val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
  */
 val Int.hoursToSeconds: Int get() = this * SECONDS_IN_AN_HOUR
 val Int.minutesToSeconds: Int get() = this * SECONDS_IN_A_MINUTE
+
+val Long.formatTimestamp: String get() {
+    val date = Date(this)
+    val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    return format.format(date)
+}

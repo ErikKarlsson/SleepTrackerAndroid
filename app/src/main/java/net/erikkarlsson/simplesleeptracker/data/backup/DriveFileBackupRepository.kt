@@ -1,11 +1,14 @@
 package net.erikkarlsson.simplesleeptracker.data.backup
 
+import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.gms.drive.DriveFile
 import com.google.android.gms.drive.DriveFolder
 import com.google.android.gms.drive.MetadataBuffer
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.base.PREFS_LAST_SYNC_TIMESTAMP
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FOLDER_NAME
@@ -21,9 +24,11 @@ import javax.inject.Named
  *
  * Requires user to be logged in to Google Account.
  */
-class DriveFileBackupRepository
-@Inject constructor(private val rxDrive: RxDrive,
-                    @Named("filePath") private val filePath: String) : FileBackupDataSource {
+class DriveFileBackupRepository @Inject constructor(
+        private val rxDrive: RxDrive,
+        @Named("filePath") private val filePath: String,
+        private val rxSharedPreferences: RxSharedPreferences)
+    : FileBackupDataSource {
 
     override fun get(): Maybe<File> =
             queryBackupFile().flatMapMaybe { fileMeta ->
@@ -40,6 +45,9 @@ class DriveFileBackupRepository
                 uploadToDrive(fileMeta, file)
                         .andThen(syncFiles())
             }
+
+    override fun getLastBackupTimestamp(): Observable<Long> =
+        rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP, 0).asObservable()
 
     private fun openFile(driveFile: DriveFile): Single<File> =
             rxDrive.openFile(driveFile)
@@ -60,7 +68,11 @@ class DriveFileBackupRepository
             rxDrive.requestSync()
                     // Sync request might fail because of API rate limit.
                     // Drive will eventually perform sync so consider the work successful.
+                    .doOnComplete(this::updateLastBackupTimestamp)
                     .onErrorComplete()
+
+    private fun updateLastBackupTimestamp() =
+            rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP).set(System.currentTimeMillis())
 
     private fun updateExistingFile(driveFile: DriveFile,
                                    file: File): Completable =

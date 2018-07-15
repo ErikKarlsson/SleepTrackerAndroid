@@ -229,6 +229,7 @@ dependencies {
     implementation Deps.rxrelay
     implementation Deps.rxbinding
     implementation Deps.rxkotlin
+    implementation Deps.rx_preferences
 
     // Support libraries
     implementation Deps.support_app_compat

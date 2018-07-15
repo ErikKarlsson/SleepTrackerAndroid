@@ -24,8 +24,10 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.REQUEST_CODE_SIGN_IN
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
+import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -67,7 +69,7 @@ class ProfileFragment : Fragment() {
         val account = GoogleSignIn.getLastSignedInAccount(ctx)
 
         if (account != null) {
-            onSignInSuccess(account)
+            onSignInRestored(account)
         }
     }
 
@@ -99,6 +101,15 @@ class ProfileFragment : Fragment() {
                 displayNameText.text = it.displayName
             }
 
+            it.profile.lastBackupTimestamp.let {
+                val backupString = getString(R.string.last_backup)
+                val dateString =  if (it > 0L) {
+                    it.formatTimestamp
+                } else {
+                    getString(R.string.not_backed_up_yet)
+                }
+                lastBackupText.text = String.format("%s: %s", backupString, dateString)
+            }
         }
     }
 
@@ -131,11 +142,21 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onSignInSuccess(account: GoogleSignInAccount) {
+        val userAccount = toUserAccount(account)
+        viewModel.dispatch(SignInSuccess(userAccount))
+    }
+
+    private fun onSignInRestored(account: GoogleSignInAccount) {
+        val userAccount = toUserAccount(account)
+        viewModel.dispatch(SignInRestored(userAccount))
+    }
+
+    private fun toUserAccount(account: GoogleSignInAccount): UserAccount {
         val email = account.email ?: ""
         val displayName = account.displayName ?: ""
         val photoUrl = account.photoUrl?.toString() ?: ""
         val userAccount = UserAccount(email, displayName, photoUrl)
-        viewModel.dispatch(SignInSuccess(userAccount))
+        return userAccount
     }
 
     private fun onSignInCancelled() {

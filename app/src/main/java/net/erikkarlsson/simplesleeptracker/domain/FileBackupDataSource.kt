@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker.domain
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import java.io.File
 
 /**
@@ -10,4 +11,5 @@ import java.io.File
 interface FileBackupDataSource {
     fun get(): Maybe<File>
     fun put(file: File): Completable
+    fun getLastBackupTimestamp(): Observable<Long>
 }
