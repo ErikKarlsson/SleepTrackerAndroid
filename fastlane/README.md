@@ -30,7 +30,7 @@ Submit a new internal Build to Play Store
 ```
 fastlane android deploy
 ```
-Deploy a new version to the Google Play
+Deploy a new production version to Google Play
 
 ----
 
