@@ -15,6 +15,11 @@
             android:id="@+id/actionDiaryToDetail"
             app:destination="@id/detail"/>
 
+
+        <action
+            android:id="@+id/actionDiaryToAddSleep"
+            app:destination="@id/add"/>
+
     </fragment>
 
     <fragment
@@ -30,5 +35,11 @@
             android:name="sleepId"
             android:defaultValue="0"
             app:type="integer"/>
+    </activity>
+
+    <activity
+        android:id="@+id/add"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity"
+        android:label="AddSleepActivity">
     </activity>
 </navigation>

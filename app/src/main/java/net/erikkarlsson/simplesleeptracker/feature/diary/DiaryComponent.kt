@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.diary.GetSleepListTask
+import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetSleepListTask
 import net.erikkarlsson.simplesleeptracker.elm.Cmd
 import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg

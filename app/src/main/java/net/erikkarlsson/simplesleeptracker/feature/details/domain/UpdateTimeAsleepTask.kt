@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task.details
+package net.erikkarlsson.simplesleeptracker.feature.details.domain
 
 import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -13,12 +13,22 @@ class UpdateTimeAsleepTask @Inject constructor(
     override fun execute(params: Params): Completable =
             sleepRepository.getSleep(params.sleepId)
                     .take(1)
-                    .map { updateTimeAsleep(it, params.timeAsleep)}
+                    .map { updateTimeAsleep(it, params.timeAsleep) }
                     .ignoreElements()
 
     private fun updateTimeAsleep(sleep: Sleep, timeAsleep: LocalTime) {
-        val fromDate = sleep.fromDate.with(timeAsleep)
-        val updatedSleep = sleep.copy(fromDate = fromDate)
+        val toDate = checkNotNull(sleep.toDate)
+        val fromDate = sleep.fromDate
+        val startDate = fromDate.toLocalDate()
+        val endTime = toDate.toLocalTime()
+        val zoneOffset = fromDate.offset
+
+        val updatedSleep = Sleep.from(id = sleep.id,
+                                      startDate = startDate,
+                                      startTime = timeAsleep,
+                                      endTime = endTime,
+                                      zoneOffset = zoneOffset)
+
         sleepRepository.update(updatedSleep)
     }
 

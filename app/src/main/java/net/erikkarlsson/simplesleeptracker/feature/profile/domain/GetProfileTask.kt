@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task.profile
+package net.erikkarlsson.simplesleeptracker.feature.profile.domain
 
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource

@@ -10,8 +10,8 @@ import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.domain.task.statistics.StatisticComparisonOverallTask
-import net.erikkarlsson.simplesleeptracker.domain.task.statistics.StatisticComparisonWeekTask
+import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonOverallTask
+import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonWeekTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension

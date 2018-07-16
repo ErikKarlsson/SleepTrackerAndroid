@@ -6,6 +6,7 @@ import net.erikkarlsson.simplesleeptracker.MainActivity
 import net.erikkarlsson.simplesleeptracker.di.scope.ActivityScope
 import net.erikkarlsson.simplesleeptracker.di.scope.BroadcastRecieverScope
 import net.erikkarlsson.simplesleeptracker.di.scope.FragmentScope
+import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment
@@ -22,6 +23,10 @@ abstract class AndroidBindingModule {
     @ActivityScope
     @ContributesAndroidInjector
     abstract fun bindsDetailActivity(): DetailActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    abstract fun bindsAddSleepActivity(): AddSleepActivity
 
     @FragmentScope
     @ContributesAndroidInjector

@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task.statistics
+package net.erikkarlsson.simplesleeptracker.feature.statistics.domain
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables

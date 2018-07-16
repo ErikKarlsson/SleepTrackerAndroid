@@ -6,9 +6,9 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.Profile
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.backup.ScheduleRestoreBackupTask
-import net.erikkarlsson.simplesleeptracker.domain.task.profile.GetProfileTask
-import net.erikkarlsson.simplesleeptracker.domain.task.profile.LogoutTask
+import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleRestoreBackupTask
+import net.erikkarlsson.simplesleeptracker.feature.profile.domain.GetProfileTask
+import net.erikkarlsson.simplesleeptracker.feature.profile.domain.LogoutTask
 import net.erikkarlsson.simplesleeptracker.elm.Cmd
 import net.erikkarlsson.simplesleeptracker.elm.Component
 import net.erikkarlsson.simplesleeptracker.elm.Msg

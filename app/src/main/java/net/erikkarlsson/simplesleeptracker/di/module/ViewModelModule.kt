@@ -8,6 +8,7 @@ import dagger.multibindings.IntoMap
 import net.erikkarlsson.simplesleeptracker.MainViewModel
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.di.ViewModelKey
+import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepViewModel
 import net.erikkarlsson.simplesleeptracker.feature.details.DetailViewModel
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryViewModel
 import net.erikkarlsson.simplesleeptracker.feature.profile.ProfileViewModel
@@ -30,6 +31,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DiaryViewModel::class)
     abstract fun bindDiaryViewModel(diaryViewModel: DiaryViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddSleepViewModel::class)
+    abstract fun bindAddSleepViewModel(addSleepViewModel: AddSleepViewModel): ViewModel
 
     @Binds
     @IntoMap

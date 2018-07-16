@@ -23,6 +23,8 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="sign_out">Sign out</string>
-    <string name="not_backed_up_yet">Not backed up yet.</string>
+    <string name="not_backed_up_yet">No recent backup.</string>
     <string name="last_backup">Last backup</string>
+    <string name="add_sleep_session">Add Sleep Session</string>
+    <string name="you_have_slept_for">You\'ve slept for</string>
 </resources>

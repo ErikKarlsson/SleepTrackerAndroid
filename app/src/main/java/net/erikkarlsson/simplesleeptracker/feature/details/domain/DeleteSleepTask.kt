@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task.details
+package net.erikkarlsson.simplesleeptracker.feature.details.domain
 
 import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -7,7 +7,8 @@ import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import javax.inject.Inject
 
 class DeleteSleepTask @Inject constructor(
-        private val sleepRepository: SleepDataSource) : CompletableTask<DeleteSleepTask.Params> {
+        private val sleepRepository: SleepDataSource)
+    : CompletableTask<DeleteSleepTask.Params> {
 
     override fun execute(params: Params): Completable =
             sleepRepository.getSleep(params.sleepId)

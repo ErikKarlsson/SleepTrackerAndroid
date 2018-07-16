@@ -7,6 +7,7 @@ import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_A_DAY
 import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_A_MINUTE
 import net.erikkarlsson.simplesleeptracker.base.TWELVE_IN_THE_AFTERNOON
 import org.threeten.bp.Duration
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.temporal.ChronoUnit
@@ -27,9 +28,9 @@ val OffsetDateTime.midnightOffsetInSeconds: Int
     }
 
 /**
- * Calculates amount of hours between two dates. e.g. 7.850
+ * Calculates amount of hours between two dates. e.g. 7.850 hours
  */
-fun OffsetDateTime.hoursBetween(dateTime: OffsetDateTime): Float {
+fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
     val secondsBetweenDates = ChronoUnit.SECONDS.between(this, dateTime)
     return BigDecimal.valueOf(secondsBetweenDates / SECONDS_IN_AN_HOUR.toDouble())
         .setScale(HOURS_PRECISION, BigDecimal.ROUND_HALF_UP)
@@ -37,9 +38,11 @@ fun OffsetDateTime.hoursBetween(dateTime: OffsetDateTime): Float {
 }
 
 /**
- * Amount of hours between two points in time. e.g. 7.850
- */
-fun LocalTime.diffHours(other: LocalTime): Float = Duration.between(this, other).toMinutes().toFloat() / MINUTES_IN_AN_HOUR
+ * Amount of hours between two times.
+ * e.g. 22:30 to 06:30 eq 8.0 hours
+ * e.g. 22:30 to 21:30 eq -1 hours
+*/
+fun LocalTime.hoursTo(other: LocalTime): Float = Duration.between(this, other).toMinutes().toFloat() / MINUTES_IN_AN_HOUR
 
 /**
  * Converts midnight offset in seconds to LocalTime.

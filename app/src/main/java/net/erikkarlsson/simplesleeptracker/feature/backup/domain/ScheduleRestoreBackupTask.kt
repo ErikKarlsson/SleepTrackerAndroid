@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task.backup
+package net.erikkarlsson.simplesleeptracker.feature.backup.domain
 
 import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask

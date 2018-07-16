@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.feature.backup
 import androidx.work.Worker
 import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.backup.RestoreSleepBackupTask
+import net.erikkarlsson.simplesleeptracker.feature.backup.domain.RestoreSleepBackupTask
 import timber.log.Timber
 import javax.inject.Inject
 

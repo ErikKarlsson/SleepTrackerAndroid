@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.domain.task.diary
+package net.erikkarlsson.simplesleeptracker.feature.diary.domain
 
 import android.arch.paging.PagedList
 import io.reactivex.Observable

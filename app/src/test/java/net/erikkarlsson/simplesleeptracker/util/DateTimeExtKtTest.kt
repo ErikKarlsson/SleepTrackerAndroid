@@ -25,7 +25,7 @@ class DateTimeExtKtTest {
     fun `hours between datetimes`() {
         val startDate = "2018-03-05T05:40:00+01:00".offsetDateTime
         val endDate = "2018-03-05T06:50:00+01:00".offsetDateTime
-        val actual = startDate.hoursBetween(endDate)
+        val actual = startDate.hoursTo(endDate)
         assertEquals(1.167f, actual)
     }
 
@@ -33,8 +33,8 @@ class DateTimeExtKtTest {
     fun `localtime diff hours`() {
         val startTime = LocalTime.of(12, 0, 0)
         val endTime = LocalTime.of(12, 1, 0)
-        val actualPositive = startTime.diffHours(endTime)
-        val actualNegative = endTime.diffHours(startTime)
+        val actualPositive = startTime.hoursTo(endTime)
+        val actualNegative = endTime.hoursTo(startTime)
         assertEquals(0.0166f, actualPositive, 0.0001f)
         assertEquals(-0.0166f, actualNegative, 0.0001f)
     }
