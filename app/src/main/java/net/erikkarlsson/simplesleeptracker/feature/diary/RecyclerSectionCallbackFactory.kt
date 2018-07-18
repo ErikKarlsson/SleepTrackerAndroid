@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import android.content.Context
+import android.content.res.Resources
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
@@ -11,7 +11,7 @@ import javax.inject.Inject
 private val MONTH_PATTERN = DateTimeFormatter.ofPattern("MMMM")
 
 class RecyclerSectionCallbackFactory @Inject constructor(
-        private val ctx: Context,
+        private val resources: Resources,
         private val dateTimeProvider: DateTimeProvider) {
 
     fun create(sleepDiary: SleepDiary): RecyclerSectionItemDecoration.SectionCallback {
@@ -59,9 +59,7 @@ class RecyclerSectionCallbackFactory @Inject constructor(
                     val month = fromDate.monthValue
                     val sleepCount = sleepDiary.getSleepCount(year, month)
 
-                    return String.format("%s %s",
-                                         sleepCount.toString(),
-                                         ctx.getString(R.string.nights))
+                    return resources.getQuantityString(R.plurals.nights, sleepCount, sleepCount)
                 } catch (e: IndexOutOfBoundsException) {
                     return ""
                 }
