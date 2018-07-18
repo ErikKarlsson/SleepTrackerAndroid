@@ -3,26 +3,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 tools:ignore="RelativeOverlap">
+
+    <ImageView
+        android:id="@+id/iconImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:background="@color/gray"/>
 
     <TextView
         android:id="@+id/dateText"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_toEndOf="@id/iconImage"
+        tools:text="Fri 9 Feb"/>
 
     <TextView
         android:id="@+id/timeText"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/dateText"
-        android:layout_toRightOf="@id/dateText"/>
+        android:layout_below="@id/dateText"
+        android:layout_toEndOf="@id/iconImage"
+        android:textSize="16sp"
+        tools:text="22:30"/>
 
     <TextView
         android:id="@+id/hoursText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_below="@id/dateText"
+        android:layout_toEndOf="@id/timeText"
+        android:textSize="16sp"
+        tools:text="8 h 0 min"
+        />
 
 </RelativeLayout>

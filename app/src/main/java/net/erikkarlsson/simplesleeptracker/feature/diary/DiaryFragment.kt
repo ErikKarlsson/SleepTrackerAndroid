@@ -31,6 +31,9 @@ class DiaryFragment : Fragment() {
     lateinit var linearLayoutManager: LinearLayoutManager
 
     @Inject
+    lateinit var dividerItemDecoration: SimpleDividerItemDecoration
+
+    @Inject
     lateinit var itemDecorationFactory: RecyclerSectionItemDecorationFactory
 
     private var sectionItemDecoration: RecyclerSectionItemDecoration? = null
@@ -59,6 +62,7 @@ class DiaryFragment : Fragment() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
         recyclerView.itemAnimator = null
+        recyclerView.addItemDecoration(dividerItemDecoration)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {

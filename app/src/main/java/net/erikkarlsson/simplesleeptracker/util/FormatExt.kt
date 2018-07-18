@@ -10,7 +10,7 @@ import org.threeten.bp.format.TextStyle
 import java.util.*
 
 val OffsetDateTime.formatHHMM: String get() = this.format(DateTimeFormatter.ofPattern("HH:mm"))
-val OffsetDateTime.formatDateDisplayName: String get() = this.format(DateTimeFormatter.ofPattern("EEE, MMM d"))
+val OffsetDateTime.formatDateDisplayName: String get() = this.format(DateTimeFormatter.ofPattern("EEE d MMM"))
 val OffsetDateTime.formatDateDisplayName2: String get() = this.format(DateTimeFormatter.ofPattern("EEEE d MMMM"))
 val LocalDate.formatDateDisplayName2: String get() = this.format(DateTimeFormatter.ofPattern("EEEE d MMMM"))
 
@@ -39,6 +39,16 @@ val Float.formatHoursMinutes: String
             hours > 0 && minutes == 0 -> String.format("%dh", hours)
             hours > 0 && minutes > 0 -> String.format("%dh %dmin", hours, minutes)
             else -> "0h"
+        }
+    }
+
+val Float.formatHoursMinutes2: String
+    get() {
+        val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
+        val minutes: Int = Math.floor(((Math.abs(this) - hours) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        return when {
+            hours == 0 -> String.format("%dmin", minutes)
+            else -> String.format("%d h %d min", hours, minutes)
         }
     }
 

@@ -11,7 +11,7 @@ import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes2
 
 class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sleep, SleepAdapter.ViewHolder>(diffCallback) {
 
@@ -28,7 +28,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sl
         : RecyclerView.ViewHolder(v) {
 
         fun bindSleep(sleep: Sleep?) {
-            itemView.hoursText.text = sleep?.hours?.formatHoursMinutes
+            itemView.hoursText.text = sleep?.hours?.formatHoursMinutes2
             itemView.dateText.text = sleep?.fromDate?.formatDateDisplayName
             itemView.timeText.text = sleep?.fromDate?.formatHHMM
             itemView.setOnClickListener {

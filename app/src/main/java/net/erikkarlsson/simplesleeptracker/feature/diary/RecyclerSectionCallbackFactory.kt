@@ -8,7 +8,7 @@ import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
-private val MONTH_PATTERN = DateTimeFormatter.ofPattern("MMM")
+private val MONTH_PATTERN = DateTimeFormatter.ofPattern("MMMM")
 
 class RecyclerSectionCallbackFactory @Inject constructor(
         private val ctx: Context,
