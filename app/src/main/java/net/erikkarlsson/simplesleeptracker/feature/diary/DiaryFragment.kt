@@ -34,7 +34,7 @@ class DiaryFragment : Fragment() {
     lateinit var dividerItemDecoration: SimpleDividerItemDecoration
 
     @Inject
-    lateinit var itemDecorationFactory: RecyclerSectionItemDecorationFactory
+    lateinit var sectionItemDecorationFactory: RecyclerSectionItemDecorationFactory
 
     private var sectionItemDecoration: RecyclerSectionItemDecoration? = null
 
@@ -93,7 +93,7 @@ class DiaryFragment : Fragment() {
                 recyclerView.removeItemDecoration(sectionItemDecoration)
             }
 
-            sectionItemDecoration = itemDecorationFactory.create(it)
+            sectionItemDecoration = sectionItemDecorationFactory.create(it)
 
             recyclerView.addItemDecoration(sectionItemDecoration)
 
