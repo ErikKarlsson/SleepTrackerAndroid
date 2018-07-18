@@ -18,12 +18,12 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
+import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
-
 
 class DiaryFragment : Fragment() {
 
@@ -33,9 +33,14 @@ class DiaryFragment : Fragment() {
     @Inject
     lateinit var ctx: Context
 
+    @Inject
+    lateinit var dateTimeProvider: DateTimeProvider
+
     var sectionItemDecoration: RecyclerSectionItemDecoration? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+    private val monthPattern = DateTimeFormatter.ofPattern("MMM")
 
     private val viewModel: DiaryViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(DiaryViewModel::class.java)
@@ -119,14 +124,29 @@ class DiaryFragment : Fragment() {
                         ?.fromDate?.month != sleepList[position - 1]?.fromDate?.month
             }
 
-            override fun getSectionHeader(position: Int): CharSequence {
-                if (!isPositionWithinBounds(position)) {
+            override fun getMonthSectionHeader(position: Int): CharSequence {
+                if (!isPositionWithinBounds(position) ) {
                     return ""
                 }
-                return sleepList[position]?.fromDate?.format(DateTimeFormatter.ofPattern("MMM")).toString()
+
+                val fromDate = sleepList[position]?.fromDate
+
+                if (fromDate == null) {
+                    return ""
+                }
+
+                val year = fromDate.year ?: 0
+                val currentYear = dateTimeProvider.now().year
+                val monthString = fromDate.format(monthPattern).toString()
+
+                return if (year == currentYear) {
+                    monthString
+                } else {
+                    String.format("%s %d", monthString, year)
+                }
             }
 
-            override fun getSectionHeader2(position: Int): CharSequence {
+            override fun getNightsSectionHeader(position: Int): CharSequence {
                 if (!isPositionWithinBounds(position)) {
                     return ""
                 }

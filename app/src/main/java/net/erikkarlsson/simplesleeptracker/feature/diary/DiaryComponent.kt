@@ -26,7 +26,7 @@ class DiaryComponent @Inject constructor(private val sleepSubscription: SleepSub
 
     override fun update(msg: DiaryMsg, prevState: DiaryState): Pair<DiaryState, DiaryCmd?> = when (msg) {
         NoOp -> prevState.noCmd()
-        is SleepLoaded -> prevState.copy(sleepDiary = msg.sleepDiary).noCmd()
+        is DiaryLoaded -> prevState.copy(sleepDiary = msg.sleepDiary).noCmd()
     }
 
 }
@@ -44,13 +44,13 @@ class SleepSubscription @Inject constructor(private val getSleepDiaryTask: GetSl
 
     override fun invoke(): Observable<DiaryMsg> =
             getSleepDiaryTask.execute(ObservableTask.None())
-                    .map { SleepLoaded(it) }
+                    .map { DiaryLoaded(it) }
 }
 
 // Msg
 sealed class DiaryMsg : Msg
 
-data class SleepLoaded(val sleepDiary: SleepDiary) : DiaryMsg()
+data class DiaryLoaded(val sleepDiary: SleepDiary) : DiaryMsg()
 object NoOp : DiaryMsg()
 
 // Cmd

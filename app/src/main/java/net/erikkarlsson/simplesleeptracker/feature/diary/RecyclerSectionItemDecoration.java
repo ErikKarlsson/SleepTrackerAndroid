@@ -57,10 +57,10 @@ public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
             View child = parent.getChildAt(i);
             final int position = parent.getChildAdapterPosition(child);
 
-            CharSequence title = sectionCallback.getSectionHeader(position);
+            CharSequence title = sectionCallback.getMonthSectionHeader(position);
             header.setText(title);
 
-            CharSequence title2 = sectionCallback.getSectionHeader2(position);
+            CharSequence title2 = sectionCallback.getNightsSectionHeader(position);
             header2.setText(title2);
 
             if (!previousHeader.equals(title) || sectionCallback.isSection(position)) {
@@ -112,7 +112,7 @@ public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
 
         boolean isSection(int position);
 
-        CharSequence getSectionHeader(int position);
-        CharSequence getSectionHeader2(int position);
+        CharSequence getMonthSectionHeader(int position);
+        CharSequence getNightsSectionHeader(int position);
     }
 }
