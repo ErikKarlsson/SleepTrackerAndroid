@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,9 +18,12 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
+
 
 class DiaryFragment : Fragment() {
 
@@ -28,6 +32,8 @@ class DiaryFragment : Fragment() {
 
     @Inject
     lateinit var ctx: Context
+
+    var sectionItemDecoration: RecyclerSectionItemDecoration? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -52,10 +58,16 @@ class DiaryFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(ctx)
         recyclerView.adapter = adapter
+        recyclerView.setItemAnimator(null)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
+                if (!isAdded) {
+                    return
+                }
+
                 if (dy > 0 && floatingActionButton.isVisible) {
                     floatingActionButton.hide()
                 } else if (dy < 0 && !floatingActionButton.isVisible) {
@@ -70,8 +82,72 @@ class DiaryFragment : Fragment() {
     }
 
     private fun render(state: DiaryState?) {
-        state?.sleepList?.let {
-            adapter.submitList(it)
+        state?.sleepDiary?.let {
+            adapter.submitList(it.pagedSleep)
+
+            if (sectionItemDecoration != null) {
+                recyclerView.removeItemDecoration(sectionItemDecoration)
+            }
+
+            sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen.recycler_section_header_height),
+                                                                  true,
+                                                                  getSectionCallback(it))
+            recyclerView.addItemDecoration(sectionItemDecoration)
+
+            // TODO (erikkarlsson): Hack to make time for items to be added to list before scrolling.
+            // Maybe use one-time event for newly added item?
+            Handler().postDelayed({
+                                      if (isAdded) {
+                                          recyclerView.scrollToPosition(0)
+                                      }
+                                  }, 200)
+
+        }
+    }
+
+    private fun getSectionCallback(sleepDiary: SleepDiary): RecyclerSectionItemDecoration.SectionCallback {
+        return object : RecyclerSectionItemDecoration.SectionCallback {
+
+            val sleepList = sleepDiary.pagedSleep
+
+            override fun isSection(position: Int): Boolean {
+                if (!isPositionWithinBounds(position)) {
+                    return false
+                }
+
+                return position == 0 || sleepList[position]
+                        ?.fromDate?.month != sleepList[position - 1]?.fromDate?.month
+            }
+
+            override fun getSectionHeader(position: Int): CharSequence {
+                if (!isPositionWithinBounds(position)) {
+                    return ""
+                }
+                return sleepList[position]?.fromDate?.format(DateTimeFormatter.ofPattern("MMM")).toString()
+            }
+
+            override fun getSectionHeader2(position: Int): CharSequence {
+                if (!isPositionWithinBounds(position)) {
+                    return ""
+                }
+
+                val fromDate = sleepList[position]?.fromDate
+
+                if (fromDate == null) {
+                    return ""
+                }
+
+                val year = fromDate.year
+                val month = fromDate.monthValue
+                val sleepCount = sleepDiary.getSleepCount(year, month)
+
+                return String.format("%s %s",
+                                     sleepCount.toString(),
+                                     getString(R.string.nights))
+            }
+
+            private fun isPositionWithinBounds(position: Int): Boolean =
+                    position < sleepList.size || position >= 0
         }
     }
 

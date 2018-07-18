@@ -34,6 +34,9 @@ class AddSleepActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    var timePickerDialog: TimePickerDialog? = null
+    var datePickDialog: DatePickerDialog? = null
+
     private val viewModel: AddSleepViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(AddSleepViewModel::class.java)
     }
@@ -91,6 +94,12 @@ class AddSleepActivity : AppCompatActivity() {
         disposables.clear()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        datePickDialog?.dismiss()
+        timePickerDialog?.dismiss()
+    }
+
     private fun onStartDateClick() {
         pickDate(state.startDate, OnDateSetListener(this::onStartDateSet))
     }
@@ -117,23 +126,23 @@ class AddSleepActivity : AppCompatActivity() {
 
     private fun pickDate(localDate: LocalDate,
                          onDateSetListener: OnDateSetListener) {
-        DatePickerDialog(
+        datePickDialog = DatePickerDialog(
                 this,
                 onDateSetListener,
                 localDate.year,
                 localDate.monthValue - 1,
                 localDate.dayOfMonth)
-                .show()
+        datePickDialog?.show()
     }
 
     private fun pickTime(localTime: LocalTime, onTimeSetListener: OnTimeSetListener) {
-        TimePickerDialog(
+        timePickerDialog = TimePickerDialog(
                 this,
                 onTimeSetListener,
                 localTime.hour,
                 localTime.minute,
                 true)
-                .show()
+        timePickerDialog?.show()
     }
 
     private fun render(state: AddSleepState) {
@@ -144,6 +153,7 @@ class AddSleepActivity : AppCompatActivity() {
                                             getString(R.string.you_have_slept_for),
                                             state.hoursSlept.formatHoursMinutes)
     }
+
 }
 
 class AddSleepViewModel @Inject constructor(detailComponent: AddSleepComponent) :

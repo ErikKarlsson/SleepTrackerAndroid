@@ -10,6 +10,7 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepCountYearMonth
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.util.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.util.toImmutableList
@@ -22,7 +23,8 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
     : StatisticsDataSource {
 
     override fun getStatistics(): Observable<Statistics> {
-        return getStatistics(DateRange(LocalDate.parse("1000-01-01"), LocalDate.parse("9999-01-01"))) // Infinite date range
+        val infiniteDateRange = DateRange(LocalDate.parse("1000-01-01"), LocalDate.parse("9999-01-01"))
+        return getStatistics(infiniteDateRange)
     }
 
     override fun getStatistics(dateRange: DateRange): Observable<Statistics> {
@@ -42,6 +44,9 @@ class StatisticsRepository @Inject constructor(private val sleepDao: SleepDao,
                     Statistics(sleepCount, averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime, averageBedTimeDayOfWeek, averageWakeupTimeDayOfWeek)
                 }
     }
+
+    override fun getSleepCountYearMonth(): Observable<List<SleepCountYearMonth>> =
+        sleepDao.getCountGroupedByYearMonth().toObservable()
 
     private fun getSleepCount(from: String, to: String): Observable<Int> =
             sleepDao.getSleepCount(from, to).toObservable()

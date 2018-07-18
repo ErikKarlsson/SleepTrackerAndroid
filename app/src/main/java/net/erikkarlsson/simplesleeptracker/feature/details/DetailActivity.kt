@@ -42,6 +42,9 @@ class DetailActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
 
+    var timePickerDialog: TimePickerDialog? = null
+    var datePickDialog: DatePickerDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
@@ -72,12 +75,12 @@ class DetailActivity : AppCompatActivity() {
     private fun showConfirmDeleteDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(getString(R.string.confirm_delete_sleep))
-        builder.setPositiveButton(getString(R.string.delete)) {
-            dialog, id -> onDeleteConfirmClick()
+        builder.setPositiveButton(getString(R.string.delete)) { dialog, id ->
+            onDeleteConfirmClick()
         }
 
-        builder.setNegativeButton(getString(R.string.cancel))  {
-            dialog, id -> dialog.cancel()
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, id ->
+            dialog.cancel()
         }
 
         val dialog = builder.create()
@@ -99,6 +102,12 @@ class DetailActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         disposables.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        datePickDialog?.dismiss()
+        timePickerDialog?.dismiss()
     }
 
     private fun onStartDateClick() {
@@ -129,23 +138,23 @@ class DetailActivity : AppCompatActivity() {
 
     private fun pickDate(offsetDateTime: OffsetDateTime,
                          onDateSetListener: OnDateSetListener) {
-        DatePickerDialog(
+        datePickDialog = DatePickerDialog(
                 this,
                 onDateSetListener,
                 offsetDateTime.year,
                 offsetDateTime.monthValue - 1,
                 offsetDateTime.dayOfMonth)
-                .show()
+        datePickDialog?.show()
     }
 
     private fun pickTime(localTime: LocalTime, onTimeSetListener: OnTimeSetListener) {
-        TimePickerDialog(
+        timePickerDialog = TimePickerDialog(
                 this,
                 onTimeSetListener,
                 localTime.hour,
                 localTime.minute,
                 true)
-                .show()
+        timePickerDialog?.show()
     }
 
     private fun render(nextState: DetailState?) {

@@ -27,4 +27,5 @@
     <string name="last_backup">Last backup</string>
     <string name="add_sleep_session">Add Sleep Session</string>
     <string name="you_have_slept_for">You\'ve slept for</string>
+    <string name="nights">nights</string>
 </resources>

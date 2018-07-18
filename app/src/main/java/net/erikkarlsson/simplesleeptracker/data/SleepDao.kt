@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update
 import io.reactivex.Flowable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepEntity
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepCountYearMonth
 
 /**
  * Data Access Object for the sleep table.
@@ -55,6 +56,9 @@ interface SleepDao {
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) as 'midnightOffsetInSeconds', strftime('%w', to_date) as 'dayOfWeek' FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to) GROUP BY strftime('%w', to_date)")
     fun getAverageWakeUpMidnightOffsetInSecondsForDaysOfWeek(from: String, to: String): Flowable<List<DayOfWeekMidnightOffset>>
+
+    @Query("SELECT count(*) as 'sleepCount', strftime('%Y', from_date) as 'yearString', strftime('%m', from_date) as 'monthString' FROM Sleep WHERE to_date != 0 GROUP BY strftime('%Y', from_date), strftime('%m', from_date)")
+    fun getCountGroupedByYearMonth(): Flowable<List<SleepCountYearMonth>>
 
     @Query("SELECT avg(to_date_midnight_offset_seconds) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
     fun getAverageWakeUpMidnightOffsetInSeconds(from: String, to: String): Flowable<Int>
