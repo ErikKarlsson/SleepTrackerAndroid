@@ -22,6 +22,7 @@ import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
+import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -116,58 +117,52 @@ class DiaryFragment : Fragment() {
             val sleepList = sleepDiary.pagedSleep
 
             override fun isSection(position: Int): Boolean {
-                if (!isPositionWithinBounds(position)) {
+                try {
+                    return position == 0 || sleepList[position]
+                            ?.fromDate?.month != sleepList[position - 1]?.fromDate?.month
+                } catch (e: IndexOutOfBoundsException) {
                     return false
                 }
 
-                return position == 0 || sleepList[position]
-                        ?.fromDate?.month != sleepList[position - 1]?.fromDate?.month
             }
 
             override fun getMonthSectionHeader(position: Int): CharSequence {
-                if (!isPositionWithinBounds(position) ) {
+                try {
+                    val fromDate = sleepList[position]?.fromDate ?: OffsetDateTime.MIN
+
+                    val year = fromDate.year ?: 0
+                    val currentYear = dateTimeProvider.now().year
+                    val monthString = fromDate.format(monthPattern).toString()
+
+                    return if (year == currentYear) {
+                        monthString
+                    } else {
+                        String.format("%s %d", monthString, year)
+                    }
+                } catch (e: IndexOutOfBoundsException) {
                     return ""
-                }
-
-                val fromDate = sleepList[position]?.fromDate
-
-                if (fromDate == null) {
-                    return ""
-                }
-
-                val year = fromDate.year ?: 0
-                val currentYear = dateTimeProvider.now().year
-                val monthString = fromDate.format(monthPattern).toString()
-
-                return if (year == currentYear) {
-                    monthString
-                } else {
-                    String.format("%s %d", monthString, year)
                 }
             }
 
             override fun getNightsSectionHeader(position: Int): CharSequence {
-                if (!isPositionWithinBounds(position)) {
+                try {
+                    val fromDate = sleepList[position]?.fromDate
+
+                    if (fromDate == null) {
+                        return ""
+                    }
+
+                    val year = fromDate.year
+                    val month = fromDate.monthValue
+                    val sleepCount = sleepDiary.getSleepCount(year, month)
+
+                    return String.format("%s %s",
+                                         sleepCount.toString(),
+                                         getString(R.string.nights))
+                } catch (e: IndexOutOfBoundsException) {
                     return ""
                 }
-
-                val fromDate = sleepList[position]?.fromDate
-
-                if (fromDate == null) {
-                    return ""
-                }
-
-                val year = fromDate.year
-                val month = fromDate.monthValue
-                val sleepCount = sleepDiary.getSleepCount(year, month)
-
-                return String.format("%s %s",
-                                     sleepCount.toString(),
-                                     getString(R.string.nights))
             }
-
-            private fun isPositionWithinBounds(position: Int): Boolean =
-                    position < sleepList.size || position >= 0
         }
     }
 
