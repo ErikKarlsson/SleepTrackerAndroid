@@ -18,12 +18,8 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
-import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
-import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
-import org.threeten.bp.OffsetDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DiaryFragment : Fragment() {
@@ -32,22 +28,20 @@ class DiaryFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     @Inject
-    lateinit var ctx: Context
+    lateinit var linearLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var dateTimeProvider: DateTimeProvider
+    lateinit var itemDecorationFactory: RecyclerSectionItemDecorationFactory
 
-    var sectionItemDecoration: RecyclerSectionItemDecoration? = null
+    private var sectionItemDecoration: RecyclerSectionItemDecoration? = null
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    private val monthPattern = DateTimeFormatter.ofPattern("MMM")
+    private val adapter = SleepAdapter { navigateToDetails(it.id) }
 
     private val viewModel: DiaryViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(DiaryViewModel::class.java)
     }
-
-    private val adapter = SleepAdapter { navigateToDetails(it.id) }
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -62,9 +56,9 @@ class DiaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.layoutManager = LinearLayoutManager(ctx)
+        recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
-        recyclerView.setItemAnimator(null)
+        recyclerView.itemAnimator = null
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -95,9 +89,8 @@ class DiaryFragment : Fragment() {
                 recyclerView.removeItemDecoration(sectionItemDecoration)
             }
 
-            sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen.recycler_section_header_height),
-                                                                  true,
-                                                                  getSectionCallback(it))
+            sectionItemDecoration = itemDecorationFactory.create(it)
+
             recyclerView.addItemDecoration(sectionItemDecoration)
 
             // TODO (erikkarlsson): Hack to make time for items to be added to list before scrolling.
@@ -108,61 +101,6 @@ class DiaryFragment : Fragment() {
                                       }
                                   }, 200)
 
-        }
-    }
-
-    private fun getSectionCallback(sleepDiary: SleepDiary): RecyclerSectionItemDecoration.SectionCallback {
-        return object : RecyclerSectionItemDecoration.SectionCallback {
-
-            val sleepList = sleepDiary.pagedSleep
-
-            override fun isSection(position: Int): Boolean {
-                try {
-                    return position == 0 || sleepList[position]
-                            ?.fromDate?.month != sleepList[position - 1]?.fromDate?.month
-                } catch (e: IndexOutOfBoundsException) {
-                    return false
-                }
-
-            }
-
-            override fun getMonthSectionHeader(position: Int): CharSequence {
-                try {
-                    val fromDate = sleepList[position]?.fromDate ?: OffsetDateTime.MIN
-
-                    val year = fromDate.year ?: 0
-                    val currentYear = dateTimeProvider.now().year
-                    val monthString = fromDate.format(monthPattern).toString()
-
-                    return if (year == currentYear) {
-                        monthString
-                    } else {
-                        String.format("%s %d", monthString, year)
-                    }
-                } catch (e: IndexOutOfBoundsException) {
-                    return ""
-                }
-            }
-
-            override fun getNightsSectionHeader(position: Int): CharSequence {
-                try {
-                    val fromDate = sleepList[position]?.fromDate
-
-                    if (fromDate == null) {
-                        return ""
-                    }
-
-                    val year = fromDate.year
-                    val month = fromDate.monthValue
-                    val sleepCount = sleepDiary.getSleepCount(year, month)
-
-                    return String.format("%s %s",
-                                         sleepCount.toString(),
-                                         getString(R.string.nights))
-                } catch (e: IndexOutOfBoundsException) {
-                    return ""
-                }
-            }
         }
     }
 

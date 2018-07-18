@@ -13,11 +13,15 @@ class AppModule() {
 
     @Provides
     @Singleton
-    fun provideApplication(app: App): Context = app
+    fun providesApplication(app: App): Context = app
 
     @Provides
     @Singleton
-    fun provideWorkManager(): WorkManager = WorkManager.getInstance()
+    fun providesResources(context: Context) = context.resources
+
+    @Provides
+    @Singleton
+    fun providesWorkManager(): WorkManager = WorkManager.getInstance()
 
     @Provides
     @Singleton

@@ -10,6 +10,7 @@ import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment
+import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryModule
 import net.erikkarlsson.simplesleeptracker.feature.profile.ProfileFragment
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment
 
@@ -37,7 +38,7 @@ abstract class AndroidBindingModule {
     abstract fun bindsProfileFragment(): ProfileFragment
 
     @FragmentScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [DiaryModule::class])
     abstract fun bindsDiaryFragment(): DiaryFragment
     
     @BroadcastRecieverScope
