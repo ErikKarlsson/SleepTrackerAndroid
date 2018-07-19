@@ -29,30 +29,31 @@ class DetailComponent @Inject constructor(private val sleepSubscription: SleepSu
         is UpdateStartDateCmd -> updateStartDateTask.execute(UpdateStartDateTask.Params(cmd.sleepId, cmd.startDate)).toSingleDefault(NoOp)
         is UpdateTimeAsleepCmd -> updateTimeAsleepTask.execute(UpdateTimeAsleepTask.Params(cmd.sleepId, cmd.timeAsleep)).toSingleDefault(NoOp)
         is UpdateTimeAwakeCmd -> updateTimeAwakeTask.execute(UpdateTimeAwakeTask.Params(cmd.sleepId, cmd.timeAwake)).toSingleDefault(NoOp)
-        is DeleteSleepCmd -> deleteSleepTask.execute(DeleteSleepTask.Params(cmd.sleepId)).toSingleDefault(NoOp)
+        is DeleteSleepCmd -> deleteSleepTask.execute(DeleteSleepTask.Params(cmd.sleepId)).andThen(Single.just(DeleteSuccess).cast(DetailMsg::class.java))
     }
 
     override fun initState(): DetailState = DetailState.empty()
 
     override fun subscriptions(): List<Sub<DetailState, DetailMsg>> = listOf(sleepSubscription)
 
-    override fun update(msg: DetailMsg, prevState: DetailState): Pair<DetailState, DetailCmd?> = when (msg) {
-        NoOp -> prevState.noCmd()
-        is DetailLoaded -> prevState.copy(sleep = msg.sleep).noCmd()
-        is LoadDetailIntent -> prevState.copy(sleepId = msg.sleepId).noCmd()
-        is PickedStartDate -> prevState withCmd UpdateStartDateCmd(prevState.sleepId, msg.startDate)
-        is PickedTimeAsleep -> prevState withCmd UpdateTimeAsleepCmd(prevState.sleepId, msg.timeAsleep)
-        is PickedTimeAwake -> prevState withCmd UpdateTimeAwakeCmd(prevState.sleepId, msg.timeAwake)
-        DeleteClick -> prevState withCmd DeleteSleepCmd(prevState.sleepId)
-    }
-
+    override fun update(msg: DetailMsg, prevState: DetailState): Pair<DetailState, DetailCmd?> =
+            when (msg) {
+                NoOp -> prevState.noCmd()
+                is DetailLoaded -> prevState.copy(sleep = msg.sleep).noCmd()
+                is LoadDetailIntent -> prevState.copy(sleepId = msg.sleepId).noCmd()
+                is PickedStartDate -> prevState withCmd UpdateStartDateCmd(prevState.sleepId, msg.startDate)
+                is PickedTimeAsleep -> prevState withCmd UpdateTimeAsleepCmd(prevState.sleepId, msg.timeAsleep)
+                is PickedTimeAwake -> prevState withCmd UpdateTimeAwakeCmd(prevState.sleepId, msg.timeAwake)
+                DeleteClick -> prevState withCmd DeleteSleepCmd(prevState.sleepId)
+                DeleteSuccess -> prevState.copy(isDeleted = true).noCmd()
+            }
 }
 
 // State
-data class DetailState(val sleepId: Int, val sleep: Sleep) : State {
+data class DetailState(val sleepId: Int, val sleep: Sleep, val isDeleted: Boolean) : State {
 
     companion object {
-        fun empty() = DetailState(0, Sleep.empty())
+        fun empty() = DetailState(0, Sleep.empty(), false)
     }
 }
 
@@ -80,6 +81,7 @@ data class PickedStartDate(val startDate: LocalDate) : DetailMsg()
 data class PickedTimeAsleep(val timeAsleep: LocalTime) : DetailMsg()
 data class PickedTimeAwake(val timeAwake: LocalTime) : DetailMsg()
 object DeleteClick : DetailMsg()
+object DeleteSuccess : DetailMsg()
 object NoOp : DetailMsg()
 
 // Cmd

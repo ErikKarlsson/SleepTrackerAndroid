@@ -27,7 +27,7 @@ class AddSleepComponent @Inject constructor(private val addSleepTask: AddSleepTa
         val startTime = LocalTime.of(DEFAULT_START_TIME_HOUR, DEFAULT_START_TIME_MINUTE)
         val endTime = LocalTime.of(DEFAULT_END_TIME_HOUR, DEFAULT_END_TIME_MINUTE)
         val zoneOffset = dateTimeProvider.now().getOffset()
-        return AddSleepState(startDate, startTime, endTime, zoneOffset)
+        return AddSleepState(startDate, startTime, endTime, zoneOffset, false)
     }
 
     override fun update(msg: AddSleepMsg, prevState: AddSleepState): Pair<AddSleepState, AddSleepCmd?> =
@@ -37,18 +37,20 @@ class AddSleepComponent @Inject constructor(private val addSleepTask: AddSleepTa
                 is PickedStartDate -> prevState.copy(startDate = msg.startDate).noCmd()
                 is PickedTimeAwake -> prevState.copy(endTime = msg.timeAwake).noCmd()
                 SaveClick -> prevState withCmd SaveSleepCmd(prevState)
+                SaveSuccess -> prevState.copy(isSaveSuccess = true).noCmd()
             }
 
     private fun onAddSleepCmd(sleep: Sleep): Single<AddSleepMsg> =
             addSleepTask.execute(AddSleepTask.Params(sleep))
-                    .toSingleDefault(NoOp)
+                    .andThen(Single.just(SaveSuccess).cast(AddSleepMsg::class.java))
 }
 
 // State
 data class AddSleepState(val startDate: LocalDate,
                          val startTime: LocalTime,
                          val endTime: LocalTime,
-                         val zoneOffset: ZoneOffset) : State {
+                         val zoneOffset: ZoneOffset,
+                         val isSaveSuccess: Boolean) : State {
 
     val hoursSlept: Float
         get() = sleep.hours
@@ -60,7 +62,7 @@ data class AddSleepState(val startDate: LocalDate,
                            zoneOffset = zoneOffset)
 
     companion object {
-        fun empty() = AddSleepState(LocalDate.MIN, LocalTime.MIN, LocalTime.MIN, ZoneOffset.MIN)
+        fun empty() = AddSleepState(LocalDate.MIN, LocalTime.MIN, LocalTime.MIN, ZoneOffset.MIN, false)
     }
 }
 
@@ -71,6 +73,7 @@ data class PickedStartDate(val startDate: LocalDate) : AddSleepMsg()
 data class PickedTimeAsleep(val timeAsleep: LocalTime) : AddSleepMsg()
 data class PickedTimeAwake(val timeAwake: LocalTime) : AddSleepMsg()
 object SaveClick : AddSleepMsg()
+object SaveSuccess : AddSleepMsg()
 object NoOp : AddSleepMsg()
 
 // Cmd

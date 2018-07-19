@@ -97,14 +97,14 @@ class DiaryFragment : Fragment() {
 
             recyclerView.addItemDecoration(sectionItemDecoration)
 
-            // TODO (erikkarlsson): Hack to make time for items to be added to list before scrolling.
-            // Maybe use one-time event for newly added item?
-            Handler().postDelayed({
-                                      if (isAdded) {
-                                          recyclerView.scrollToPosition(0)
-                                      }
-                                  }, 200)
+            // Add scroll delay to give RecyclerView time to update.
+            Handler().postDelayed({ scrollToTop() }, 200)
+        }
+    }
 
+    private fun scrollToTop() {
+        if (isAdded) {
+            recyclerView.scrollToPosition(0)
         }
     }
 

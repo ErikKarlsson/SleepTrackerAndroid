@@ -75,7 +75,6 @@ class AddSleepActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.save_sleep) {
             viewModel.dispatch(SaveClick)
-            finish()
             return true
         }
 
@@ -152,6 +151,10 @@ class AddSleepActivity : AppCompatActivity() {
         sleptHoursText.text = String.format("%s %s",
                                             getString(R.string.you_have_slept_for),
                                             state.hoursSlept.formatHoursMinutes)
+
+        if (state.isSaveSuccess) {
+            finish()
+        }
     }
 
 }

@@ -89,7 +89,6 @@ class DetailActivity : AppCompatActivity() {
 
     private fun onDeleteConfirmClick() {
         viewModel.dispatch(DeleteClick)
-        finish()
     }
 
     override fun onStart() {
@@ -166,6 +165,10 @@ class DetailActivity : AppCompatActivity() {
                 startDateText.text = dateString
                 timeAsleepText.text = state.sleep.fromDate.formatHHMM
                 timeAwakeText.text = state.sleep.toDate?.formatHHMM
+            }
+
+            if (state.isDeleted) {
+                finish()
             }
         }
     }
