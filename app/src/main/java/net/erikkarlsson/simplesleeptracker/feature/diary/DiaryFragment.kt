@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
@@ -17,10 +18,13 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
+import net.erikkarlsson.simplesleeptracker.base.Event
+import net.erikkarlsson.simplesleeptracker.base.EventObserver
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import javax.inject.Inject
+import javax.inject.Named
 
 class DiaryFragment : Fragment() {
 
@@ -35,6 +39,9 @@ class DiaryFragment : Fragment() {
 
     @Inject
     lateinit var sectionItemDecorationFactory: RecyclerSectionItemDecorationFactory
+
+    @field:[Inject Named("sleepAddedEvents")]
+    lateinit var sleepAddedEvents: MutableLiveData<Event<Unit>>
 
     private var sectionItemDecoration: RecyclerSectionItemDecoration? = null
 
@@ -83,6 +90,11 @@ class DiaryFragment : Fragment() {
         floatingActionButton.clicksThrottle(compositeDisposable) { navigateToAddSleep() }
 
         viewModel.state().observe(this, Observer(this::render))
+
+        sleepAddedEvents.observe(this, EventObserver {
+            // Add scroll delay to give RecyclerView time to update.
+            Handler().postDelayed({ scrollToTop() }, 100)
+        })
     }
 
     private fun render(state: DiaryState?) {
@@ -96,9 +108,6 @@ class DiaryFragment : Fragment() {
             sectionItemDecoration = sectionItemDecorationFactory.create(it)
 
             recyclerView.addItemDecoration(sectionItemDecoration)
-
-            // Add scroll delay to give RecyclerView time to update.
-            Handler().postDelayed({ scrollToTop() }, 200)
         }
     }
 

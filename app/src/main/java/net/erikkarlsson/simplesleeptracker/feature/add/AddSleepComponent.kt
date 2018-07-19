@@ -1,6 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.feature.add
 
+import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.base.Event
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.elm.Cmd
@@ -12,14 +14,18 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneOffset
 import javax.inject.Inject
+import javax.inject.Named
 
-class AddSleepComponent @Inject constructor(private val addSleepTask: AddSleepTask,
-                                            private val dateTimeProvider: DateTimeProvider)
+class AddSleepComponent @Inject constructor(
+        private val addSleepTask: AddSleepTask,
+        private val dateTimeProvider: DateTimeProvider,
+        @Named("sleepAddedEvents") private val sleepAddedEvents: MutableLiveData<Event<Unit>>)
     : Component<AddSleepState, AddSleepMsg, AddSleepCmd> {
 
-    override fun call(sleepCmd: AddSleepCmd): Single<AddSleepMsg> =
-            when (sleepCmd) {
-                is SaveSleepCmd -> onAddSleepCmd(sleepCmd.addSleepState.sleep)
+    override fun call(cmd: AddSleepCmd): Single<AddSleepMsg> =
+            when (cmd) {
+                is SaveSleepCmd -> onAddSleepCmd(cmd.addSleepState.sleep)
+                        .doOnSuccess { sleepAddedEvents.postValue(Event(Unit)) }
             }
 
     override fun initState(): AddSleepState {
