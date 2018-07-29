@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -20,7 +21,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.logged_in_content.*
+import kotlinx.android.synthetic.main.logged_out_content.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.REQUEST_CODE_SIGN_IN
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
@@ -30,7 +32,6 @@ import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
-
 
 class ProfileFragment : Fragment() {
 
@@ -94,16 +95,21 @@ class ProfileFragment : Fragment() {
         state?.let {
             signInButton.isVisible = !it.isLoggedIn
             loggedInContent.isVisible = it.isLoggedIn
+            loggedOutContent.isVisible = !it.isLoggedIn
 
             it.userAccount?.let {
-                Glide.with(this).load(it.photoUrl).into(photoImage);
+                Glide.with(this)
+                        .load(it.photoUrl)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(photoImage)
+
                 emailText.text = it.email
                 displayNameText.text = it.displayName
             }
 
             it.profile.lastBackupTimestamp.let {
                 val backupString = getString(R.string.last_backup)
-                val dateString =  if (it > 0L) {
+                val dateString = if (it > 0L) {
                     it.formatTimestamp
                 } else {
                     getString(R.string.not_backed_up_yet)

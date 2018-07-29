@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loggedInContent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/photoImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@null"
+        android:layout_marginBottom="16dp"
+        tools:src="@color/gray"/>
+
+    <TextView
+        android:id="@+id/displayNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Erik Karlsson"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="email.address@gmail.com"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/lastBackupText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Last backup: 2018-06-23 23:00"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/signOutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_out"/>
+
+</LinearLayout>
