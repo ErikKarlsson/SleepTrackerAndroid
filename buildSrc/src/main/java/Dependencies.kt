@@ -49,7 +49,7 @@ object Versions {
     val rxkotlin = "2.2.0"
     val rx_preferences = "2.0.0"
     val support = "27.1.1"
-    val threeten_backport = "1.3.6"
+    val threeten_backport = "1.1.0"
     val timber = "4.7.0"
     val work_manager = "1.0.0-alpha02"
 }
@@ -129,7 +129,7 @@ object Deps {
     val support_recyclerview = "com.android.support:recyclerview-v7:${Versions.support}"
     val support_v4 = "com.android.support:support-v4:${Versions.support}"
     val support_vector_drawable = "com.android.support:support-vector-drawable:${Versions.support}"
-    val threeten_backport = "org.threeten:threetenbp:${Versions.threeten_backport}"
+    val threeten_backport = "com.jakewharton.threetenabp:threetenabp:${Versions.threeten_backport}"
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     val work_manager_runtime = "android.arch.work:work-runtime-ktx:${Versions.work_manager}"
     val work_manager_firebase = "android.arch.work:work-firebase:${Versions.work_manager}"

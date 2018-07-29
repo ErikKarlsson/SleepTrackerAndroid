@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication
 import android.support.v4.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -56,6 +57,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
                 .build()
 
         Fabric.with(this, crashlytics)
+
+        AndroidThreeTen.init(this)
 
         appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
