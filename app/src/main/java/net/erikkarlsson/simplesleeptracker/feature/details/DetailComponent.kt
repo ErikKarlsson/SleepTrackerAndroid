@@ -52,6 +52,9 @@ class DetailComponent @Inject constructor(private val sleepSubscription: SleepSu
 // State
 data class DetailState(val sleepId: Int, val sleep: Sleep, val isDeleted: Boolean) : State {
 
+    val hoursSlept: Float
+        get() = sleep.hours
+
     companion object {
         fun empty() = DetailState(0, Sleep.empty(), false)
     }

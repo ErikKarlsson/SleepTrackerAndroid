@@ -24,6 +24,7 @@ import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -165,6 +166,9 @@ class DetailActivity : AppCompatActivity() {
                 startDateText.text = dateString
                 timeAsleepText.text = state.sleep.fromDate.formatHHMM
                 timeAwakeText.text = state.sleep.toDate?.formatHHMM
+                sleptHoursText.text = String.format("%s %s",
+                                                    getString(R.string.you_have_slept_for),
+                                                    state.hoursSlept.formatHoursMinutes)
             }
 
             if (state.isDeleted) {
