@@ -85,7 +85,7 @@ class StatisticsFragment : Fragment() {
 
             with(state.statistics.first) {
                 statisticsText.text = if (this.isEmpty) {
-                    getString(R.string.no_sleep_tracked)
+                    getString(R.string.no_sleep_tracked_yet)
                 } else {
                     String.format("%s: %d\n" +
                                           "%s: %s %s\n" +

@@ -98,6 +98,9 @@ class DiaryFragment : Fragment() {
     }
 
     private fun render(state: DiaryState?) {
+        emptyState.isVisible = state?.isEmptySleep ?: true
+        recyclerView.isVisible = state?.isEmptySleep == false ?: false
+
         state?.sleepDiary?.let {
             adapter.submitList(it.pagedSleep)
 

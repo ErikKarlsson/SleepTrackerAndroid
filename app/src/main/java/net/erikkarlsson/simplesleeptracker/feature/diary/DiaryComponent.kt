@@ -34,6 +34,8 @@ class DiaryComponent @Inject constructor(private val sleepSubscription: SleepSub
 // State
 data class DiaryState(val sleepDiary: SleepDiary?) : State {
 
+    val isEmptySleep = sleepDiary == null || sleepDiary.pagedSleep.size == 0
+
     companion object {
         fun empty() = DiaryState(null)
     }
