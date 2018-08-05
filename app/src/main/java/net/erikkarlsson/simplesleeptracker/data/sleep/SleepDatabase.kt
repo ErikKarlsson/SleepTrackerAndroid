@@ -5,8 +5,8 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
-import net.erikkarlsson.simplesleeptracker.data.SleepDao
 import net.erikkarlsson.simplesleeptracker.data.TiviTypeConverters
+import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDao
 
 /**
  * The Room database that contains the Sleep table
@@ -16,6 +16,8 @@ import net.erikkarlsson.simplesleeptracker.data.TiviTypeConverters
 abstract class SleepDatabase : RoomDatabase() {
 
     abstract fun sleepDao(): SleepDao
+
+    abstract fun statisticsDao(): StatisticsDao
 
     companion object {
 

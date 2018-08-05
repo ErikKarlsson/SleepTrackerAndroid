@@ -29,6 +29,7 @@
     <string name="you_have_slept_for">You\'ve slept for</string>
     <string name="nights">nights</string>
     <string name="no_sleep_tracked_yet">No sleep tracked yet...</string>
+    <string name="sleep_duration">Sleep duration</string>
 
     <plurals name="nights">
         <item quantity="one">%d night</item>

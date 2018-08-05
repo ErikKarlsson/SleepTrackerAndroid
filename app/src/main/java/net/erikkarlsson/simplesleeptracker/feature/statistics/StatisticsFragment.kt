@@ -21,6 +21,7 @@ import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatDisplayName
+import net.erikkarlsson.simplesleeptracker.util.formatDisplayNameTime
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
@@ -87,43 +88,56 @@ class StatisticsFragment : Fragment() {
                 statisticsText.text = if (this.isEmpty) {
                     getString(R.string.no_sleep_tracked_yet)
                 } else {
-                    String.format("%s: %d\n" +
-                                          "%s: %s %s\n" +
-                                          "%s: %d%% %s\n" +
-                                          "%s: %s, %s\n" +
-                                          "%s: %s, %s\n" +
-                                          "%s: %s %s\n%s\n" +
-                                          "%s: %s %s\n%s",
-                                  getString(R.string.tracked_nights),
-                                  sleepCount,
-                                  getString(R.string.avg_duration),
-                                  avgSleepHours.formatHoursMinutes,
-                                  with(state.statistics.avgSleepDiffHours) {
-                                      if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                                  },
-                                  getString(R.string.time_sleeping),
-                                  timeSleepingPercentage,
-                                  with(state.statistics.timeSleepingDiffPercentage) {
-                                      if (this == 0) "" else String.format("(%s)", formatPercentage)
-                                  },
-                                  getString(R.string.longest_night),
-                                  longestSleep.hours.formatHoursMinutes,
-                                  longestSleep.toDate?.formatDateDisplayName,
-                                  getString(R.string.shortest_night),
-                                  shortestSleep.hours.formatHoursMinutes,
-                                  shortestSleep.toDate?.formatDateDisplayName,
-                                  getString(R.string.average_bed_time),
-                                  averageBedTime.formatHHMM,
-                                  with(state.statistics.avgBedTimeDiffHours) {
-                                      if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                                  },
-                                  averageBedTimeDayOfWeek.formatDisplayName,
-                                  getString(R.string.average_wake_up_time),
-                                  averageWakeUpTime.formatHHMM,
-                                  with(state.statistics.avgWakeUpTimeDiffHours) {
-                                      if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                                  },
-                                  averageWakeUpTimeDayOfWeek.formatDisplayName)
+                    val trackedNights = String.format("%s: %d\n",
+                                                      getString(R.string.tracked_nights),
+                                                      sleepCount)
+
+                    val avgSleepDuration = String.format("%s: %s %s\n",
+                                                         getString(R.string.avg_duration),
+                                                         avgSleepHours.formatHoursMinutes,
+                                                         with(state.statistics.avgSleepDiffHours) {
+                                                             if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                                                         })
+
+                    val sleepDuration = String.format("%s\n%s\n",
+                                                      getString(R.string.sleep_duration),
+                                                      averageSleepDurationDayOfWeek.formatDisplayName)
+
+                    val timeSleeping = String.format("%s: %d%% %s\n",
+                                                     getString(R.string.time_sleeping),
+                                                     timeSleepingPercentage,
+                                                     with(state.statistics.timeSleepingDiffPercentage) {
+                                                         if (this == 0) "" else String.format("(%s)", formatPercentage)
+                                                     })
+
+                    val longestNight = String.format("%s: %s, %s\n",
+                                                     getString(R.string.longest_night),
+                                                     longestSleep.hours.formatHoursMinutes,
+                                                     longestSleep.toDate?.formatDateDisplayName)
+
+                    val shortestNight = String.format("%s: %s, %s\n",
+                                                      getString(R.string.shortest_night),
+                                                      shortestSleep.hours.formatHoursMinutes,
+                                                      shortestSleep.toDate?.formatDateDisplayName)
+
+                    val averageBedTime = String.format("%s: %s %s\n%s\n",
+                                                       getString(R.string.average_bed_time),
+                                                       averageBedTime.formatHHMM,
+                                                       with(state.statistics.avgBedTimeDiffHours) {
+                                                           if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                                                       },
+                                                       averageBedTimeDayOfWeek.formatDisplayNameTime)
+
+                    val averageWakeUpTime = String.format("%s: %s %s\n%s\n",
+                                                          getString(R.string.average_wake_up_time),
+                                                          averageWakeUpTime.formatHHMM,
+                                                          with(state.statistics.avgWakeUpTimeDiffHours) {
+                                                              if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                                                          },
+                                                          averageWakeUpTimeDayOfWeek.formatDisplayNameTime)
+
+
+                    trackedNights + avgSleepDuration + sleepDuration + timeSleeping + longestNight + shortestNight + averageBedTime + averageWakeUpTime
                 }
             }
         }
