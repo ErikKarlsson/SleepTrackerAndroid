@@ -202,6 +202,9 @@ dependencies {
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
 
+    // MPAndroidChart
+    implementation Deps.mpandroidchart
+
     // Multidex
     implementation Deps.multidex
 

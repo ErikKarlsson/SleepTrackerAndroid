@@ -88,27 +88,32 @@ class StatisticsFragment : Fragment() {
                 statisticsText.text = if (this.isEmpty) {
                     getString(R.string.no_sleep_tracked_yet)
                 } else {
-                    val trackedNights = String.format("%s: %d\n",
-                                                      getString(R.string.tracked_nights),
-                                                      sleepCount)
 
-                    val avgSleepDuration = String.format("%s: %s %s\n",
-                                                         getString(R.string.avg_duration),
-                                                         avgSleepHours.formatHoursMinutes,
-                                                         with(state.statistics.avgSleepDiffHours) {
-                                                             if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                                                         })
+                    trackedNightsText.text = sleepCount.toString()
+
+                    avgDurationText.text = String.format("%s %s",
+                                                        avgSleepHours.formatHoursMinutes,
+                                                        with(state.statistics.avgSleepDiffHours) {
+                                                            if (this == 0f) {
+                                                                ""
+                                                            } else {
+                                                                String.format("(%s)", formatHoursMinutesWithPrefix)
+                                                            }
+                                                        })
+
+                    timeSleepingText.text = String.format("%d%% %s",
+                                                          timeSleepingPercentage,
+                                                          with(state.statistics.timeSleepingDiffPercentage) {
+                                                              if (this == 0) {
+                                                                  ""
+                                                              } else {
+                                                                  String.format("(%s)", formatPercentage)
+                                                              }
+                                                          })
 
                     val sleepDuration = String.format("%s\n%s\n",
                                                       getString(R.string.sleep_duration),
                                                       averageSleepDurationDayOfWeek.formatDisplayName)
-
-                    val timeSleeping = String.format("%s: %d%% %s\n",
-                                                     getString(R.string.time_sleeping),
-                                                     timeSleepingPercentage,
-                                                     with(state.statistics.timeSleepingDiffPercentage) {
-                                                         if (this == 0) "" else String.format("(%s)", formatPercentage)
-                                                     })
 
                     val longestNight = String.format("%s: %s, %s\n",
                                                      getString(R.string.longest_night),
@@ -137,7 +142,7 @@ class StatisticsFragment : Fragment() {
                                                           averageWakeUpTimeDayOfWeek.formatDisplayNameTime)
 
 
-                    trackedNights + avgSleepDuration + sleepDuration + timeSleeping + longestNight + shortestNight + averageBedTime + averageWakeUpTime
+                    sleepDuration + longestNight + shortestNight + averageBedTime + averageWakeUpTime
                 }
             }
         }
