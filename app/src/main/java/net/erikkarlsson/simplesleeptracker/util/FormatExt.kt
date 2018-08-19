@@ -64,6 +64,19 @@ val Float.formatHoursMinutes2: String
         }
     }
 
+val Float.formatHoursMinutes3: String
+    get() {
+        val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
+        val minutes: Int = Math.floor(((Math.abs(this) - hours) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+
+        return when {
+            hours == 0 && minutes > 0 -> String.format("0.%02d", minutes)
+            hours > 0 && minutes == 0 -> String.format("%d", hours)
+            hours > 0 && minutes > 0 -> String.format("%d.%02d", hours, minutes)
+            else -> "0"
+        }
+    }
+
 val Float.formatHoursMinutesWithPrefix: String
     get() {
         val prefix = if (this > 0) "+" else "-"

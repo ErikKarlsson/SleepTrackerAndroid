@@ -5,10 +5,17 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.*
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
@@ -19,15 +26,22 @@ import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
-import net.erikkarlsson.simplesleeptracker.util.formatDisplayName
-import net.erikkarlsson.simplesleeptracker.util.formatDisplayNameTime
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
-import net.erikkarlsson.simplesleeptracker.util.formatPercentage
 import timber.log.Timber
 import javax.inject.Inject
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IValueFormatter
+import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
+import net.erikkarlsson.simplesleeptracker.util.*
+import org.threeten.bp.DayOfWeek
+import org.threeten.bp.format.TextStyle
+import java.util.*
+
+data class ChartExtra(val displayValue: Boolean)
+
+private const val BAR_WIDTH = 0.5f
+private const val ANIMATION_DURATION = 1300
+private const val AXIS_TEXT_SIZE = 12f
+private const val VALUE_TEXT_SIZE = 10f
 
 class StatisticsFragment : Fragment() {
 
@@ -66,11 +80,11 @@ class StatisticsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        spinner.itemSelections().subscribe({ onFilterSelected(it) }).addTo(disposables)
+        spinner.itemSelections().subscribe { onFilterSelected(it) }.addTo(disposables)
 
         Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
                 .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
-                           { Timber.e(it, "Error merging clicks") })
+                        { Timber.e(it, "Error merging clicks") })
                 .addTo(disposables)
     }
 
@@ -84,6 +98,8 @@ class StatisticsFragment : Fragment() {
             val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
             owlImage.setImageResource(imageRes)
 
+            renderSleepDuration(state.statistics)
+
             with(state.statistics.first) {
                 statisticsText.text = if (this.isEmpty) {
                     getString(R.string.no_sleep_tracked_yet)
@@ -92,60 +108,173 @@ class StatisticsFragment : Fragment() {
                     trackedNightsText.text = sleepCount.toString()
 
                     avgDurationText.text = String.format("%s %s",
-                                                        avgSleepHours.formatHoursMinutes,
-                                                        with(state.statistics.avgSleepDiffHours) {
-                                                            if (this == 0f) {
-                                                                ""
-                                                            } else {
-                                                                String.format("(%s)", formatHoursMinutesWithPrefix)
-                                                            }
-                                                        })
+                            avgSleepHours.formatHoursMinutes,
+                            with(state.statistics.avgSleepDiffHours) {
+                                if (this == 0f) {
+                                    ""
+                                } else {
+                                    String.format("(%s)", formatHoursMinutesWithPrefix)
+                                }
+                            })
 
                     timeSleepingText.text = String.format("%d%% %s",
-                                                          timeSleepingPercentage,
-                                                          with(state.statistics.timeSleepingDiffPercentage) {
-                                                              if (this == 0) {
-                                                                  ""
-                                                              } else {
-                                                                  String.format("(%s)", formatPercentage)
-                                                              }
-                                                          })
-
-                    val sleepDuration = String.format("%s\n%s\n",
-                                                      getString(R.string.sleep_duration),
-                                                      averageSleepDurationDayOfWeek.formatDisplayName)
+                            timeSleepingPercentage,
+                            with(state.statistics.timeSleepingDiffPercentage) {
+                                if (this == 0) {
+                                    ""
+                                } else {
+                                    String.format("(%s)", formatPercentage)
+                                }
+                            })
 
                     val longestNight = String.format("%s: %s, %s\n",
-                                                     getString(R.string.longest_night),
-                                                     longestSleep.hours.formatHoursMinutes,
-                                                     longestSleep.toDate?.formatDateDisplayName)
+                            getString(R.string.longest_night),
+                            longestSleep.hours.formatHoursMinutes,
+                            longestSleep.toDate?.formatDateDisplayName)
 
                     val shortestNight = String.format("%s: %s, %s\n",
-                                                      getString(R.string.shortest_night),
-                                                      shortestSleep.hours.formatHoursMinutes,
-                                                      shortestSleep.toDate?.formatDateDisplayName)
+                            getString(R.string.shortest_night),
+                            shortestSleep.hours.formatHoursMinutes,
+                            shortestSleep.toDate?.formatDateDisplayName)
 
                     val averageBedTime = String.format("%s: %s %s\n%s\n",
-                                                       getString(R.string.average_bed_time),
-                                                       averageBedTime.formatHHMM,
-                                                       with(state.statistics.avgBedTimeDiffHours) {
-                                                           if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                                                       },
-                                                       averageBedTimeDayOfWeek.formatDisplayNameTime)
+                            getString(R.string.average_bed_time),
+                            averageBedTime.formatHHMM,
+                            with(state.statistics.avgBedTimeDiffHours) {
+                                if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                            },
+                            averageBedTimeDayOfWeek.formatDisplayNameTime)
 
                     val averageWakeUpTime = String.format("%s: %s %s\n%s\n",
-                                                          getString(R.string.average_wake_up_time),
-                                                          averageWakeUpTime.formatHHMM,
-                                                          with(state.statistics.avgWakeUpTimeDiffHours) {
-                                                              if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                                                          },
-                                                          averageWakeUpTimeDayOfWeek.formatDisplayNameTime)
+                            getString(R.string.average_wake_up_time),
+                            averageWakeUpTime.formatHHMM,
+                            with(state.statistics.avgWakeUpTimeDiffHours) {
+                                if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
+                            },
+                            averageWakeUpTimeDayOfWeek.formatDisplayNameTime)
 
 
-                    sleepDuration + longestNight + shortestNight + averageBedTime + averageWakeUpTime
+                    longestNight + shortestNight + averageBedTime + averageWakeUpTime
                 }
             }
         }
+    }
+
+    private fun renderSleepDuration(statisticsComparison: StatisticComparison) {
+        val current = statisticsComparison.first
+        val previous = statisticsComparison.second
+
+        val pinkValues = ArrayList<BarEntry>()
+        val greenValues = ArrayList<BarEntry>()
+        val lightPinkValues = ArrayList<BarEntry>()
+
+        // Monday gets highest x value and Sunday lowest to show them in ascending order in chart.
+        for (day in 6 downTo 0) {
+            val x = 6 - day.toFloat()
+
+            val dayOfWeekHours = current.averageSleepDurationDayOfWeekFor(day)
+            val previousDayOfWeekHours = previous.averageSleepDurationDayOfWeekFor(day)
+
+            when {
+                dayOfWeekHours == null -> {
+                    pinkValues.add(BarEntry(x, 0f, ChartExtra(false)))
+                    greenValues.add(BarEntry(x, 0f, ChartExtra(false)))
+                    lightPinkValues.add(BarEntry(x, 0f, ChartExtra(false)))
+                }
+                previousDayOfWeekHours == null -> {
+                    pinkValues.add(BarEntry(x, dayOfWeekHours.hours, ChartExtra(true)))
+                    greenValues.add(BarEntry(x, 0f, ChartExtra(false)))
+                    lightPinkValues.add(BarEntry(x, 0f, ChartExtra(false)))
+                }
+                else -> {
+                    val previousHours = previousDayOfWeekHours.hours
+                    val currentHours = dayOfWeekHours.hours
+                    val diffHours = Math.abs(currentHours - previousHours)
+
+                    var lightPinkVal = 0f
+
+                    if (currentHours >= previousHours) {
+                        val pinkVal = currentHours - diffHours
+                        pinkValues.add(BarEntry(x, pinkVal, ChartExtra(false)))
+                        greenValues.add(BarEntry(x, currentHours, ChartExtra(true)))
+                    } else {
+                        lightPinkVal = previousHours
+
+                        pinkValues.add(BarEntry(x, currentHours, ChartExtra(true)))
+                        greenValues.add(BarEntry(x, 0f, ChartExtra(false)))
+                    }
+
+                    lightPinkValues.add(BarEntry(x, lightPinkVal, ChartExtra(false)))
+                }
+            }
+        }
+
+        val set1 = BarDataSet(pinkValues, "Sleep duration")
+        set1.color = ResourcesCompat.getColor(ctx.resources, R.color.colorAccent, null)
+        set1.valueTextSize = VALUE_TEXT_SIZE
+
+        val set2 = BarDataSet(greenValues, "Sleep duration add")
+        set2.color = ResourcesCompat.getColor(ctx.resources, R.color.green, null)
+        set2.valueTextSize = VALUE_TEXT_SIZE
+
+        val set3 = BarDataSet(lightPinkValues, "Sleep duration sub")
+        set3.color = ResourcesCompat.getColor(ctx.resources, R.color.pink_light, null)
+
+        val dataSets = ArrayList<IBarDataSet>()
+        dataSets.add(set3)
+        dataSets.add(set2)
+        dataSets.add(set1)
+
+        val data = BarData(dataSets)
+        data.barWidth = BAR_WIDTH
+        data.setValueFormatter(IValueFormatter { value, entry, _, _ ->
+            if (entry == null) {
+                return@IValueFormatter ""
+            }
+
+            val chartExtra = entry.data as ChartExtra
+
+            if (chartExtra.displayValue) {
+                value.formatHoursMinutes3
+            } else {
+                ""
+            }
+        })
+
+        val longestSleepDurationDayOfWeekInHours = statisticsComparison.first.longestSleepDurationDayOfWeekInHours
+        val leftMaximum = Math.round(longestSleepDurationDayOfWeekInHours.toDouble()).toFloat() + 1f
+
+        val leftAxis = sleepDurationChart.axisLeft
+        leftAxis.isEnabled = true
+        leftAxis.axisMinimum = 0f
+        leftAxis.axisMaximum = leftMaximum
+        leftAxis.textSize = AXIS_TEXT_SIZE
+        leftAxis.valueFormatter = IAxisValueFormatter { value, _ -> String.format("%dh", value.toInt()) }
+
+        val rightAxis = sleepDurationChart.axisRight
+        rightAxis.isEnabled = false
+
+        val xAxis = sleepDurationChart.xAxis
+        xAxis.isEnabled = true
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.granularity = 1f
+        xAxis.textSize = AXIS_TEXT_SIZE
+        xAxis.setDrawGridLines(false)
+        xAxis.valueFormatter = IAxisValueFormatter { value, _ -> DayOfWeek.of(7 - value.toInt()).getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
+
+        val legend = sleepDurationChart.legend
+        legend.isEnabled = false
+
+        sleepDurationChart.data = data
+        sleepDurationChart.setScaleEnabled(false)
+        sleepDurationChart.setTouchEnabled(false)
+        sleepDurationChart.isDragEnabled = false
+        sleepDurationChart.description.text = ""
+        sleepDurationChart.animateY(ANIMATION_DURATION, Easing.EasingOption.EaseOutQuad)
+        sleepDurationChart.setBackgroundColor(ResourcesCompat.getColor(ctx.resources,
+                android.R.color.transparent,
+                null))
+        sleepDurationChart.invalidate()
     }
 
     private fun onFilterSelected(index: Int) {
