@@ -3,8 +3,6 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
@@ -13,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.*
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -32,12 +31,13 @@ import timber.log.Timber
 import javax.inject.Inject
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
-import kotlinx.android.synthetic.main.notification_template_lines_media.*
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.util.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.format.TextStyle
 import java.util.*
+import kotlin.math.max
 
 data class ChartExtra(val displayValue: Boolean)
 
@@ -114,16 +114,8 @@ class StatisticsFragment : Fragment() {
                             avgSleepHours.formatHoursMinutes)
 
                     renderAvgDurationDiff(state.statistics.avgSleepDiffHours)
-
-                    val longestNight = String.format("%s: %s, %s\n",
-                            getString(R.string.longest_night),
-                            longestSleep.hours.formatHoursMinutes,
-                            longestSleep.toDate?.formatDateDisplayName)
-
-                    val shortestNight = String.format("%s: %s, %s\n",
-                            getString(R.string.shortest_night),
-                            shortestSleep.hours.formatHoursMinutes,
-                            shortestSleep.toDate?.formatDateDisplayName)
+                    renderLongestNight(longestSleep)
+                    renderShortestNight(shortestSleep, longestSleep)
 
                     val averageBedTime = String.format("%s: %s %s\n%s\n",
                             getString(R.string.average_bed_time),
@@ -142,7 +134,7 @@ class StatisticsFragment : Fragment() {
                             averageWakeUpTimeDayOfWeek.formatDisplayNameTime)
 
 
-                    longestNight + shortestNight + averageBedTime + averageWakeUpTime
+                    averageBedTime + averageWakeUpTime
                 }
             }
         }
@@ -164,6 +156,68 @@ class StatisticsFragment : Fragment() {
                 String.format("%s", formatHoursMinutesWithPrefix)
             }
         }
+    }
+
+    private fun renderLongestNight(longestSleep: Sleep) {
+        longestNightDurationText.text = longestSleep.hours.formatHoursMinutes
+        longestNightDateText.text = longestSleep.toDate?.formatDateDisplayName
+
+        val value = if (longestSleep.hours == 0f) {
+            0f
+        } else {
+            1f
+        }
+
+        renderBasicBarChart(longestNightChart, value, 1f)
+    }
+
+    private fun renderShortestNight(shortestSleep: Sleep, longestSleep: Sleep) {
+        shortestNightDurationText.text = shortestSleep.hours.formatHoursMinutes
+        shortestNightDateText.text = shortestSleep.toDate?.formatDateDisplayName
+
+        val value = shortestSleep.hours
+        val maxValue = longestSleep.hours
+
+        renderBasicBarChart(shortestNightChart, value, maxValue)
+    }
+
+    private fun renderBasicBarChart(barChart: BarChart, value: Float, maxValue: Float) {
+        val pinkValues = ArrayList<BarEntry>()
+        pinkValues.add(BarEntry(1f, value))
+
+        val set1 = BarDataSet(pinkValues, "")
+        set1.color = ResourcesCompat.getColor(ctx.resources, R.color.colorAccent, null)
+
+        val data = BarData(set1)
+        data.barWidth = 1f
+        data.setDrawValues(false)
+
+        val leftAxis = barChart.axisLeft
+        leftAxis.isEnabled = false
+        leftAxis.axisMinimum = 0f
+        leftAxis.axisMaximum = maxValue
+
+        val rightAxis = barChart.axisRight
+        rightAxis.isEnabled = false
+
+        val xAxis = barChart.xAxis
+        xAxis.isEnabled = false
+
+        val legend = barChart.legend
+        legend.isEnabled = false
+
+        barChart.data = data
+        barChart.setScaleEnabled(false)
+        barChart.setTouchEnabled(false)
+        barChart.isDragEnabled = false
+        barChart.setDrawBarShadow(true)
+        barChart.description.text = ""
+        barChart.setViewPortOffsets(0f, 0f, 0f, 0f)
+        barChart.animateY(ANIMATION_DURATION, Easing.EasingOption.EaseOutQuad)
+        barChart.setBackgroundColor(ResourcesCompat.getColor(ctx.resources,
+                R.color.gray,
+                null))
+        barChart.invalidate()
     }
 
     private fun renderSleepDuration(statisticsComparison: StatisticComparison) {
