@@ -3,6 +3,8 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
@@ -30,6 +32,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
+import kotlinx.android.synthetic.main.notification_template_lines_media.*
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.util.*
 import org.threeten.bp.DayOfWeek
@@ -107,25 +110,10 @@ class StatisticsFragment : Fragment() {
 
                     trackedNightsText.text = sleepCount.toString()
 
-                    avgDurationText.text = String.format("%s %s",
-                            avgSleepHours.formatHoursMinutes,
-                            with(state.statistics.avgSleepDiffHours) {
-                                if (this == 0f) {
-                                    ""
-                                } else {
-                                    String.format("(%s)", formatHoursMinutesWithPrefix)
-                                }
-                            })
+                    avgDurationText.text = String.format("%s",
+                            avgSleepHours.formatHoursMinutes)
 
-                    timeSleepingText.text = String.format("%d%% %s",
-                            timeSleepingPercentage,
-                            with(state.statistics.timeSleepingDiffPercentage) {
-                                if (this == 0) {
-                                    ""
-                                } else {
-                                    String.format("(%s)", formatPercentage)
-                                }
-                            })
+                    renderAvgDurationDiff(state.statistics.avgSleepDiffHours)
 
                     val longestNight = String.format("%s: %s, %s\n",
                             getString(R.string.longest_night),
@@ -156,6 +144,24 @@ class StatisticsFragment : Fragment() {
 
                     longestNight + shortestNight + averageBedTime + averageWakeUpTime
                 }
+            }
+        }
+    }
+
+    private fun renderAvgDurationDiff(avgSleepDiffHours: Float) {
+        val avgDurationDiffTextColor = if (avgSleepDiffHours > 0) {
+            R.color.green
+        } else {
+            R.color.red
+        }
+
+        avgDurationDiffText.setTextColor(ResourcesCompat.getColor(resources, avgDurationDiffTextColor, null))
+
+        avgDurationDiffText.text = with(avgSleepDiffHours) {
+            if (this == 0f) {
+                ""
+            } else {
+                String.format("%s", formatHoursMinutesWithPrefix)
             }
         }
     }
