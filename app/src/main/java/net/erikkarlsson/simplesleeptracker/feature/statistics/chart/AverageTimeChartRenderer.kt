@@ -5,15 +5,17 @@ import android.graphics.Color
 import android.support.v4.content.res.ResourcesCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.google.common.collect.ImmutableList
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_AN_HOUR
+import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
+import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.feature.statistics.*
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.util.midnightOffsetInSeconds
@@ -24,17 +26,17 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class AverageBedTimeChartRenderer @Inject constructor(private val ctx: Context) {
+class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
 
-    fun render(avergeBedTimeChart: BarChart, statistics: StatisticComparison) {
+    fun render(avergeTimeChart: BarChart,
+               averageTime: LocalTime,
+               timeDayOfWeek: ImmutableList<DayOfWeekLocalTime>,
+               statistics: Statistics) {
 
-        val current = statistics.first
-        val averageBedTime = current.averageBedTime
-
-        val rightAxis = avergeBedTimeChart.getAxisRight()
+        val rightAxis = avergeTimeChart.getAxisRight()
         rightAxis.setEnabled(false)
 
-        val leftAxis = avergeBedTimeChart.axisLeft
+        val leftAxis = avergeTimeChart.axisLeft
         leftAxis.isEnabled = true
         leftAxis.setDrawGridLines(false)
         leftAxis.setDrawAxisLine(false)
@@ -45,7 +47,7 @@ class AverageBedTimeChartRenderer @Inject constructor(private val ctx: Context) 
         leftAxis.setZeroLineWidth(0.7f)
         leftAxis.textSize = AXIS_TEXT_SIZE
 
-        val xAxis = avergeBedTimeChart.getXAxis()
+        val xAxis = avergeTimeChart.getXAxis()
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
@@ -53,13 +55,13 @@ class AverageBedTimeChartRenderer @Inject constructor(private val ctx: Context) 
         xAxis.setGranularity(1f)
         xAxis.valueFormatter = IAxisValueFormatter { value, _ -> DayOfWeek.of(7 - value.toInt()).getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
 
-        val legend = avergeBedTimeChart.getLegend()
+        val legend = avergeTimeChart.getLegend()
         legend.isEnabled = false
 
         val yValues = ArrayList<BarEntry>()
         val colors = ArrayList<Int>()
 
-        val averageMidnightOffsetInSeconds = averageBedTime.midnightOffsetInSeconds
+        val averageMidnightOffsetInSeconds = averageTime.midnightOffsetInSeconds
 
         var maxDiff = -99999999
         var minDiff = 99999999
@@ -70,7 +72,7 @@ class AverageBedTimeChartRenderer @Inject constructor(private val ctx: Context) 
         for (day in 7 downTo 1) {
             val x = 7 - day.toFloat()
 
-            val dayOfWeekLocalTime = current.averageBedTimeDayOfWeekFor(day)
+            val dayOfWeekLocalTime = statistics.timeDayOfWeekFor(timeDayOfWeek, day)
 
             if (dayOfWeekLocalTime == null) {
                 yValues.add(BarEntry(x, floatArrayOf(0.000001f, 0.000001f)))
@@ -130,18 +132,18 @@ class AverageBedTimeChartRenderer @Inject constructor(private val ctx: Context) 
             }
         }
 
-        avergeBedTimeChart.setData(data)
-        avergeBedTimeChart.setDrawBarShadow(false)
-        avergeBedTimeChart.setDrawValueAboveBar(true)
-        avergeBedTimeChart.setHighlightFullBarEnabled(false)
-        avergeBedTimeChart.setDrawGridBackground(false)
-        avergeBedTimeChart.getDescription().setEnabled(false)
-        avergeBedTimeChart.setScaleEnabled(false)
-        avergeBedTimeChart.setPinchZoom(false)
-        avergeBedTimeChart.setTouchEnabled(false)
-        avergeBedTimeChart.isDragEnabled = false
-        avergeBedTimeChart.description.text = ""
-        avergeBedTimeChart.animateY(ANIMATION_DURATION, Easing.EasingOption.EaseOutQuad)
-        avergeBedTimeChart.invalidate()
+        avergeTimeChart.setData(data)
+        avergeTimeChart.setDrawBarShadow(false)
+        avergeTimeChart.setDrawValueAboveBar(true)
+        avergeTimeChart.setHighlightFullBarEnabled(false)
+        avergeTimeChart.setDrawGridBackground(false)
+        avergeTimeChart.getDescription().setEnabled(false)
+        avergeTimeChart.setScaleEnabled(false)
+        avergeTimeChart.setPinchZoom(false)
+        avergeTimeChart.setTouchEnabled(false)
+        avergeTimeChart.isDragEnabled = false
+        avergeTimeChart.description.text = ""
+        avergeTimeChart.animateY(ANIMATION_DURATION, Easing.EasingOption.EaseOutQuad)
+        avergeTimeChart.invalidate()
     }
 }

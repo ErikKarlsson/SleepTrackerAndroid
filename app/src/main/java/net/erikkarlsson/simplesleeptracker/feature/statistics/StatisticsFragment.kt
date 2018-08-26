@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
@@ -23,10 +24,13 @@ import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.AverageBedTimeChartRenderer
+import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.AverageTimeChartRenderer
 import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.BasicChartRenderer
 import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.SleepDurationChartRenderer
-import net.erikkarlsson.simplesleeptracker.util.*
+import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
+import net.erikkarlsson.simplesleeptracker.util.formatHHMM
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,7 +48,7 @@ class StatisticsFragment : Fragment() {
     lateinit var sleepDurationChartRenderer: SleepDurationChartRenderer
 
     @Inject
-    lateinit var averageBedTimeChartRenderer: AverageBedTimeChartRenderer
+    lateinit var averageTimeChartRenderer: AverageTimeChartRenderer
 
     @Inject
     lateinit var ctx: Context
@@ -101,48 +105,38 @@ class StatisticsFragment : Fragment() {
             sleepDurationChartRenderer.render(sleepDurationChart, state.statistics)
 
             with(state.statistics.first) {
-                statisticsText.text = if (this.isEmpty) {
-                    getString(R.string.no_sleep_tracked_yet)
-                } else {
+                if (!isEmpty) {
                     trackedNightsText.text = sleepCount.toString()
                     avgDurationText.text = String.format("%s", avgSleepHours.formatHoursMinutes)
 
-                    renderAvgDurationDiff(state.statistics.avgSleepDiffHours)
+                    renderAvgTimeDiff(avgDurationDiffText, state.statistics.avgSleepDiffHours)
                     renderLongestNight(longestSleep)
                     renderShortestNight(shortestSleep, longestSleep)
-                    renderAvgBedTimeDiff(state.statistics.avgBedTimeDiffHours)
+                    renderAvgTimeDiff(avgBedDiffText, state.statistics.avgBedTimeDiffHours)
+                    renderAvgTimeDiff(avgWakeUpDiffText, state.statistics.avgWakeUpTimeDiffHours)
                     renderAverageBedTime(state.statistics)
-
-                    val averageWakeUpTime = String.format("%s: %s %s\n%s\n",
-                            getString(R.string.average_wake_up_time),
-                            averageWakeUpTime.formatHHMM,
-                            with(state.statistics.avgWakeUpTimeDiffHours) {
-                                if (this == 0f) "" else String.format("(%s)", formatHoursMinutesWithPrefix)
-                            },
-                            averageWakeUpTimeDayOfWeek.formatDisplayNameTime)
-
-
-                    averageWakeUpTime
+                    renderAverageWakeUpTime(state.statistics)
                 }
             }
         }
     }
 
-    private fun renderAvgBedTimeDiff(avgBedTimeDiffHours: Float) {
-        val avgBedDiffTextColor = if (avgBedTimeDiffHours > 0) {
+    private fun renderAvgTimeDiff(avgTimeText: TextView,
+                                  avgTimeDiffHours: Float) {
+        val avgDiffTextColor = if (avgTimeDiffHours > 0) {
             R.color.green
         } else {
             R.color.red
         }
 
-        avgBedDiffText.setTextColor(ResourcesCompat.getColor(resources, avgBedDiffTextColor, null))
+        avgTimeText.setTextColor(ResourcesCompat.getColor(resources, avgDiffTextColor, null))
 
-        if (avgBedTimeDiffHours == 0f) {
-            avgBedDiffText.isVisible = false
+        if (avgTimeDiffHours == 0f) {
+            avgTimeText.isVisible = false
         } else {
-            avgBedDiffText.isVisible = true
-            avgBedDiffText.text = String.format("%s",
-                    avgBedTimeDiffHours.formatHoursMinutesWithPrefix)
+            avgTimeText.isVisible = true
+            avgTimeText.text = String.format("%s",
+                    avgTimeDiffHours.formatHoursMinutesWithPrefix)
         }
     }
 
@@ -150,25 +144,16 @@ class StatisticsFragment : Fragment() {
         val current = statistics.first
         val averageBedTime = current.averageBedTime
         averageBedText.text = averageBedTime.formatHHMM
-        averageBedTimeChartRenderer.render(avergeBedTimeChart, statistics)
+        averageTimeChartRenderer.render(averageBedTimeChart, current.averageBedTime,
+                statistics.first.averageBedTimeDayOfWeek, statistics.first)
     }
 
-    private fun renderAvgDurationDiff(avgSleepDiffHours: Float) {
-        val avgDurationDiffTextColor = if (avgSleepDiffHours > 0) {
-            R.color.green
-        } else {
-            R.color.red
-        }
-
-        avgDurationDiffText.setTextColor(ResourcesCompat.getColor(resources, avgDurationDiffTextColor, null))
-
-        avgDurationDiffText.text = with(avgSleepDiffHours) {
-            if (this == 0f) {
-                ""
-            } else {
-                String.format("%s", formatHoursMinutesWithPrefix)
-            }
-        }
+    private fun renderAverageWakeUpTime(statistics: StatisticComparison) {
+        val current = statistics.first
+        val averageWakeUpTime = current.averageWakeUpTime
+        averageWakeUpText.text = averageWakeUpTime.formatHHMM
+        averageTimeChartRenderer.render(averageWakeUpTimeChart, current.averageWakeUpTime,
+                statistics.first.averageWakeUpTimeDayOfWeek, statistics.first)
     }
 
     private fun renderLongestNight(longestSleep: Sleep) {

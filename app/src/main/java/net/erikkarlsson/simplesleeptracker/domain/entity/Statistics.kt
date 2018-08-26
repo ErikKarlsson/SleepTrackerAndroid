@@ -27,8 +27,9 @@ data class Statistics(val sleepCount: Int,
         return null
     }
 
-    fun averageBedTimeDayOfWeekFor(day: Int): DayOfWeekLocalTime? {
-        for (dayOfWeekLocalTime in averageBedTimeDayOfWeek) {
+    fun timeDayOfWeekFor(timeDayOfWeek: ImmutableList<DayOfWeekLocalTime>,
+                                   day: Int): DayOfWeekLocalTime? {
+        for (dayOfWeekLocalTime in timeDayOfWeek) {
             if (dayOfWeekLocalTime.dayOfWeek.value == day) {
                 return dayOfWeekLocalTime
             }
