@@ -224,7 +224,6 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
-                    android:background="@android:color/white"
                     app:layout_constraintTop_toBottomOf="@id/guideline_horizontal2" />
 
                 <View
@@ -249,29 +248,27 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:textSize="12sp"
-                    app:layout_constraintLeft_toRightOf="@id/longestNightLabel"
                     app:layout_constraintBottom_toBottomOf="@id/longestNightLabel"
-                    tools:text="10/5/18"
-                    />
+                    app:layout_constraintLeft_toRightOf="@id/longestNightLabel"
+                    tools:text="10/5/18" />
 
                 <TextView
                     android:id="@+id/longestNightDurationText"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/longestNightLabel"
-                    android:layout_marginEnd="12dp"
-                    tools:text="9h 35min"
-                    android:textSize="21sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:textSize="21sp"
+                    app:layout_constraintBottom_toBottomOf="@id/longestNightLabel"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="9h 35min" />
 
                 <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/longestNightChart"
                     android:layout_width="match_parent"
                     android:layout_height="14dp"
                     android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
                     android:layout_marginTop="4dp"
-                    android:background="@android:color/white"
+                    android:layout_marginEnd="12dp"
                     app:layout_constraintTop_toBottomOf="@id/longestNightLabel" />
 
                 <View
@@ -297,30 +294,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:textSize="12sp"
-                    app:layout_constraintLeft_toRightOf="@id/shortestNightLabel"
                     app:layout_constraintBottom_toBottomOf="@id/shortestNightLabel"
-                    tools:text="10/5/18"
-                    />
+                    app:layout_constraintLeft_toRightOf="@id/shortestNightLabel"
+                    tools:text="10/5/18" />
 
                 <TextView
                     android:id="@+id/shortestNightDurationText"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/shortestNightLabel"
-                    android:layout_marginEnd="12dp"
-                    tools:text="9h 35min"
-                    android:textSize="21sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:textSize="21sp"
+                    app:layout_constraintBottom_toBottomOf="@id/shortestNightLabel"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="9h 35min" />
 
                 <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/shortestNightChart"
                     android:layout_width="match_parent"
                     android:layout_height="14dp"
                     android:layout_marginStart="12dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@android:color/white"
                     app:layout_constraintTop_toBottomOf="@id/shortestNightLabel" />
 
                 <View
@@ -328,6 +323,61 @@
                     style="@style/Divider"
                     android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@id/shortestNightChart" />
+
+                <TextView
+                    android:id="@+id/averageBedTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/average_bed_time"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+                <TextView
+                    android:id="@+id/averageBedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="21sp"
+                    app:layout_constraintBottom_toBottomOf="@id/averageBedTimeLabel"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/avgBedDiffText"
+                    tools:text="21:00" />
+
+                <TextView
+                    android:id="@+id/avgBedDiffText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="3dp"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/averageBedText"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintLeft_toRightOf="@id/averageBedText"
+                    app:layout_constraintRight_toRightOf="@id/endMargin"
+                    tools:text="+35 min" />
+
+                <Space
+                    android:id="@+id/endMargin"
+                    android:layout_width="12dp"
+                    android:layout_height="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/averageBedText"
+                    app:layout_constraintLeft_toRightOf="@id/avgBedDiffText"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/avergeBedTimeChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/averageBedTimeLabel" />
+
 
             </android.support.constraint.ConstraintLayout>
 

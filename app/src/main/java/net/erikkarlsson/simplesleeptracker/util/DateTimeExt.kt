@@ -24,6 +24,12 @@ val OffsetDateTime.midnightOffsetInSeconds: Int
         return if (this.hour <= TWELVE_IN_THE_AFTERNOON) seconds else seconds - SECONDS_IN_A_DAY
     }
 
+val LocalTime.midnightOffsetInSeconds: Int
+    get() {
+        val seconds = this.hour.hoursToSeconds + this.minute.minutesToSeconds + this.second
+        return if (this.hour <= TWELVE_IN_THE_AFTERNOON) seconds else seconds - SECONDS_IN_A_DAY
+    }
+
 /**
  * Calculates amount of hours between two dates. e.g. 7.850 hours
  */

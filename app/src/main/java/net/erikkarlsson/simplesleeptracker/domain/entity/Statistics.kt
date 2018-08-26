@@ -27,6 +27,15 @@ data class Statistics(val sleepCount: Int,
         return null
     }
 
+    fun averageBedTimeDayOfWeekFor(day: Int): DayOfWeekLocalTime? {
+        for (dayOfWeekLocalTime in averageBedTimeDayOfWeek) {
+            if (dayOfWeekLocalTime.dayOfWeek.value == day) {
+                return dayOfWeekLocalTime
+            }
+        }
+        return null
+    }
+
     val longestSleepDurationDayOfWeekInHours: Float
         get() {
             var longest = 0f
