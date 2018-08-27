@@ -11,7 +11,7 @@ import net.erikkarlsson.simplesleeptracker.di.ViewModelKey
 import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepViewModel
 import net.erikkarlsson.simplesleeptracker.feature.details.DetailViewModel
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryViewModel
-import net.erikkarlsson.simplesleeptracker.feature.profile.ProfileViewModel
+import net.erikkarlsson.simplesleeptracker.feature.home.HomeViewModel
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsViewModel
 
 @Module
@@ -44,8 +44,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ProfileViewModel::class)
-    abstract fun bindProfileViewModel(profileViewModel: ProfileViewModel): ViewModel
+    @ViewModelKey(HomeViewModel::class)
+    abstract fun bindHomeViewModel(homeViewModel: HomeViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

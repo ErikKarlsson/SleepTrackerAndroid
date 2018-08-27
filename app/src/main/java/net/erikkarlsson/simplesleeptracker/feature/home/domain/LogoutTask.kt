@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.feature.profile.domain
+package net.erikkarlsson.simplesleeptracker.feature.home.domain
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.Completable

@@ -19,6 +19,7 @@
     <string name="title_statistics">Statistics</string>
     <string name="title_diary">Diary</string>
     <string name="title_profile">Profile</string>
+    <string name="title_home">Home</string>
     <string name="confirm_delete_sleep">Do you really want to delete this sleep session?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>

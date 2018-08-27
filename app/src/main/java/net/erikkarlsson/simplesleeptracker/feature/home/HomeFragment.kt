@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.feature.profile
+package net.erikkarlsson.simplesleeptracker.feature.home
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
@@ -19,8 +19,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.jakewharton.rxbinding2.view.clicks
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.logged_in_content.*
 import kotlinx.android.synthetic.main.logged_out_content.*
 import net.erikkarlsson.simplesleeptracker.R
@@ -33,7 +37,7 @@ import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
 
-class ProfileFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -46,8 +50,8 @@ class ProfileFragment : Fragment() {
 
     private val disposables = CompositeDisposable()
 
-    private val viewModel: ProfileViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
+    private val viewModel: HomeViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
     }
 
     override fun onAttach(context: Context?) {
@@ -56,7 +60,7 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,6 +76,20 @@ class ProfileFragment : Fragment() {
         if (account != null) {
             onSignInRestored(account)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
+                .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
+                        { Timber.e(it, "Error merging clicks") })
+                .addTo(disposables)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 
     override fun onDestroyView() {
@@ -91,8 +109,11 @@ class ProfileFragment : Fragment() {
                 }
     }
 
-    private fun render(state: ProfileState?) {
+    private fun render(state: HomeState?) {
         state?.let {
+            val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
+            owlImage.setImageResource(imageRes)
+
             signInButton.isVisible = !it.isLoggedIn
             loggedInContent.isVisible = it.isLoggedIn
             loggedOutContent.isVisible = !it.isLoggedIn
@@ -174,5 +195,5 @@ class ProfileFragment : Fragment() {
     }
 }
 
-class ProfileViewModel @Inject constructor(profileComponent: ProfileComponent) :
-        ElmViewModel<ProfileState, ProfileMsg, ProfileCmd>(profileComponent)
+class HomeViewModel @Inject constructor(homeComponent: HomeComponent) :
+        ElmViewModel<HomeState, HomeMsg, HomeCmd>(homeComponent)

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:startDestination="@+id/statistics">
+            app:startDestination="@+id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.home.HomeFragment"
+        android:label="HomeFragment" />
+
     <fragment
         android:id="@+id/statistics"
         android:name="net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment"
@@ -21,11 +27,6 @@
             app:destination="@id/add"/>
 
     </fragment>
-
-    <fragment
-        android:id="@+id/profile"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.profile.ProfileFragment"
-        android:label="ProfileFragment"/>
 
     <activity
         android:id="@+id/detail"

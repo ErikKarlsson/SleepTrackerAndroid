@@ -19,7 +19,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
     override fun execute(params: None): Completable =
             sleepRepository.getCurrentSingle()
                 .map { toggleSleep(it) }
-                .toCompletable()
+                .ignoreElement()
 
     private fun toggleSleep(currentSleep: Sleep) {
         if (currentSleep.isSleeping) {

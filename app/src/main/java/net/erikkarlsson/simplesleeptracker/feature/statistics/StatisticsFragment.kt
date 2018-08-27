@@ -12,10 +12,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.view.isVisible
-import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
@@ -31,7 +29,6 @@ import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
-import timber.log.Timber
 import javax.inject.Inject
 
 data class ChartExtra(val displayValue: Boolean)
@@ -76,7 +73,7 @@ class StatisticsFragment : Fragment() {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
 
-        spinner.setSelection(1) // TODO (erikkarlsson): Hardcoded week selection.
+        spinner.setSelection(0)
 
         viewModel.state().observe(this, Observer { render(it) })
     }
@@ -85,11 +82,6 @@ class StatisticsFragment : Fragment() {
         super.onStart()
 
         spinner.itemSelections().subscribe { onFilterSelected(it) }.addTo(disposables)
-
-        Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
-                .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
-                        { Timber.e(it, "Error merging clicks") })
-                .addTo(disposables)
     }
 
     override fun onStop() {
@@ -99,9 +91,6 @@ class StatisticsFragment : Fragment() {
 
     private fun render(state: StatisticsState?) {
         state?.let {
-            val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
-            owlImage.setImageResource(imageRes)
-
             sleepDurationChartRenderer.render(sleepDurationChart, state.statistics)
 
             with(state.statistics.first) {
