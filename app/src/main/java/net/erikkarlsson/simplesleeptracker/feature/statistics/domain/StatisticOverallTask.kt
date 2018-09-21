@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * Get stream of overall statistic, with no statistics to compare against.
  */
-class StatisticComparisonOverallTask @Inject constructor(
+class StatisticOverallTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSource)
     : ObservableTask<StatisticComparison, ObservableTask.None> {
 

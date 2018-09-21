@@ -11,10 +11,10 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.feature.statistics.*
+import net.erikkarlsson.simplesleeptracker.feature.statistics.item.ChartExtra
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes3
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.format.TextStyle

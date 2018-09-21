@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker
 
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import net.erikkarlsson.simplesleeptracker.robot.MainRobot
 import net.erikkarlsson.simplesleeptracker.robot.StatisticsRobot
 import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
 import org.junit.Rule
@@ -16,6 +17,7 @@ class StatisticsTest {
     val main = ActivityTestRule(MainActivity::class.java, false, false)
     val component = TestComponentRule()
     val robot = StatisticsRobot()
+    val mainRobot = MainRobot()
 
     @get:Rule
     var chain: TestRule = RuleChain.outerRule(component).around(main)
@@ -46,6 +48,9 @@ class StatisticsTest {
             // Given current time
             mockDateTimeNow("2018-03-14T22:30:00+01:00")
 
+            // data for previous months
+            insertSleep(fromDate = "2018-01-04T23:30:00+01:00", toDate = "2018-01-05T06:30:00+01:00")
+
             // data for previous week
             insertSleep(fromDate = "2018-03-04T23:30:00+01:00", toDate = "2018-03-05T06:30:00+01:00")
             insertSleep(fromDate = "2018-03-05T23:30:00+01:00", toDate = "2018-03-06T06:55:00+01:00")
@@ -66,6 +71,8 @@ class StatisticsTest {
         }
 
         main.launchActivity(null)
+
+        mainRobot.clickStatisticsTab()
 
         Thread.sleep(99999999)
 

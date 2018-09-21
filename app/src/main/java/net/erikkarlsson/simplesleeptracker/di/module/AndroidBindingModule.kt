@@ -13,6 +13,7 @@ import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryModule
 import net.erikkarlsson.simplesleeptracker.feature.home.HomeFragment
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment
+import net.erikkarlsson.simplesleeptracker.feature.statistics.item.StatisticsItemFragment
 
 @Module
 abstract class AndroidBindingModule {
@@ -32,6 +33,10 @@ abstract class AndroidBindingModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract fun bindsStatisticsFragment(): StatisticsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun bindsStatisticsItemFragment(): StatisticsItemFragment
 
     @FragmentScope
     @ContributesAndroidInjector

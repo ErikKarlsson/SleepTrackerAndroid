@@ -10,9 +10,10 @@ import net.erikkarlsson.simplesleeptracker.domain.ToggleSleepTaskTest
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonOverallTask
-import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonWeekTask
+import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticOverallTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.feature.statistics.item.StatisticsItemComponent
+import net.erikkarlsson.simplesleeptracker.feature.statistics.item.StatisticsSubscription
 import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
 import org.junit.jupiter.api.BeforeEach
@@ -27,19 +28,18 @@ class StatisticsViewModelTest {
     val sleepRepository: SleepDataSource = mock()
     val observer: Observer<StatisticsState> = mock()
     val toggleSleepTask: ToggleSleepTask = mock()
-    val statisticComparisonWeekTask: StatisticComparisonWeekTask = mock()
-    val statisticComparisonOverallTask: StatisticComparisonOverallTask = mock()
+    val statisticOverallTask: StatisticOverallTask = mock()
 
     @BeforeEach
     fun setUp() {
-        reset(sleepRepository, observer, toggleSleepTask, statisticComparisonWeekTask, statisticComparisonOverallTask)
+        reset(sleepRepository, observer, toggleSleepTask, statisticOverallTask)
     }
 
     @Test
     fun `load statistics shows statistics in view`() {
         val expectedStatisticComparison = StatisticComparison(Statistics.empty(), Statistics.empty())
 
-        given(statisticComparisonOverallTask.execute()).willReturn(Observable.just(expectedStatisticComparison))
+        given(statisticOverallTask.execute()).willReturn(Observable.just(expectedStatisticComparison))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
         given(sleepRepository.getSleep()).willReturn(Observable.just(ImmutableList.of()))
 
@@ -69,8 +69,8 @@ class StatisticsViewModelTest {
 
     private fun createViewModel(): StatisticsViewModel {
         val sleepSubscription = SleepSubscription(sleepRepository)
-        val statisticsSubscription = StatisticsSubscription(statisticComparisonOverallTask, statisticComparisonWeekTask)
-        val statisticsComponent = StatisticsComponent(toggleSleepTask, sleepSubscription, statisticsSubscription)
+        val statisticsSubscription = StatisticsSubscription(statisticOverallTask, statisticComparisonWeekTask)
+        val statisticsComponent = StatisticsItemComponent(toggleSleepTask, sleepSubscription, statisticsSubscription)
         return StatisticsViewModel(statisticsComponent)
     }
 }

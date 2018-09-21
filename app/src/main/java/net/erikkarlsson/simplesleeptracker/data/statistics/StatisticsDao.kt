@@ -44,4 +44,9 @@ interface StatisticsDao {
     @Query("SELECT avg(to_date_midnight_offset_seconds) FROM Sleep WHERE to_date != 0 AND date(to_date) BETWEEN date(:from) AND date(:to)")
     fun getAverageWakeUpMidnightOffsetInSeconds(from: String, to: String): Flowable<Int>
 
+    @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(to_date) ASC LIMIT 1")
+    fun getYoungestSleep(): Flowable<SleepEntity>
+
+    @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(to_date) DESC LIMIT 1")
+    fun getOldestSleep(): Flowable<SleepEntity>
 }

@@ -7,11 +7,7 @@ import net.erikkarlsson.simplesleeptracker.data.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.data.DayOfWeekMidnightOffset
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
-import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
-import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.entity.SleepCountYearMonth
-import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
+import net.erikkarlsson.simplesleeptracker.domain.entity.*
 import net.erikkarlsson.simplesleeptracker.util.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.util.toImmutableList
 import org.threeten.bp.LocalDate
@@ -21,6 +17,12 @@ import javax.inject.Inject
 class StatisticsRepository @Inject constructor(private val statisticsDao: StatisticsDao,
                                                private val sleepMapper: SleepMapper)
     : StatisticsDataSource {
+
+    override fun getYoungestSleep(): Observable<Sleep> =
+            statisticsDao.getYoungestSleep().map(sleepMapper::mapFromEntity).toObservable()
+
+    override fun getOldestSleep(): Observable<Sleep> =
+            statisticsDao.getOldestSleep().map(sleepMapper::mapFromEntity).toObservable()
 
     override fun getStatistics(): Observable<Statistics> {
         val infiniteDateRange = DateRange(LocalDate.parse("1000-01-01"), LocalDate.parse("9999-01-01"))

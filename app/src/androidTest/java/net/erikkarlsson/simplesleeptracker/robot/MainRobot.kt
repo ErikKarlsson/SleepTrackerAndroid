@@ -10,4 +10,9 @@ class MainRobot {
         return DiaryRobot()
     }
 
+    fun clickStatisticsTab(): StatisticsRobot {
+        clickViewWithId(R.id.statistics)
+        return StatisticsRobot()
+    }
+
 }

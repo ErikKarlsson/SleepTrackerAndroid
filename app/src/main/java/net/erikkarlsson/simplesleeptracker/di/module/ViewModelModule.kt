@@ -13,6 +13,7 @@ import net.erikkarlsson.simplesleeptracker.feature.details.DetailViewModel
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryViewModel
 import net.erikkarlsson.simplesleeptracker.feature.home.HomeViewModel
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsViewModel
+import net.erikkarlsson.simplesleeptracker.feature.statistics.item.StatisticsItemViewModel
 
 @Module
 abstract class ViewModelModule {
@@ -26,6 +27,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(StatisticsViewModel::class)
     abstract fun bindStatisticsViewModel(statisticsViewModel: StatisticsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(StatisticsItemViewModel::class)
+    abstract fun bindStatisticsItemViewModel(statisticsItemViewModel: StatisticsItemViewModel): ViewModel
 
     @Binds
     @IntoMap

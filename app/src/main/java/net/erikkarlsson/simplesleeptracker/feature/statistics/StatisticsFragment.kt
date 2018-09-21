@@ -5,13 +5,10 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
-import androidx.view.isVisible
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -19,19 +16,8 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
-import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.AverageTimeChartRenderer
-import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.BasicChartRenderer
-import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.SleepDurationChartRenderer
-import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
 import javax.inject.Inject
-
-data class ChartExtra(val displayValue: Boolean)
 
 class StatisticsFragment : Fragment() {
 
@@ -39,16 +25,9 @@ class StatisticsFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     @Inject
-    lateinit var basicChartRenderer: BasicChartRenderer
-
-    @Inject
-    lateinit var sleepDurationChartRenderer: SleepDurationChartRenderer
-
-    @Inject
-    lateinit var averageTimeChartRenderer: AverageTimeChartRenderer
-
-    @Inject
     lateinit var ctx: Context
+
+    lateinit var statisticsAdapter: StatisticsAdapter
 
     private val viewModel: StatisticsViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(StatisticsViewModel::class.java)
@@ -72,100 +51,34 @@ class StatisticsFragment : Fragment() {
         val spinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-
         spinner.setSelection(0)
 
+        statisticsAdapter = StatisticsAdapter(requireFragmentManager())
+
+        viewPager.adapter = statisticsAdapter
+
         viewModel.state().observe(this, Observer { render(it) })
+    }
+
+    private fun render(state: StatisticsState?) {
+        state?.let {
+            statisticsAdapter.data = StatisticsItemData(it.dateRanges, it.filter)
+            statisticsAdapter.notifyDataSetChanged()
+            viewPager.setCurrentItem(it.dateRanges.size - 1)
+        }
     }
 
     override fun onStart() {
         super.onStart()
 
-        spinner.itemSelections().subscribe { onFilterSelected(it) }.addTo(disposables)
+        spinner.itemSelections()
+                .subscribe { onFilterSelected(it) }
+                .addTo(disposables)
     }
 
     override fun onStop() {
         super.onStop()
         disposables.clear()
-    }
-
-    private fun render(state: StatisticsState?) {
-        state?.let {
-            sleepDurationChartRenderer.render(sleepDurationChart, state.statistics)
-
-            with(state.statistics.first) {
-                if (!isEmpty) {
-                    trackedNightsText.text = sleepCount.toString()
-                    avgDurationText.text = String.format("%s", avgSleepHours.formatHoursMinutes)
-
-                    renderAvgTimeDiff(avgDurationDiffText, state.statistics.avgSleepDiffHours)
-                    renderLongestNight(longestSleep)
-                    renderShortestNight(shortestSleep, longestSleep)
-                    renderAvgTimeDiff(avgBedDiffText, state.statistics.avgBedTimeDiffHours)
-                    renderAvgTimeDiff(avgWakeUpDiffText, state.statistics.avgWakeUpTimeDiffHours)
-                    renderAverageBedTime(state.statistics)
-                    renderAverageWakeUpTime(state.statistics)
-                }
-            }
-        }
-    }
-
-    private fun renderAvgTimeDiff(avgTimeText: TextView,
-                                  avgTimeDiffHours: Float) {
-        val avgDiffTextColor = if (avgTimeDiffHours > 0) {
-            R.color.green
-        } else {
-            R.color.red
-        }
-
-        avgTimeText.setTextColor(ResourcesCompat.getColor(resources, avgDiffTextColor, null))
-
-        if (avgTimeDiffHours == 0f) {
-            avgTimeText.isVisible = false
-        } else {
-            avgTimeText.isVisible = true
-            avgTimeText.text = String.format("%s",
-                    avgTimeDiffHours.formatHoursMinutesWithPrefix)
-        }
-    }
-
-    private fun renderAverageBedTime(statistics: StatisticComparison) {
-        val current = statistics.first
-        val averageBedTime = current.averageBedTime
-        averageBedText.text = averageBedTime.formatHHMM
-        averageTimeChartRenderer.render(averageBedTimeChart, current.averageBedTime,
-                statistics.first.averageBedTimeDayOfWeek, statistics.first)
-    }
-
-    private fun renderAverageWakeUpTime(statistics: StatisticComparison) {
-        val current = statistics.first
-        val averageWakeUpTime = current.averageWakeUpTime
-        averageWakeUpText.text = averageWakeUpTime.formatHHMM
-        averageTimeChartRenderer.render(averageWakeUpTimeChart, current.averageWakeUpTime,
-                statistics.first.averageWakeUpTimeDayOfWeek, statistics.first)
-    }
-
-    private fun renderLongestNight(longestSleep: Sleep) {
-        longestNightDurationText.text = longestSleep.hours.formatHoursMinutes
-        longestNightDateText.text = longestSleep.toDate?.formatDateDisplayName
-
-        val value = if (longestSleep.hours == 0f) {
-            0f
-        } else {
-            1f
-        }
-
-        basicChartRenderer.render(longestNightChart, value, 1f)
-    }
-
-    private fun renderShortestNight(shortestSleep: Sleep, longestSleep: Sleep) {
-        shortestNightDurationText.text = shortestSleep.hours.formatHoursMinutes
-        shortestNightDateText.text = shortestSleep.toDate?.formatDateDisplayName
-
-        val value = shortestSleep.hours
-        val maxValue = longestSleep.hours
-
-        basicChartRenderer.render(shortestNightChart, value, maxValue)
     }
 
     private fun onFilterSelected(index: Int) {

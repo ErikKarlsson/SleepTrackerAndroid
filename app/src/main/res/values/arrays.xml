@@ -3,7 +3,7 @@
 
     <string-array name="statistic_filter_array">
         <item>Overall</item>
-        <item>This week</item>
+        <item>Week</item>
     </string-array>
 
 </resources>
