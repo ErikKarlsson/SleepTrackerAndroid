@@ -69,7 +69,7 @@ class StatisticsComponent @Inject constructor(private val youngestOldestSubscrip
         return when (statisticFilter) {
             StatisticsFilter.OVERALL -> getOverallDateRange()
             StatisticsFilter.WEEK -> getWeekDateRanges(startDate, endDate)
-            StatisticsFilter.MONTH -> TODO()
+            StatisticsFilter.MONTH -> getMonthDateRanges(startDate, endDate)
             StatisticsFilter.YEAR -> TODO()
         }
     }
@@ -104,6 +104,34 @@ class StatisticsComponent @Inject constructor(private val youngestOldestSubscrip
             // Iterate until reaching week after end date.
             isAtEnd = date.year == endDateNextWeek.year &&
                     date.weekOfWeekBasedYear == endDateNextWeek.weekOfWeekBasedYear
+        } while (!isAtEnd)
+
+        return dateRangePairList
+    }
+
+    private fun getMonthDateRanges(startDate: LocalDate, endDate: LocalDate): List<DateRangePair> {
+        val dateRangePairList = mutableListOf<DateRangePair>()
+        var date = startDate
+        val endDateNextMonth = endDate.plusMonths(1)
+        var isAtEnd: Boolean
+
+        do {
+            val firstDay = date.withDayOfMonth(1)
+            val lastDay = date.withDayOfMonth(date.lengthOfMonth())
+            val previousFirstDay = firstDay.minusMonths(1)
+            val previousLastDay = previousFirstDay.withDayOfMonth(previousFirstDay.lengthOfMonth())
+
+            val first = DateRange(firstDay, lastDay)
+            val second = DateRange(previousFirstDay, previousLastDay)
+            val pair = Pair(first, second)
+
+            dateRangePairList.add(pair)
+
+            date = date.plusMonths(1)
+
+            // Iterate until reaching month after end month.
+            isAtEnd = date.year == endDateNextMonth.year &&
+                    date.month == endDateNextMonth.month
         } while (!isAtEnd)
 
         return dateRangePairList

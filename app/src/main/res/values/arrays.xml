@@ -4,6 +4,7 @@
     <string-array name="statistic_filter_array">
         <item>Overall</item>
         <item>Week</item>
+        <item>Month</item>
     </string-array>
 
 </resources>
