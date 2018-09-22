@@ -36,6 +36,16 @@ val ImmutableList<DayOfWeekHours>.formatDisplayName: String
 
 val LocalTime.formatHHMM: String get() = this.format(DateTimeFormatter.ofPattern("HH:mm"))
 
+val LocalDate.yearLastTwoDigits: String
+    get() {
+        return this.format(DateTimeFormatter.ofPattern("yy"))
+    }
+
+val LocalDate.formatDateShort: String
+    get() {
+        return this.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+    }
+
 val Int.formatPercentage: String  get() {
     val prefix = if (this > 0) "+" else if (this < 0) "-" else ""
     return String.format("%s%d%%", prefix, this)

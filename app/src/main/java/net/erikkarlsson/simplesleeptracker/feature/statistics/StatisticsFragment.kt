@@ -4,11 +4,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.view.isVisible
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -16,6 +18,7 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
+import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import javax.inject.Inject
 
@@ -26,6 +29,9 @@ class StatisticsFragment : Fragment() {
 
     @Inject
     lateinit var ctx: Context
+
+    @Inject
+    lateinit var dateTimeProvider: DateTimeProvider
 
     lateinit var statisticsAdapter: StatisticsAdapter
 
@@ -53,9 +59,11 @@ class StatisticsFragment : Fragment() {
         spinner.adapter = spinnerAdapter
         spinner.setSelection(0)
 
-        statisticsAdapter = StatisticsAdapter(requireFragmentManager())
+        statisticsAdapter = StatisticsAdapter(requireFragmentManager(), dateTimeProvider)
 
         viewPager.adapter = statisticsAdapter
+
+        slidingTabLayout.setViewPager(viewPager)
 
         viewModel.state().observe(this, Observer { render(it) })
     }
@@ -66,6 +74,15 @@ class StatisticsFragment : Fragment() {
             statisticsAdapter.notifyDataSetChanged()
             viewPager.setCurrentItem(it.dateRanges.size - 1, false)
             viewPager.invalidate()
+
+            slidingTabLayout.isVisible = it.filter != StatisticsFilter.OVERALL
+            slidingTabLayout.setViewPager(viewPager)
+
+            // TODO: Hack to fix scroll not working.
+            Handler().postDelayed({
+                slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
+            }, 100)
+
         }
     }
 
