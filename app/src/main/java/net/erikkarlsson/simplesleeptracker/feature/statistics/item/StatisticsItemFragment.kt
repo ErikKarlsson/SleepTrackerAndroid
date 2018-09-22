@@ -91,6 +91,10 @@ class StatisticsItemFragment : Fragment() {
         val filter = arguments?.getSerializable(ARGS_STATISTICS_FILTER) as StatisticsFilter
         val loadStatistics = LoadStatistics(pair, filter)
 
+        sleepDurationChart.setNoDataText("")
+        averageBedTimeChart.setNoDataText("")
+        averageWakeUpTimeChart.setNoDataText("")
+
         viewModel.dispatch(loadStatistics)
         viewModel.state().observe(this, Observer { render(it) })
     }
