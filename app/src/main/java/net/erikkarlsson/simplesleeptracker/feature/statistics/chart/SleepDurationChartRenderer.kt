@@ -2,7 +2,6 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics.chart
 
 import android.content.Context
 import android.support.v4.content.res.ResourcesCompat
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -13,7 +12,9 @@ import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
-import net.erikkarlsson.simplesleeptracker.feature.statistics.*
+import net.erikkarlsson.simplesleeptracker.feature.statistics.AXIS_TEXT_SIZE
+import net.erikkarlsson.simplesleeptracker.feature.statistics.BAR_WIDTH
+import net.erikkarlsson.simplesleeptracker.feature.statistics.VALUE_TEXT_SIZE
 import net.erikkarlsson.simplesleeptracker.feature.statistics.item.ChartExtra
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes3
 import org.threeten.bp.DayOfWeek
@@ -134,7 +135,6 @@ class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
         sleepDurationChart.setTouchEnabled(false)
         sleepDurationChart.isDragEnabled = false
         sleepDurationChart.description.text = ""
-        sleepDurationChart.animateY(ANIMATION_DURATION, Easing.EasingOption.EaseOutQuad)
         sleepDurationChart.setBackgroundColor(ResourcesCompat.getColor(ctx.resources,
                 android.R.color.transparent,
                 null))

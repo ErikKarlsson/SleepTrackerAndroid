@@ -202,6 +202,9 @@ dependencies {
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
 
+    // Material progress bar
+    implementation Deps.materialprogressbar
+
     // MPAndroidChart
     implementation Deps.mpandroidchart
 

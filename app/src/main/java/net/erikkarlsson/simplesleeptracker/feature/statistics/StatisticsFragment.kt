@@ -64,7 +64,8 @@ class StatisticsFragment : Fragment() {
         state?.let {
             statisticsAdapter.data = StatisticsItemData(it.dateRanges, it.filter)
             statisticsAdapter.notifyDataSetChanged()
-            viewPager.setCurrentItem(it.dateRanges.size - 1)
+            viewPager.setCurrentItem(it.dateRanges.size - 1, false)
+            viewPager.invalidate()
         }
     }
 

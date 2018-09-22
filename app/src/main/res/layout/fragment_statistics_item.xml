@@ -230,20 +230,25 @@
                     app:layout_constraintRight_toRightOf="parent"
                     tools:text="9h 35min" />
 
-                <com.github.mikephil.charting.charts.HorizontalBarChart
-                    android:id="@+id/longestNightChart"
+                <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                    android:id="@+id/longestNightBar"
                     android:layout_width="match_parent"
                     android:layout_height="14dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/longestNightLabel" />
+                    android:scaleY="4"
+                    android:indeterminate="false"
+                    app:mpb_progressStyle="horizontal"
+                    app:mpb_progressBackgroundTint="@color/gray"
+                    app:layout_constraintTop_toBottomOf="@id/longestNightLabel"
+                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
 
                 <View
                     android:id="@+id/divider3"
                     style="@style/Divider"
                     android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/longestNightChart" />
+                    app:layout_constraintTop_toBottomOf="@id/longestNightBar" />
 
                 <TextView
                     android:id="@+id/shortestNightLabel"
@@ -276,21 +281,26 @@
                     app:layout_constraintRight_toRightOf="parent"
                     tools:text="9h 35min" />
 
-                <com.github.mikephil.charting.charts.HorizontalBarChart
-                    android:id="@+id/shortestNightChart"
+                <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                    android:id="@+id/shortestNightBar"
                     android:layout_width="match_parent"
                     android:layout_height="14dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/shortestNightLabel" />
+                    android:scaleY="4"
+                    android:indeterminate="false"
+                    app:mpb_progressStyle="horizontal"
+                    app:mpb_progressBackgroundTint="@color/gray"
+                    app:layout_constraintTop_toBottomOf="@id/shortestNightLabel"
+                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
 
                 <View
                     android:id="@+id/divider4"
                     style="@style/Divider"
                     android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/shortestNightChart" />
+                    app:layout_constraintTop_toBottomOf="@id/shortestNightBar" />
 
                 <TextView
                     android:id="@+id/averageBedTimeLabel"

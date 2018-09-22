@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.view.isVisible
+import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_statistics_item.*
@@ -23,7 +24,6 @@ import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRangePair
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.AverageTimeChartRenderer
-import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.BasicChartRenderer
 import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.SleepDurationChartRenderer
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
@@ -37,9 +37,6 @@ class StatisticsItemFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    lateinit var basicChartRenderer: BasicChartRenderer
 
     @Inject
     lateinit var sleepDurationChartRenderer: SleepDurationChartRenderer
@@ -105,7 +102,7 @@ class StatisticsItemFragment : Fragment() {
 
     private fun render(state: StatisticsItemState?) {
         state?.let {
-            sleepDurationChartRenderer.render(sleepDurationChart, state.statistics)
+            sleepDurationChartRenderer.render(sleepDurationChart as BarChart, state.statistics)
 
             with(state.statistics.first) {
                 if (!isEmpty) {
@@ -169,7 +166,7 @@ class StatisticsItemFragment : Fragment() {
             1f
         }
 
-        basicChartRenderer.render(longestNightChart, value, 1f)
+        longestNightBar.progress = (value * 100).toInt()
     }
 
     private fun renderShortestNight(shortestSleep: Sleep, longestSleep: Sleep) {
@@ -179,7 +176,7 @@ class StatisticsItemFragment : Fragment() {
         val value = shortestSleep.hours
         val maxValue = longestSleep.hours
 
-        basicChartRenderer.render(shortestNightChart, value, maxValue)
+        shortestNightBar.progress = ((value / maxValue) * 100).toInt()
     }
 }
 

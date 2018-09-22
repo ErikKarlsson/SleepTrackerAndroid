@@ -3,7 +3,6 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics.chart
 import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.res.ResourcesCompat
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -14,9 +13,9 @@ import com.google.common.collect.ImmutableList
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_AN_HOUR
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
-import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.feature.statistics.*
+import net.erikkarlsson.simplesleeptracker.feature.statistics.AXIS_TEXT_SIZE
+import net.erikkarlsson.simplesleeptracker.feature.statistics.VALUE_TEXT_SIZE
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.util.midnightOffsetInSeconds
 import org.threeten.bp.DayOfWeek
@@ -143,7 +142,6 @@ class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
         avergeTimeChart.setTouchEnabled(false)
         avergeTimeChart.isDragEnabled = false
         avergeTimeChart.description.text = ""
-        avergeTimeChart.animateY(ANIMATION_DURATION, Easing.EasingOption.EaseOutQuad)
         avergeTimeChart.invalidate()
     }
 }
