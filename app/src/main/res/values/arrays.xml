@@ -5,6 +5,7 @@
         <item>Overall</item>
         <item>Week</item>
         <item>Month</item>
+        <item>Year</item>
     </string-array>
 
 </resources>

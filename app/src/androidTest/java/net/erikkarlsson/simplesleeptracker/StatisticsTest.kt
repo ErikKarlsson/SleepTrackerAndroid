@@ -48,6 +48,15 @@ class StatisticsTest {
             // Given current time
             mockDateTimeNow("2018-03-14T22:30:00+01:00")
 
+            // Last year
+            insertSleep(fromDate = "2017-03-04T23:30:00+01:00", toDate = "2017-03-05T06:30:00+01:00")
+            insertSleep(fromDate = "2017-03-05T23:30:00+01:00", toDate = "2017-03-06T06:55:00+01:00")
+            insertSleep(fromDate = "2017-03-06T22:50:00+01:00", toDate = "2017-03-07T06:20:00+01:00")
+            insertSleep(fromDate = "2017-03-07T22:50:00+01:00", toDate = "2017-03-08T06:20:00+01:00")
+            insertSleep(fromDate = "2017-03-08T22:50:00+01:00", toDate = "2017-03-09T06:20:00+01:00")
+            insertSleep(fromDate = "2017-03-09T22:50:00+01:00", toDate = "2017-03-10T06:20:00+01:00")
+            insertSleep(fromDate = "2017-03-10T22:50:00+01:00", toDate = "2017-03-11T06:20:00+01:00")
+
             // Two months ago
             insertSleep(fromDate = "2018-01-04T23:30:00+01:00", toDate = "2018-01-05T06:30:00+01:00")
 
