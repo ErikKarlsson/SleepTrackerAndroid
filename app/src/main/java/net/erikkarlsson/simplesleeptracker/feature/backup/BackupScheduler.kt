@@ -4,9 +4,9 @@ import androidx.work.*
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import javax.inject.Inject
 
-const val TAG_RESTORE_BACKUP = "tag_restore_backup"
+const val TAG_BACKUP = "tag_backup"
 
-class RestoreBackupScheduler @Inject constructor(private val workManager: WorkManager)
+class BackupScheduler @Inject constructor(private val workManager: WorkManager)
     : TaskScheduler {
 
     override fun schedule() {
@@ -14,13 +14,13 @@ class RestoreBackupScheduler @Inject constructor(private val workManager: WorkMa
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-        val restoreSleepDataRequest =
-                OneTimeWorkRequest.Builder(RestoreSleepWorker::class.java)
+        val backupSleepDataRequest =
+                OneTimeWorkRequest.Builder(BackupSleepWorker::class.java)
                         .setConstraints(constraints)
                         .build()
 
-        workManager.beginUniqueWork(TAG_RESTORE_BACKUP,
+        workManager.beginUniqueWork(TAG_BACKUP,
                 ExistingWorkPolicy.KEEP,
-                restoreSleepDataRequest).enqueue()
+                backupSleepDataRequest).enqueue()
     }
 }

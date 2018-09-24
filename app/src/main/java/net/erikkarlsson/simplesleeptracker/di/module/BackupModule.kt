@@ -7,9 +7,9 @@ import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileWriter
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
+import net.erikkarlsson.simplesleeptracker.feature.backup.BackupScheduler
 import net.erikkarlsson.simplesleeptracker.feature.backup.FastBackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.feature.backup.FastBackupCsvFileWriter
-import net.erikkarlsson.simplesleeptracker.feature.backup.PeriodicBackupScheduler
 import net.erikkarlsson.simplesleeptracker.feature.backup.RestoreBackupScheduler
 import javax.inject.Named
 import javax.inject.Singleton
@@ -31,8 +31,8 @@ abstract class BackupModule() {
 
     @Binds
     @Singleton
-    @Named("periodicBackupScheduler")
-    abstract fun bindsPeriodicBackupScheduler(periodicBackupScheduler: PeriodicBackupScheduler): TaskScheduler
+    @Named("backupScheduler")
+    abstract fun bindsBackupScheduler(backupScheduler: BackupScheduler): TaskScheduler
 
     @Binds
     @Singleton

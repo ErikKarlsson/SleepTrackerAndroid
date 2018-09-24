@@ -20,7 +20,6 @@ import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.elm.LogLevel
 import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
-import net.erikkarlsson.simplesleeptracker.feature.backup.PeriodicBackupScheduler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,9 +39,6 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
-
-    @Inject
-    lateinit var periodicBackupScheduler: PeriodicBackupScheduler
 
     override fun onCreate() {
         super.onCreate()
