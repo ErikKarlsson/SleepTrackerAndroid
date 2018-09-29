@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.res.ResourcesCompat
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -42,6 +43,11 @@ class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
         leftAxis.setDrawLabels(false)
         leftAxis.setDrawZeroLine(true)
         leftAxis.textSize = AXIS_TEXT_SIZE
+
+        val limitLine = LimitLine(0f)
+        limitLine.lineColor = Color.GRAY
+        limitLine.lineWidth = 0.4f
+        leftAxis.addLimitLine(limitLine)
 
         val xAxis = avergeTimeChart.getXAxis()
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
