@@ -96,6 +96,6 @@ val Float.formatHoursMinutesWithPrefix: String
 val Long.formatTimestamp: String
     get() {
         val date = Date(this)
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         return format.format(date)
     }

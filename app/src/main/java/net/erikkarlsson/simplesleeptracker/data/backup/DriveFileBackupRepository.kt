@@ -47,7 +47,12 @@ class DriveFileBackupRepository @Inject constructor(
             }
 
     override fun getLastBackupTimestamp(): Observable<Long> =
-        rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP, 0).asObservable()
+            rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP, 0).asObservable()
+
+    override fun updateLastBackupTimestamp(): Completable =
+            Completable.fromCallable {
+                rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP).set(System.currentTimeMillis())
+            }
 
     private fun openFile(driveFile: DriveFile): Single<File> =
             rxDrive.openFile(driveFile)
@@ -68,11 +73,8 @@ class DriveFileBackupRepository @Inject constructor(
             rxDrive.requestSync()
                     // Sync request might fail because of API rate limit.
                     // Drive will eventually perform sync so consider the work successful.
-                    .doOnComplete(this::updateLastBackupTimestamp)
+                    .andThen(updateLastBackupTimestamp())
                     .onErrorComplete()
-
-    private fun updateLastBackupTimestamp() =
-            rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP).set(System.currentTimeMillis())
 
     private fun updateExistingFile(driveFile: DriveFile,
                                    file: File): Completable =

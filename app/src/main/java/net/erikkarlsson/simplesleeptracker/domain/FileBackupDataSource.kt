@@ -12,4 +12,5 @@ interface FileBackupDataSource {
     fun get(): Maybe<File>
     fun put(file: File): Completable
     fun getLastBackupTimestamp(): Observable<Long>
+    fun updateLastBackupTimestamp(): Completable
 }
