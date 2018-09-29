@@ -46,4 +46,7 @@ interface StatisticsDao {
 
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY date(to_date_local) ASC LIMIT 1")
     fun getYoungestSleep(): Flowable<SleepEntity>
+
+    @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY date(to_date_local) DESC LIMIT 1")
+    fun getOldestSleep(): Flowable<SleepEntity>
 }
