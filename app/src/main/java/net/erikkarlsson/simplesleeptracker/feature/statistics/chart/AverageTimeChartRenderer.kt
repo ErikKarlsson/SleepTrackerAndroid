@@ -41,9 +41,6 @@ class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
         leftAxis.setDrawAxisLine(false)
         leftAxis.setDrawLabels(false)
         leftAxis.setDrawZeroLine(true)
-        leftAxis.setDrawZeroLine(true) // draw a zero line
-        leftAxis.setZeroLineColor(Color.RED)
-        leftAxis.setZeroLineWidth(0.7f)
         leftAxis.textSize = AXIS_TEXT_SIZE
 
         val xAxis = avergeTimeChart.getXAxis()
@@ -100,7 +97,23 @@ class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
             }
         }
 
+        // Max diff not found.
+        if (maxDiff < 0) {
+            maxDiff = 0
+        }
+
+        // Min diff not found.
+        if (minDiff > 0) {
+            minDiff = 0
+        }
+
         var maxValue = Math.max(Math.abs(maxDiff), Math.abs(minDiff))
+
+        // Max value of 0 means all bars are in the middle of the chart.
+        // To fix bug with values not rendering we set max value to 1.
+        if (maxValue == 0) {
+            maxValue = 1
+        }
 
         val scale = if (maxValue < SECONDS_IN_AN_HOUR / 2) {
             2.5f
