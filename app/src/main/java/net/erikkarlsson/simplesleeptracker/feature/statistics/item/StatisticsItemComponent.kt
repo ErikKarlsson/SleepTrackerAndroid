@@ -9,8 +9,8 @@ import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRangePair
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFilter.OVERALL
-import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticOverallTask
 import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonTask
+import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticOverallTask
 import javax.inject.Inject
 
 class StatisticsItemComponent @Inject constructor(private val statisticsSubscription: StatisticsSubscription)
@@ -26,21 +26,32 @@ class StatisticsItemComponent @Inject constructor(private val statisticsSubscrip
     override fun update(msg: StatisticsItemMsg, prevState: StatisticsItemState): Pair<StatisticsItemState, StatisticsItemCmd?> =
             when (msg) {
                 is LoadStatistics -> prevState.copy(filter = msg.filter, dataRangePair = msg.dataRangePair).noCmd()
-                is StatisticsLoaded -> prevState.copy(statistics = msg.statistics).noCmd()
+                is StatisticsLoaded -> {
+                    prevState.copy(statistics = msg.statistics,
+                            LoadCount = (prevState.LoadCount + 1)).noCmd()
+                }
                 DoNothing -> prevState.noCmd()
             }
-
 }
 
 // State
-data class StatisticsItemState(val statistics: StatisticComparison,
+data class StatisticsItemState(val LoadCount: Int,
+                               val statistics: StatisticComparison,
                                val filter: StatisticsFilter,
                                val dataRangePair: DateRangePair) : State {
 
+    val isStatisticsEmpty
+        get() = statistics == StatisticComparison.empty()
+
+    // Don't rendering while loading to avoid flicker.
+    // First emitted result is always empty.
+    val isLoading = LoadCount < 2
+
     companion object {
-        fun empty() = StatisticsItemState(StatisticComparison.empty(),
+        fun empty() = StatisticsItemState(0,
+                StatisticComparison.empty(),
                 OVERALL,
-                Pair(DateRange.empty(), DateRange.empty()))
+                DateRange.empty() to DateRange.empty())
     }
 }
 

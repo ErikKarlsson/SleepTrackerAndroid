@@ -106,6 +106,15 @@ class StatisticsItemFragment : Fragment() {
 
     private fun render(state: StatisticsItemState?) {
         state?.let {
+            if (state.isLoading) {
+                return
+            }
+
+            if (state.isStatisticsEmpty) {
+                trackedNightsText.text = "0"
+                avgDurationText.text = "-"
+            }
+
             sleepDurationChartRenderer.render(sleepDurationChart as BarChart, state.statistics)
 
             with(state.statistics.first) {
