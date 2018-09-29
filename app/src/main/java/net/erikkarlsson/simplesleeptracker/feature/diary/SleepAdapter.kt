@@ -29,7 +29,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sl
 
         fun bindSleep(sleep: Sleep?) {
             itemView.hoursText.text = sleep?.hours?.formatHoursMinutes2
-            itemView.dateText.text = sleep?.fromDate?.formatDateDisplayName
+            itemView.dateText.text = sleep?.toDate?.formatDateDisplayName
             itemView.timeText.text = sleep?.fromDate?.formatHHMM
             itemView.setOnClickListener {
                 sleep?.let(itemClick)

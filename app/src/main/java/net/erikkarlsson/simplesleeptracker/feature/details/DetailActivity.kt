@@ -161,9 +161,10 @@ class DetailActivity : AppCompatActivity() {
         nextState?.let {
             state = nextState
             if (state.sleep != Sleep.empty()) {
-                val dateString = state.sleep.fromDate.formatDateDisplayName2
-                toolbar.setTitle(dateString)
-                startDateText.text = dateString
+                val fromDateString = state.sleep.fromDate.formatDateDisplayName2
+                val toDateString = state.sleep.toDate?.formatDateDisplayName2
+                toolbar.setTitle(toDateString)
+                startDateText.text = fromDateString
                 timeAsleepText.text = state.sleep.fromDate.formatHHMM
                 timeAwakeText.text = state.sleep.toDate?.formatHHMM
                 sleptHoursText.text = String.format("%s %s",
