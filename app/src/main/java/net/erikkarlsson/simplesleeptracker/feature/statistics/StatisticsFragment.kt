@@ -72,11 +72,15 @@ class StatisticsFragment : Fragment() {
         state?.let {
             statisticsAdapter.data = StatisticsItemData(it.dateRanges, it.filter)
             statisticsAdapter.notifyDataSetChanged()
+
             viewPager.setCurrentItem(it.dateRanges.size - 1, false)
             viewPager.invalidate()
 
-            slidingTabLayout.isVisible = it.filter != StatisticsFilter.OVERALL
             slidingTabLayout.setViewPager(viewPager)
+            slidingTabLayout.isVisible = it.filter != StatisticsFilter.OVERALL && !it.isEmpty
+
+            spinnerContainer.isVisible = !it.isEmpty
+            emptyState.isVisible = it.isEmpty
 
             // TODO: Hack to fix scroll not working.
             Handler().postDelayed({

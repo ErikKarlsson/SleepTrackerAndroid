@@ -179,6 +179,8 @@ data class StatisticsState(val filter: StatisticsFilter,
                            val oldest: Sleep,
                            val dateRanges: List<DateRangePair>) : State {
 
+    val isEmpty = dateRanges.size == 0
+
     companion object {
         fun empty() = StatisticsState(StatisticsFilter.OVERALL, Sleep.empty(), Sleep.empty(), listOf())
     }
