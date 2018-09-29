@@ -115,6 +115,7 @@ class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
         leftAxis.isEnabled = true
         leftAxis.axisMinimum = 0f
         leftAxis.axisMaximum = leftMaximum
+        leftAxis.granularity = 1f
         leftAxis.textSize = AXIS_TEXT_SIZE
         leftAxis.valueFormatter = IAxisValueFormatter { value, _ -> String.format("%dh", value.toInt()) }
 
