@@ -6,17 +6,21 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/recycler_section_header_height"
-        android:background="@color/gray">
+        android:layout_height="48dp"
+        android:background="@android:color/white">
 
         <Spinner
             android:id="@+id/spinner"
             style="@style/Widget.AppCompat.Spinner"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="12dp" />
+
+        <View
+            android:id="@+id/divider0"
+            style="@style/Divider"
+            android:layout_gravity="bottom"/>
 
     </FrameLayout>
 
