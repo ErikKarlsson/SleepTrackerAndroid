@@ -28,6 +28,15 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sl
         : RecyclerView.ViewHolder(v) {
 
         fun bindSleep(sleep: Sleep?) {
+            val hours = sleep?.hours ?: 0f
+
+            val imageResId = when {
+                hours >= 7 && hours <= 9 -> R.drawable.ic_good_sleep
+                hours < 6 || hours > 10 -> R.drawable.ic_bad_sleep
+                else -> R.drawable.ic_so_so_sleep
+            }
+
+            itemView.iconImage.setImageResource(imageResId)
             itemView.hoursText.text = sleep?.hours?.formatHoursMinutes2
             itemView.dateText.text = sleep?.toDate?.formatDateDisplayName
             itemView.timeText.text = sleep?.fromDate?.formatHHMM

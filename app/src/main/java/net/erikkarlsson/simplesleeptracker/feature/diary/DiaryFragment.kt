@@ -22,6 +22,9 @@ import net.erikkarlsson.simplesleeptracker.base.Event
 import net.erikkarlsson.simplesleeptracker.base.EventObserver
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
+import net.erikkarlsson.simplesleeptracker.feature.diary.recycler.RecyclerSectionItemDecoration
+import net.erikkarlsson.simplesleeptracker.feature.diary.recycler.RecyclerSectionItemDecorationFactory
+import net.erikkarlsson.simplesleeptracker.feature.diary.recycler.SimpleDividerItemDecoration
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import javax.inject.Inject
 import javax.inject.Named

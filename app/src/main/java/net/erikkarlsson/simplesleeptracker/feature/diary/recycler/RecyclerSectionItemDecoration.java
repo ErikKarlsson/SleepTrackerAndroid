@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.feature.diary;
+package net.erikkarlsson.simplesleeptracker.feature.diary.recycler;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
