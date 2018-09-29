@@ -20,8 +20,8 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
     override fun getSleep(): Observable<ImmutableList<Sleep>> =
             sleepDao.getSleep()
                     .toObservable()
-                    .switchMap {
-                        Observable.fromIterable(it)
+                    .switchMap { sleepList ->
+                        Observable.fromIterable(sleepList)
                                 .map { sleepMapper.mapFromEntity(it) }
                                 .toImmutableList()
                                 .toObservable()

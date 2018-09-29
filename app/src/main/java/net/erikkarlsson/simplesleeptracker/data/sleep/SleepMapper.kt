@@ -14,11 +14,13 @@ class SleepMapper @Inject constructor() : Mapper<SleepEntity, Sleep> {
 
     override fun mapToEntity(type: Sleep): SleepEntity {
         return SleepEntity(fromDate = type.fromDate,
-                                                                          toDate = type.toDate,
-                                                                          toDateMidnightOffsetSeconds = type.toDateMidnightOffsetSeconds,
-                                                                          fromDateMidnightOffsetSeconds = type.fromDateMidnightOffsetSeconds,
-                                                                          hours = type.hours,
-                                                                          id = type.id)
+                toDate = type.toDate,
+                fromDateLocal = type.fromDate.toLocalDate(),
+                toDateLocal = type.toDate?.toLocalDate(),
+                toDateMidnightOffsetSeconds = type.toDateMidnightOffsetSeconds,
+                fromDateMidnightOffsetSeconds = type.fromDateMidnightOffsetSeconds,
+                hours = type.hours,
+                id = type.id)
     }
 
 }

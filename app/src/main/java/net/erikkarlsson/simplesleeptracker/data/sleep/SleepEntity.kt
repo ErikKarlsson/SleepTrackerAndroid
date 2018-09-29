@@ -3,6 +3,7 @@ package net.erikkarlsson.simplesleeptracker.data.sleep
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "sleep")
@@ -10,6 +11,10 @@ data class SleepEntity(@ColumnInfo(name = "from_date")
                        var fromDate: OffsetDateTime? = null,
                        @ColumnInfo(name = "to_date")
                        var toDate: OffsetDateTime? = null,
+                       @ColumnInfo(name = "from_date_local")
+                       var fromDateLocal: LocalDate? = null,
+                       @ColumnInfo(name = "to_date_local")
+                       var toDateLocal: LocalDate? = null,
                        @ColumnInfo(name = "to_date_midnight_offset_seconds")
                        var toDateMidnightOffsetSeconds: Int = 0,
                        @ColumnInfo(name = "from_date_midnight_offset_seconds")
