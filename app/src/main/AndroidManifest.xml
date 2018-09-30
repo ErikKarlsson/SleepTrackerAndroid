@@ -2,6 +2,8 @@
 <manifest package="net.erikkarlsson.simplesleeptracker"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="false"
@@ -42,6 +44,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_info"/>
         </receiver>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fe2ec819a92c92bdf335833374300bb79b6fff00"
+            />
     </application>
 
 </manifest>

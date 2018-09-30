@@ -11,7 +11,7 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "2.64.0"
+fastlane_version "2.68.0"
 
 default_platform :android
 
@@ -23,6 +23,18 @@ platform :android do
   desc "Runs all the tests"
   lane :test do
     gradle(task: "test")
+  end
+
+  lane :beta do
+    # build the release variant
+    build_android_app(task: "assembleInternalRelease")
+
+    # upload to Beta by Crashlytics
+    crashlytics(
+      # keys for organization: Erik Karlsson’s Projects
+      api_token: "fe2ec819a92c92bdf335833374300bb79b6fff00",
+      build_secret: "e61b972516adb33a74fa135266efd04318d7950a13f87e0fa06e0063464f38c9"
+    )
   end
 
   desc "Submit a new internal Build to Play Store"

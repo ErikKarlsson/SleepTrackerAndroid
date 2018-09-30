@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
@@ -26,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
+
+        Fabric.with(this, Crashlytics())
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
