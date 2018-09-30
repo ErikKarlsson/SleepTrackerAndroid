@@ -66,9 +66,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signInButton.clicksThrottle(disposables) { signIn() }
-        signOutButton.clicksThrottle(disposables) { signOut() }
-
         viewModel.state().observe(this, Observer(this::render))
 
         val account = GoogleSignIn.getLastSignedInAccount(ctx)
@@ -80,6 +77,9 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        signInButton.clicksThrottle(disposables) { signIn() }
+        signOutButton.clicksThrottle(disposables) { signOut() }
 
         Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
                 .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
