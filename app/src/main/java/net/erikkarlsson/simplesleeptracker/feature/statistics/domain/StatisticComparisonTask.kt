@@ -4,7 +4,6 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
-import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRangePair
 import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonTask.Params
@@ -22,8 +21,8 @@ class StatisticComparisonTask @Inject constructor(
         val secondRange = params.rangePair.second
 
         return Observables.combineLatest(
-                statisticsRepository.getStatistics(firstRange).startWith(Statistics.empty()),
-                statisticsRepository.getStatistics(secondRange).startWith(Statistics.empty()))
+                statisticsRepository.getStatistics(firstRange),
+                statisticsRepository.getStatistics(secondRange))
         { firstWeek, secondWeek -> StatisticComparison(firstWeek, secondWeek) }
     }
 

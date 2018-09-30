@@ -3,6 +3,7 @@ package net.erikkarlsson.simplesleeptracker.data.statistics
 import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.data.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.data.DayOfWeekMidnightOffset
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepEntity
@@ -38,23 +39,30 @@ class StatisticsRepository @Inject constructor(private val statisticsDao: Statis
         val from = dateRange.from.toString()
         val to = dateRange.to.toString()
 
-        return Observables.combineLatest(
-                getSleepCount(from, to),
-                getAverageSleepInHours(from, to),
-                getLongestSleep(from, to),
-                getShortestSleep(from, to),
-                getAverageWakeUpTime(from, to),
-                getAverageBedtime(from, to),
-                getAverageBedtimeDayOfWeek(from, to),
-                getAverageWakeUpTimeDayOfWeek(from, to),
-                getAverageSleepDurationDayOfWeek(from, to))
-                { sleepCount, averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime, averageBedTimeDayOfWeek, averageWakeupTimeDayOfWeek, averageSleepDurationDayOfWeek ->
-                    Statistics(sleepCount, averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime, averageBedTimeDayOfWeek, averageWakeupTimeDayOfWeek, averageSleepDurationDayOfWeek)
+        return getSleepCount(from, to)
+                .switchMap { sleepCount ->
+                    if (sleepCount == 0) {
+                        Observable.just(Statistics.empty())
+                    } else {
+                        Observables.combineLatest(
+                                getAverageSleepInHours(from, to),
+                                getLongestSleep(from, to),
+                                getShortestSleep(from, to),
+                                getAverageWakeUpTime(from, to),
+                                getAverageBedtime(from, to),
+                                getAverageBedtimeDayOfWeek(from, to),
+                                getAverageWakeUpTimeDayOfWeek(from, to),
+                                getAverageSleepDurationDayOfWeek(from, to))
+                        { averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime, averageBedTimeDayOfWeek, averageWakeupTimeDayOfWeek, averageSleepDurationDayOfWeek ->
+                            Statistics(sleepCount, averageSleep, longestNight, shortestSleep, averageWakeUpTime, averageBedTime, averageBedTimeDayOfWeek, averageWakeupTimeDayOfWeek, averageSleepDurationDayOfWeek)
+                        }
+                                .subscribeOn(Schedulers.io())
+                    }
                 }
     }
 
     override fun getSleepCountYearMonth(): Observable<List<SleepCountYearMonth>> =
-        statisticsDao.getCountGroupedByYearMonth().toObservable()
+            statisticsDao.getCountGroupedByYearMonth().toObservable()
 
     private fun firstOrEmpty(sleepList: List<SleepEntity>): SleepEntity =
             sleepList.firstOrNull() ?: SleepEntity.empty()

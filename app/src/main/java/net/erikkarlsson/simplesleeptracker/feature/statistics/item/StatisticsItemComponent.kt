@@ -28,14 +28,14 @@ class StatisticsItemComponent @Inject constructor(private val statisticsSubscrip
                 is LoadStatistics -> prevState.copy(filter = msg.filter, dataRangePair = msg.dataRangePair).noCmd()
                 is StatisticsLoaded -> {
                     prevState.copy(statistics = msg.statistics,
-                            LoadCount = (prevState.LoadCount + 1)).noCmd()
+                            isLoading = false).noCmd()
                 }
                 DoNothing -> prevState.noCmd()
             }
 }
 
 // State
-data class StatisticsItemState(val LoadCount: Int,
+data class StatisticsItemState(val isLoading: Boolean,
                                val statistics: StatisticComparison,
                                val filter: StatisticsFilter,
                                val dataRangePair: DateRangePair) : State {
@@ -43,12 +43,8 @@ data class StatisticsItemState(val LoadCount: Int,
     val isStatisticsEmpty
         get() = statistics == StatisticComparison.empty()
 
-    // Don't rendering while loading to avoid flicker.
-    // First emitted result is always empty.
-    val isLoading = LoadCount < 2
-
     companion object {
-        fun empty() = StatisticsItemState(0,
+        fun empty() = StatisticsItemState(true,
                 StatisticComparison.empty(),
                 OVERALL,
                 DateRange.empty() to DateRange.empty())
