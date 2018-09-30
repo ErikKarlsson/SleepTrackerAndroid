@@ -24,6 +24,8 @@ import org.threeten.bp.format.TextStyle
 import java.util.*
 import javax.inject.Inject
 
+private const val MAX_VALUE_WHEN_EMPTY = 8
+
 class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
 
     fun render(sleepDurationChart: BarChart,
@@ -109,6 +111,7 @@ class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
         })
 
         val longestSleepDurationDayOfWeekInHours = statisticsComparison.first.longestSleepDurationDayOfWeekInHours
+
         val leftMaximum = Math.round(longestSleepDurationDayOfWeekInHours.toDouble()).toFloat() + 1f
 
         val leftAxis = sleepDurationChart.axisLeft
@@ -117,7 +120,16 @@ class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
         leftAxis.axisMaximum = leftMaximum
         leftAxis.granularity = 1f
         leftAxis.textSize = AXIS_TEXT_SIZE
-        leftAxis.valueFormatter = IAxisValueFormatter { value, _ -> String.format("%dh", value.toInt()) }
+        leftAxis.valueFormatter = IAxisValueFormatter { value, _ ->
+            // When empty display 8h instead of 1h as max value.
+            val displayValue = if (value != 0f && statisticsComparison == StatisticComparison.empty()) {
+                MAX_VALUE_WHEN_EMPTY
+            } else {
+                value.toInt()
+            }
+
+            String.format("%dh", displayValue)
+        }
 
         val rightAxis = sleepDurationChart.axisRight
         rightAxis.isEnabled = false

@@ -113,22 +113,23 @@ class StatisticsItemFragment : Fragment() {
             if (state.isStatisticsEmpty) {
                 trackedNightsText.text = "0"
                 avgDurationText.text = "-"
-            }
+                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, StatisticComparison.empty())
+            } else {
+                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, state.statistics)
 
-            sleepDurationChartRenderer.render(sleepDurationChart as BarChart, state.statistics)
+                with(state.statistics.first) {
+                    if (!isEmpty) {
+                        trackedNightsText.text = sleepCount.toString()
+                        avgDurationText.text = String.format("%s", avgSleepHours.formatHoursMinutes)
 
-            with(state.statistics.first) {
-                if (!isEmpty) {
-                    trackedNightsText.text = sleepCount.toString()
-                    avgDurationText.text = String.format("%s", avgSleepHours.formatHoursMinutes)
-
-                    renderAvgTimeDiff(avgDurationDiffText, state.statistics.avgSleepDiffHours)
-                    renderLongestNight(longestSleep)
-                    renderShortestNight(shortestSleep, longestSleep)
-                    renderAvgTimeDiff(avgBedDiffText, state.statistics.avgBedTimeDiffHours)
-                    renderAvgTimeDiff(avgWakeUpDiffText, state.statistics.avgWakeUpTimeDiffHours)
-                    renderAverageBedTime(state.statistics)
-                    renderAverageWakeUpTime(state.statistics)
+                        renderAvgTimeDiff(avgDurationDiffText, state.statistics.avgSleepDiffHours)
+                        renderLongestNight(longestSleep)
+                        renderShortestNight(shortestSleep, longestSleep)
+                        renderAvgTimeDiff(avgBedDiffText, state.statistics.avgBedTimeDiffHours)
+                        renderAvgTimeDiff(avgWakeUpDiffText, state.statistics.avgWakeUpTimeDiffHours)
+                        renderAverageBedTime(state.statistics)
+                        renderAverageWakeUpTime(state.statistics)
+                    }
                 }
             }
         }

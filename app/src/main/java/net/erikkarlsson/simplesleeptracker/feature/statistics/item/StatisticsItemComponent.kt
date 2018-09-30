@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
+import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRangePair
@@ -41,12 +42,12 @@ data class StatisticsItemState(val isLoading: Boolean,
                                val dataRangePair: DateRangePair) : State {
 
     val isStatisticsEmpty
-        get() = statistics == StatisticComparison.empty()
+        get() = statistics.first == Statistics.empty()
 
     companion object {
         fun empty() = StatisticsItemState(true,
                 StatisticComparison.empty(),
-                OVERALL,
+                StatisticsFilter.NONE,
                 DateRange.empty() to DateRange.empty())
     }
 }
@@ -56,6 +57,9 @@ class StatisticsSubscription @Inject constructor(private val statisticOverallTas
                                                  private val statisticComparisonTask: StatisticComparisonTask) : StatefulSub<StatisticsItemState, StatisticsItemMsg>() {
     override fun invoke(state: StatisticsItemState): Observable<StatisticsItemMsg> =
             when {
+                state.filter == StatisticsFilter.NONE -> {
+                    Observable.empty()
+                }
                 state.filter == OVERALL -> {
                     statisticOverallTask.execute(ObservableTask.None())
                             .map { StatisticsLoaded(it) }

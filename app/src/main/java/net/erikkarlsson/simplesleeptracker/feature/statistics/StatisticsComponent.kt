@@ -76,6 +76,7 @@ class StatisticsComponent @Inject constructor(private val youngestOldestSubscrip
             StatisticsFilter.WEEK -> getWeekDateRanges(startDate, endDate)
             StatisticsFilter.MONTH -> getMonthDateRanges(startDate, endDate)
             StatisticsFilter.YEAR -> getYearDateRanges(startDate, endDate)
+            StatisticsFilter.NONE -> listOf()
         }
     }
 

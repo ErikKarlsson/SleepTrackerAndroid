@@ -37,6 +37,7 @@ class StatisticsAdapter(fragmentManager: FragmentManager,
                 StatisticsFilter.WEEK -> getWeekTitle(position)
                 StatisticsFilter.MONTH -> getMonthTitle(position)
                 StatisticsFilter.YEAR -> getYearTitle(position)
+                StatisticsFilter.NONE -> ""
             }
 
     private fun getWeekTitle(position: Int): CharSequence? {
