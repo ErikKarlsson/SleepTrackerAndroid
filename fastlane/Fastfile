@@ -25,7 +25,7 @@ platform :android do
     gradle(task: "test")
   end
 
-  lane :beta do
+  lane :internal do
     # build the release variant
     build_android_app(task: "assembleInternalRelease")
 
@@ -38,7 +38,7 @@ platform :android do
   end
 
   desc "Submit a new internal Build to Play Store"
-  lane :internal do
+  lane :internal_play_store do
     gradle(task: "clean assembleInternalRelease")
     upload_to_play_store(track: 'internal')
 
