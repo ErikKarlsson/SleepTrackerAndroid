@@ -45,8 +45,8 @@ interface StatisticsDao {
     fun getAverageWakeUpMidnightOffsetInSeconds(from: String, to: String): Flowable<Int>
 
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY date(to_date_local) ASC LIMIT 1")
-    fun getYoungestSleep(): Flowable<SleepEntity>
+    fun getYoungestSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY date(to_date_local) DESC LIMIT 1")
-    fun getOldestSleep(): Flowable<SleepEntity>
+    fun getOldestSleep(): Flowable<List<SleepEntity>>
 }

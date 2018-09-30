@@ -23,8 +23,14 @@ interface StatisticsDataSource {
      */
     fun getSleepCountYearMonth(): Observable<List<SleepCountYearMonth>>
 
+    /**
+     * Get stream of youngest sleep. Emits empty list if no sleep found.
+     */
     fun getYoungestSleep(): Observable<Sleep>
 
+    /**
+     * Get stream of oldest sleep. Emits empty list if no sleep found.
+     */
     fun getOldestSleep(): Observable<Sleep>
 }
 

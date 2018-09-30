@@ -7,9 +7,13 @@ import javax.inject.Inject
 class SleepMapper @Inject constructor() : Mapper<SleepEntity, Sleep> {
 
     override fun mapFromEntity(type: SleepEntity): Sleep {
-        return Sleep(id = type.id ?: throw RuntimeException("Requires non-null id"),
-                fromDate = type.fromDate ?: throw RuntimeException("Requires non-null fromDate"),
-                toDate = type.toDate)
+        return if (type == SleepEntity.empty()) {
+            Sleep.empty()
+        } else {
+            Sleep(id = type.id ?: throw RuntimeException("Requires non-null id"),
+                    fromDate = type.fromDate ?: throw RuntimeException("Requires non-null fromDate"),
+                    toDate = type.toDate)
+        }
     }
 
     override fun mapToEntity(type: Sleep): SleepEntity {

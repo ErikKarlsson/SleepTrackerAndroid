@@ -80,7 +80,7 @@ class StatisticsFragment : Fragment() {
             slidingTabLayout.isVisible = it.filter != StatisticsFilter.OVERALL && !it.isEmpty
 
             spinnerContainer.isVisible = !it.isEmpty
-            emptyState.isVisible = it.isEmpty
+            emptyState.isVisible = !it.isLoading && it.isEmpty
 
             // TODO: Hack to fix scroll not working.
             Handler().postDelayed({

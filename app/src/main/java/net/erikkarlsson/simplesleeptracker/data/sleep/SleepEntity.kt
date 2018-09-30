@@ -25,7 +25,9 @@ data class SleepEntity(@ColumnInfo(name = "from_date")
                        var id: Int? = null) {
 
     companion object {
-        fun empty() = SleepEntity()
+        fun empty() = SleepEntity(id = -1,
+                fromDate = OffsetDateTime.MIN,
+                toDate = OffsetDateTime.MAX)
     }
 }
 

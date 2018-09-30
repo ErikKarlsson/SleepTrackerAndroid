@@ -5,6 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import net.erikkarlsson.simplesleeptracker.data.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.data.DayOfWeekMidnightOffset
+import net.erikkarlsson.simplesleeptracker.data.sleep.SleepEntity
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.*
@@ -19,10 +20,14 @@ class StatisticsRepository @Inject constructor(private val statisticsDao: Statis
     : StatisticsDataSource {
 
     override fun getYoungestSleep(): Observable<Sleep> =
-            statisticsDao.getYoungestSleep().map(sleepMapper::mapFromEntity).toObservable()
+            statisticsDao.getYoungestSleep()
+                    .map(::firstOrEmpty)
+                    .map(sleepMapper::mapFromEntity).toObservable()
 
     override fun getOldestSleep(): Observable<Sleep> =
-            statisticsDao.getOldestSleep().map(sleepMapper::mapFromEntity).toObservable()
+            statisticsDao.getOldestSleep()
+                    .map(::firstOrEmpty)
+                    .map(sleepMapper::mapFromEntity).toObservable()
 
     override fun getStatistics(): Observable<Statistics> {
         val infiniteDateRange = DateRange(LocalDate.parse("1000-01-01"), LocalDate.parse("9999-01-01"))
@@ -50,6 +55,9 @@ class StatisticsRepository @Inject constructor(private val statisticsDao: Statis
 
     override fun getSleepCountYearMonth(): Observable<List<SleepCountYearMonth>> =
         statisticsDao.getCountGroupedByYearMonth().toObservable()
+
+    private fun firstOrEmpty(sleepList: List<SleepEntity>): SleepEntity =
+            sleepList.firstOrNull() ?: SleepEntity.empty()
 
     private fun getSleepCount(from: String, to: String): Observable<Int> =
             statisticsDao.getSleepCount(from, to).toObservable()

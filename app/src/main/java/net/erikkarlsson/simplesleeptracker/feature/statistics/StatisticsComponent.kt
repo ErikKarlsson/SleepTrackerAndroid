@@ -35,11 +35,16 @@ class StatisticsComponent @Inject constructor(private val youngestOldestSubscrip
         val filter = prevState.filter
         val youngest = msg.youngest
         val oldest = msg.oldest
+        val sleepFound = youngest != Sleep.empty()
 
-        val dateRanges = getDateRanges(filter, youngest, oldest)
+        val dateRanges = if (sleepFound) {
+            getDateRanges(filter, youngest, oldest)
+        } else {
+            listOf()
+        }
 
         return prevState.copy(youngest = youngest, oldest = oldest,
-                dateRanges = dateRanges).noCmd()
+                dateRanges = dateRanges, isLoading = false).noCmd()
     }
 
     private fun onFilterSelected(prevState: StatisticsState, msg: StatisticsFilterSelected): Pair<StatisticsState, StatisticsCmd?> {
@@ -177,12 +182,13 @@ class YoungestOldestSubscription @Inject constructor(private val statisticsDataS
 data class StatisticsState(val filter: StatisticsFilter,
                            val youngest: Sleep,
                            val oldest: Sleep,
-                           val dateRanges: List<DateRangePair>) : State {
+                           val dateRanges: List<DateRangePair>,
+                           val isLoading: Boolean) : State {
 
     val isEmpty = dateRanges.size == 0
 
     companion object {
-        fun empty() = StatisticsState(StatisticsFilter.OVERALL, Sleep.empty(), Sleep.empty(), listOf())
+        fun empty() = StatisticsState(StatisticsFilter.OVERALL, Sleep.empty(), Sleep.empty(), listOf(), true)
     }
 }
 
