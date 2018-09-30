@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import com.google.common.collect.ImmutableList
-import net.erikkarlsson.simplesleeptracker.data.DayOfWeekHours
+import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
 import org.threeten.bp.LocalTime
 
 data class Statistics(val sleepCount: Int,
@@ -13,8 +13,6 @@ data class Statistics(val sleepCount: Int,
                       val averageBedTimeDayOfWeek: ImmutableList<DayOfWeekLocalTime>,
                       val averageWakeUpTimeDayOfWeek: ImmutableList<DayOfWeekLocalTime>,
                       val averageSleepDurationDayOfWeek: ImmutableList<DayOfWeekHours>) {
-
-    val timeSleepingPercentage get(): Int = Math.min(Math.round(avgSleepHours / 24 * 100), 100)
 
     val isEmpty get(): Boolean = this == empty()
 

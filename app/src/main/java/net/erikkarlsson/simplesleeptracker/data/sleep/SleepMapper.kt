@@ -1,6 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data.sleep
 
 import net.erikkarlsson.simplesleeptracker.data.Mapper
+import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import javax.inject.Inject
 

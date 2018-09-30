@@ -1,14 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.data.sleep
 
 import android.arch.paging.DataSource
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 
 /**
  * Data Access Object for the sleep table.
