@@ -4,12 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
-import net.erikkarlsson.simplesleeptracker.elm.Cmd
-import net.erikkarlsson.simplesleeptracker.elm.Component
-import net.erikkarlsson.simplesleeptracker.elm.Msg
-import net.erikkarlsson.simplesleeptracker.elm.State
-import net.erikkarlsson.simplesleeptracker.elm.StatelessSub
-import net.erikkarlsson.simplesleeptracker.elm.Sub
+import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetSleepDiaryTask
 import javax.inject.Inject
 
@@ -34,7 +29,9 @@ class DiaryComponent @Inject constructor(private val sleepSubscription: SleepSub
 // State
 data class DiaryState(val sleepDiary: SleepDiary?) : State {
 
-    val isEmptySleep = sleepDiary == null || sleepDiary.pagedSleep.size == 0
+    val isLoading = sleepDiary == null
+
+    val isEmptySleep = sleepDiary != null && sleepDiary.pagedSleep.size == 0
 
     companion object {
         fun empty() = DiaryState(null)

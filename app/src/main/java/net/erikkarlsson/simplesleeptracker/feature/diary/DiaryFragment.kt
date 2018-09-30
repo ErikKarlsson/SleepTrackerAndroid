@@ -101,19 +101,25 @@ class DiaryFragment : Fragment() {
     }
 
     private fun render(state: DiaryState?) {
-        emptyState.isVisible = state?.isEmptySleep ?: true
-        recyclerView.isVisible = state?.isEmptySleep == false ?: false
-
-        state?.sleepDiary?.let {
-            adapter.submitList(it.pagedSleep)
-
-            if (sectionItemDecoration != null) {
-                recyclerView.removeItemDecoration(sectionItemDecoration)
+        state?.let {
+            if (it.isLoading) {
+                return
             }
 
-            sectionItemDecoration = sectionItemDecorationFactory.create(it)
+            emptyState.isVisible = it.isEmptySleep
+            recyclerView.isVisible = it.isEmptySleep == false
 
-            recyclerView.addItemDecoration(sectionItemDecoration)
+            it.sleepDiary?.let { sleepDiary ->
+                adapter.submitList(sleepDiary.pagedSleep)
+
+                if (sectionItemDecoration != null) {
+                    recyclerView.removeItemDecoration(sectionItemDecoration)
+                }
+
+                sectionItemDecoration = sectionItemDecorationFactory.create(sleepDiary)
+
+                recyclerView.addItemDecoration(sectionItemDecoration)
+            }
         }
     }
 
