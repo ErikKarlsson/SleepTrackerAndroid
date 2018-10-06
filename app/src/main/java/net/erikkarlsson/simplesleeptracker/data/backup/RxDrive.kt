@@ -3,14 +3,7 @@ package net.erikkarlsson.simplesleeptracker.data.backup
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.drive.Drive
-import com.google.android.gms.drive.DriveClient
-import com.google.android.gms.drive.DriveContents
-import com.google.android.gms.drive.DriveFile
-import com.google.android.gms.drive.DriveFolder
-import com.google.android.gms.drive.DriveResourceClient
-import com.google.android.gms.drive.MetadataBuffer
-import com.google.android.gms.drive.MetadataChangeSet
+import com.google.android.gms.drive.*
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
@@ -76,6 +69,11 @@ class RxDrive @Inject constructor(private val context: Context) {
 
                 rootFolderTask.continueWithTask {
                     val parent = rootFolderTask.getResult()
+
+                    if (parent == null) {
+                        throw RuntimeException("parent was null")
+                    }
+
                     val folderChangeSet = MetadataChangeSet.Builder()
                             .setTitle(folderTitle)
                             .setMimeType(DriveFolder.MIME_TYPE)
@@ -104,6 +102,11 @@ class RxDrive @Inject constructor(private val context: Context) {
                 createContentsTask
                         .continueWithTask {
                             val contents = createContentsTask.getResult()
+
+                            if (contents == null) {
+                                throw RuntimeException("contents was null")
+                            }
+
                             val outputStream = contents.outputStream
 
                             outputStream.write(file.readBytes())
@@ -132,6 +135,11 @@ class RxDrive @Inject constructor(private val context: Context) {
 
                 openTask.continueWithTask {
                     val driveContents = openTask.getResult()
+
+                    if (driveContents == null) {
+                        throw RuntimeException("driveContents was null")
+                    }
+
                     val outputStream = driveContents.outputStream
                     outputStream.write(file.readBytes())
 
