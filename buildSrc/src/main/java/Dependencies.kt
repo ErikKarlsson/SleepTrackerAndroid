@@ -103,6 +103,7 @@ object Deps {
     val mockito_kotlin = "com.nhaarman:mockito-kotlin:${Versions.mockito_kotlin}"
     val mpandroidchart = "com.github.PhilJay:MPAndroidChart:${Versions.mpandroidchart}"
     val multidex = "com.android.support:multidex:${Versions.multidex}"
+    val multidex_instrumentation = "com.android.support:multidex-instrumentation:${Versions.multidex}"
     val navigation_fragment = "android.arch.navigation:navigation-fragment-ktx:${Versions.navigation}"
     val navigation_ui = "android.arch.navigation:navigation-ui-ktx:${Versions.navigation}"
     val navigation_testing = "android.arch.navigation:navigation-testing:${Versions.navigation}"

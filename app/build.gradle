@@ -212,6 +212,7 @@ dependencies {
 
     // Multidex
     implementation Deps.multidex
+    implementation Deps.multidex_instrumentation
 
     // Navigation
     implementation Deps.navigation_fragment
