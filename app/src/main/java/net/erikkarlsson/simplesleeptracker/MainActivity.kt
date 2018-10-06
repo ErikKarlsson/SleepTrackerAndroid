@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
 import io.fabric.sdk.android.Fabric
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import javax.inject.Inject
@@ -37,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = host.navController
 
-        bottomNavigation.setupWithNavController(navController)
+        setupWithNavController(bottomNavigation, navController)
     }
 }
 

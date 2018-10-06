@@ -12,8 +12,9 @@ import javax.inject.Singleton
 
 @Singleton
 class SleepWidgetView @Inject constructor(private val context: Context,
-                                          sleepAppWidgetViewModel: SleepAppWidgetViewModel) {
-    init {
+                                          private val sleepAppWidgetViewModel: SleepAppWidgetViewModel) {
+
+    fun init() {
         sleepAppWidgetViewModel.state().observeForever({ render(it) })
     }
 

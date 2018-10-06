@@ -66,6 +66,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
         }
 
         RuntimeFactory.defaultLogLevel = if (BuildConfig.DEBUG) LogLevel.FULL else LogLevel.NONE
+
+        sleepWidgetView.init()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector

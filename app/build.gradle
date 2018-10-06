@@ -244,7 +244,6 @@ dependencies {
     implementation Deps.support_app_compat
     implementation Deps.support_cardview
     implementation Deps.support_constraint_layout
-    implementation Deps.support_design
     implementation Deps.support_v4
     implementation Deps.support_vector_drawable
 
