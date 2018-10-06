@@ -32,7 +32,7 @@ object Versions {
     val leakcanary = "1.6.1"
     val lifecycle = "1.1.1"
     val materialprogressbar = "1.4.2"
-    val mockito = "2.22.0"
+    val mockito = "2.23.0"
     val mockito_kotlin = "1.6.0"
     val mockwebserver = "3.8.1"
     val mpandroidchart = "v3.0.3"
