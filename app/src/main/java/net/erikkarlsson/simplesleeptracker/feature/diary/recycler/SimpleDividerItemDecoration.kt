@@ -16,7 +16,7 @@ class SimpleDividerItemDecoration @Inject constructor(context: Context) : Recycl
         divider = checkNotNull(ContextCompat.getDrawable(context, R.drawable.line_divider))
     }
 
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = 72.px // TODO (erikkarlsson: Hardcoded value
         val right = parent.width - parent.paddingRight
 

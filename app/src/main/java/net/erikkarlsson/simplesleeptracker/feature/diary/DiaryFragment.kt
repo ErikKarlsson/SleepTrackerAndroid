@@ -75,7 +75,7 @@ class DiaryFragment : Fragment() {
         recyclerView.addItemDecoration(dividerItemDecoration)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (!isAdded) {
@@ -112,13 +112,16 @@ class DiaryFragment : Fragment() {
             it.sleepDiary?.let { sleepDiary ->
                 adapter.submitList(sleepDiary.pagedSleep)
 
-                if (sectionItemDecoration != null) {
+                sectionItemDecoration?.let { sectionItemDecoration ->
                     recyclerView.removeItemDecoration(sectionItemDecoration)
                 }
 
                 sectionItemDecoration = sectionItemDecorationFactory.create(sleepDiary)
 
-                recyclerView.addItemDecoration(sectionItemDecoration)
+                sectionItemDecoration?.let { sectionItemDecoration ->
+                    recyclerView.addItemDecoration(sectionItemDecoration)
+                }
+
             }
         }
     }

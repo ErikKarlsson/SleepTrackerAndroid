@@ -1,8 +1,8 @@
 object Versions {
-    val build_tools = "27.0.3"
-    val compile_sdk = 27
+    val build_tools = "28.0.2"
+    val compile_sdk = 28
     val min_sdk = 19
-    val target_sdk = 27
+    val target_sdk = 28
     val version_code = 1
     val version_name = "1.0"
 
@@ -51,7 +51,7 @@ object Versions {
     val rxjava2 = "2.2.2"
     val rxkotlin = "2.3.0"
     val rx_preferences = "2.0.0"
-    val support = "27.1.1"
+    val support = "28.0.0"
     val threeten_backport = "1.1.0"
     val timber = "4.7.1"
     val work_manager = "1.0.0-alpha09"
