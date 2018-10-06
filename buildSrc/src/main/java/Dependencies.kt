@@ -37,7 +37,7 @@ object Versions {
     val mockwebserver = "3.8.1"
     val mpandroidchart = "v3.0.3"
     val multidex = "1.0.3"
-    val navigation = "1.0.0-alpha01"
+    val navigation = "1.0.0-alpha06"
     val okhttp_logging_interceptor = "3.9.0"
     val paging = "1.0.1"
     val paging_rx = "1.0.1"
