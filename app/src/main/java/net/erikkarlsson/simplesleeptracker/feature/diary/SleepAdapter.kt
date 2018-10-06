@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_sleep.view.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -24,7 +25,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sl
     }
 
     class ViewHolder(v: View, private val itemClick: (Sleep) -> Unit)
-        : androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {
+        : RecyclerView.ViewHolder(v) {
 
         fun bindSleep(sleep: Sleep?) {
             val hours = sleep?.hours ?: 0f

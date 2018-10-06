@@ -1,15 +1,15 @@
 package net.erikkarlsson.simplesleeptracker.feature.statistics
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.view.isVisible
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
@@ -22,7 +22,7 @@ import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import javax.inject.Inject
 
-class StatisticsFragment : androidx.fragment.app.Fragment() {
+class StatisticsFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

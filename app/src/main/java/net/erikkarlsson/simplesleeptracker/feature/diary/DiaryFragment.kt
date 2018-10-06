@@ -1,18 +1,18 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.view.isVisible
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -29,13 +29,13 @@ import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import javax.inject.Inject
 import javax.inject.Named
 
-class DiaryFragment : androidx.fragment.app.Fragment() {
+class DiaryFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     @Inject
-    lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
+    lateinit var linearLayoutManager: LinearLayoutManager
 
     @Inject
     lateinit var dividerItemDecoration: SimpleDividerItemDecoration
@@ -74,8 +74,8 @@ class DiaryFragment : androidx.fragment.app.Fragment() {
         recyclerView.itemAnimator = null
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-        recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (!isAdded) {

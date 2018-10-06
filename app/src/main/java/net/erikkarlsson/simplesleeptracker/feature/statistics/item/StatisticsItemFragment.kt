@@ -1,15 +1,15 @@
 package net.erikkarlsson.simplesleeptracker.feature.statistics.item
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.view.isVisible
 import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 data class ChartExtra(val displayValue: Boolean)
 
-class StatisticsItemFragment : androidx.fragment.app.Fragment() {
+class StatisticsItemFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

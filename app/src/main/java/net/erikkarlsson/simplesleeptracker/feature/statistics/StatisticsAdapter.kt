@@ -11,12 +11,12 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.format.TextStyle
 import java.util.*
 
-class StatisticsAdapter(fragmentManager: androidx.fragment.app.FragmentManager,
-                        private val dateTimeProvider: DateTimeProvider) : androidx.fragment.app.FragmentStatePagerAdapter(fragmentManager) {
+class StatisticsAdapter(fragmentManager: FragmentManager,
+                        private val dateTimeProvider: DateTimeProvider) : FragmentStatePagerAdapter(fragmentManager) {
 
     var data: StatisticsItemData = StatisticsItemData.empty()
 
-    override fun getItem(position: Int): androidx.fragment.app.Fragment {
+    override fun getItem(position: Int): Fragment {
         val dateRangePair = data.dataRanges[position]
         val filter = data.filter
         return StatisticsItemFragment.newInstance(dateRangePair, filter)

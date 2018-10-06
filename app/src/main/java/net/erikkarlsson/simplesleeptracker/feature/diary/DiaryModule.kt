@@ -11,6 +11,6 @@ class DiaryModule {
 
     @Provides
     @FragmentScope
-    fun providesLinearLayoutManager(context: Context): androidx.recyclerview.widget.LinearLayoutManager =
-            androidx.recyclerview.widget.LinearLayoutManager(context)
+    fun providesLinearLayoutManager(context: Context): LinearLayoutManager =
+            LinearLayoutManager(context)
 }

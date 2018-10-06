@@ -37,7 +37,7 @@ import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
 
-class HomeFragment : androidx.fragment.app.Fragment() {
+class HomeFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

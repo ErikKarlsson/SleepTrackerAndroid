@@ -32,7 +32,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
     @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject
     lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
@@ -72,7 +72,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
-    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment> = fragmentInjector
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastInjector
 }
