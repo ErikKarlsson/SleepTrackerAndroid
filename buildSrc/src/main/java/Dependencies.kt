@@ -26,7 +26,7 @@ object Versions {
     val guava = "20.0"
     val hamcrest = "1.3"
     val junit = "4.12"
-    val jsr305 = "2.0.2"
+    val jsr305 = "3.0.2"
     val kotlin = "1.2.71"
     val leakcanary = "1.6.1"
     val lifecycle = "1.1.1"
