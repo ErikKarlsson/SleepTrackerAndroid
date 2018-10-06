@@ -1,11 +1,11 @@
 package net.erikkarlsson.simplesleeptracker.espresso
 
-import android.support.annotation.IdRes
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.IdRes
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.recyclerview.widget.RecyclerView
 
 object ViewActions {
 
@@ -26,13 +26,13 @@ object ViewActions {
 
     fun clickRecyclerViewItemWithText(@IdRes recyclerViewResId: Int, text: String) {
         onView(withId(recyclerViewResId))
-            .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+            .perform(RecyclerViewActions.actionOnItem<androidx.recyclerview.widget.RecyclerView.ViewHolder>(
                     hasDescendant(withText(text)), click()))
     }
 
     fun clickRecyclerViewItemAtPosition(@IdRes recyclerViewResId: Int, position: Int) {
         onView(withId(recyclerViewResId))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+            .perform(RecyclerViewActions.actionOnItemAtPosition<androidx.recyclerview.widget.RecyclerView.ViewHolder>(
                     position, click()))
     }
 

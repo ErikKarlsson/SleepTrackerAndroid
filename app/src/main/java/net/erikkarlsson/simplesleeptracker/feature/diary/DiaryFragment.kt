@@ -1,22 +1,20 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
-import androidx.view.isVisible
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_diary.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.base.Event
 import net.erikkarlsson.simplesleeptracker.base.EventObserver
@@ -25,17 +23,16 @@ import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.feature.diary.recycler.RecyclerSectionItemDecoration
 import net.erikkarlsson.simplesleeptracker.feature.diary.recycler.RecyclerSectionItemDecorationFactory
 import net.erikkarlsson.simplesleeptracker.feature.diary.recycler.SimpleDividerItemDecoration
-import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import javax.inject.Inject
 import javax.inject.Named
 
-class DiaryFragment : Fragment() {
+class DiaryFragment : androidx.fragment.app.Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     @Inject
-    lateinit var linearLayoutManager: LinearLayoutManager
+    lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
 
     @Inject
     lateinit var dividerItemDecoration: SimpleDividerItemDecoration
@@ -74,8 +71,8 @@ class DiaryFragment : Fragment() {
         recyclerView.itemAnimator = null
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (!isAdded) {

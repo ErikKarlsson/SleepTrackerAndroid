@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.util
 
-import android.support.annotation.StringRes
-import android.support.test.InstrumentationRegistry
+import androidx.annotation.StringRes
+import androidx.test.InstrumentationRegistry
 import net.erikkarlsson.simplesleeptracker.App
 
 object TestUtil {

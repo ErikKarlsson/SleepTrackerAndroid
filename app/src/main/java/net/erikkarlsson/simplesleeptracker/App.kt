@@ -2,8 +2,8 @@ package net.erikkarlsson.simplesleeptracker
 
 import android.app.Activity
 import android.content.BroadcastReceiver
-import android.support.multidex.MultiDexApplication
-import android.support.v4.app.Fragment
+import androidx.multidex.MultiDexApplication
+import androidx.fragment.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -32,7 +32,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
     @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
 
     @Inject
     lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
@@ -70,7 +70,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
+    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment> = fragmentInjector
 
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastInjector
 }

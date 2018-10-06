@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data.sleep
 
-import android.arch.paging.DataSource
-import android.arch.persistence.room.*
+import androidx.paging.DataSource
+import androidx.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity

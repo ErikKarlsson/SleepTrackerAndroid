@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
+import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset

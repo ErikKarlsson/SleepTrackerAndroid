@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.feature.statistics.chart
 
 import android.content.Context
-import android.support.v4.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis

@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data.sleep
 
-import android.arch.paging.PagedList
-import android.arch.paging.RxPagedListBuilder
+import androidx.paging.PagedList
+import androidx.paging.RxPagedListBuilder
 import com.google.common.collect.ImmutableList
 import io.reactivex.Completable
 import io.reactivex.Observable

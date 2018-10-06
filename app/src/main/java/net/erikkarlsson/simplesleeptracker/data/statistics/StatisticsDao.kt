@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data.statistics
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Query
+import androidx.room.Dao
+import androidx.room.Query
 import io.reactivex.Flowable
 import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekMidnightOffset

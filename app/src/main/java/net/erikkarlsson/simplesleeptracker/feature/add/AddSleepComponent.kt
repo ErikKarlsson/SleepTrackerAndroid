@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.add
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.base.Event
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider

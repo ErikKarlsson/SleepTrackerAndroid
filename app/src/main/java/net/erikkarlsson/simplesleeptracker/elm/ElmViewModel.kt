@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.elm
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 
 open class ElmViewModel<STATE : State, in MSG : Msg, CMD : Cmd>(component: Component<STATE, MSG, CMD>, logLevel: LogLevel = LogLevel.NONE) :
         ViewModel(),

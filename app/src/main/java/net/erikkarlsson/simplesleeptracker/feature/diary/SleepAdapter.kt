@@ -1,12 +1,11 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import android.arch.paging.PagedListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.item_sleep.view.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
@@ -25,7 +24,7 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sl
     }
 
     class ViewHolder(v: View, private val itemClick: (Sleep) -> Unit)
-        : RecyclerView.ViewHolder(v) {
+        : androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {
 
         fun bindSleep(sleep: Sleep?) {
             val hours = sleep?.hours ?: 0f

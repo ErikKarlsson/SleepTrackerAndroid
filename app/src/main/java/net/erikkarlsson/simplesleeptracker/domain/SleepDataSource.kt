@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import android.arch.paging.PagedList
+import androidx.paging.PagedList
 import com.google.common.collect.ImmutableList
 import io.reactivex.Completable
 import io.reactivex.Observable

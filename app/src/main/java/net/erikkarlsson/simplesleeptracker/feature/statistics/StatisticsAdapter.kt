@@ -1,8 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.feature.statistics
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.feature.statistics.item.StatisticsItemFragment
 import net.erikkarlsson.simplesleeptracker.util.formatDateShort
@@ -11,12 +11,12 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.format.TextStyle
 import java.util.*
 
-class StatisticsAdapter(fragmentManager: FragmentManager,
-                        private val dateTimeProvider: DateTimeProvider) : FragmentStatePagerAdapter(fragmentManager) {
+class StatisticsAdapter(fragmentManager: androidx.fragment.app.FragmentManager,
+                        private val dateTimeProvider: DateTimeProvider) : androidx.fragment.app.FragmentStatePagerAdapter(fragmentManager) {
 
     var data: StatisticsItemData = StatisticsItemData.empty()
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment {
         val dateRangePair = data.dataRanges[position]
         val filter = data.filter
         return StatisticsItemFragment.newInstance(dateRangePair, filter)

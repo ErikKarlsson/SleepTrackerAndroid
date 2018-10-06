@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.di.module
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.base.Event

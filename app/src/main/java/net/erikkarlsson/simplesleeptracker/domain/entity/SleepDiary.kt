@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
-import android.arch.paging.PagedList
+import androidx.paging.PagedList
 
 data class SleepDiary(val pagedSleep: PagedList<Sleep>,
                       val sleepCountYearMonth: List<SleepCountYearMonth>) {

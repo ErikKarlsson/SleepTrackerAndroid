@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.base
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 
 /**
  * https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9
