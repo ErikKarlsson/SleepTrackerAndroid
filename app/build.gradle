@@ -109,12 +109,6 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
-
-    packagingOptions {
-        // TODO (erikkarlsson): Exclude fixes bug in alpha09 https://stackoverflow.com/questions/52467819/compile-errors-after-updating-to-workmanager-1-0-0-alpha09
-        // Remove when updating to stable release.
-        exclude 'META-INF/proguard/androidx-annotations.pro'
-    }
 }
 
 configurations.all { config ->
