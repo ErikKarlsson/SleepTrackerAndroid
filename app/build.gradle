@@ -10,8 +10,6 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'androidx.navigation.safeargs'
 
-apply plugin: "de.mannodermaus.android-junit5"
-
 apply from: "$project.rootDir/git-version.gradle"
 
 def keystorePropertiesFile = new File(System.getProperty("user.home") + '/android/files/simplesleeptracker/keystore.properties')
@@ -167,16 +165,6 @@ dependencies {
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
     testImplementation Deps.mockito_inline
-
-    // (Required) Writing and executing Unit Tests on the JUnit Platform.
-    testImplementation junit5.unitTests()
-
-    // (Optional) If you need "Parameterized Tests".
-    testImplementation junit5.parameterized()
-
-    // (Optional) For running tests inside Android Studio 3
-    // Please refer to the "Android Studio Workarounds" section for more insight on this.
-    testCompileOnly junit5.unitTestsRuntime()
 
     // Crashlytics
     implementation Deps.crashlytics

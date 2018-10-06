@@ -4,7 +4,6 @@ buildscript {
         classpath Deps.android_gradle_plugin
         classpath Deps.fabric_plugin
         classpath Deps.google_services_plugin
-        classpath Deps.junit5_plugin
         classpath Deps.kotlin_plugin
         classpath Deps.navigation_plugin
     }
