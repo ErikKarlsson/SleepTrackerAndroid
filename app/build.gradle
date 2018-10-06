@@ -23,8 +23,8 @@ android {
         applicationId "net.erikkarlsson.simplesleeptracker"
         minSdkVersion Versions.min_sdk
         targetSdkVersion Versions.target_sdk
-        versionCode Versions.version_code
-        versionName Versions.version_name
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "${applicationId}.runner.TestRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
