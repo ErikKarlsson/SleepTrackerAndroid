@@ -54,7 +54,7 @@ object Versions {
     val support = "27.1.1"
     val threeten_backport = "1.1.0"
     val timber = "4.7.1"
-    val work_manager = "1.0.0-alpha02"
+    val work_manager = "1.0.0-alpha09"
 }
 
 object Deps {
