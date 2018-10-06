@@ -11,7 +11,7 @@ object Versions {
     val atsl_rules = "1.1.0-alpha4"
     val atsl_runner = "1.1.0-alpha4"
     val constraint_layout = "1.1.2"
-    val core_ktx = "0.2"
+    val core_ktx = "1.0.0"
     val crashlytics = "2.9.5"
     val dagger = "2.16"
     val daggermock = "0.8.4"
