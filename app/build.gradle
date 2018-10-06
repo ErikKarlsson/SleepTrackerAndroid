@@ -18,7 +18,6 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion Versions.compile_sdk
-    buildToolsVersion Versions.build_tools
 
     defaultConfig {
         applicationId "net.erikkarlsson.simplesleeptracker"
