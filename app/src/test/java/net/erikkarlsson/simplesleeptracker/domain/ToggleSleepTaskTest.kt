@@ -1,34 +1,29 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.inOrder
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Completable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
-import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
-import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.extension.ExtendWith
+import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
+@RunWith(JUnit4::class)
 class ToggleSleepTaskTest {
+
+    @get:Rule
+    var testSchedulerRule = RxImmediateSchedulerRule()
 
     val dateTimeProvider = MockDateTimeProvider()
     val sleepRepository: SleepDataSource = mock()
-    val toggleSleepTask = ToggleSleepTask(sleepRepository, dateTimeProvider)
-
-    @BeforeEach
-    fun setUp() {
-        reset(sleepRepository)
-        dateTimeProvider.reset()
-    }
+    val scheduleBackupTask: ScheduleBackupTask = mock()
+    val toggleSleepTask = ToggleSleepTask(sleepRepository, dateTimeProvider, scheduleBackupTask)
 
     @Test
     fun `toggle from empty inserts sleep`() {
@@ -51,6 +46,8 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = anHourAgo)
         val awake = Sleep(fromDate = anHourAgo, toDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+        given(scheduleBackupTask.execute(any())).willReturn(Completable.complete())
+
         toggleSleepTask.execute(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
@@ -58,6 +55,9 @@ class ToggleSleepTaskTest {
             verify(sleepRepository).update(awake)
             verifyNoMoreInteractions()
         }
+
+        verify(scheduleBackupTask).execute(any())
+        verifyNoMoreInteractions(scheduleBackupTask)
     }
 
     @Test
@@ -73,6 +73,8 @@ class ToggleSleepTaskTest {
             verify(sleepRepository).insert(sleeping)
             verifyNoMoreInteractions()
         }
+
+        verifyNoMoreInteractions(scheduleBackupTask)
     }
 
     @Test
@@ -88,5 +90,7 @@ class ToggleSleepTaskTest {
             verify(sleepRepository).delete(sleeping)
             verifyNoMoreInteractions()
         }
+
+        verifyNoMoreInteractions(scheduleBackupTask)
     }
 }

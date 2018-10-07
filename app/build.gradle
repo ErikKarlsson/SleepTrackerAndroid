@@ -241,7 +241,8 @@ dependencies {
     implementation Deps.support_vector_drawable
 
     // ThreeTen Backport
-    implementation Deps.threeten_backport
+    implementation Deps.threeten_backport_android
+    testImplementation Deps.threeten_backport
 
     // Timber
     implementation Deps.timber

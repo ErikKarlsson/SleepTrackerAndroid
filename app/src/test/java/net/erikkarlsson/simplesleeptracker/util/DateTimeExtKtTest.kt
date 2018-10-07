@@ -1,16 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.util
 
-import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
-import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.extension.ExtendWith
+import junit.framework.Assert.assertEquals
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
+@RunWith(JUnit4::class)
 class DateTimeExtKtTest {
 
     @Test

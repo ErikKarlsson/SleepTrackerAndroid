@@ -7,12 +7,7 @@ import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.GetCurrentSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
-import net.erikkarlsson.simplesleeptracker.elm.Cmd
-import net.erikkarlsson.simplesleeptracker.elm.Component
-import net.erikkarlsson.simplesleeptracker.elm.Msg
-import net.erikkarlsson.simplesleeptracker.elm.State
-import net.erikkarlsson.simplesleeptracker.elm.StatelessSub
-import net.erikkarlsson.simplesleeptracker.elm.Sub
+import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.WidgetCmd.ToggleSleepCmd
 import javax.inject.Inject
 
@@ -48,6 +43,7 @@ class SleepSubscription @Inject constructor(private val getCurrentSleepTask: Get
 
     override fun invoke(): Observable<WidgetMsg> =
             getCurrentSleepTask.execute(ObservableTask.None())
+                    .onErrorReturnItem(Sleep.empty())
                     .map { CurrentSleepLoaded(it) }
 }
 

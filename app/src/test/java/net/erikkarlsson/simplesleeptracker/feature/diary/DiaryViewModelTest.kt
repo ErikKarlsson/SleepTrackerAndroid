@@ -1,45 +1,50 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Observable
+import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.testutil.InstantTaskExecutorExtension
-import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerExtension
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.extension.ExtendWith
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
+import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetSleepDiaryTask
+import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(InstantTaskExecutorExtension::class, RxImmediateSchedulerExtension::class)
+@RunWith(JUnit4::class)
 class DiaryViewModelTest {
 
+    @get:Rule
+    var testSchedulerRule = RxImmediateSchedulerRule()
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
     val sleepRepository: SleepDataSource = mock()
+    val statisticsRepository: StatisticsRepository = mock()
     val observer: Observer<DiaryState> = mock()
     val sleepPaged: PagedList<Sleep> = mock()
-
-    @BeforeEach
-    fun setUp() {
-        reset(sleepRepository)
-    }
+    val getSleepDiaryTask = GetSleepDiaryTask(sleepRepository, statisticsRepository)
 
     @Test
     fun `load sleep shows sleep in view`() {
         given(sleepRepository.getSleepPaged()).willReturn(Observable.just(sleepPaged))
+        given(statisticsRepository.getSleepCountYearMonth()).willReturn(Observable.just(emptyList()))
 
         val viewModel = createViewModel()
         viewModel.state().observeForever(observer)
-        verify(observer).onChanged(DiaryState(sleepPaged))
+        verify(observer).onChanged(DiaryState(SleepDiary(sleepPaged, emptyList())))
     }
 
     private fun createViewModel(): DiaryViewModel {
-        val sleepSubscription = SleepSubscription(sleepRepository)
+        val sleepSubscription = SleepSubscription(getSleepDiaryTask)
         val diaryComponent = DiaryComponent(sleepSubscription)
         return DiaryViewModel(diaryComponent)
     }

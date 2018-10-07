@@ -56,7 +56,6 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                         else sleepMapper.mapFromEntity(it[0])
                     }
                     .toObservable()
-                    .onErrorReturnItem(Sleep.empty())
 
     override fun insertAll(sleepList: ImmutableList<Sleep>): Completable {
         val sleepListBuilder = ImmutableList.Builder<SleepEntity>()
