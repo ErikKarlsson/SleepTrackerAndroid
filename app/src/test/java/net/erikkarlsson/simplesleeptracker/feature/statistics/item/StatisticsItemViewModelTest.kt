@@ -92,24 +92,4 @@ class StatisticsItemViewModelTest {
         }
     }
 
-    /*
-    TODO (erikkarlsson): Create HomeViewModel test.
-
-    /**
-     * See [ToggleSleepTaskTest] for extensive coverage of toggle cases.
-     */
-    @Test
-    fun `clicking toggle sleep button toggles sleep`() {
-        given(toggleSleepTask.execute(any())).willReturn(Completable.complete())
-        given(statisticComparisonWeekTask.execute()).willReturn(Observable.just(StatisticComparison.empty()))
-        given(sleepRepository.getSleep()).willReturn(Observable.just(ImmutableList.of()))
-        given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-
-        val viewModel = createViewModel()
-
-        viewModel.dispatch(ToggleSleepClicked)
-
-        verify(toggleSleepTask).execute(any())
-    }
-    */
 }

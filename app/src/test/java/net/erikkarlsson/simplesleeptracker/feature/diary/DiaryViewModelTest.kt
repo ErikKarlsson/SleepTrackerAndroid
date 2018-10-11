@@ -15,10 +15,7 @@ import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetSleepDiaryTas
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@RunWith(JUnit4::class)
 class DiaryViewModelTest {
 
     @get:Rule

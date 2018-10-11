@@ -11,10 +11,7 @@ import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupT
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@RunWith(JUnit4::class)
 class ToggleSleepTaskTest {
 
     @get:Rule

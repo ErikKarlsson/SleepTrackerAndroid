@@ -12,11 +12,8 @@ import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.threeten.bp.OffsetDateTime
 
-@RunWith(JUnit4::class)
 class SleepAppWidgetViewModelTest {
 
     @get:Rule

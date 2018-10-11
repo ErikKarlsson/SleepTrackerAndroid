@@ -1,6 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.data.backup
 
-import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.google.android.gms.drive.DriveFile
 import com.google.android.gms.drive.DriveFolder
 import com.google.android.gms.drive.MetadataBuffer
@@ -10,6 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.base.PREFS_LAST_SYNC_TIMESTAMP
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
+import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FOLDER_NAME
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_MIME_TYPE
@@ -27,7 +27,7 @@ import javax.inject.Named
 class DriveFileBackupRepository @Inject constructor(
         private val rxDrive: RxDrive,
         @Named("filePath") private val filePath: String,
-        private val rxSharedPreferences: RxSharedPreferences)
+        private val preferencesDataSource: PreferencesDataSource)
     : FileBackupDataSource {
 
     override fun get(): Maybe<File> =
@@ -47,11 +47,11 @@ class DriveFileBackupRepository @Inject constructor(
             }
 
     override fun getLastBackupTimestamp(): Observable<Long> =
-            rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP, 0).asObservable()
+            preferencesDataSource.getLong(PREFS_LAST_SYNC_TIMESTAMP)
 
     override fun updateLastBackupTimestamp(): Completable =
             Completable.fromCallable {
-                rxSharedPreferences.getLong(PREFS_LAST_SYNC_TIMESTAMP).set(System.currentTimeMillis())
+                preferencesDataSource.set(PREFS_LAST_SYNC_TIMESTAMP, System.currentTimeMillis())
             }
 
     private fun openFile(driveFile: DriveFile): Single<File> =

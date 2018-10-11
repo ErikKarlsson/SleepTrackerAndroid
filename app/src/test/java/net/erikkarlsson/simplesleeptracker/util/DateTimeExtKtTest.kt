@@ -2,12 +2,9 @@ package net.erikkarlsson.simplesleeptracker.util
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
 
-@RunWith(JUnit4::class)
 class DateTimeExtKtTest {
 
     @Test
