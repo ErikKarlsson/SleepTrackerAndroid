@@ -9,7 +9,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class AppModule() {
+class AppModule {
 
     @Provides
     @Singleton

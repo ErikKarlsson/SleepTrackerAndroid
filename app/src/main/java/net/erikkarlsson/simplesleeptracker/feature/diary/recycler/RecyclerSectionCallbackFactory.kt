@@ -8,7 +8,7 @@ import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
-private val MONTH_PATTERN = DateTimeFormatter.ofPattern("MMMM")
+private val monthPattern = DateTimeFormatter.ofPattern("MMMM")
 
 class RecyclerSectionCallbackFactory @Inject constructor(
         private val resources: Resources,
@@ -35,7 +35,7 @@ class RecyclerSectionCallbackFactory @Inject constructor(
 
                     val year = fromDate.year ?: 0
                     val currentYear = dateTimeProvider.now().year
-                    val monthString = fromDate.format(MONTH_PATTERN).toString()
+                    val monthString = fromDate.format(monthPattern).toString()
 
                     return if (year == currentYear) {
                         monthString

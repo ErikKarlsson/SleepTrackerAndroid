@@ -15,7 +15,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-abstract class BackupModule() {
+abstract class BackupModule {
 
     @Binds
     @Singleton

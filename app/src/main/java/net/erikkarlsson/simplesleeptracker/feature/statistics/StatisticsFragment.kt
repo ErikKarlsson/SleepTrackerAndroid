@@ -82,7 +82,7 @@ class StatisticsFragment : Fragment() {
             spinnerContainer.isVisible = !it.isEmpty
             emptyState.isVisible = !it.isLoading && it.isEmpty
 
-            // TODO: Hack to fix scroll not working.
+            // TODO (erikkarlsson): Hack to fix scroll not working.
             Handler().postDelayed({
                 slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
             }, 100)

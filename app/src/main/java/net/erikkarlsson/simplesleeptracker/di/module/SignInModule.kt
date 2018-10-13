@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class SignInModule() {
+class SignInModule {
 
     @Provides
     fun providesGoogleSignInOptions() =
