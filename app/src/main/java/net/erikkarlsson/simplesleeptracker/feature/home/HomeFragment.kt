@@ -163,14 +163,14 @@ class HomeFragment : Fragment() {
         } catch (e: ApiException) {
             when (e.statusCode) {
                 GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> {
-                    Timber.w("Sign in cancelled:failed code=" + e.statusCode)
+                    Timber.w("Sign in cancelled:failed code=%s", e.statusCode)
                     onSignInCancelled()
                 }
                 GoogleSignInStatusCodes.SIGN_IN_FAILED -> {
-                    Timber.w("Sign in failed:failed code=" + e.statusCode)
+                    Timber.w("Sign in failed:failed code=%s", e.statusCode)
                     onSignInFailed()
                 }
-                else -> Timber.w("signInResult:failed code=" + e.statusCode)
+                else -> Timber.w("signInResult:failed code=%s", e.statusCode)
             }
         }
     }

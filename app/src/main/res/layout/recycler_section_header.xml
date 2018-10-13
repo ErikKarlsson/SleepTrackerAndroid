@@ -6,7 +6,7 @@
     android:background="@android:color/white"
     android:orientation="horizontal">
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:id="@+id/list_item_section_text"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -18,7 +18,7 @@
         android:textSize="14sp"
         tools:text="september" />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:id="@+id/list_item_section_text2"
         android:layout_width="0dp"
         android:layout_height="match_parent"

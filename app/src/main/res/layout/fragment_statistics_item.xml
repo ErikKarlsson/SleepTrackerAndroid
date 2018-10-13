@@ -8,8 +8,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsActivity">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,6 +36,7 @@
                     android:layout_height="12dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="1dp"
+                    android:contentDescription="@null"
                     app:layout_constraintBottom_toTopOf="@id/guideline_horizontal1"
                     app:layout_constraintEnd_toStartOf="@id/trackedNightsLabel"
                     app:layout_constraintStart_toStartOf="parent"
@@ -75,8 +75,9 @@
                     android:id="@+id/avgDurationDiffText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginBottom="3dp"
+                    android:contentDescription="@null"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toTopOf="@id/avgDurationLabel"
                     app:layout_constraintLeft_toRightOf="@id/avgDurationText"
@@ -87,6 +88,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginTop="2dp"
+                    android:contentDescription="@null"
                     app:layout_constraintBottom_toTopOf="@id/guideline_horizontal1"
                     app:layout_constraintEnd_toStartOf="@+id/avgDurationLabel"
                     app:layout_constraintStart_toStartOf="@id/guideline1"
@@ -127,6 +129,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginTop="2dp"
+                    android:contentDescription="@null"
                     android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@id/guideline_horizontal1"
                     app:layout_constraintEnd_toStartOf="@+id/timeSleepingLabel"
@@ -208,7 +211,7 @@
                     android:id="@+id/longestNightDateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/longestNightLabel"
                     app:layout_constraintLeft_toRightOf="@id/longestNightLabel"
@@ -226,17 +229,17 @@
 
                 <me.zhanghai.android.materialprogressbar.MaterialProgressBar
                     android:id="@+id/longestNightBar"
+                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="14dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
-                    android:scaleY="4"
                     android:indeterminate="false"
-                    app:mpb_progressStyle="horizontal"
-                    app:mpb_progressBackgroundTint="@color/gray"
+                    android:scaleY="4"
                     app:layout_constraintTop_toBottomOf="@id/longestNightLabel"
-                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
+                    app:mpb_progressBackgroundTint="@color/gray"
+                    app:mpb_progressStyle="horizontal" />
 
                 <View
                     android:id="@+id/divider3"
@@ -259,7 +262,7 @@
                     android:id="@+id/shortestNightDateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/shortestNightLabel"
                     app:layout_constraintLeft_toRightOf="@id/shortestNightLabel"
@@ -277,18 +280,18 @@
 
                 <me.zhanghai.android.materialprogressbar.MaterialProgressBar
                     android:id="@+id/shortestNightBar"
+                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="14dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
-                    android:scaleY="4"
                     android:indeterminate="false"
-                    app:mpb_progressStyle="horizontal"
-                    app:mpb_progressBackgroundTint="@color/gray"
+                    android:scaleY="4"
                     app:layout_constraintTop_toBottomOf="@id/shortestNightLabel"
-                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
+                    app:mpb_progressBackgroundTint="@color/gray"
+                    app:mpb_progressStyle="horizontal" />
 
                 <View
                     android:id="@+id/divider4"
@@ -314,8 +317,8 @@
                     android:gravity="end"
                     android:textSize="21sp"
                     app:layout_constraintBottom_toBottomOf="@id/averageBedTimeLabel"
-                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/avgBedDiffText"
                     tools:text="21:00" />
@@ -374,8 +377,8 @@
                     android:gravity="end"
                     android:textSize="21sp"
                     app:layout_constraintBottom_toBottomOf="@id/averageWakeUpTimeLabel"
-                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/avgWakeUpDiffText"
                     tools:text="21:00" />

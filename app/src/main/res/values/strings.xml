@@ -21,7 +21,6 @@
     <string name="title_profile">Profile</string>
     <string name="title_home">Home</string>
     <string name="confirm_delete_sleep">Do you really want to delete this sleep session?</string>
-    <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="sign_out">Sign out</string>
     <string name="not_backed_up_yet">No recent backup.</string>
@@ -29,8 +28,12 @@
     <string name="add_sleep_session">Add Sleep Session</string>
     <string name="you_have_slept_for">You\'ve slept for</string>
     <string name="nights">nights</string>
-    <string name="no_sleep_tracked_yet">No sleep tracked yet...</string>
+    <string name="no_sleep_tracked_yet">No sleep tracked yet…</string>
     <string name="sleep_duration">Sleep duration</string>
+    <string name="save">SAVE</string>
+    <string name="delete">Delete</string>
+    <string name="enable_backup">Enable Backup</string>
+    <string name="sign_in_description">Sign in with your Google Account to backup your sleep data.</string>
 
     <plurals name="nights">
         <item quantity="one">%d night</item>

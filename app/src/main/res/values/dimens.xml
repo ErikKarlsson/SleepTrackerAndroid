@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="mtrl_card_spacing">12dp</dimen>
-    <dimen name="mtrl_card_title_text_size">24sp</dimen>
-    <dimen name="mtrl_card_text_margin">16dp</dimen>
-    <dimen name="mtrl_card_button_margin">8dp</dimen>
+    <dimen name="card_spacing">12dp</dimen>
+    <dimen name="card_title_text_size">24sp</dimen>
+    <dimen name="card_text_margin">16dp</dimen>
+    <dimen name="card_button_margin">8dp</dimen>
     <dimen name="statistics_owl_image_size">100dp</dimen>
     <dimen name="statistics_owl_image_margin">12dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
