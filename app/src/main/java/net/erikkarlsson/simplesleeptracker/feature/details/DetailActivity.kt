@@ -7,8 +7,6 @@ import android.app.TimePickerDialog.OnTimeSetListener
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.DatePicker
-import android.widget.TimePicker
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -76,11 +74,11 @@ class DetailActivity : AppCompatActivity() {
     private fun showConfirmDeleteDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(getString(R.string.confirm_delete_sleep))
-        builder.setPositiveButton(getString(R.string.delete)) { dialog, id ->
+        builder.setPositiveButton(getString(R.string.delete)) { _, _ ->
             onDeleteConfirmClick()
         }
 
-        builder.setNegativeButton(getString(R.string.cancel)) { dialog, id ->
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.cancel()
         }
 
@@ -111,28 +109,37 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun onStartDateClick() {
-        pickDate(state.sleep.fromDate, OnDateSetListener(this::onStartDateSet))
+        pickDate(state.sleep.fromDate,
+                OnDateSetListener { _, year, month, dayOfMonth ->
+                    onStartDateSet(year, month, dayOfMonth)
+                })
     }
 
     private fun onTimeAsleepClick() {
-        pickTime(state.sleep.fromDate.toLocalTime(), OnTimeSetListener(this::onTimeAsleepSet))
+        pickTime(state.sleep.fromDate.toLocalTime(),
+                OnTimeSetListener { _, hour, minute ->
+                    onTimeAsleepSet(hour, minute)
+                })
     }
 
     private fun onTimeAwakeClick() {
         state.sleep.toDate?.let {
-            pickTime(it.toLocalTime(), OnTimeSetListener(this::onTimeAwakeSet))
+            pickTime(it.toLocalTime(),
+                    OnTimeSetListener { _, hour, minute ->
+                        onTimeAwakeSet(hour, minute)
+                    })
         }
     }
 
-    private fun onStartDateSet(datePicker: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
+    private fun onStartDateSet(year: Int, month: Int, dayOfMonth: Int) {
         viewModel.dispatch(PickedStartDate(LocalDate.of(year, month + 1, dayOfMonth)))
     }
 
-    private fun onTimeAsleepSet(timePicker: TimePicker, hour: Int, minute: Int) {
+    private fun onTimeAsleepSet(hour: Int, minute: Int) {
         viewModel.dispatch(PickedTimeAsleep(LocalTime.of(hour, minute)))
     }
 
-    private fun onTimeAwakeSet(timePicker: TimePicker, hour: Int, minute: Int) {
+    private fun onTimeAwakeSet(hour: Int, minute: Int) {
         viewModel.dispatch(PickedTimeAwake(LocalTime.of(hour, minute)))
     }
 
@@ -168,8 +175,8 @@ class DetailActivity : AppCompatActivity() {
                 timeAsleepText.text = state.sleep.fromDate.formatHHMM
                 timeAwakeText.text = state.sleep.toDate?.formatHHMM
                 sleptHoursText.text = String.format("%s %s",
-                                                    getString(R.string.you_have_slept_for),
-                                                    state.hoursSlept.formatHoursMinutes)
+                        getString(R.string.you_have_slept_for),
+                        state.hoursSlept.formatHoursMinutes)
             }
 
             if (state.isDeleted) {

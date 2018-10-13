@@ -8,8 +8,6 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.DatePicker
-import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -54,13 +52,13 @@ class AddSleepActivity : AppCompatActivity() {
 
         val closeIcon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_baseline_clear_24px)
         closeIcon?.setColorFilter(ContextCompat.getColor(applicationContext, android.R.color.white),
-                                  PorterDuff.Mode.SRC_ATOP)
+                PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(closeIcon)
 
         toolbar.setTitle(getString(R.string.add_sleep_session))
 
-        viewModel.state().observe(this, Observer {
-            it?.let {
+        viewModel.state().observe(this, Observer { addSleepState ->
+            addSleepState?.let {
                 state = it
                 render(it)
             }
@@ -100,26 +98,35 @@ class AddSleepActivity : AppCompatActivity() {
     }
 
     private fun onStartDateClick() {
-        pickDate(state.startDate, OnDateSetListener(this::onStartDateSet))
+        pickDate(state.startDate,
+                OnDateSetListener { _, year, month, dayOfMonth ->
+                    onStartDateSet(year, month, dayOfMonth)
+                })
     }
 
     private fun onTimeAsleepClick() {
-        pickTime(state.startTime, OnTimeSetListener(this::onTimeAsleepSet))
+        pickTime(state.startTime,
+                OnTimeSetListener { _, hour, minute ->
+                    onTimeAsleepSet(hour, minute)
+                })
     }
 
     private fun onTimeAwakeClick() {
-        pickTime(state.endTime, OnTimeSetListener(this::onTimeAwakeSet))
+        pickTime(state.endTime,
+                OnTimeSetListener { _, hour, minute ->
+                    onTimeAwakeSet(hour, minute)
+                })
     }
 
-    private fun onStartDateSet(datePicker: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
+    private fun onStartDateSet(year: Int, month: Int, dayOfMonth: Int) {
         viewModel.dispatch(PickedStartDate(LocalDate.of(year, month + 1, dayOfMonth)))
     }
 
-    private fun onTimeAsleepSet(timePicker: TimePicker, hour: Int, minute: Int) {
+    private fun onTimeAsleepSet(hour: Int, minute: Int) {
         viewModel.dispatch(PickedTimeAsleep(LocalTime.of(hour, minute)))
     }
 
-    private fun onTimeAwakeSet(timePicker: TimePicker, hour: Int, minute: Int) {
+    private fun onTimeAwakeSet(hour: Int, minute: Int) {
         viewModel.dispatch(PickedTimeAwake(LocalTime.of(hour, minute)))
     }
 
@@ -149,8 +156,8 @@ class AddSleepActivity : AppCompatActivity() {
         timeAsleepText.text = state.startTime.formatHHMM
         timeAwakeText.text = state.endTime.formatHHMM
         sleptHoursText.text = String.format("%s %s",
-                                            getString(R.string.you_have_slept_for),
-                                            state.hoursSlept.formatHoursMinutes)
+                getString(R.string.you_have_slept_for),
+                state.hoursSlept.formatHoursMinutes)
 
         if (state.isSaveSuccess) {
             finish()

@@ -28,6 +28,12 @@ android {
         testInstrumentationRunner "${applicationId}.runner.TestRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     signingConfigs {
