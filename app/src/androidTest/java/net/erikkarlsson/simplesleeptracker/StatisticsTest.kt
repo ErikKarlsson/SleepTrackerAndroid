@@ -23,26 +23,6 @@ class StatisticsTest {
     var chain: TestRule = RuleChain.outerRule(component).around(main)
 
     @Test
-    fun testToggleSleepNavigateToDetailsFlow() {
-        main.launchActivity(null)
-
-        with(component) {
-            // Given is evening
-            mockDateTimeNow("2018-03-17T22:30:00+01:00")
-
-            // toggle to sleeping
-            robot.clickToggleSleepButton()
-
-            // is morning the following day
-            mockDateTimeNow("2018-03-18T06:30:00+01:00")
-        }
-
-        robot.clickToggleSleepButton() // toggle to awake
-            .clickItem(0) // When clicking newly added sleep item
-            .isShowingDetailsScreen() // Then should navigate to details screen
-    }
-
-    @Test
     fun testCompareStatisticsBetweenWeeks() {
         with(component) {
             // Given current time
