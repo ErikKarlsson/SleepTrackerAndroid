@@ -197,6 +197,9 @@ dependencies {
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
 
+    // Material
+    implementation Deps.material
+
     // Material progress bar
     implementation Deps.materialprogressbar
 
