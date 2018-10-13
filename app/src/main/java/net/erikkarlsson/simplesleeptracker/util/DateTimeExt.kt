@@ -1,11 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.util
 
-import net.erikkarlsson.simplesleeptracker.base.HOURS_PRECISION
-import net.erikkarlsson.simplesleeptracker.base.MINUTES_IN_AN_HOUR
-import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_AN_HOUR
-import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_A_DAY
-import net.erikkarlsson.simplesleeptracker.base.SECONDS_IN_A_MINUTE
-import net.erikkarlsson.simplesleeptracker.base.TWELVE_IN_THE_AFTERNOON
+import net.erikkarlsson.simplesleeptracker.base.*
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime

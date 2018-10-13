@@ -4,16 +4,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import net.erikkarlsson.simplesleeptracker.App
-import net.erikkarlsson.simplesleeptracker.di.module.AndroidBindingModule
-import net.erikkarlsson.simplesleeptracker.di.module.AppModule
-import net.erikkarlsson.simplesleeptracker.di.module.BackupModule
-import net.erikkarlsson.simplesleeptracker.di.module.DateTimeModule
-import net.erikkarlsson.simplesleeptracker.di.module.EventModule
-import net.erikkarlsson.simplesleeptracker.di.module.PreferencesModule
-import net.erikkarlsson.simplesleeptracker.di.module.SignInModule
-import net.erikkarlsson.simplesleeptracker.di.module.SleepModule
-import net.erikkarlsson.simplesleeptracker.di.module.StatisticsModule
-import net.erikkarlsson.simplesleeptracker.di.module.ViewModelModule
+import net.erikkarlsson.simplesleeptracker.di.module.*
 import net.erikkarlsson.simplesleeptracker.feature.backup.BackupSleepWorker
 import net.erikkarlsson.simplesleeptracker.feature.backup.RestoreSleepWorker
 import javax.inject.Singleton

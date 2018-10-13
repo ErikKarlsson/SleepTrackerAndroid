@@ -10,5 +10,4 @@ abstract class DateTimeModule {
 
     @Binds
     abstract fun bindDateTimeProvider(realDateTimeProvider: RealDateTimeProvider): DateTimeProvider
-
 }

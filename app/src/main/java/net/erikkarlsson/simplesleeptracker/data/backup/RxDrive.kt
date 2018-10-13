@@ -71,7 +71,7 @@ class RxDrive @Inject constructor(private val context: Context) {
                     val parent = rootFolderTask.getResult()
 
                     if (parent == null) {
-                        throw RuntimeException("parent was null")
+                        throw IllegalStateException("parent was null")
                     }
 
                     val folderChangeSet = MetadataChangeSet.Builder()
@@ -104,7 +104,7 @@ class RxDrive @Inject constructor(private val context: Context) {
                             val contents = createContentsTask.getResult()
 
                             if (contents == null) {
-                                throw RuntimeException("contents was null")
+                                throw IllegalStateException("contents was null")
                             }
 
                             val outputStream = contents.outputStream
@@ -137,7 +137,7 @@ class RxDrive @Inject constructor(private val context: Context) {
                     val driveContents = openTask.getResult()
 
                     if (driveContents == null) {
-                        throw RuntimeException("driveContents was null")
+                        throw IllegalStateException("driveContents was null")
                     }
 
                     val outputStream = driveContents.outputStream
@@ -171,7 +171,7 @@ class RxDrive @Inject constructor(private val context: Context) {
 
             if (account == null) {
                 // Not logged in to Google account.
-                throw RuntimeException("Not logged in to Google Account")
+                throw IllegalStateException("Not logged in to Google Account")
             }
 
             return account
