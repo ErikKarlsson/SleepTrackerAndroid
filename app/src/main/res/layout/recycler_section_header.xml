@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/recycler_section_header_height"
     android:background="@android:color/white"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="overdraw">
 
     <TextView
         android:id="@+id/list_item_section_text"
