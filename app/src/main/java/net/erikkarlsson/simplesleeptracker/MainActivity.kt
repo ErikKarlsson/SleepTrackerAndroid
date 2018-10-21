@@ -1,9 +1,13 @@
 package net.erikkarlsson.simplesleeptracker
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
@@ -20,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    lateinit var navController: NavController
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
@@ -38,9 +44,20 @@ class MainActivity : AppCompatActivity() {
         val host: NavHostFragment = supportFragmentManager
                 .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
 
-        val navController = host.navController
+        navController = host.navController
 
+        setupWithNavController(toolbar, navController)
         setupWithNavController(bottomNavigation, navController)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onNavDestinationSelected(item, navController)
+        return super.onOptionsItemSelected(item)
     }
 }
 

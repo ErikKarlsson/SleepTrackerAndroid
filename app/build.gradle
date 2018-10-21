@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+
 apply plugin: 'io.fabric'
 
 apply plugin: 'kotlin-android'
@@ -225,9 +227,13 @@ dependencies {
     implementation Deps.paging
     implementation Deps.paging_rx
 
+    // Preferences
+    implementation Deps.preferences
+
     // Play Services
     implementation Deps.play_services_auth
     implementation Deps.play_services_drive
+    implementation Deps.play_services_oss_licenses
 
     // Room
     implementation Deps.room_runtime

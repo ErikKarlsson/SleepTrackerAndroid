@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="net.erikkarlsson.simplesleeptracker"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.erikkarlsson.simplesleeptracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,43 +12,47 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
-
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
-            android:name="net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity"
-            android:parentActivityName=".MainActivity"/>
-
+            android:name=".feature.details.DetailActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name="net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity"
+            android:name=".feature.add.AddSleepActivity"
             android:label="@string/add_sleep_session"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
 
-        <receiver android:name="net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider">
+        <receiver android:name=".feature.appwidget.SleepAppWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info"/>
+                android:resource="@xml/appwidget_info" />
         </receiver>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="fe2ec819a92c92bdf335833374300bb79b6fff00"
-            />
+            android:value="fe2ec819a92c92bdf335833374300bb79b6fff00" />
+
+        <activity
+            android:name=".feature.settings.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.erikkarlsson.simplesleeptracker.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -39,4 +39,5 @@
         <item quantity="one">%d night</item>
         <item quantity="other">%d nights</item>
     </plurals>
+    <string name="settings">Settings</string>
 </resources>

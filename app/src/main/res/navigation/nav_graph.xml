@@ -43,4 +43,10 @@
         android:name="net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity"
         android:label="AddSleepActivity">
     </activity>
+
+    <activity
+        android:id="@+id/settings"
+        android:name="net.erikkarlsson.simplesleeptracker.feature.settings.SettingsActivity"
+        android:label="SettingsActivity">
+    </activity>
 </navigation>

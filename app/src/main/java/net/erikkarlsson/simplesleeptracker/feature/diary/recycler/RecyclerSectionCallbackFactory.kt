@@ -33,7 +33,7 @@ class RecyclerSectionCallbackFactory @Inject constructor(
                 try {
                     val fromDate = sleepList[position]?.fromDate ?: OffsetDateTime.MIN
 
-                    val year = fromDate.year ?: 0
+                    val year = fromDate.year
                     val currentYear = dateTimeProvider.now().year
                     val monthString = fromDate.format(monthPattern).toString()
 
