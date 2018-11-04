@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         navController = host.navController
 
-        setupWithNavController(toolbar, navController)
         setupWithNavController(bottomNavigation, navController)
     }
 
