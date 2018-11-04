@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker
 
 import android.app.Activity
 import android.content.BroadcastReceiver
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
@@ -40,8 +41,20 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
 
+    companion object {
+
+        lateinit var self: App
+
+        @JvmStatic
+        fun getApplication(): Context {
+            return self
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        self = this
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return

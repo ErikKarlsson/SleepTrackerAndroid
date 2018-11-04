@@ -7,7 +7,10 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/own_awake"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/money_sprites_4"
+        android:scaleType="centerInside"
         android:contentDescription="@string/owl_image_content_description"/>
 
 </FrameLayout>
+
