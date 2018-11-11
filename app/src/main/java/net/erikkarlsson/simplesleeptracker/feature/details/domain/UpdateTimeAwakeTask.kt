@@ -4,17 +4,20 @@ import io.reactivex.Completable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
+import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class UpdateTimeAwakeTask @Inject constructor(
-        private val sleepRepository: SleepDataSource) : CompletableTask<UpdateTimeAwakeTask.Params> {
+        private val sleepRepository: SleepDataSource,
+        private val scheduleBackupTask: ScheduleBackupTask) : CompletableTask<UpdateTimeAwakeTask.Params> {
 
     override fun execute(params: Params): Completable =
             sleepRepository.getSleep(params.sleepId)
                     .take(1)
                     .map { updateTimeAwake(it, params.timeAwake) }
                     .ignoreElements()
+                    .andThen(scheduleBackupTask.execute(CompletableTask.None()))
 
     private fun updateTimeAwake(sleep: Sleep, timeAwake: LocalTime) {
         val fromDate = sleep.fromDate
