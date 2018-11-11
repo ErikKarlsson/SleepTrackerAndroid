@@ -83,9 +83,9 @@ class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
                 val midnightOffsetInSeconds = localTime.midnightOffsetInSeconds
                 val midnightOffsetInSecondsDiff = midnightOffsetInSeconds - averageMidnightOffsetInSeconds
 
-                if (midnightOffsetInSecondsDiff > maxDiff) {
+                if (midnightOffsetInSecondsDiff >= 0 && midnightOffsetInSecondsDiff > maxDiff) {
                     maxDiff = midnightOffsetInSecondsDiff
-                } else if (midnightOffsetInSecondsDiff < minDiff) {
+                } else if (midnightOffsetInSecondsDiff < 0 && midnightOffsetInSecondsDiff < minDiff) {
                     minDiff = midnightOffsetInSecondsDiff
                 }
 
