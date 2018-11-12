@@ -112,7 +112,7 @@ class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
 
         val longestSleepDurationDayOfWeekInHours = statisticsComparison.first.longestSleepDurationDayOfWeekInHours
 
-        val leftMaximum = Math.round(longestSleepDurationDayOfWeekInHours.toDouble()).toFloat() + 1f
+        val leftMaximum = Math.ceil(longestSleepDurationDayOfWeekInHours.toDouble()).toFloat() + 1f
 
         val leftAxis = sleepDurationChart.axisLeft
         leftAxis.isEnabled = true
