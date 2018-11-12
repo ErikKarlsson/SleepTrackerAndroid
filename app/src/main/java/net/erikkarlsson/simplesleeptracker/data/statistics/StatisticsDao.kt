@@ -20,7 +20,7 @@ interface StatisticsDao {
     @Query("SELECT ROUND(avg(hours),3) FROM Sleep WHERE to_date != 0 AND date(to_date_local) BETWEEN date(:from) AND date(:to)")
     fun getAverageSleepInHours(from: String, to: String): Flowable<Float>
 
-    @Query("SELECT ROUND(avg(hours),3) as 'hours', strftime('%w', from_date_local) as 'day' FROM Sleep WHERE to_date != 0 AND date(to_date_local) BETWEEN date(:from) AND date(:to) GROUP BY strftime('%w', to_date_local)")
+    @Query("SELECT ROUND(avg(hours),3) as 'hours', strftime('%w', to_date_local) as 'day' FROM Sleep WHERE to_date != 0 AND date(to_date_local) BETWEEN date(:from) AND date(:to) GROUP BY strftime('%w', to_date_local)")
     fun getAverageSleepDurationDayOfWeek(from: String, to: String): Flowable<List<DayOfWeekHours>>
 
     @Query("SELECT * FROM Sleep WHERE to_date != 0 AND date(to_date_local) BETWEEN date(:from) AND date(:to) AND hours = (SELECT max(hours) FROM Sleep WHERE to_date != 0 AND date(to_date_local) BETWEEN date(:from) AND date(:to)) ORDER BY date(to_date_local) ASC LIMIT 1")

@@ -16,9 +16,12 @@ data class Statistics(val sleepCount: Int,
 
     val isEmpty get(): Boolean = this == empty()
 
-    fun averageSleepDurationDayOfWeekFor(day: Int): DayOfWeekHours? {
+    /**
+     * @param dayOfWeekIso 1-7 (Sunday = 7)
+     */
+    fun averageSleepDurationDayOfWeekFor(dayOfWeekIso: Int): DayOfWeekHours? {
         for (dayOfWeekHours in averageSleepDurationDayOfWeek) {
-            if (dayOfWeekHours.day == day) {
+            if (dayOfWeekHours.dayOfWeekIso == dayOfWeekIso) {
                 return dayOfWeekHours
             }
         }

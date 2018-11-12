@@ -40,9 +40,9 @@ class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
         // Monday gets highest x value and Sunday lowest to show them in ascending order in chart.
         for (day in 6 downTo 0) {
             val x = 6 - day.toFloat()
-
-            val dayOfWeekHours = current.averageSleepDurationDayOfWeekFor(day)
-            val previousDayOfWeekHours = previous.averageSleepDurationDayOfWeekFor(day)
+            val isoDay = (7 - x).toInt()
+            val dayOfWeekHours = current.averageSleepDurationDayOfWeekFor(isoDay)
+            val previousDayOfWeekHours = previous.averageSleepDurationDayOfWeekFor(isoDay)
 
             when {
                 dayOfWeekHours == null -> {
