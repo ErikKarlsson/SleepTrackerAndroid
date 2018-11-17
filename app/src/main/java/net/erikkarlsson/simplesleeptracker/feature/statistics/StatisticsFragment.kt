@@ -57,7 +57,7 @@ class StatisticsFragment : Fragment() {
         val spinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-        spinner.setSelection(0)
+        spinner.setTag(0) // Avoid triggering selection on initialization.
 
         statisticsAdapter = StatisticsAdapter(requireFragmentManager(), dateTimeProvider)
 
@@ -82,6 +82,8 @@ class StatisticsFragment : Fragment() {
             spinnerContainer.isVisible = !it.isEmpty
             emptyState.isVisible = !it.isLoading && it.isEmpty
 
+            spinner.setSelection(state.filterOrdinal)
+
             // TODO (erikkarlsson): Hack to fix scroll not working.
             Handler().postDelayed({
                 slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
@@ -104,6 +106,10 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun onFilterSelected(index: Int) {
+        if (spinner.getTag() == index) {
+            return
+        }
+        spinner.setTag(index)
         val statisticsFilter = StatisticsFilter.values()[index]
         viewModel.dispatch(StatisticsFilterSelected(statisticsFilter))
     }

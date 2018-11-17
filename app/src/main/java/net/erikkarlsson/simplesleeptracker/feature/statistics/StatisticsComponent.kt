@@ -3,33 +3,49 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.zipWith
+import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_FILTER
+import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.elm.*
-import net.erikkarlsson.simplesleeptracker.util.weekOfWeekBasedYear
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.LocalDate
+import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRanges.getMonthDateRanges
+import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRanges.getOverallDateRange
+import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRanges.getWeekDateRanges
+import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRanges.getYearDateRanges
 import javax.inject.Inject
 
 typealias DateRangePair = Pair<DateRange, DateRange>
 
-class StatisticsComponent @Inject constructor(private val youngestOldestSubscription: YoungestOldestSubscription)
+class StatisticsComponent @Inject
+constructor(private val youngestOldestSubscription: YoungestOldestSubscription,
+            private val savedFilterSubscription: SavedFilterSubscription,
+            private val preferencesDataSource: PreferencesDataSource)
     : Component<StatisticsState, StatisticsMsg, StatisticsCmd> {
 
     override fun call(cmd: StatisticsCmd): Single<StatisticsMsg> =
-            Single.just(DoNothing)
+            when (cmd) {
+                is SaveFilter -> {
+                    preferencesDataSource.set(PREFS_SELECTED_FILTER, cmd.filter.ordinal)
+                    Single.just(DoNothing)
+                }
+            }
 
     override fun initState(): StatisticsState = StatisticsState.empty()
 
-    override fun subscriptions(): List<Sub<StatisticsState, StatisticsMsg>> = listOf(youngestOldestSubscription)
+    override fun subscriptions(): List<Sub<StatisticsState, StatisticsMsg>> =
+            listOf(youngestOldestSubscription, savedFilterSubscription)
 
     override fun update(msg: StatisticsMsg, prevState: StatisticsState): Pair<StatisticsState, StatisticsCmd?> =
             when (msg) {
                 is StatisticsFilterSelected -> onFilterSelected(prevState, msg)
                 is YoungestOldestLoaded -> onOldestYoungestLoaded(prevState, msg)
+                is SavedFilterLoaded -> onSavedFilterLoaded(prevState, msg)
                 DoNothing -> prevState.noCmd()
             }
+
+    private fun onSavedFilterLoaded(prevState: StatisticsState, msg: SavedFilterLoaded): Pair<StatisticsState, StatisticsCmd?> =
+        prevState.copy(filter = msg.filter).noCmd()
 
     private fun onOldestYoungestLoaded(prevState: StatisticsState, msg: YoungestOldestLoaded): Pair<StatisticsState, StatisticsCmd?> {
         val filter = prevState.filter
@@ -54,7 +70,7 @@ class StatisticsComponent @Inject constructor(private val youngestOldestSubscrip
 
         val dateRanges = getDateRanges(filter, youngest, oldest)
 
-        return prevState.copy(filter = filter, dateRanges = dateRanges).noCmd()
+        return prevState.copy(filter = filter, dateRanges = dateRanges) withCmd SaveFilter(filter)
     }
 
     private fun getDateRanges(statisticFilter: StatisticsFilter,
@@ -80,95 +96,6 @@ class StatisticsComponent @Inject constructor(private val youngestOldestSubscrip
         }
     }
 
-    // Dummy date range for overall filter, needs at least one entry to populate view pager.
-    private fun getOverallDateRange(): List<DateRangePair> {
-        val emptyDateRange = DateRange.empty()
-        return listOf(DateRangePair(emptyDateRange, emptyDateRange))
-    }
-
-    private fun getWeekDateRanges(startDate: LocalDate,
-                                  endDate: LocalDate): List<DateRangePair> {
-        val dateRangePairList = mutableListOf<DateRangePair>()
-        var date = startDate
-        val endDateNextWeek = endDate.plusWeeks(1)
-        var isAtEnd: Boolean
-
-        do {
-            val monday = date.with(DayOfWeek.MONDAY)
-            val sunday = date.with(DayOfWeek.SUNDAY)
-            val previousMonday = monday.minusWeeks(1)
-            val previousSunday = sunday.minusWeeks(1)
-
-            val first = DateRange(monday, sunday)
-            val second = DateRange(previousMonday, previousSunday)
-            val pair = Pair(first, second)
-
-            dateRangePairList.add(pair)
-
-            date = date.plusWeeks(1)
-
-            // Iterate until reaching week after end date.
-            isAtEnd = date.year == endDateNextWeek.year &&
-                    date.weekOfWeekBasedYear == endDateNextWeek.weekOfWeekBasedYear
-        } while (!isAtEnd)
-
-        return dateRangePairList
-    }
-
-    private fun getMonthDateRanges(startDate: LocalDate, endDate: LocalDate): List<DateRangePair> {
-        val dateRangePairList = mutableListOf<DateRangePair>()
-        var date = startDate
-        val endDateNextMonth = endDate.plusMonths(1)
-        var isAtEnd: Boolean
-
-        do {
-            val firstDay = date.withDayOfMonth(1)
-            val lastDay = date.withDayOfMonth(date.lengthOfMonth())
-            val previousFirstDay = firstDay.minusMonths(1)
-            val previousLastDay = previousFirstDay.withDayOfMonth(previousFirstDay.lengthOfMonth())
-
-            val first = DateRange(firstDay, lastDay)
-            val second = DateRange(previousFirstDay, previousLastDay)
-            val pair = Pair(first, second)
-
-            dateRangePairList.add(pair)
-
-            date = date.plusMonths(1)
-
-            // Iterate until reaching month after end month.
-            isAtEnd = date.year == endDateNextMonth.year &&
-                    date.month == endDateNextMonth.month
-        } while (!isAtEnd)
-
-        return dateRangePairList
-    }
-
-    private fun getYearDateRanges(startDate: LocalDate, endDate: LocalDate): List<DateRangePair> {
-        val dateRangePairList = mutableListOf<DateRangePair>()
-        var date = startDate
-        val endDateNextYear = endDate.plusYears(1)
-        var isAtEnd: Boolean
-
-        do {
-            val firstDay = date.withDayOfYear(1)
-            val lastDay = date.withDayOfYear(date.lengthOfYear())
-            val previousFirstDay = firstDay.minusYears(1)
-            val previousLastDay = previousFirstDay.withDayOfYear(previousFirstDay.lengthOfYear())
-
-            val first = DateRange(firstDay, lastDay)
-            val second = DateRange(previousFirstDay, previousLastDay)
-            val pair = Pair(first, second)
-
-            dateRangePairList.add(pair)
-
-            date = date.plusYears(1)
-
-            // Iterate until reaching month after end month.
-            isAtEnd = date.year == endDateNextYear.year
-        } while (!isAtEnd)
-
-        return dateRangePairList
-    }
 }
 
 // Subscription
@@ -177,6 +104,14 @@ class YoungestOldestSubscription @Inject constructor(private val statisticsDataS
             statisticsDataSource.getYoungestSleep()
                     .zipWith(statisticsDataSource.getOldestSleep())
                     .map { YoungestOldestLoaded(it.first, it.second) }
+}
+
+class SavedFilterSubscription @Inject constructor(private val preferences: PreferencesDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
+    override fun invoke(): Observable<StatisticsMsg> =
+            preferences.getInt(PREFS_SELECTED_FILTER)
+                    .take(1)
+                    .map { StatisticsFilter.values()[it] }
+                    .map { SavedFilterLoaded(it) }
 }
 
 // State
@@ -188,6 +123,8 @@ data class StatisticsState(val filter: StatisticsFilter,
 
     val isEmpty = dateRanges.size == 0
 
+    val filterOrdinal get() = filter.ordinal
+
     companion object {
         fun empty() = StatisticsState(StatisticsFilter.OVERALL, Sleep.empty(), Sleep.empty(), listOf(), true)
     }
@@ -198,9 +135,13 @@ sealed class StatisticsMsg : Msg
 
 data class StatisticsFilterSelected(val filter: StatisticsFilter) : StatisticsMsg()
 
+data class SavedFilterLoaded(val filter: StatisticsFilter) : StatisticsMsg()
+
 data class YoungestOldestLoaded(val youngest: Sleep, val oldest: Sleep) : StatisticsMsg()
 
 object DoNothing : StatisticsMsg()
 
 // Cmd
 sealed class StatisticsCmd : Cmd
+
+data class SaveFilter(val filter: StatisticsFilter) : StatisticsCmd()

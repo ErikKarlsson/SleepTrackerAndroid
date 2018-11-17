@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.base.PREFS_LAST_SYNC_TIMESTAMP
+import net.erikkarlsson.simplesleeptracker.domain.PREFS_LAST_SYNC_TIMESTAMP
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FILE_NAME

@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.base
+package net.erikkarlsson.simplesleeptracker.data
 
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import org.threeten.bp.OffsetDateTime
