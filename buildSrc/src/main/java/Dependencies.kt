@@ -1,6 +1,6 @@
 object Versions {
     val compile_sdk = 28
-    val min_sdk = 19
+    val min_sdk = 21
     val target_sdk = 28
 
     val android_gradle_plugin = "3.2.0"

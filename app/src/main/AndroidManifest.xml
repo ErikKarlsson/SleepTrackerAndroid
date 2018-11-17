@@ -30,6 +30,12 @@
             android:label="@string/add_sleep_session"
             android:parentActivityName=".MainActivity" />
 
+        <receiver android:name=".feature.appwidget.AlarmBroadcastReciever" android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".feature.appwidget.SleepAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

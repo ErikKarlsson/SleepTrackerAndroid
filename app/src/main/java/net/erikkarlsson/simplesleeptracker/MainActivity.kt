@@ -16,7 +16,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
+import net.erikkarlsson.simplesleeptracker.feature.appwidget.AlarmBroadcastReciever
 import javax.inject.Inject
+
+
 
 const val REQUEST_CODE_SIGN_IN = 1
 
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
 
+    private lateinit var receiver: AlarmBroadcastReciever
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
@@ -36,6 +41,21 @@ class MainActivity : AppCompatActivity() {
         AndroidInjection.inject(this)
 
         Fabric.with(this, Crashlytics())
+//        receiver = AlarmBroadcastReciever()
+
+//        val intentFilter = IntentFilter()
+//        intentFilter.addAction("android.app.action.NEXT_ALARM_CLOCK_CHANGED")
+        /*
+        intentFilter.addAction("com.sec.android.app.clockpackage.ClockPackage.ALARM_ALERT")
+        intentFilter.addAction("com.sec.android.app.clockpackage.ClockPackage.ALARM_DISMISS")
+        intentFilter.addAction("com.sec.android.app.clockpackage.alarm.ALARM_DISMISS")
+        intentFilter.addAction("com.sec.android.app.clockpackage.ALARM_DISMISS")
+        intentFilter.addAction("com.sec.android.app.clockpackage.ALARM_ALERT")
+        intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+        */
+//        registerReceiver(receiver, intentFilter);
+
+
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
