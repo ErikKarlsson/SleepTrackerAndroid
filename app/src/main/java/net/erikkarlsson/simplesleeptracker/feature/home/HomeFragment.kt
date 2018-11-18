@@ -1,8 +1,11 @@
 package net.erikkarlsson.simplesleeptracker.feature.home
 
 import android.app.Activity
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +35,9 @@ import net.erikkarlsson.simplesleeptracker.REQUEST_CODE_SIGN_IN
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
+import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes2
 import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
@@ -78,6 +83,7 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        widgetBubble.clicksThrottle(disposables) { pinWidget() }
         signInButton.clicksThrottle(disposables) { signIn() }
         signOutButton.clicksThrottle(disposables) { signOut() }
 
@@ -85,6 +91,22 @@ class HomeFragment : Fragment() {
                 .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
                         { Timber.e(it, "Error merging clicks") })
                 .addTo(disposables)
+    }
+
+    private fun pinWidget() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val appWidgetManager = AppWidgetManager.getInstance(requireContext())
+            val myProvider = ComponentName(requireContext(), SleepAppWidgetProvider::class.java)
+
+            if (appWidgetManager.isRequestPinAppWidgetSupported()) {
+                appWidgetManager.requestPinAppWidget(myProvider, null, null);
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.dispatch(LoadWidgetStatus)
     }
 
     override fun onStop() {
@@ -111,32 +133,64 @@ class HomeFragment : Fragment() {
 
     private fun render(state: HomeState?) {
         state?.let {
-            val imageRes = if (state.isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
-            owlImage.setImageResource(imageRes)
+            renderOwl(it.isSleeping)
+            renderLogin(it.isLoggedIn)
+            renderUserAccount(it.userAccount)
+            renderBackup(it.profile.lastBackupTimestamp)
+            renderWidgetBubble(it.bubbleState, it.sleepDuration)
+        }
+    }
 
-            signInButton.isVisible = !it.isLoggedIn
-            loggedInContent.isVisible = it.isLoggedIn
-            loggedOutContent.isVisible = !it.isLoggedIn
+    private fun renderWidgetBubble(bubbleState: BubbleState, sleepDuration: Float) {
+        widgetBubbleText.text = when (bubbleState) {
+            BubbleState.SLEEPING -> getString(R.string.sleeping_zzz)
+            BubbleState.ADD_TO_HOME -> getString(R.string.add_me_to_home_screen)
+            BubbleState.START_TRACKING -> getString(R.string.remember_to_toggle_sleep)
+            BubbleState.MINIMUM_SLEEP -> getString(R.string.sleep_minimum)
+            BubbleState.SLEEP_DURATION -> getString(R.string.slept_for, sleepDuration.formatHoursMinutes2)
+            BubbleState.EMPTY -> ""
+        }
 
-            it.userAccount?.let {
-                Glide.with(this)
-                        .load(it.photoUrl)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(photoImage)
+        widgetBubble.isVisible = bubbleState != BubbleState.EMPTY
+    }
 
-                emailText.text = it.email
-                displayNameText.text = it.displayName
-            }
+    private fun renderLogin(loggedIn: Boolean) {
+        signInButton.isVisible = !loggedIn
+        loggedInContent.isVisible = loggedIn
+        loggedOutContent.isVisible = !loggedIn
+    }
 
-            it.profile.lastBackupTimestamp.let {
-                val backupString = getString(R.string.last_backup)
-                val dateString = if (it > 0L) {
-                    it.formatTimestamp
-                } else {
-                    getString(R.string.not_backed_up_yet)
-                }
-                lastBackupText.text = String.format("%s: %s", backupString, dateString)
-            }
+    private fun renderOwl(isSleeping: Boolean) {
+        val imageRes = if (isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
+        owlImage.setImageResource(imageRes)
+
+        val textRes = if (isSleeping) {
+            R.string.wake_up
+        } else {
+            R.string.go_to_bed
+        }
+        toggleSleepButton.setText(textRes)
+    }
+
+    private fun renderBackup(timestamp: Long) {
+        val backupString = getString(R.string.last_backup)
+        val dateString = if (timestamp > 0L) {
+            timestamp.formatTimestamp
+        } else {
+            getString(R.string.not_backed_up_yet)
+        }
+        lastBackupText.text = String.format("%s: %s", backupString, dateString)
+    }
+
+    private fun renderUserAccount(userAccount: UserAccount?) {
+        userAccount?.let {
+            Glide.with(this)
+                    .load(it.photoUrl)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(photoImage)
+
+            emailText.text = it.email
+            displayNameText.text = it.displayName
         }
     }
 

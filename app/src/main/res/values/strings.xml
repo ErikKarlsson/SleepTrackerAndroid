@@ -12,7 +12,6 @@
     <string name="average_bed_time">Average Bed Time</string>
     <string name="average_wake_up_time">Average Wake Up Time</string>
     <string name="not_implemented_yet">Not implemented yet</string>
-    <string name="toggle_sleep">Toggle sleep</string>
     <string name="statistics">Statistics</string>
     <string name="owl_image_content_description">Owl image</string>
     <string name="title_activity_main">MainActivity</string>
@@ -40,4 +39,11 @@
         <item quantity="other">%d nights</item>
     </plurals>
     <string name="settings">Settings</string>
+    <string name="add_me_to_home_screen">Add me to your home screen CLICK HERE</string>
+    <string name="remember_to_toggle_sleep">Click to start tracking your sleep.</string>
+    <string name="sleeping_zzz">ZZZzzzzz…</string>
+    <string name="go_to_bed">Sleep</string>
+    <string name="wake_up">Awake</string>
+    <string name="sleep_minimum">Minimum 1 hour of sleep to be tracked.</string>
+    <string name="slept_for">Last night\'s sleep\n%1$s.</string>
 </resources>

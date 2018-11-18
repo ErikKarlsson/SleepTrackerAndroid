@@ -262,6 +262,8 @@ dependencies {
     // Timber
     implementation Deps.timber
 
+    implementation 'com.daasuu:BubbleLayout:1.2.0'
+
     // Work Manager
     // TODO (erikkarlsson): Exclude fixes bug in alpha09 https://stackoverflow.com/questions/52467819/compile-errors-after-updating-to-workmanager-1-0-0-alpha09
     // Remove when updating to stable release.
