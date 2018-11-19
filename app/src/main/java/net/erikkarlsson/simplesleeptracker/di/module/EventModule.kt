@@ -3,7 +3,11 @@ package net.erikkarlsson.simplesleeptracker.di.module
 import androidx.lifecycle.MutableLiveData
 import dagger.Module
 import dagger.Provides
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.Event
+import net.erikkarlsson.simplesleeptracker.feature.home.HomeEvents
+import net.erikkarlsson.simplesleeptracker.feature.home.SleepEvent
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -14,5 +18,15 @@ class EventModule {
     @Singleton
     @Named("sleepAddedEvents")
     fun providesSleepAddedEvents(): MutableLiveData<Event<Unit>> = MutableLiveData()
+
+    @Provides
+    @Singleton
+    @Named("homeEvents")
+    fun providesHomeEvents(): HomeEvents = MutableLiveData()
+
+    @Provides
+    @Singleton
+    @Named("sleepEvents")
+    fun providesSleepEventSubject(): Subject<SleepEvent> = PublishSubject.create()
 
 }

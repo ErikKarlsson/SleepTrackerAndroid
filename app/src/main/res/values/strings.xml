@@ -44,6 +44,6 @@
     <string name="sleeping_zzz">ZZZzzzzz…</string>
     <string name="go_to_bed">Sleep</string>
     <string name="wake_up">Awake</string>
-    <string name="sleep_minimum">Minimum 1 hour of sleep to be tracked.</string>
+    <string name="sleep_minimum">Minimum 1 hour of sleep.</string>
     <string name="slept_for">Last night\'s sleep\n%1$s.</string>
 </resources>

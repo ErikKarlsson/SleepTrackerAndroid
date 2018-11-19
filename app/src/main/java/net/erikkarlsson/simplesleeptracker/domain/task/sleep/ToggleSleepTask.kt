@@ -1,12 +1,17 @@
 package net.erikkarlsson.simplesleeptracker.domain.task.sleep
 
 import io.reactivex.Completable
-import net.erikkarlsson.simplesleeptracker.domain.*
+import io.reactivex.subjects.Subject
+import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.feature.home.MinimumSleepEvent
+import net.erikkarlsson.simplesleeptracker.feature.home.SleepEvent
 import javax.inject.Inject
+import javax.inject.Named
 
 private const val MINIMUM_SLEEP_DURATION_HOURS = 1 // Minimum hours to count as tracked sleep.
 
@@ -16,14 +21,12 @@ private const val MINIMUM_SLEEP_DURATION_HOURS = 1 // Minimum hours to count as 
 class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
                                           private val dateTimeProvider: DateTimeProvider,
                                           private val scheduleBackupTask: ScheduleBackupTask,
-                                          private val preferencesDataSource: PreferencesDataSource,
-                                          private val widgetDataSource: WidgetDataSource) : CompletableTask<None> {
+                                          @Named("sleepEvents") private val sleepEvents: Subject<SleepEvent>) : CompletableTask<None> {
 
     override fun execute(params: None): Completable =
             sleepRepository.getCurrentSingle()
                     .map(::toggleSleep)
                     .flatMapCompletable(::backupSleep)
-                    .andThen(setHasToggledSleep())
 
     private fun toggleSleep(currentSleep: Sleep): Boolean =
             if (currentSleep.isSleeping) {
@@ -45,6 +48,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
             sleepRepository.update(sleep)
             return true
         } else {
+            sleepEvents.onNext(MinimumSleepEvent)
             sleepRepository.delete(currentSleep)
             return false
         }
@@ -57,14 +61,4 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
                 Completable.complete()
             }
 
-    private fun setHasToggledSleep(): Completable =
-        widgetDataSource.isWidgetAdded()
-                .flatMapCompletable {
-                    // Only counts as toggled if widget has been added to home screen.
-                    if (it) {
-                        preferencesDataSource.set(PREFS_HAS_TOGGLED_SLEEP, true)
-                    } else {
-                        Completable.complete()
-                    }
-                }
 }

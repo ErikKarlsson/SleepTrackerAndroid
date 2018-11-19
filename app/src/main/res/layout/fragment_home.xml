@@ -37,6 +37,7 @@
 
                 <com.daasuu.bl.BubbleLayout
                     android:id="@+id/widgetBubble"
+                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -50,7 +51,8 @@
                     app:bl_arrowPosition="16dp"
                     app:bl_arrowWidth="8dp"
                     app:bl_cornersRadius="12dp"
-                    app:bl_strokeWidth="0dp">
+                    app:bl_strokeWidth="0dp"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/widgetBubbleText"

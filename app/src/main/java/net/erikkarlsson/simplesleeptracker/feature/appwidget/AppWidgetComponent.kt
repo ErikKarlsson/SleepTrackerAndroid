@@ -2,10 +2,9 @@ package net.erikkarlsson.simplesleeptracker.feature.appwidget
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.GetCurrentSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.elm.*
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.WidgetCmd.ToggleSleepCmd
@@ -39,10 +38,10 @@ data class WidgetState(val isLoading: Boolean, val isSleeping: Boolean, val upda
 }
 
 // Subscription
-class SleepSubscription @Inject constructor(private val getCurrentSleepTask: GetCurrentSleepTask) : StatelessSub<WidgetState, WidgetMsg>() {
+class SleepSubscription @Inject constructor(private val sleepRepository: SleepDataSource) : StatelessSub<WidgetState, WidgetMsg>() {
 
     override fun invoke(): Observable<WidgetMsg> =
-            getCurrentSleepTask.execute(ObservableTask.None())
+            sleepRepository.getCurrent()
                     .onErrorReturnItem(Sleep.empty())
                     .map { CurrentSleepLoaded(it) }
 }

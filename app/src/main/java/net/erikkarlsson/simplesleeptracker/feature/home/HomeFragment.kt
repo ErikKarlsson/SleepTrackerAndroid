@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.logged_in_content.*
 import kotlinx.android.synthetic.main.logged_out_content.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.REQUEST_CODE_SIGN_IN
+import net.erikkarlsson.simplesleeptracker.base.EventObserver
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
@@ -41,6 +42,7 @@ import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes2
 import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 class HomeFragment : Fragment() {
 
@@ -52,6 +54,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var ctx: Context
+
+    @field:[Inject Named("homeEvents")]
+    lateinit var homeEvents: HomeEvents
 
     private val disposables = CompositeDisposable()
 
@@ -71,7 +76,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state().observe(this, Observer(this::render))
+        viewModel.state().observe(this, Observer(::render))
+
+        homeEvents.observe(this, EventObserver {
+            when (it) {
+                PinWidgetEvent -> pinWidget()
+            }
+        })
 
         val account = GoogleSignIn.getLastSignedInAccount(ctx)
 
@@ -83,9 +94,9 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        widgetBubble.clicksThrottle(disposables) { pinWidget() }
         signInButton.clicksThrottle(disposables) { signIn() }
         signOutButton.clicksThrottle(disposables) { signOut() }
+        widgetBubble.clicksThrottle(disposables) { viewModel.dispatch(BubbleClick) }
 
         Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
                 .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
@@ -133,10 +144,13 @@ class HomeFragment : Fragment() {
 
     private fun render(state: HomeState?) {
         state?.let {
+            if (it.isLoading) {
+                return
+            }
             renderOwl(it.isSleeping)
             renderLogin(it.isLoggedIn)
             renderUserAccount(it.userAccount)
-            renderBackup(it.profile.lastBackupTimestamp)
+            renderBackup(it.lastBackupTimestamp)
             renderWidgetBubble(it.bubbleState, it.sleepDuration)
         }
     }
