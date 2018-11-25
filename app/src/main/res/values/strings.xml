@@ -39,11 +39,15 @@
         <item quantity="other">%d nights</item>
     </plurals>
     <string name="settings">Settings</string>
-    <string name="add_me_to_home_screen">Add me to your home screen CLICK HERE</string>
+    <string name="pin_widget">Add me to your home screen\nCLICK HERE</string>
+    <string name="add_widget">Add me to your home screen\nLEARN MORE</string>
     <string name="remember_to_toggle_sleep">Click to start tracking your sleep.</string>
-    <string name="sleeping_zzz">ZZZzzzzz…</string>
+    <string name="sleeping_zzz"><b>ZZZzzzzz…</b></string>
+    <string name="sleeping_zzz_onboarding"><b>ZZZzzzzz…</b>\n(Click to awake)</string>
     <string name="go_to_bed">Sleep</string>
     <string name="wake_up">Awake</string>
-    <string name="sleep_minimum">Minimum 1 hour of sleep.</string>
-    <string name="slept_for">Last night\'s sleep\n%1$s.</string>
+    <string name="sleep_minimum">Minimum <b>1</b> hour of sleep.</string>
+    <string name="slept_for">Last night\'s sleep %1$s.</string>
+    <string name="add_widget_instructions"><![CDATA[<p>1. On the home screen, tap and hold on an <b>available space</b>.</p><p>2. Tap <b>widgets</b></p><p>3. Select the sleep widget. You will need to press and hold it to select it.</p><p>4. Drag and drop the <b>widget</b> onto the available space.</p>5. The widget is now displayed]]></string>
+    <string name="add_widget_dialog_title">Add Widget to Home screen</string>
 </resources>

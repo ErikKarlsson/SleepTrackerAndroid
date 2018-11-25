@@ -1,15 +1,16 @@
 package net.erikkarlsson.simplesleeptracker.feature.home
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -81,6 +82,7 @@ class HomeFragment : Fragment() {
         homeEvents.observe(this, EventObserver {
             when (it) {
                 PinWidgetEvent -> pinWidget()
+                AddWidgetEvent -> addWidget()
             }
         })
 
@@ -104,15 +106,28 @@ class HomeFragment : Fragment() {
                 .addTo(disposables)
     }
 
+    @SuppressLint("NewApi")
     private fun pinWidget() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val appWidgetManager = AppWidgetManager.getInstance(requireContext())
-            val myProvider = ComponentName(requireContext(), SleepAppWidgetProvider::class.java)
+        val appWidgetManager = AppWidgetManager.getInstance(requireContext())
+        val myProvider = ComponentName(requireContext(), SleepAppWidgetProvider::class.java)
 
-            if (appWidgetManager.isRequestPinAppWidgetSupported()) {
-                appWidgetManager.requestPinAppWidget(myProvider, null, null);
-            }
+        if (appWidgetManager.isRequestPinAppWidgetSupported()) {
+            appWidgetManager.requestPinAppWidget(myProvider, null, null);
         }
+    }
+
+    private fun addWidget() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+
+        builder.setTitle(R.string.add_widget_dialog_title)
+
+        builder.setMessage(getText(R.string.add_widget_instructions))
+
+        builder.setPositiveButton("OK") { dialog, which ->
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     override fun onResume() {
@@ -157,10 +172,12 @@ class HomeFragment : Fragment() {
 
     private fun renderWidgetBubble(bubbleState: BubbleState, sleepDuration: Float) {
         widgetBubbleText.text = when (bubbleState) {
-            BubbleState.SLEEPING -> getString(R.string.sleeping_zzz)
-            BubbleState.ADD_TO_HOME -> getString(R.string.add_me_to_home_screen)
-            BubbleState.START_TRACKING -> getString(R.string.remember_to_toggle_sleep)
-            BubbleState.MINIMUM_SLEEP -> getString(R.string.sleep_minimum)
+            BubbleState.SLEEPING_ONBOARDING -> getText(R.string.sleeping_zzz_onboarding)
+            BubbleState.SLEEPING -> getText(R.string.sleeping_zzz)
+            BubbleState.ADD_WIDGET -> getText(R.string.add_widget)
+            BubbleState.PIN_WIDGET -> getText(R.string.pin_widget)
+            BubbleState.START_TRACKING -> getText(R.string.remember_to_toggle_sleep)
+            BubbleState.MINIMUM_SLEEP -> getText(R.string.sleep_minimum)
             BubbleState.SLEEP_DURATION -> getString(R.string.slept_for, sleepDuration.formatHoursMinutes2)
             BubbleState.EMPTY -> ""
         }

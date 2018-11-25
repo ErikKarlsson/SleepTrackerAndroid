@@ -1,12 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.feature.home
 
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.Event
-import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_SECONDS
+import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_MILLI
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
@@ -40,6 +41,10 @@ class HomeComponent @Inject constructor(
             homeEvents.postValue(Event(PinWidgetEvent))
             Single.just(DoNothing)
         }
+        AddWidgetCmd -> {
+            homeEvents.postValue(Event(AddWidgetEvent))
+            Single.just(DoNothing)
+        }
     }
 
     override fun initState(): HomeState = HomeState.empty()
@@ -57,7 +62,7 @@ class HomeComponent @Inject constructor(
                 SignOutComplete -> prevState.copy(userAccount = null) withCmd Logout
                 is SignInSuccess -> prevState.copy(userAccount = msg.userAccount) withCmd RestoreBackup
                 is HomeLoaded -> prevState.copy(lastBackupTimestamp = msg.lastBackupTimestamp,
-                        sleep = msg.currentSleep, isLoadingHome = false).noCmd()
+                        sleep = msg.currentSleep, isLoadingHome = false, sleepCount = msg.sleepCount).noCmd()
                 is SignInRestored -> prevState.copy(userAccount = msg.userAccount).noCmd()
                 LoadWidgetStatus -> prevState.withCmd(LoadWidgetStatusCmd)
                 is WidgetStatusLoaded -> prevState.copy(isWidgetAdded = msg.isWidgetAdded,
@@ -67,10 +72,10 @@ class HomeComponent @Inject constructor(
             }
 
     private fun onBubbleClick(prevState: HomeState): Pair<HomeState, HomeCmd?> =
-            if (prevState.bubbleState == BubbleState.ADD_TO_HOME) {
-                prevState withCmd PinWidgetCmd
-            } else {
-                prevState withCmd ToggleSleepCmd
+            when {
+                prevState.bubbleState == BubbleState.PIN_WIDGET -> prevState withCmd PinWidgetCmd
+                prevState.bubbleState == BubbleState.ADD_WIDGET -> prevState withCmd AddWidgetCmd
+                else -> prevState withCmd ToggleSleepCmd
             }
 
     private fun executeLogoutTask(): Single<HomeMsg> =
@@ -85,6 +90,7 @@ data class HomeState(val isLoadingHome: Boolean,
                      val isLoadingWidgetStatus: Boolean,
                      val isShowingMinimalSleep: Boolean,
                      val sleep: Sleep,
+                     val sleepCount: Int,
                      val userAccount: UserAccount?,
                      val lastBackupTimestamp: Long,
                      val isWidgetAdded: Boolean) : State {
@@ -100,12 +106,17 @@ data class HomeState(val isLoadingHome: Boolean,
     val sleepDuration: Float
         get() = sleep.hours
 
+    val isPinWidgetSupported: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
     val bubbleState: BubbleState
         get() =
             when {
+                isSleeping && sleepCount < 2 -> BubbleState.SLEEPING_ONBOARDING
                 isSleeping -> BubbleState.SLEEPING
                 isShowingMinimalSleep -> BubbleState.MINIMUM_SLEEP
-                !isSleeping && !isWidgetAdded -> BubbleState.ADD_TO_HOME
+                !isSleeping && !isWidgetAdded && isPinWidgetSupported -> BubbleState.PIN_WIDGET
+                !isSleeping && !isWidgetAdded -> BubbleState.ADD_WIDGET
                 !isSleeping && sleep == Sleep.empty() -> BubbleState.START_TRACKING
                 !isSleeping -> BubbleState.SLEEP_DURATION
                 else -> BubbleState.EMPTY
@@ -113,11 +124,13 @@ data class HomeState(val isLoadingHome: Boolean,
 
     companion object {
         fun empty() = HomeState(true, true, false,
-                Sleep.empty(), null, -1, true)
+                Sleep.empty(), -1, null, -1, true)
     }
 }
 
-enum class BubbleState { SLEEPING, ADD_TO_HOME, START_TRACKING, MINIMUM_SLEEP, SLEEP_DURATION, EMPTY }
+enum class BubbleState { SLEEPING, SLEEPING_ONBOARDING, PIN_WIDGET, ADD_WIDGET, START_TRACKING,
+    MINIMUM_SLEEP, SLEEP_DURATION, EMPTY
+}
 
 // Subscription
 class HomeSubscription @Inject constructor(private val backupDataSource: FileBackupDataSource,
@@ -127,9 +140,10 @@ class HomeSubscription @Inject constructor(private val backupDataSource: FileBac
     override fun invoke(): Observable<HomeMsg> {
         return Observables.combineLatest(
                 backupDataSource.getLastBackupTimestamp(),
-                sleepRepository.getCurrent())
-        { lastBackupTimestamp, currentSleep ->
-            HomeLoaded(lastBackupTimestamp, currentSleep)
+                sleepRepository.getCurrent(),
+                sleepRepository.getCount())
+        { lastBackupTimestamp, currentSleep, sleepCount ->
+            HomeLoaded(lastBackupTimestamp, currentSleep, sleepCount)
         }
     }
 }
@@ -142,8 +156,8 @@ class EventSubscription @Inject constructor(@Named("sleepEvents") private val sl
                     .switchMap { sleepEvent ->
                         Observable.concat(
                                 Observable.just(ShowMinimumSleep),
-                                Observable.timer(BUBBLE_DURATION_SECONDS,
-                                        TimeUnit.SECONDS).map { HideMinimumSleep })
+                                Observable.timer(BUBBLE_DURATION_MILLI,
+                                        TimeUnit.MILLISECONDS).map { HideMinimumSleep })
                     }
 }
 
@@ -154,7 +168,8 @@ object ToggleSleepClicked : HomeMsg()
 object BubbleClick : HomeMsg()
 data class CurrentSleepLoaded(val sleep: Sleep) : HomeMsg()
 data class HomeLoaded(val lastBackupTimestamp: Long,
-                      val currentSleep: Sleep) : HomeMsg()
+                      val currentSleep: Sleep,
+                      val sleepCount: Int) : HomeMsg()
 
 data class SignInSuccess(val userAccount: UserAccount) : HomeMsg()
 data class SignInRestored(val userAccount: UserAccount) : HomeMsg()
@@ -171,6 +186,7 @@ object DoNothing : HomeMsg()
 sealed class HomeEvent
 
 object PinWidgetEvent : HomeEvent()
+object AddWidgetEvent : HomeEvent()
 
 sealed class SleepEvent
 object MinimumSleepEvent : SleepEvent()
@@ -183,6 +199,7 @@ object Logout : HomeCmd()
 object ToggleSleepCmd : HomeCmd()
 object LoadWidgetStatusCmd : HomeCmd()
 object PinWidgetCmd : HomeCmd()
+object AddWidgetCmd : HomeCmd()
 
 // Alias
 typealias HomeEvents = MutableLiveData<Event<HomeEvent>>
