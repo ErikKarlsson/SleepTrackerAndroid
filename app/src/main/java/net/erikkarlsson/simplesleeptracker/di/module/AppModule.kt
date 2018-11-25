@@ -2,29 +2,43 @@ package net.erikkarlsson.simplesleeptracker.di.module
 
 import android.content.Context
 import androidx.work.WorkManager
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.App
+import net.erikkarlsson.simplesleeptracker.data.AndroidAppLifecycle
+import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class AppModule {
+abstract class AppModule {
 
-    @Provides
-    @Singleton
-    fun providesApplication(app: App): Context = app
+    @Binds
+    abstract fun bindsAppLifecycle(appLifecycle: AndroidAppLifecycle): AppLifecycle
 
-    @Provides
-    @Singleton
-    fun providesResources(context: Context) = context.resources
+    @Module
+    companion object {
+        @Provides
+        @Singleton
+        @JvmStatic
+        fun providesApplication(app: App): Context = app
 
-    @Provides
-    @Singleton
-    fun providesWorkManager(): WorkManager = WorkManager.getInstance()
+        @Provides
+        @Singleton
+        @JvmStatic
+        fun providesResources(context: Context) = context.resources
 
-    @Provides
-    @Singleton
-    @Named("filePath")
-    fun providesFilePath(context: Context): String = context.getFilesDir().getPath().toString()
+        @Provides
+        @Singleton
+        @JvmStatic
+        fun providesWorkManager(): WorkManager = WorkManager.getInstance()
+
+        @Provides
+        @Singleton
+        @JvmStatic
+        @Named("filePath")
+        fun providesFilePath(context: Context): String = context.getFilesDir().getPath().toString()
+    }
+
 }

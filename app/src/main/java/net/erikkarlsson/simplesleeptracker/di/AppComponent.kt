@@ -12,8 +12,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [AndroidBindingModule::class, AndroidInjectionModule::class,
     AppModule::class, BackupModule::class, DateTimeModule::class, EventModule::class,
-    PreferencesModule::class, SignInModule::class, StatisticsModule::class,
-    SleepModule::class, ViewModelModule::class, WidgetModule::class])
+    NotificationModule::class, PreferencesModule::class, SignInModule::class,
+    StatisticsModule::class, SleepModule::class, ViewModelModule::class, WidgetModule::class])
 
 interface AppComponent {
     @Component.Builder

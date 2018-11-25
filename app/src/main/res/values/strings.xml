@@ -47,7 +47,11 @@
     <string name="go_to_bed">Sleep</string>
     <string name="wake_up">Awake</string>
     <string name="sleep_minimum">Minimum <b>1</b> hour of sleep.</string>
+    <string name="sleep_minimum_notification_title">Minimum sleep 1 hour</string>
+    <string name="sleep_minimum_notification_description">Minimum 1 hour of sleep to be tracked.</string>
     <string name="slept_for">Last night\'s sleep %1$s.</string>
     <string name="add_widget_instructions"><![CDATA[<p>1. On the home screen, tap and hold on an <b>available space</b>.</p><p>2. Tap <b>widgets</b></p><p>3. Select the sleep widget. You will need to press and hold it to select it.</p><p>4. Drag and drop the <b>widget</b> onto the available space.</p>5. The widget is now displayed]]></string>
     <string name="add_widget_dialog_title">Add Widget to Home screen</string>
+    <string name="notification_channel_name">Sleep notifications</string>
+    <string name="notification_channel_description">Sleep notifications</string>
 </resources>
