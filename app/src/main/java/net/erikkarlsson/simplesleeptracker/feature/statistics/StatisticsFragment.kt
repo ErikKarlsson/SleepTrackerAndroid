@@ -41,6 +41,8 @@ class StatisticsFragment : Fragment() {
 
     private val disposables = CompositeDisposable()
 
+    private var prevState: StatisticsState = StatisticsState.empty()
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -75,10 +77,18 @@ class StatisticsFragment : Fragment() {
 
     private fun render(state: StatisticsState?) {
         state?.let {
+            val hasFilterChanged = it.filter != prevState.filter
+
+            val selectedItem = if (hasFilterChanged) {
+                it.dateRanges.size - 1
+            } else {
+                viewPager.currentItem
+            }
+
             statisticsAdapter.data = StatisticsItemData(it.dateRanges, it.filter)
             statisticsAdapter.notifyDataSetChanged()
 
-            viewPager.setCurrentItem(it.dateRanges.size - 1, false)
+            viewPager.setCurrentItem(selectedItem, false)
             viewPager.invalidate()
 
             slidingTabLayout.setViewPager(viewPager)
@@ -97,6 +107,7 @@ class StatisticsFragment : Fragment() {
                 slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
             }, 100)
 
+            prevState = it
         }
     }
 
