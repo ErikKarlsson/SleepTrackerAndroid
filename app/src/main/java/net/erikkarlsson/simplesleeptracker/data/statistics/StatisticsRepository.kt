@@ -12,7 +12,6 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.*
 import net.erikkarlsson.simplesleeptracker.util.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.util.toImmutableList
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
@@ -31,7 +30,7 @@ class StatisticsRepository @Inject constructor(private val statisticsDao: Statis
                     .map(sleepMapper::mapFromEntity).toObservable()
 
     override fun getStatistics(): Observable<Statistics> {
-        val infiniteDateRange = DateRange(LocalDate.parse("1000-01-01"), LocalDate.parse("9999-01-01"))
+        val infiniteDateRange = DateRange.infinite()
         return getStatistics(infiniteDateRange)
     }
 

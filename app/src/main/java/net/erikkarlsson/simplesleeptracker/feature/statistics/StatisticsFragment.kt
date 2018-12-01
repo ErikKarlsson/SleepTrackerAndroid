@@ -59,6 +59,11 @@ class StatisticsFragment : Fragment() {
         spinner.adapter = spinnerAdapter
         spinner.setTag(0) // Avoid triggering selection on initialization.
 
+        val compareSpinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_compare_array, android.R.layout.simple_spinner_item)
+        compareSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        compareSpinner.adapter = compareSpinnerAdapter
+        compareSpinner.setTag(0) // Avoid triggering selection on initialization.
+
         statisticsAdapter = StatisticsAdapter(requireFragmentManager(), dateTimeProvider)
 
         viewPager.adapter = statisticsAdapter
@@ -77,12 +82,15 @@ class StatisticsFragment : Fragment() {
             viewPager.invalidate()
 
             slidingTabLayout.setViewPager(viewPager)
-            slidingTabLayout.isVisible = it.filter != StatisticsFilter.OVERALL && !it.isEmpty
+            slidingTabLayout.isVisible = it.shouldShowTabs
 
             spinnerContainer.isVisible = !it.isEmpty
             emptyState.isVisible = !it.isLoading && it.isEmpty
 
-            spinner.setSelection(state.filterOrdinal)
+            spinner.setSelection(it.filterOrdinal)
+
+            compareSpinner.isVisible = it.shouldShowCompareFilter
+            compareSpinner.setSelection(it.compareFilterOrdinal)
 
             // TODO (erikkarlsson): Hack to fix scroll not working.
             Handler().postDelayed({
@@ -98,6 +106,10 @@ class StatisticsFragment : Fragment() {
         spinner.itemSelections()
                 .subscribe { onFilterSelected(it) }
                 .addTo(disposables)
+
+        compareSpinner.itemSelections()
+                .subscribe { onCompareSelected(it) }
+                .addTo(disposables)
     }
 
     override fun onStop() {
@@ -112,6 +124,15 @@ class StatisticsFragment : Fragment() {
         spinner.setTag(index)
         val statisticsFilter = StatisticsFilter.values()[index]
         viewModel.dispatch(StatisticsFilterSelected(statisticsFilter))
+    }
+
+    private fun onCompareSelected(index: Int) {
+        if (compareSpinner.getTag() == index) {
+            return
+        }
+        compareSpinner.setTag(index)
+        val compareFilter = CompareFilter.values()[index]
+        viewModel.dispatch(CompareFilterSelected(compareFilter))
     }
 }
 

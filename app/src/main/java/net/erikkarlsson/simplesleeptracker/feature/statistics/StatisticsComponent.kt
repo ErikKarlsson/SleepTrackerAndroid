@@ -3,6 +3,7 @@ package net.erikkarlsson.simplesleeptracker.feature.statistics
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.zipWith
+import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_COMPARE_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
@@ -23,13 +24,16 @@ constructor(private val youngestOldestSubscription: YoungestOldestSubscription,
             private val preferencesDataSource: PreferencesDataSource)
     : Component<StatisticsState, StatisticsMsg, StatisticsCmd> {
 
-    override fun call(cmd: StatisticsCmd): Single<StatisticsMsg> =
+    override fun call(cmd: StatisticsCmd): Single<StatisticsMsg> {
             when (cmd) {
-                is SaveFilter -> {
+                is SaveFilter ->
                     preferencesDataSource.set(PREFS_SELECTED_FILTER, cmd.filter.ordinal)
-                    Single.just(DoNothing)
-                }
+                is SaveCompareFilter ->
+                    preferencesDataSource.set(PREFS_SELECTED_COMPARE_FILTER, cmd.compareFilter.ordinal)
             }
+
+        return Single.just(DoNothing)
+    }
 
     override fun initState(): StatisticsState = StatisticsState.empty()
 
@@ -41,20 +45,22 @@ constructor(private val youngestOldestSubscription: YoungestOldestSubscription,
                 is StatisticsFilterSelected -> onFilterSelected(prevState, msg)
                 is YoungestOldestLoaded -> onOldestYoungestLoaded(prevState, msg)
                 is SavedFilterLoaded -> onSavedFilterLoaded(prevState, msg)
+                is CompareFilterSelected -> onCompareFilterSelected(prevState, msg)
                 DoNothing -> prevState.noCmd()
             }
 
     private fun onSavedFilterLoaded(prevState: StatisticsState, msg: SavedFilterLoaded): Pair<StatisticsState, StatisticsCmd?> =
-        prevState.copy(filter = msg.filter).noCmd()
+            prevState.copy(filter = msg.filter, compareFilter = msg.compareFilter).noCmd()
 
     private fun onOldestYoungestLoaded(prevState: StatisticsState, msg: YoungestOldestLoaded): Pair<StatisticsState, StatisticsCmd?> {
         val filter = prevState.filter
+        val compareFilter = prevState.compareFilter
         val youngest = msg.youngest
         val oldest = msg.oldest
         val sleepFound = youngest != Sleep.empty()
 
         val dateRanges = if (sleepFound) {
-            getDateRanges(filter, youngest, oldest)
+            getDateRanges(filter, compareFilter, youngest, oldest)
         } else {
             listOf()
         }
@@ -65,15 +71,27 @@ constructor(private val youngestOldestSubscription: YoungestOldestSubscription,
 
     private fun onFilterSelected(prevState: StatisticsState, msg: StatisticsFilterSelected): Pair<StatisticsState, StatisticsCmd?> {
         val filter = msg.filter
+        val compareFilter = prevState.compareFilter
         val youngest = prevState.youngest
         val oldest = prevState.oldest
-
-        val dateRanges = getDateRanges(filter, youngest, oldest)
+        val dateRanges = getDateRanges(filter, compareFilter, youngest, oldest)
 
         return prevState.copy(filter = filter, dateRanges = dateRanges) withCmd SaveFilter(filter)
     }
 
+    private fun onCompareFilterSelected(prevState: StatisticsState, msg: CompareFilterSelected): Pair<StatisticsState, StatisticsCmd?> {
+        val compareFilter = msg.compareFilter
+        val filter = prevState.filter
+        val youngest = prevState.youngest
+        val oldest = prevState.oldest
+        val dateRanges = getDateRanges(filter, compareFilter, youngest, oldest)
+
+        return prevState.copy(compareFilter = compareFilter,
+                dateRanges = dateRanges) withCmd SaveCompareFilter(compareFilter)
+    }
+
     private fun getDateRanges(statisticFilter: StatisticsFilter,
+                              compareFilter: CompareFilter,
                               youngest: Sleep,
                               oldest: Sleep): List<DateRangePair> {
         if (youngest == Sleep.empty() || oldest == Sleep.empty()) {
@@ -87,11 +105,13 @@ constructor(private val youngestOldestSubscription: YoungestOldestSubscription,
             throw IllegalStateException("Youngest or oldest sleep null toDate")
         }
 
+        val startEndDateRange = DateRange(startDate, endDate)
+
         return when (statisticFilter) {
             StatisticsFilter.OVERALL -> getOverallDateRange()
-            StatisticsFilter.WEEK -> getWeekDateRanges(startDate, endDate)
-            StatisticsFilter.MONTH -> getMonthDateRanges(startDate, endDate)
-            StatisticsFilter.YEAR -> getYearDateRanges(startDate, endDate)
+            StatisticsFilter.WEEK -> getWeekDateRanges(startEndDateRange, compareFilter)
+            StatisticsFilter.MONTH -> getMonthDateRanges(startEndDateRange, compareFilter)
+            StatisticsFilter.YEAR -> getYearDateRanges(startEndDateRange, compareFilter)
             StatisticsFilter.NONE -> listOf()
         }
     }
@@ -109,13 +129,18 @@ class YoungestOldestSubscription @Inject constructor(private val statisticsDataS
 class SavedFilterSubscription @Inject constructor(private val preferences: PreferencesDataSource) : StatelessSub<StatisticsState, StatisticsMsg>() {
     override fun invoke(): Observable<StatisticsMsg> =
             preferences.getInt(PREFS_SELECTED_FILTER)
+                    .zipWith(preferences.getInt(PREFS_SELECTED_COMPARE_FILTER))
                     .take(1)
-                    .map { StatisticsFilter.values()[it] }
-                    .map { SavedFilterLoaded(it) }
+                    .map {
+                        val statisticsFilter = StatisticsFilter.values()[it.first]
+                        val compareFilter = CompareFilter.values()[it.second]
+                        SavedFilterLoaded(statisticsFilter, compareFilter)
+                    }
 }
 
 // State
 data class StatisticsState(val filter: StatisticsFilter,
+                           val compareFilter: CompareFilter,
                            val youngest: Sleep,
                            val oldest: Sleep,
                            val dateRanges: List<DateRangePair>,
@@ -125,8 +150,14 @@ data class StatisticsState(val filter: StatisticsFilter,
 
     val filterOrdinal get() = filter.ordinal
 
+    val compareFilterOrdinal get() = compareFilter.ordinal
+
+    val shouldShowTabs = filter != StatisticsFilter.OVERALL && !isEmpty
+
+    val shouldShowCompareFilter = filter != StatisticsFilter.OVERALL
+
     companion object {
-        fun empty() = StatisticsState(StatisticsFilter.OVERALL, Sleep.empty(), Sleep.empty(), listOf(), true)
+        fun empty() = StatisticsState(StatisticsFilter.OVERALL, CompareFilter.PREVIOUS, Sleep.empty(), Sleep.empty(), listOf(), true)
     }
 }
 
@@ -135,7 +166,9 @@ sealed class StatisticsMsg : Msg
 
 data class StatisticsFilterSelected(val filter: StatisticsFilter) : StatisticsMsg()
 
-data class SavedFilterLoaded(val filter: StatisticsFilter) : StatisticsMsg()
+data class CompareFilterSelected(val compareFilter: CompareFilter) : StatisticsMsg()
+
+data class SavedFilterLoaded(val filter: StatisticsFilter, val compareFilter: CompareFilter) : StatisticsMsg()
 
 data class YoungestOldestLoaded(val youngest: Sleep, val oldest: Sleep) : StatisticsMsg()
 
@@ -145,3 +178,4 @@ object DoNothing : StatisticsMsg()
 sealed class StatisticsCmd : Cmd
 
 data class SaveFilter(val filter: StatisticsFilter) : StatisticsCmd()
+data class SaveCompareFilter(val compareFilter: CompareFilter) : StatisticsCmd()
