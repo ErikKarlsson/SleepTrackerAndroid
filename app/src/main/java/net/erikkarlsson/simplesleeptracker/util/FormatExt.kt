@@ -53,8 +53,13 @@ val Int.formatPercentage: String  get() {
 
 val Float.formatHoursMinutes: String
     get() {
-        val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
-        val minutes: Int = Math.round(((Math.abs(this) - hours) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val totalMinutes = Math.round((Math.abs(this) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val hours = Math.floor((totalMinutes / MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val minutes = if (hours > 0) {
+            totalMinutes % (hours * MINUTES_IN_AN_HOUR)
+        } else {
+            totalMinutes
+        }
 
         return when {
             hours == 0 && minutes > 0 -> String.format("%dmin", minutes)
@@ -66,8 +71,14 @@ val Float.formatHoursMinutes: String
 
 val Float.formatHoursMinutes2: String
     get() {
-        val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
-        val minutes: Int = Math.round(((Math.abs(this) - hours) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val totalMinutes = Math.round((Math.abs(this) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val hours = Math.floor((totalMinutes / MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val minutes = if (hours > 0) {
+            totalMinutes % (hours * MINUTES_IN_AN_HOUR)
+        } else {
+            totalMinutes
+        }
+
         return when {
             hours == 0 -> String.format("%dmin", minutes)
             else -> String.format("%d h %d min", hours, minutes)
@@ -76,8 +87,13 @@ val Float.formatHoursMinutes2: String
 
 val Float.formatHoursMinutes3: String
     get() {
-        val hours: Int = Math.floor(Math.abs(this).toDouble()).toInt()
-        val minutes: Int = Math.round(((Math.abs(this) - hours) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val totalMinutes = Math.round((Math.abs(this) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val hours = Math.floor((totalMinutes / MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val minutes = if (hours > 0) {
+            totalMinutes % (hours * MINUTES_IN_AN_HOUR)
+        } else {
+            totalMinutes
+        }
 
         return when {
             hours == 0 && minutes > 0 -> String.format("0.%02d", minutes)
