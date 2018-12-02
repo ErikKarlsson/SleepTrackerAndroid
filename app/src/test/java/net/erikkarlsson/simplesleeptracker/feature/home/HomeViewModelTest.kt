@@ -1,6 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.feature.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.google.common.collect.ImmutableList
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.given
@@ -8,18 +9,15 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
-import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
-import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
-import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.GetCurrentSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
 import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleRestoreBackupTask
-import net.erikkarlsson.simplesleeptracker.feature.home.domain.GetProfileTask
 import net.erikkarlsson.simplesleeptracker.feature.home.domain.LogoutTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
@@ -41,20 +39,29 @@ class HomeViewModelTest {
 
     val taskScheduler: TaskScheduler = mock()
 
+    val widgetDataSource: WidgetDataSource = mock()
+
     val dateTimeProvider: DateTimeProvider = MockDateTimeProvider()
+
+    val appLifecycle: AppLifecycle = mock()
+
+    val notifications: Notifications = mock()
+
+    val sleepEvents: Subject<SleepEvent> = PublishSubject.create()
 
     val scheduleBackupTask = ScheduleBackupTask(taskScheduler)
     val scheduleRestoreBackupTask = ScheduleRestoreBackupTask(taskScheduler)
-    val logoutTask = LogoutTask(sleepDataSource, preferencesDataSource)
-    val toggleSleepTask = ToggleSleepTask(sleepDataSource, dateTimeProvider, scheduleBackupTask)
-    val getProfileTask = GetProfileTask(fileBackupDataSource)
-    val getCurrentSleepTask = GetCurrentSleepTask(sleepDataSource)
-    val profileSubscription = ProfileSubscription(getProfileTask)
-    val sleepSubscription = SleepSubscription(getCurrentSleepTask)
+    val logoutTask = LogoutTask(this.sleepDataSource, preferencesDataSource)
+    val toggleSleepTask = ToggleSleepTask(this.sleepDataSource, dateTimeProvider,
+            scheduleBackupTask, appLifecycle, notifications, sleepEvents)
+
+    val homeSubscription = HomeSubscription(fileBackupDataSource, sleepDataSource)
+    val eventSubscription = EventSubscription(sleepEvents)
+    val homeEvents: HomeEvents = MutableLiveData()
 
     fun createViewModel(): HomeViewModel {
         val homeComponent = HomeComponent(toggleSleepTask, scheduleRestoreBackupTask,
-                logoutTask, profileSubscription, sleepSubscription)
+                logoutTask, homeSubscription, eventSubscription, widgetDataSource, homeEvents)
         return HomeViewModel(homeComponent)
     }
 
@@ -63,16 +70,17 @@ class HomeViewModelTest {
      */
     @Test
     fun `clicking toggle sleep button toggles sleep`() {
-        given(sleepDataSource.getSleep()).willReturn(Observable.just(ImmutableList.of()))
-        given(sleepDataSource.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-        given(sleepDataSource.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
+        given(this.sleepDataSource.getSleep()).willReturn(Observable.just(ImmutableList.of()))
+        given(this.sleepDataSource.getCurrent()).willReturn(Observable.just(Sleep.empty()))
+        given(this.sleepDataSource.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
+        given(this.sleepDataSource.getCount()).willReturn(Observable.just(0))
         given(fileBackupDataSource.getLastBackupTimestamp()).willReturn(Observable.just(0))
 
         val viewModel = createViewModel()
 
         viewModel.dispatch(ToggleSleepClicked)
 
-        verify(sleepDataSource).insert(any())
+        verify(this.sleepDataSource).insert(any())
     }
 
 }

@@ -7,7 +7,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.GetCurrentSleepTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
@@ -25,7 +24,6 @@ class SleepAppWidgetViewModelTest {
     val sleepRepository: SleepDataSource = mock()
     val observer: Observer<WidgetState> = mock()
     val toggleSleepTask: ToggleSleepTask = mock()
-    val getCurrentSleepTask = GetCurrentSleepTask(sleepRepository)
 
     /**
      * LoadCases
@@ -104,7 +102,7 @@ class SleepAppWidgetViewModelTest {
     }
 
     private fun createViewModel(): SleepAppWidgetViewModel {
-        val sleepSubscription = SleepSubscription(getCurrentSleepTask)
+        val sleepSubscription = SleepSubscription(sleepRepository)
         val widgetComponent = AppWidgetComponent(toggleSleepTask, sleepSubscription)
         return SleepAppWidgetViewModel(widgetComponent)
     }

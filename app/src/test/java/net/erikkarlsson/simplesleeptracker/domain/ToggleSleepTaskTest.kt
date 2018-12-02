@@ -3,11 +3,14 @@ package net.erikkarlsson.simplesleeptracker.domain
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.feature.home.MinimumSleepEvent
+import net.erikkarlsson.simplesleeptracker.feature.home.SleepEvent
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test
@@ -20,7 +23,11 @@ class ToggleSleepTaskTest {
     val dateTimeProvider = MockDateTimeProvider()
     val sleepRepository: SleepDataSource = mock()
     val scheduleBackupTask: ScheduleBackupTask = mock()
-    val toggleSleepTask = ToggleSleepTask(sleepRepository, dateTimeProvider, scheduleBackupTask)
+    val appLifecycle: AppLifecycle = mock()
+    val notifications: Notifications = mock()
+    val sleepEvents: Subject<SleepEvent> = mock()
+    val toggleSleepTask = ToggleSleepTask(sleepRepository, dateTimeProvider, scheduleBackupTask,
+            appLifecycle, notifications, sleepEvents)
 
     @Test
     fun `toggle from empty inserts sleep`() {
@@ -79,6 +86,7 @@ class ToggleSleepTaskTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+        given(appLifecycle.isForegrounded()).willReturn(Single.just(true))
         dateTimeProvider.nowValue = now.plusMinutes(59)
         toggleSleepTask.execute(None()).test().assertComplete()
 
@@ -89,5 +97,33 @@ class ToggleSleepTaskTest {
         }
 
         verifyNoMoreInteractions(scheduleBackupTask)
+    }
+
+    @Test
+    fun `sleep duration less than an hour should send sleep event when foregrounded`() {
+        val now = dateTimeProvider.mockDateTime()
+        val sleeping = Sleep(fromDate = now)
+        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+        given(appLifecycle.isForegrounded()).willReturn(Single.just(true))
+        dateTimeProvider.nowValue = now.plusMinutes(59)
+        toggleSleepTask.execute(None()).test().assertComplete()
+
+        verify(sleepEvents).onNext(MinimumSleepEvent)
+        verify(notifications, never()).sendMinimumSleepNotification()
+        verifyNoMoreInteractions(sleepEvents)
+    }
+
+    @Test
+    fun `sleep duration less than an hour should show notification when backgrounded`() {
+        val now = dateTimeProvider.mockDateTime()
+        val sleeping = Sleep(fromDate = now)
+        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
+        given(appLifecycle.isForegrounded()).willReturn(Single.just(false))
+        dateTimeProvider.nowValue = now.plusMinutes(59)
+        toggleSleepTask.execute(None()).test().assertComplete()
+
+        verify(sleepEvents, never()).onNext(MinimumSleepEvent)
+        verify(notifications).sendMinimumSleepNotification()
+        verifyNoMoreInteractions(notifications)
     }
 }
