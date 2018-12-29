@@ -29,7 +29,9 @@ val LocalTime.midnightOffsetInSeconds: Int
  * Calculates amount of hours between two dates. e.g. 7.850 hours
  */
 fun OffsetDateTime.hoursTo(dateTime: OffsetDateTime): Float {
-    val secondsBetweenDates = ChronoUnit.SECONDS.between(this, dateTime)
+    val from = this.withSecond(0) // Remove seconds to fix rounding errors.
+    val to = dateTime.withSecond(0)
+    val secondsBetweenDates = ChronoUnit.SECONDS.between(from, to)
     return BigDecimal.valueOf(secondsBetweenDates / SECONDS_IN_AN_HOUR.toDouble())
             .setScale(HOURS_PRECISION, BigDecimal.ROUND_HALF_UP)
             .toFloat()
