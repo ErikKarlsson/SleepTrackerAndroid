@@ -3,18 +3,24 @@ package net.erikkarlsson.simplesleeptracker.data.backup
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.drive.*
-import com.google.android.gms.drive.query.Filters
-import com.google.android.gms.drive.query.Query
-import com.google.android.gms.drive.query.SearchableField
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.http.FileContent
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.File
+import com.google.api.services.drive.model.FileList
 import io.reactivex.Completable
 import io.reactivex.Single
-import java.io.File
-import java.util.*
+import net.erikkarlsson.simplesleeptracker.R
+import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_MIME_TYPE
+import java.io.InputStream
+import java.util.Collections.singletonList
 import javax.inject.Inject
 
 /**
- * RxJava wrapper for Google Drive API.
+ * RxJava wrapper for Google Drive REST API.
  */
 class RxDrive @Inject constructor(private val context: Context) {
 
@@ -23,15 +29,14 @@ class RxDrive @Inject constructor(private val context: Context) {
      *
      * @param fileTitle the file title.
      */
-    fun queryFileMeta(fileTitle: String): Single<MetadataBuffer> =
-            Single.create { emitter ->
-                val query = Query.Builder()
-                        .addFilter(Filters.eq(SearchableField.TITLE, fileTitle))
-                        .build()
 
-                driveResourceClient.query(query)
-                        .addOnSuccessListener(emitter::onSuccess)
-                        .addOnFailureListener(emitter::onError)
+    fun queryFileMeta(fileTitle: String): Single<FileList> =
+            Single.fromCallable {
+                driveService.files()
+                        .list()
+                        .setQ("name='$fileTitle'")
+                        .setSpaces("drive")
+                        .execute()
             }
 
     /**
@@ -39,23 +44,22 @@ class RxDrive @Inject constructor(private val context: Context) {
      *
      * @param folderTitle the folder title.
      */
-    fun queryFolderMeta(folderTitle: String): Single<MetadataBuffer> =
-            Single.create { emitter ->
-                val query = Query.Builder().addFilter(Filters.and(
-                        Filters.eq(SearchableField.TITLE, folderTitle),
-                        Filters.eq(SearchableField.TRASHED, false)))
-                        .build()
-
-                driveResourceClient.query(query)
-                        .addOnSuccessListener(emitter::onSuccess)
-                        .addOnFailureListener(emitter::onError)
+    fun queryFolderMeta(folderTitle: String): Single<FileList> =
+            Single.fromCallable {
+                driveService.files()
+                        .list()
+                        .setQ("name='$folderTitle' and mimeType='application/vnd.google-apps.folder' and trashed=false")
+                        .setSpaces("drive")
+                        .execute()
             }
 
-    fun openFile(driveFile: DriveFile): Single<DriveContents> =
-            Single.create { emitter ->
-                driveResourceClient.openFile(driveFile, DriveFile.MODE_READ_ONLY)
-                        .addOnSuccessListener(emitter::onSuccess)
-                        .addOnFailureListener(emitter::onError)
+    /**
+     * Open existing file for reading.
+     */
+    fun openFile(fileId: String): Single<InputStream> =
+            Single.fromCallable {
+                driveService.files().get(fileId)
+                        .executeMediaAsInputStream()
             }
 
     /**
@@ -63,27 +67,15 @@ class RxDrive @Inject constructor(private val context: Context) {
      *
      * @param folderTitle the folder title.
      */
-    fun createFolder(folderTitle: String): Single<DriveFolder> =
-            Single.create { emitter ->
-                val rootFolderTask = driveResourceClient.getRootFolder()
+    fun createFolder(folderTitle: String): Single<File> =
+            Single.fromCallable {
+                val fileMetadata = File()
+                        .setName(folderTitle)
+                        .setMimeType("application/vnd.google-apps.folder")
 
-                rootFolderTask.continueWithTask {
-                    val parent = rootFolderTask.getResult()
-
-                    if (parent == null) {
-                        throw IllegalStateException("parent was null")
-                    }
-
-                    val folderChangeSet = MetadataChangeSet.Builder()
-                            .setTitle(folderTitle)
-                            .setMimeType(DriveFolder.MIME_TYPE)
-                            .build()
-
-                    val createFolderTask = driveResourceClient.createFolder(parent, folderChangeSet)
-                    createFolderTask
-                }
-                        .addOnSuccessListener { emitter.onSuccess(it) }
-                        .addOnFailureListener(emitter::onError)
+                driveService.files().create(fileMetadata)
+                        .setFields("id")
+                        .execute()
             }
 
     /**
@@ -93,33 +85,19 @@ class RxDrive @Inject constructor(private val context: Context) {
      * @param file the file to be created.
      * @param mimeType the type of file to be created.
      */
-    fun createFile(folder: DriveFolder,
-                   file: File,
+    fun createFile(folderId: String,
+                   file: java.io.File,
                    mimeType: String): Completable =
-            Completable.create { emitter ->
-                val createContentsTask = driveResourceClient.createContents()
+            Completable.fromCallable {
+                val fileMetadata = File()
+                        .setName(file.name)
+                        .setParents(singletonList(folderId))
 
-                createContentsTask
-                        .continueWithTask {
-                            val contents = createContentsTask.getResult()
+                val mediaContent = FileContent(mimeType, file)
 
-                            if (contents == null) {
-                                throw IllegalStateException("contents was null")
-                            }
-
-                            val outputStream = contents.outputStream
-
-                            outputStream.write(file.readBytes())
-
-                            val changeSet = MetadataChangeSet.Builder()
-                                    .setTitle(file.name)
-                                    .setMimeType(mimeType)
-                                    .build()
-
-                            driveResourceClient.createFile(folder, changeSet, contents)
-                        }
-                        .addOnSuccessListener { emitter.onComplete() }
-                        .addOnFailureListener(emitter::onError)
+                driveService.files().create(fileMetadata, mediaContent)
+                        .setFields("id, parents")
+                        .execute()
             }
 
     /**
@@ -128,42 +106,28 @@ class RxDrive @Inject constructor(private val context: Context) {
      * @param driveFile the existing file on drive.
      * @param file the new file content.
      */
-    fun commitContent(driveFile: DriveFile,
-                      file: File): Completable =
-            Completable.create { emitter ->
-                val openTask = driveResourceClient.openFile(driveFile, DriveFile.MODE_WRITE_ONLY)
+    fun commitContent(fileId: String,
+                      file: java.io.File): Completable =
+            Completable.fromCallable {
+                val metadata = File().setName(file.name)
+                val content = FileContent(BACKUP_MIME_TYPE, file)
 
-                openTask.continueWithTask {
-                    val driveContents = openTask.getResult()
-
-                    if (driveContents == null) {
-                        throw IllegalStateException("driveContents was null")
-                    }
-
-                    val outputStream = driveContents.outputStream
-                    outputStream.write(file.readBytes())
-
-                    val changeSet = MetadataChangeSet.Builder()
-                            .setLastViewedByMeDate(Date())
-                            .build()
-                    driveResourceClient.commitContents(driveContents, changeSet)
-                }
-                        .addOnSuccessListener { emitter.onComplete() }
-                        .addOnFailureListener(emitter::onError)
+                driveService.files()
+                        .update(fileId, metadata, content)
+                        .execute()
             }
 
+    private val driveService: Drive
+        get() = Drive.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                GsonFactory(),
+                credential)
+                .setApplicationName(context.getString(R.string.app_name))
+                .build();
 
-    /**
-     * Drive files are stored locally before being synced to cloud.
-     * Request sync to happen immediately.
-     */
-    fun requestSync(): Completable = Completable.fromCallable { driveClient.requestSync() }
-
-    private val driveClient: DriveClient
-        get() = Drive.getDriveClient(context, googleAccount)
-
-    private val driveResourceClient: DriveResourceClient
-        get() = Drive.getDriveResourceClient(context, googleAccount)
+    private val credential: GoogleAccountCredential
+        get() = GoogleAccountCredential.usingOAuth2(context, setOf(DriveScopes.DRIVE_FILE))
+                .setSelectedAccount(googleAccount.account)
 
     private val googleAccount: GoogleSignInAccount
         get() {

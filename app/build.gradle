@@ -117,6 +117,17 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
 configurations.all { config ->
@@ -132,6 +143,9 @@ configurations.all { config ->
 
     // Force version
     resolutionStrategy.force Deps.kotlin_stdlib
+
+    // https://stackoverflow.com/questions/46989310/commons-logging-defines-classes-that-conflict-with-classes-now-provided-by-andro
+    exclude module: 'httpclient'
 }
 
 androidExtensions {
@@ -167,6 +181,9 @@ dependencies {
     testImplementation Deps.arch_core_testing
     testImplementation Deps.mockito_inline
 
+    // BubbleLayout
+    implementation Deps.bubble_layout
+
     // Crashlytics
     implementation Deps.crashlytics
 
@@ -186,6 +203,18 @@ dependencies {
     // Glide
     implementation Deps.glide
     kapt Deps.glide_compiler
+
+    // Google Drive REST API
+    implementation Deps.google_http_client_gson
+    implementation(Deps.google_api_client_android) {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation(Deps.google_api_services_drive) {
+        exclude group: 'org.apache.httpcomponents'
+    }
+
+    // Gson
+    implementation Deps.gson
 
     // Guava
     implementation Deps.guava
@@ -232,7 +261,6 @@ dependencies {
 
     // Play Services
     implementation Deps.play_services_auth
-    implementation Deps.play_services_drive
     implementation Deps.play_services_oss_licenses
 
     // Room
@@ -261,8 +289,6 @@ dependencies {
 
     // Timber
     implementation Deps.timber
-
-    implementation 'com.daasuu:BubbleLayout:1.2.0'
 
     // Work Manager
     // TODO (erikkarlsson): Exclude fixes bug in alpha09 https://stackoverflow.com/questions/52467819/compile-errors-after-updating-to-workmanager-1-0-0-alpha09

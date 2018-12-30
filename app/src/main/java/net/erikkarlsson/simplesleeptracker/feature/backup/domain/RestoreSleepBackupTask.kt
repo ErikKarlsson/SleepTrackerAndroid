@@ -31,7 +31,7 @@ class RestoreSleepBackupTask @Inject constructor(
                     .map(backupCsvFileReader::read)
                     .flatMapCompletable {
                         sleepRepository.insertAll(it)
-                                .andThen(fileBackupRepository.updateLastBackupTimestamp())
                                 .subscribeOn(Schedulers.io())
                     }
+                    .andThen(fileBackupRepository.updateLastBackupTimestamp())
 }

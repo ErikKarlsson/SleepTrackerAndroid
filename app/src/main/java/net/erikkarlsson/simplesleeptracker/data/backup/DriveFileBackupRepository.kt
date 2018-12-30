@@ -1,14 +1,12 @@
 package net.erikkarlsson.simplesleeptracker.data.backup
 
-import com.google.android.gms.drive.DriveFile
-import com.google.android.gms.drive.DriveFolder
-import com.google.android.gms.drive.MetadataBuffer
+import com.google.api.services.drive.model.FileList
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.PREFS_LAST_SYNC_TIMESTAMP
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
+import net.erikkarlsson.simplesleeptracker.domain.PREFS_LAST_SYNC_TIMESTAMP
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_FOLDER_NAME
@@ -31,19 +29,18 @@ class DriveFileBackupRepository @Inject constructor(
     : FileBackupDataSource {
 
     override fun get(): Maybe<File> =
-            queryBackupFile().flatMapMaybe { fileMeta ->
-                if (fileMeta.count > 0) {
-                    val driveFile = fileMeta[0].driveId.asDriveFile()
-                    openFile(driveFile).toMaybe()
+            queryBackupFile().flatMapMaybe { fileList ->
+                val files = fileList.files
+                if (files.size > 0) {
+                    openFile(files[0]).toMaybe()
                 } else {
                     Maybe.empty<File>()
                 }
             }
 
     override fun put(file: File): Completable =
-            queryBackupFile().flatMapCompletable { fileMeta ->
-                uploadToDrive(fileMeta, file)
-                        .andThen(syncFiles())
+            queryBackupFile().flatMapCompletable { fileList ->
+                uploadToDrive(fileList, file)
             }
 
     override fun getLastBackupTimestamp(): Observable<Long> =
@@ -54,42 +51,38 @@ class DriveFileBackupRepository @Inject constructor(
                 preferencesDataSource.set(PREFS_LAST_SYNC_TIMESTAMP, System.currentTimeMillis())
             }
 
-    private fun openFile(driveFile: DriveFile): Single<File> =
-            rxDrive.openFile(driveFile)
-                    .map { it.inputStream.toFile("$filePath/$RESTORE_FILE_NAME") }
+    private fun openFile(file: com.google.api.services.drive.model.File): Single<File> =
+            rxDrive.openFile(file.id)
+                    .map { it.toFile("$filePath/$RESTORE_FILE_NAME") }
 
-    private fun queryBackupFile(): Single<MetadataBuffer> = rxDrive.queryFileMeta(BACKUP_FILE_NAME)
+    private fun queryBackupFile(): Single<FileList> = rxDrive.queryFileMeta(BACKUP_FILE_NAME)
 
-    private fun uploadToDrive(fileMeta: MetadataBuffer,
-                              file: File): Completable =
-            if (fileMeta.count > 0) {
-                val driveFile = fileMeta[0].driveId.asDriveFile()
-                updateExistingFile(driveFile, file)
-            } else {
-                createNewFile(file)
-            }
+    private fun uploadToDrive(fileList: FileList,
+                              file: File): Completable {
+        val files = fileList.files
 
-    private fun syncFiles(): Completable =
-            rxDrive.requestSync()
-                    // Sync request might fail because of API rate limit.
-                    // Drive will eventually perform sync so consider the work successful.
-                    .andThen(updateLastBackupTimestamp())
-                    .onErrorComplete()
+        return if (files.size > 0) {
+            val fileId = files[0].id
+            updateExistingFile(fileId, file)
+        } else {
+            createNewFile(file)
+        }
+    }
 
-    private fun updateExistingFile(driveFile: DriveFile,
+    private fun updateExistingFile(fileId: String,
                                    file: File): Completable =
-            rxDrive.commitContent(driveFile, file)
+            rxDrive.commitContent(fileId, file)
 
     private fun createNewFile(file: File): Completable =
             getFolder().flatMapCompletable { folder ->
-                rxDrive.createFile(folder, file, BACKUP_MIME_TYPE)
+                rxDrive.createFile(folder.id, file, BACKUP_MIME_TYPE)
             }
 
-    private fun getFolder(): Single<DriveFolder> =
-            rxDrive.queryFolderMeta(BACKUP_FOLDER_NAME).flatMap { folderMeta ->
-                if (folderMeta.count > 0) {
-                    val driveFolder = folderMeta[0].driveId.asDriveFolder()
-                    Single.just(driveFolder)
+    private fun getFolder(): Single<com.google.api.services.drive.model.File> =
+            rxDrive.queryFolderMeta(BACKUP_FOLDER_NAME).flatMap { fileList ->
+                val files = fileList.files
+                if (files.size > 0) {
+                    Single.just(files[0])
                 } else {
                     rxDrive.createFolder(BACKUP_FOLDER_NAME)
                 }

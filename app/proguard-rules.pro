@@ -32,6 +32,9 @@
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
 
+# Google Drive REST API
+-keep class com.google.api.services.drive.** { *;}
+
 # Guava
 -dontwarn javax.inject.**
 -dontwarn sun.misc.Unsafe
