@@ -104,7 +104,9 @@ class StatisticsFragment : Fragment() {
 
             // TODO (erikkarlsson): Hack to fix scroll not working.
             Handler().postDelayed({
-                slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
+                if (isAdded) {
+                    slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
+                }
             }, 100)
 
             prevState = it
