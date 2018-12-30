@@ -24,9 +24,9 @@ class RestoreSleepWorker constructor(context : Context, params : WorkerParameter
                 .blockingGet()
 
         return if (throwable == null) {
-            Result.SUCCESS
+            Result.success()
         } else {
-            Result.FAILURE
+            Result.failure()
         }
     }
 }

@@ -39,7 +39,8 @@ object Versions {
     val mockwebserver = "3.8.1"
     val mpandroidchart = "v3.0.3"
     val multidex = "2.0.0"
-    val navigation = "1.0.0-alpha07"
+    val navigation = "1.0.0-alpha09"
+    val navigation_testing = "1.0.0-alpha08"
     val okhttp_logging_interceptor = "3.9.0"
     val paging = "2.0.0"
     val paging_rx = "2.0.0"
@@ -59,7 +60,7 @@ object Versions {
     val threeten_backport = "1.3.7"
     val threeten_backport_android = "1.1.1"
     val timber = "4.7.1"
-    val work_manager = "1.0.0-alpha10"
+    val work_manager = "1.0.0-beta01"
 }
 
 object Deps {
@@ -117,7 +118,7 @@ object Deps {
     val multidex_instrumentation = "androidx.multidex:multidex-instrumentation:${Versions.multidex}"
     val navigation_fragment = "android.arch.navigation:navigation-fragment-ktx:${Versions.navigation}"
     val navigation_plugin = "android.arch.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
-    val navigation_testing = "android.arch.navigation:navigation-testing:${Versions.navigation}"
+    val navigation_testing = "android.arch.navigation:navigation-testing:${Versions.navigation_testing}"
     val navigation_ui = "android.arch.navigation:navigation-ui-ktx:${Versions.navigation}"
     val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     val paging_rx = "androidx.paging:paging-rxjava2:${Versions.paging_rx}"
@@ -149,7 +150,6 @@ object Deps {
     val threeten_backport = "org.threeten:threetenbp:${Versions.threeten_backport}"
     val threeten_backport_android = "com.jakewharton.threetenabp:threetenabp:${Versions.threeten_backport_android}"
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
-    val work_manager_firebase = "android.arch.work:work-firebase:${Versions.work_manager}"
     val work_manager_runtime = "android.arch.work:work-runtime-ktx:${Versions.work_manager}"
     val work_manager_testing = "android.arch.work:work-testing:${Versions.work_manager}"
 }

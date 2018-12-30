@@ -297,10 +297,6 @@ dependencies {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 
-    implementation(Deps.work_manager_firebase) {
-        exclude group: 'com.google.guava', module: 'listenablefuture'
-    }
-
     androidTestImplementation Deps.work_manager_testing
 }
 
