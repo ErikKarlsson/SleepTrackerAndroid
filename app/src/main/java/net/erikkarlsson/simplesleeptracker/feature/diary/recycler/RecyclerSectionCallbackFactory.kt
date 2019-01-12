@@ -21,12 +21,16 @@ class RecyclerSectionCallbackFactory @Inject constructor(
 
             override fun isSection(position: Int): Boolean {
                 try {
-                    return position == 0 || sleepList[position]
-                            ?.fromDate?.month != sleepList[position - 1]?.fromDate?.month
+                    val isFirstPosition = position == 0
+                    val isSameMonth = !isFirstPosition && sleepList[position]
+                            ?.fromDate?.month == sleepList[position - 1]?.fromDate?.month
+                    val isSameYear = !isFirstPosition && sleepList[position]
+                            ?.fromDate?.year == sleepList[position - 1]?.fromDate?.year
+
+                    return isFirstPosition || !isSameMonth || !isSameYear
                 } catch (e: IndexOutOfBoundsException) {
                     return false
                 }
-
             }
 
             override fun getMonthSectionHeader(position: Int): CharSequence {
