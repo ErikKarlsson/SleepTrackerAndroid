@@ -16,8 +16,7 @@ object DateRanges {
                           compareFilter: CompareFilter): List<DateRangePair> {
         val dateRangePairList = mutableListOf<DateRangePair>()
         var date = startEndDateRange.from
-        val endDateNextWeek = startEndDateRange.to.plusWeeks(1)
-        var isAtEnd: Boolean
+        val endMonday = startEndDateRange.to.plusWeeks(1).with(DayOfWeek.MONDAY)
 
         do {
             val monday = date.with(DayOfWeek.MONDAY)
@@ -32,9 +31,11 @@ object DateRanges {
 
             date = date.plusWeeks(1)
 
-            // Iterate until reaching week after end date.
-            isAtEnd = date.year == endDateNextWeek.year &&
-                    date.weekOfWeekBasedYear == endDateNextWeek.weekOfWeekBasedYear
+            // Iterate until reaching end week.
+            val nextMonday = date.with(DayOfWeek.MONDAY)
+            val isAtEnd = nextMonday.weekOfWeekBasedYear == endMonday.weekOfWeekBasedYear
+                && nextMonday.year == endMonday.year
+
         } while (!isAtEnd)
 
         return dateRangePairList
