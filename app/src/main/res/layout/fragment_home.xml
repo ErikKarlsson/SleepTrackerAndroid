@@ -82,5 +82,4 @@
         layout="@layout/logged_in_content"
         tools:visibility="gone" />
 
-
 </LinearLayout>
