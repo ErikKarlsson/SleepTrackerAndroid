@@ -7,10 +7,7 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.Event
-import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_MILLI
-import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
+import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
@@ -115,8 +112,8 @@ data class HomeState(val isLoadingHome: Boolean,
                 isSleeping && sleepCount < 2 -> BubbleState.SLEEPING_ONBOARDING
                 isSleeping -> BubbleState.SLEEPING
                 isShowingMinimalSleep -> BubbleState.MINIMUM_SLEEP
-                !isSleeping && !isWidgetAdded && isPinWidgetSupported -> BubbleState.PIN_WIDGET
-                !isSleeping && !isWidgetAdded -> BubbleState.ADD_WIDGET
+                !isSleeping && !isWidgetAdded && isPinWidgetSupported && sleepCount < HIDE_WIDGET_BUBBLE_AFTER_SLEEP_COUNT -> BubbleState.PIN_WIDGET
+                !isSleeping && !isWidgetAdded && sleepCount < HIDE_WIDGET_BUBBLE_AFTER_SLEEP_COUNT -> BubbleState.ADD_WIDGET
                 !isSleeping && sleep == Sleep.empty() -> BubbleState.START_TRACKING
                 !isSleeping -> BubbleState.SLEEP_DURATION
                 else -> BubbleState.EMPTY
