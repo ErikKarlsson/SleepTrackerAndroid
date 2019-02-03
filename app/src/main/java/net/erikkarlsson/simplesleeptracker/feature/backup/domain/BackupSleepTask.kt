@@ -22,4 +22,5 @@ class BackupSleepTask @Inject constructor(
                     .first(ImmutableList.of())
                     .map(backupCsvFileWriter::write)
                     .flatMapCompletable(fileBackupRepository::put)
+                    .andThen(fileBackupRepository.updateLastBackupTimestamp())
 }
