@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SimpleSleepTracker</string>
-    <string name="no_sleep_tracked">No sleep tracked</string>
     <string name="tracked_nights">Tracked Nights</string>
     <string name="avg_duration">Avg. Duration</string>
     <string name="time_sleeping">Time Sleeping</string>
@@ -27,7 +26,7 @@
     <string name="add_sleep_session">Add Sleep Session</string>
     <string name="you_have_slept_for">You\'ve slept for</string>
     <string name="nights">nights</string>
-    <string name="no_sleep_tracked_yet">No sleep tracked yet…</string>
+    <string name="no_sleep_tracked_yet">Start tracking your sleep today. All your tracked nights will be listed here.</string>
     <string name="sleep_duration">Sleep duration</string>
     <string name="save">SAVE</string>
     <string name="delete">Delete</string>

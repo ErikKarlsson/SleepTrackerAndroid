@@ -35,7 +35,7 @@ data class StatisticComparison(val first: Statistics, val second: Statistics) {
             )
             val averageBedTimeDayOfWeek = ImmutableList.of(
                     DayOfWeekLocalTime(DayOfWeek.MONDAY, LocalTime.of(22, 10)),
-                    DayOfWeekLocalTime(DayOfWeek.TUESDAY, LocalTime.of(22, 10)),
+                    DayOfWeekLocalTime(DayOfWeek.TUESDAY, LocalTime.of(22, 15)),
                     DayOfWeekLocalTime(DayOfWeek.WEDNESDAY, LocalTime.of(21, 14)),
                     DayOfWeekLocalTime(DayOfWeek.THURSDAY, LocalTime.of(23, 10)),
                     DayOfWeekLocalTime(DayOfWeek.FRIDAY, LocalTime.of(23, 30)),
