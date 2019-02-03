@@ -19,7 +19,7 @@ class StatisticsAdapter(fragmentManager: FragmentManager,
     override fun getItem(position: Int): Fragment {
         val dateRangePair = data.dataRanges[position]
         val filter = data.filter
-        return StatisticsItemFragment.newInstance(dateRangePair, filter)
+        return StatisticsItemFragment.newInstance(dateRangePair, filter, data.isEmptyState)
     }
 
     override fun getItemPosition(`object`: Any): Int {

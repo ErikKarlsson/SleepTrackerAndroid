@@ -54,4 +54,5 @@
     <string name="add_widget_dialog_title">Add Widget to Home screen</string>
     <string name="notification_channel_name">Sleep notifications</string>
     <string name="notification_channel_description">Sleep notifications</string>
+    <string name="demo">DEMO</string>
 </resources>

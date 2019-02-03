@@ -66,7 +66,7 @@ constructor(private val youngestOldestSubscription: YoungestOldestSubscription,
         }
 
         return prevState.copy(youngest = youngest, oldest = oldest,
-                dateRanges = dateRanges, isLoading = false).noCmd()
+                dateRanges = dateRanges, isLoading = false, sleepFound = sleepFound).noCmd()
     }
 
     private fun onFilterSelected(prevState: StatisticsState, msg: StatisticsFilterSelected): Pair<StatisticsState, StatisticsCmd?> {
@@ -144,20 +144,21 @@ data class StatisticsState(val filter: StatisticsFilter,
                            val youngest: Sleep,
                            val oldest: Sleep,
                            val dateRanges: List<DateRangePair>,
+                           val sleepFound: Boolean,
                            val isLoading: Boolean) : State {
 
-    val isEmpty = dateRanges.size == 0
+    val shouldShowEmptyState: Boolean = !isLoading && !sleepFound
 
     val filterOrdinal get() = filter.ordinal
 
     val compareFilterOrdinal get() = compareFilter.ordinal
 
-    val shouldShowTabs = filter != StatisticsFilter.OVERALL && !isEmpty
+    val shouldShowTabs = filter != StatisticsFilter.OVERALL && !sleepFound
 
     val shouldShowCompareFilter = filter != StatisticsFilter.OVERALL
 
     companion object {
-        fun empty() = StatisticsState(StatisticsFilter.OVERALL, CompareFilter.PREVIOUS, Sleep.empty(), Sleep.empty(), listOf(), true)
+        fun empty() = StatisticsState(StatisticsFilter.OVERALL, CompareFilter.PREVIOUS, Sleep.empty(), Sleep.empty(), listOf(), false, true)
     }
 }
 

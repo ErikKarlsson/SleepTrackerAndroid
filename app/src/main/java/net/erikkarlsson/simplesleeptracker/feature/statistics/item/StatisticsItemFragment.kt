@@ -51,13 +51,16 @@ class StatisticsItemFragment : Fragment() {
         private const val ARGS_DATE_RANGE_FIRST = "args_date_range_first"
         private const val ARGS_DATE_RANGE_SECOND = "args_date_range_second"
         private const val ARGS_STATISTICS_FILTER = "args_statistics_filter"
+        private const val ARGS_IS_EMPTY_STATE = "args_is_empty_state"
 
         fun newInstance(dataRangePair: DateRangePair,
-                        filter: StatisticsFilter): StatisticsItemFragment {
+                        filter: StatisticsFilter,
+                        isEmptyState: Boolean = false): StatisticsItemFragment {
             val args = Bundle()
             args.putParcelable(ARGS_DATE_RANGE_FIRST, dataRangePair.first)
             args.putParcelable(ARGS_DATE_RANGE_SECOND, dataRangePair.second)
             args.putSerializable(ARGS_STATISTICS_FILTER, filter)
+            args.putBoolean(ARGS_IS_EMPTY_STATE, isEmptyState)
 
             val fragment = StatisticsItemFragment()
             fragment.arguments = args
@@ -85,15 +88,25 @@ class StatisticsItemFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sleepDurationChart.setNoDataText("")
+        averageBedTimeChart.setNoDataText("")
+        averageWakeUpTimeChart.setNoDataText("")
+
+        val isEmptyState = arguments?.getBoolean(ARGS_IS_EMPTY_STATE) ?: false
+
+        if (isEmptyState) {
+            renderEmptyState()
+        } else {
+            loadStatistics()
+        }
+    }
+
+    private fun loadStatistics() {
         val dateRangeFirst = arguments?.getParcelable(ARGS_DATE_RANGE_FIRST) as DateRange
         val dateRangeSecond = arguments?.getParcelable(ARGS_DATE_RANGE_SECOND) as DateRange
         val pair = Pair(dateRangeFirst, dateRangeSecond)
         val filter = arguments?.getSerializable(ARGS_STATISTICS_FILTER) as StatisticsFilter
         val loadStatistics = LoadStatistics(pair, filter)
-
-        sleepDurationChart.setNoDataText("")
-        averageBedTimeChart.setNoDataText("")
-        averageWakeUpTimeChart.setNoDataText("")
 
         viewModel.dispatch(loadStatistics)
         viewModel.state().observe(this, Observer { render(it) })
@@ -102,6 +115,21 @@ class StatisticsItemFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         disposables.clear()
+    }
+
+    private fun renderEmptyState() {
+        val statisticComparison = StatisticComparison.demo()
+        val filter = StatisticsFilter.OVERALL
+        val dateRangePair = DateRange.empty() to DateRange.empty()
+        val statisticsItemState = StatisticsItemState(false, statisticComparison, filter, dateRangePair)
+
+        sleepDurationLabel.text = String.format("%s [%s]", getString(R.string.sleep_duration), getString(R.string.demo))
+        longestNightLabel.text = String.format("%s [%s]", getString(R.string.longest_night), getString(R.string.demo))
+        shortestNightLabel.text = String.format("%s [%s]", getString(R.string.shortest_night), getString(R.string.demo))
+        averageBedTimeLabel.text = String.format("%s [%s]", getString(R.string.average_bed_time), getString(R.string.demo))
+        averageWakeUpTimeLabel.text = String.format("%s [%s]", getString(R.string.average_wake_up_time), getString(R.string.demo))
+
+        render(statisticsItemState)
     }
 
     private fun render(state: StatisticsItemState?) {

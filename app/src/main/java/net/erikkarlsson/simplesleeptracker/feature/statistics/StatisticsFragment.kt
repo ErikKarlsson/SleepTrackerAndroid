@@ -60,6 +60,7 @@ class StatisticsFragment : Fragment() {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
         spinner.setTag(0) // Avoid triggering selection on initialization.
+        spinner.isEnabled = false
 
         val compareSpinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_compare_array, android.R.layout.simple_spinner_item)
         compareSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -85,7 +86,12 @@ class StatisticsFragment : Fragment() {
                 viewPager.currentItem
             }
 
-            statisticsAdapter.data = StatisticsItemData(it.dateRanges, it.filter)
+            val adapterData = when (it.shouldShowEmptyState) {
+                true -> StatisticsItemData.emptyState()
+                false -> StatisticsItemData(it.dateRanges, it.filter)
+            }
+
+            statisticsAdapter.data = adapterData
             statisticsAdapter.notifyDataSetChanged()
 
             viewPager.setCurrentItem(selectedItem, false)
@@ -94,8 +100,8 @@ class StatisticsFragment : Fragment() {
             slidingTabLayout.setViewPager(viewPager)
             slidingTabLayout.isVisible = it.shouldShowTabs
 
-            spinnerContainer.isVisible = !it.isEmpty
-            emptyState.isVisible = !it.isLoading && it.isEmpty
+            emptyGroup.isVisible = it.shouldShowEmptyState
+            spinner.isEnabled = !it.shouldShowEmptyState
 
             spinner.setSelection(it.filterOrdinal)
 
