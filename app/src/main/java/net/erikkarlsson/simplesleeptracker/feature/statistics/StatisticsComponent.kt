@@ -153,7 +153,7 @@ data class StatisticsState(val filter: StatisticsFilter,
 
     val compareFilterOrdinal get() = compareFilter.ordinal
 
-    val shouldShowTabs = filter != StatisticsFilter.OVERALL && !sleepFound
+    val shouldShowTabs = filter != StatisticsFilter.OVERALL && sleepFound
 
     val shouldShowCompareFilter = filter != StatisticsFilter.OVERALL
 
