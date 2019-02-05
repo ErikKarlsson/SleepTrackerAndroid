@@ -27,7 +27,7 @@ import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.AverageTimeC
 import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.SleepDurationChartRenderer
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesSpannable
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutesWithPrefix
 import javax.inject.Inject
 
@@ -148,7 +148,7 @@ class StatisticsItemFragment : Fragment() {
                 with(state.statistics.first) {
                     if (!isEmpty) {
                         trackedNightsText.text = sleepCount.toString()
-                        avgDurationText.text = String.format("%s", avgSleepHours.formatHoursMinutes)
+                        avgDurationText.text = avgSleepHours.formatHoursMinutesSpannable
 
                         renderAvgTimeDiff(avgDurationDiffText, state.statistics.avgSleepDiffHours)
                         renderLongestNight(longestSleep)
@@ -199,7 +199,7 @@ class StatisticsItemFragment : Fragment() {
     }
 
     private fun renderLongestNight(longestSleep: Sleep) {
-        longestNightDurationText.text = longestSleep.hours.formatHoursMinutes
+        longestNightDurationText.text = longestSleep.hours.formatHoursMinutesSpannable
         longestNightDateText.text = longestSleep.toDate?.formatDateDisplayName
 
         val value = if (longestSleep.hours == 0f) {
@@ -212,7 +212,7 @@ class StatisticsItemFragment : Fragment() {
     }
 
     private fun renderShortestNight(shortestSleep: Sleep, longestSleep: Sleep) {
-        shortestNightDurationText.text = shortestSleep.hours.formatHoursMinutes
+        shortestNightDurationText.text = shortestSleep.hours.formatHoursMinutesSpannable
         shortestNightDateText.text = shortestSleep.toDate?.formatDateDisplayName
 
         val value = shortestSleep.hours

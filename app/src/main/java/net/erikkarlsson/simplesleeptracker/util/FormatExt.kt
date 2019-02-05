@@ -1,5 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.RelativeSizeSpan
 import com.google.common.collect.ImmutableList
 import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.domain.MINUTES_IN_AN_HOUR
@@ -28,8 +31,8 @@ val ImmutableList<DayOfWeekLocalTime>.formatDisplayNameTime: String
 
 val DayOfWeekHours.formatDisplayName: String
     get() = String.format("%s: %s",
-                          this.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
-                          this.hours.formatHoursMinutes)
+            this.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
+            this.hours.formatHoursMinutes)
 
 val ImmutableList<DayOfWeekHours>.formatDisplayName: String
     get() = this.map { " - " + it.formatDisplayName }.joinToString(separator = "\n")
@@ -46,10 +49,11 @@ val LocalDate.formatDateShort: String
         return this.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
     }
 
-val Int.formatPercentage: String  get() {
-    val prefix = if (this > 0) "+" else if (this < 0) "-" else ""
-    return String.format("%s%d%%", prefix, this)
-}
+val Int.formatPercentage: String
+    get() {
+        val prefix = if (this > 0) "+" else if (this < 0) "-" else ""
+        return String.format("%s%d%%", prefix, this)
+    }
 
 val Float.formatHoursMinutes: String
     get() {
@@ -68,6 +72,74 @@ val Float.formatHoursMinutes: String
             else -> "0h"
         }
     }
+
+val Float.formatHoursMinutesSpannable: Spannable
+    get() {
+        val totalMinutes = Math.round((Math.abs(this) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val hours = Math.floor((totalMinutes / MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val minutes = if (hours > 0) {
+            totalMinutes % (hours * MINUTES_IN_AN_HOUR)
+        } else {
+            totalMinutes
+        }
+
+        return spannableFrom(hours, minutes)
+    }
+
+private fun spannableFrom(hours: Int, minutes: Int): Spannable =
+        when {
+            hours == 0 && minutes > 0 -> {
+                val string = String.format("%dmin", minutes)
+                val spannableStringBuilder = SpannableStringBuilder(string)
+                spannableStringBuilder.setSpan(
+                        RelativeSizeSpan(0.7f),
+                        string.length - 3,
+                        string.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableStringBuilder
+
+            }
+            hours > 0 && minutes == 0 -> {
+                val string = String.format("%dh", hours)
+                val spannableStringBuilder = SpannableStringBuilder(string)
+                spannableStringBuilder.setSpan(
+                        RelativeSizeSpan(0.7f),
+                        hours.toString().length,
+                        hours.toString().length + 1,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableStringBuilder
+            }
+            hours > 0 && minutes > 0 -> {
+                val string = String.format("%dh %dmin", hours, minutes)
+                val spannableStringBuilder = SpannableStringBuilder(string)
+                spannableStringBuilder.setSpan(
+                        RelativeSizeSpan(0.7f),
+                        hours.toString().length,
+                        hours.toString().length + 1,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableStringBuilder.setSpan(
+                        RelativeSizeSpan(0.7f),
+                        string.length - 3,
+                        string.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableStringBuilder
+            }
+            else -> {
+                val string = "0h"
+                val spannableStringBuilder = SpannableStringBuilder(string)
+                spannableStringBuilder.setSpan(
+                        RelativeSizeSpan(0.7f),
+                        1,
+                        2,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableStringBuilder
+            }
+        }
 
 val Float.formatHoursMinutes2: String
     get() {
