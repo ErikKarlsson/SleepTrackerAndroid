@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory android:title="@string/sleep_settings">
+        <SwitchPreference
+            android:key="prefs_sleep_detection_enabled"
+            android:title="@string/automatic_sleep_detection" />
+
+        <EditTextPreference
+            android:defaultValue="20:00"
+            android:key="prefs_sleep_detection_start_time"
+            android:title="When should we active sleep detection?" />
+
+        <EditTextPreference
+            android:defaultValue="07:00"
+            android:key="prefs_sleep_detection_stop_time"
+            android:title="When should we deactivate sleep detection?" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about">
         <Preference
             android:key="privacyPolicy"
-            android:title="Privacy Policy" />
+            android:title="@string/privacy_policy" />
 
         <Preference
             android:key="termsAndConditions"
-            android:title="Terms &amp; Conditions" />
+            android:title="@string/terms_and_conditions" />
 
         <Preference
             android:key="thirdPartyLicenses"
-            android:title="Third Party Licenses" />
+            android:title="@string/third_party_licenses" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -52,6 +52,16 @@
     <string name="add_widget_instructions"><![CDATA[<p>1. On the home screen, tap and hold on an <b>available space</b>.</p><p>2. Tap <b>widgets</b></p><p>3. Select the sleep widget. You will need to press and hold it to select it.</p><p>4. Drag and drop the <b>widget</b> onto the available space.</p>5. The widget is now displayed]]></string>
     <string name="add_widget_dialog_title">Add Widget to Home screen</string>
     <string name="notification_channel_name">Sleep notifications</string>
+    <string name="foreground_notification_channel_name">Sleep foreground notifications</string>
     <string name="notification_channel_description">Sleep notifications</string>
+    <string name="foreground_notification_channel_description">Sleep foreground notifications</string>
     <string name="demo">DEMO</string>
+    <string name="sleep_detection_notification_title">Sleep detection active</string>
+    <string name="sleep_detection_notification_description">Tracking</string>
+    <string name="sleep_settings">Sleep Settings</string>
+    <string name="automatic_sleep_detection">Automatic Sleep Detection</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="third_party_licenses">Third Party Licenses</string>
+    <string name="about">About</string>
 </resources>

@@ -1,6 +1,7 @@
 package net.erikkarlsson.simplesleeptracker
 
 import android.app.Activity
+import android.app.Service
 import android.content.BroadcastReceiver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -8,17 +9,16 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
+import androidx.preference.PreferenceManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasBroadcastReceiverInjector
+import dagger.android.*
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
+import net.erikkarlsson.simplesleeptracker.data.SystemNotifications
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.elm.LogLevel
@@ -28,7 +28,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentInjector,
-        HasBroadcastReceiverInjector, LifecycleObserver {
+        HasBroadcastReceiverInjector, HasServiceInjector, LifecycleObserver {
 
     // TODO (erikkarlsson): Only needed for injecting Worker, remove once Dagger has released WorkerInjector.
     lateinit var appComponent: AppComponent
@@ -41,6 +41,9 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
     @Inject
     lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
+
+    @Inject
+    lateinit var serviceInjector: DispatchingAndroidInjector<Service>
 
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
@@ -64,6 +67,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
         AndroidThreeTen.init(this)
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
 
@@ -75,6 +80,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
         RuntimeFactory.defaultLogLevel = if (BuildConfig.DEBUG) LogLevel.FULL else LogLevel.NONE
 
+        SystemNotifications.createNotificationChannels(this)
+
         sleepWidgetView.init()
     }
 
@@ -83,6 +90,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastInjector
+
+    override fun serviceInjector(): AndroidInjector<Service> = serviceInjector
 
     // https://android.jlelse.eu/how-to-detect-android-application-open-and-close-background-and-foreground-events-1b4713784b57
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)

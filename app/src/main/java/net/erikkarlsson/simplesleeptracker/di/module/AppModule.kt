@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.di.module
 
+import android.app.AlarmManager
 import android.content.Context
 import androidx.work.WorkManager
 import dagger.Binds
@@ -33,6 +34,12 @@ abstract class AppModule {
         @Singleton
         @JvmStatic
         fun providesWorkManager(): WorkManager = WorkManager.getInstance()
+
+        @Provides
+        @Singleton
+        @JvmStatic
+        fun providesAlarmManager(context: Context): AlarmManager =
+                context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         @Provides
         @Singleton

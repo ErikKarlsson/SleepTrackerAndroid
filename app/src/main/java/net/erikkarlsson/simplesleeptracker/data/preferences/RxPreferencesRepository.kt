@@ -18,6 +18,9 @@ class RxPreferencesRepository @Inject constructor(private val rxSharedPreference
     override fun set(key: String, value: Boolean): Completable =
             Completable.fromCallable { rxSharedPreferences.getBoolean(key).set(value) }
 
+    override fun set(key: String, value: String): Completable =
+            Completable.fromCallable { rxSharedPreferences.getString(key).set(value) }
+
     override fun getLong(key: String): Observable<Long> =
             rxSharedPreferences.getLong(key, 0).asObservable()
 
@@ -26,6 +29,9 @@ class RxPreferencesRepository @Inject constructor(private val rxSharedPreference
 
     override fun getBoolean(key: String): Observable<Boolean> =
             rxSharedPreferences.getBoolean(key, false).asObservable()
+
+    override fun getString(key: String): Observable<String> =
+            rxSharedPreferences.getString(key, "").asObservable()
 
     override fun clear() =
             rxSharedPreferences.clear()
