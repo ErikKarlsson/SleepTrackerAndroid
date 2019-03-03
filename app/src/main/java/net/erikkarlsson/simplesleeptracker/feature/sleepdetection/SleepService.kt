@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import dagger.android.AndroidInjection
 import net.erikkarlsson.simplesleeptracker.domain.Notifications
+import net.erikkarlsson.simplesleeptracker.domain.entity.ActionType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -17,6 +18,9 @@ class SleepService : Service() {
 
     @Inject
     lateinit var notifications: Notifications
+
+    @Inject
+    lateinit var controller: SleepServiceController
 
     override fun onCreate() {
         Timber.d("SleepService onCreate")
@@ -47,6 +51,7 @@ class SleepService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        controller.onDestroy()
         receiver?.let { unregisterReceiver(it) }
         receiver = null
     }
@@ -68,8 +73,10 @@ class SleepService : Service() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == Intent.ACTION_SCREEN_OFF) {
                 Timber.d("ACTION_SCREEN_OFF")
+                controller.onAction(ActionType.SCREEN_OFF)
             } else if (intent.action == Intent.ACTION_SCREEN_ON) {
                 Timber.d("ACTION_SCREEN_ON")
+                controller.onAction(ActionType.SCREEN_ON)
             }
         }
 

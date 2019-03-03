@@ -4,8 +4,8 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import net.erikkarlsson.simplesleeptracker.data.SleepDatabase
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDao
-import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDatabase
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepository
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import javax.inject.Singleton
