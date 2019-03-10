@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.data.SleepDatabase
-import net.erikkarlsson.simplesleeptracker.data.SleepDetectionAlarm
+import net.erikkarlsson.simplesleeptracker.data.sleepdetection.SleepDetectionAlarm
 import net.erikkarlsson.simplesleeptracker.data.sleepdetection.DetectionActionRepository
 import net.erikkarlsson.simplesleeptracker.data.sleepdetection.DetectionDao
 import net.erikkarlsson.simplesleeptracker.domain.DetectionActionDataSource

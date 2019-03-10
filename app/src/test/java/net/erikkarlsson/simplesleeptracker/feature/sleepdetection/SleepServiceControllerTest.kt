@@ -1,0 +1,3 @@
+package net.erikkarlsson.simplesleeptracker.feature.sleepdetection
+
+class SleepServiceControllerTest

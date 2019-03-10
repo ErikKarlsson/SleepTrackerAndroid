@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker.data.sleepdetection
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -10,6 +10,7 @@ import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.feature.sleepdetection.AlarmReceiver
 import net.erikkarlsson.simplesleeptracker.feature.sleepdetection.SleepService
 import org.threeten.bp.LocalTime
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -41,11 +42,13 @@ class SleepDetectionAlarm @Inject constructor(
     }
 
     override fun onStartDetectionReceived() {
+        Timber.d("onStartDetectionReceived")
         resetAlarms()
         startService()
     }
 
     override fun onStopDetectionReceived() {
+        Timber.d("onStopDetectionReceived")
         resetAlarms()
         stopService()
     }
@@ -92,12 +95,14 @@ class SleepDetectionAlarm @Inject constructor(
 
     private fun setStartDetectionAlarm(time: LocalTime) {
         val intent = getStartDetectionPendingIntent()
-        setAlarm(intent, time)
+        val timestamp = setAlarm(intent, time)
+        preferences.set(PREFS_SLEEP_DETECTION_ALARM_START_DATE, timestamp) // It's not possible to query alarms from the alarm manager after creating them, persist any needed data.
     }
 
     private fun setStopDetectionAlarm(time: LocalTime) {
         val intent = getStopDetectionPendingIntent()
-        setAlarm(intent, time)
+        val timestamp = setAlarm(intent, time)
+        preferences.set(PREFS_SLEEP_DETECTION_ALARM_STOP_DATE, timestamp)
     }
 
     private fun isOpen(start: LocalTime, end: LocalTime, time: LocalTime): Boolean =
@@ -121,7 +126,7 @@ class SleepDetectionAlarm @Inject constructor(
                 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private fun setAlarm(pendingIntent: PendingIntent, time: LocalTime) {
+    private fun setAlarm(pendingIntent: PendingIntent, time: LocalTime): Long {
         val now = System.currentTimeMillis()
         val calendar = Calendar.getInstance().apply {
             timeInMillis = now
@@ -140,6 +145,8 @@ class SleepDetectionAlarm @Inject constructor(
                 AlarmManager.RTC_WAKEUP,
                 alarmTimestamp,
                 pendingIntent)
+
+        return alarmTimestamp
     }
 
     companion object {

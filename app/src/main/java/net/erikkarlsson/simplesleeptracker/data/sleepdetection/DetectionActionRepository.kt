@@ -1,6 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.data.sleepdetection
 
 import com.google.common.collect.ImmutableList
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.domain.DetectionActionDataSource
@@ -27,4 +28,7 @@ class DetectionActionRepository @Inject constructor(
         val detectionActionEntity = detectionMapper.mapToEntity(detectionAction)
         return detectionDao.insertDetectionAction(detectionActionEntity)
     }
+
+    override fun deleteAllDetectionActions(): Completable =
+            Completable.fromCallable { detectionDao.deleteAllDetectionActions()  }
 }

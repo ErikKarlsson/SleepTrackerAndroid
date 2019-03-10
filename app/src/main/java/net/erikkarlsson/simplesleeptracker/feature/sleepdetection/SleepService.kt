@@ -41,6 +41,7 @@ class SleepService : Service() {
                 stopSelf()
             }
             else -> {
+                controller.onStartService()
                 showNotification()
                 registerScreenReceiver()
             }

@@ -15,4 +15,6 @@ interface DetectionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDetectionAction(detectionAction: DetectionActionEntity): Long
 
+    @Query("DELETE FROM Detection")
+    fun deleteAllDetectionActions()
 }
