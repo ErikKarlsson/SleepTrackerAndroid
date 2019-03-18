@@ -36,6 +36,7 @@ class DetectionAnalyzer @Inject constructor() {
 
         var bedTime: OffsetDateTime? = null
         var wakeUp: OffsetDateTime? = null
+        var foundAlarm = false
 
         for (i in 0 until actionList.size - 1) {
             val action = actionList[i]
@@ -47,9 +48,14 @@ class DetectionAnalyzer @Inject constructor() {
                     bedTime = action.date
                 }
 
-                if (action2.actionType == ActionType.SCREEN_ON) {
+                if (action2.actionType == ActionType.SCREEN_ON && !foundAlarm) {
                     wakeUp = action2.date
                 }
+            }
+
+            if (action2.actionType == ActionType.ALARM_SNOOZE || action2.actionType == ActionType.ALARM_DISMISS) {
+                wakeUp = action2.date
+                foundAlarm = true
             }
         }
 

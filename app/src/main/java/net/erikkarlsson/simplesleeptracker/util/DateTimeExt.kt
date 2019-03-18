@@ -1,10 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.util
 
 import net.erikkarlsson.simplesleeptracker.domain.*
-import org.threeten.bp.Duration
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalTime
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.*
 import org.threeten.bp.temporal.ChronoUnit
 import java.math.BigDecimal
 
@@ -55,6 +52,7 @@ val Int.midnightOffsetToLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeco
  */
 val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
 
+val String.localDateTime: LocalDateTime get() = this.offsetDateTime.toLocalDateTime()
 val String.localDate: LocalDate get() = LocalDate.parse(this)
 
 /**

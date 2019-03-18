@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList
 import junit.framework.Assert.assertEquals
 import net.erikkarlsson.simplesleeptracker.domain.entity.ActionType
 import net.erikkarlsson.simplesleeptracker.domain.entity.DetectionAction
-import net.erikkarlsson.simplesleeptracker.util.localDate
+import net.erikkarlsson.simplesleeptracker.util.localDateTime
 import net.erikkarlsson.simplesleeptracker.util.offsetDateTime
 import org.junit.Test
 
@@ -21,7 +21,7 @@ class DetectionAnalyzerTest {
 
         val result = detectionAnalyzer.analyze(
                 actionList = actionList,
-                detectionStopDate = "2019-03-04".localDate)
+                detectionStopDate = "2019-03-04T22:00:00+01:00".localDateTime)
 
         val expectedResult = AnalyzerResult(
                 bedTime = "2019-03-03T22:00:00+01:00".offsetDateTime,
@@ -42,7 +42,7 @@ class DetectionAnalyzerTest {
 
         val result = detectionAnalyzer.analyze(
                 actionList = actionList,
-                detectionStopDate = "2019-03-04".localDate)
+                detectionStopDate = "2019-03-04T22:00:00+01:00".localDateTime)
 
         val expectedResult = AnalyzerResult(
                 bedTime = "2019-03-03T22:00:00+01:00".offsetDateTime,
@@ -58,14 +58,15 @@ class DetectionAnalyzerTest {
                 actionOf("2019-03-03T22:00:00+01:00", ActionType.SCREEN_OFF),
                 actionOf("2019-03-04T06:40:00+01:00", ActionType.SCREEN_ON),
                 actionOf("2019-03-04T06:40:00+01:00", ActionType.SCREEN_OFF),
-                actionOf("2019-03-04T06:50:00+01:00", ActionType.SCREEN_ON),
-                actionOf("2019-03-04T06:50:00+01:00", ActionType.SCREEN_OFF),
-                actionOf("2019-03-04T07:00:00+01:00", ActionType.SCREEN_ON)
+                actionOf("2019-03-04T06:50:00+01:00", ActionType.ALARM_SNOOZE),
+                actionOf("2019-03-04T06:50:00+01:00", ActionType.ALARM_SNOOZE),
+                actionOf("2019-03-04T07:00:00+01:00", ActionType.ALARM_DISMISS),
+                actionOf("2019-03-04T08:00:00+01:00", ActionType.SCREEN_ON)
         )
 
         val result = detectionAnalyzer.analyze(
                 actionList = actionList,
-                detectionStopDate = "2019-03-04".localDate)
+                detectionStopDate = "2019-03-04T22:00:00+01:00".localDateTime)
 
         val expectedResult = AnalyzerResult(
                 bedTime = "2019-03-03T22:00:00+01:00".offsetDateTime,
