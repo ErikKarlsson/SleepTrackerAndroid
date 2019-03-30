@@ -16,6 +16,8 @@ class MockDateTimeProvider @Inject constructor(): DateTimeProvider {
         return now
     }
 
+    override fun currentTimeMillis(): Long = 0L
+
     fun reset() {
         nowValue = null
     }

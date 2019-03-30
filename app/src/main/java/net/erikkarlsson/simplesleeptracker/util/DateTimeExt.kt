@@ -47,6 +47,8 @@ fun LocalTime.hoursTo(other: LocalTime): Float = Duration.between(this, other).t
  */
 val Int.midnightOffsetToLocalTime: LocalTime get() = LocalTime.of(0, 0).plusSeconds(this.toLong())
 
+val Long.offsetDateTime: OffsetDateTime get() = OffsetDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
+
 /**
  * Converts a string containing ISO date into OffsetDateTime. e.g. "2018-03-07T21:30:00+01:00"
  */

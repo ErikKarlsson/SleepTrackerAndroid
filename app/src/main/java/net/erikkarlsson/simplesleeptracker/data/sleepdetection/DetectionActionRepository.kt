@@ -12,7 +12,6 @@ import javax.inject.Inject
 class DetectionActionRepository @Inject constructor(
         private val detectionDao: DetectionDao,
         private val detectionMapper: DetectionMapper) : DetectionActionDataSource {
-
     override fun getDetectionAction(): Observable<ImmutableList<DetectionAction>> =
             detectionDao.getAllDetectionActions()
                     .toObservable()
@@ -27,6 +26,11 @@ class DetectionActionRepository @Inject constructor(
     override fun insert(detectionAction: DetectionAction): Long {
         val detectionActionEntity = detectionMapper.mapToEntity(detectionAction)
         return detectionDao.insertDetectionAction(detectionActionEntity)
+    }
+
+    override fun insertCompletable(detectionAction: DetectionAction): Completable {
+        val detectionActionEntity = detectionMapper.mapToEntity(detectionAction)
+        return detectionDao.insertDetectionActionCompletable(detectionActionEntity)
     }
 
     override fun deleteAllDetectionActions(): Completable =

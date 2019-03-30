@@ -8,6 +8,7 @@ import net.erikkarlsson.simplesleeptracker.di.scope.BroadcastRecieverScope
 import net.erikkarlsson.simplesleeptracker.di.scope.FragmentScope
 import net.erikkarlsson.simplesleeptracker.di.scope.ServiceScope
 import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity
+import net.erikkarlsson.simplesleeptracker.feature.appwidget.AlarmBroadcastReciever
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity
 import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment
@@ -61,6 +62,10 @@ abstract class AndroidBindingModule {
     @BroadcastRecieverScope
     @ContributesAndroidInjector
     abstract fun bindsAlarmReceiver(): AlarmReceiver
+
+    @BroadcastRecieverScope
+    @ContributesAndroidInjector
+    abstract fun bindsAlarmBroadcastReceiver(): AlarmBroadcastReciever
 
     @ServiceScope
     @ContributesAndroidInjector

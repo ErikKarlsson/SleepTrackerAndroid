@@ -5,8 +5,7 @@ import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 
 class RealDateTimeProvider @Inject constructor() : DateTimeProvider {
-    override fun now(): OffsetDateTime {
-        return OffsetDateTime.now()
-    }
+    override fun now(): OffsetDateTime = OffsetDateTime.now()
 
+    override fun currentTimeMillis(): Long = System.currentTimeMillis()
 }

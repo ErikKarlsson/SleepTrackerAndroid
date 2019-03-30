@@ -4,4 +4,5 @@ import org.threeten.bp.OffsetDateTime
 
 interface DateTimeProvider {
     fun now(): OffsetDateTime
+    fun currentTimeMillis(): Long
 }

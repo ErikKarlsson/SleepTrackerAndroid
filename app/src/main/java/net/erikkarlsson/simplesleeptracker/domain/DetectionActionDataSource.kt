@@ -8,5 +8,6 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.DetectionAction
 interface DetectionActionDataSource {
     fun getDetectionAction(): Observable<ImmutableList<DetectionAction>>
     fun insert(detectionAction: DetectionAction): Long
+    fun insertCompletable(detectionAction: DetectionAction): Completable
     fun deleteAllDetectionActions(): Completable
 }
