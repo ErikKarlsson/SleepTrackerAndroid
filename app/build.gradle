@@ -156,6 +156,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Dependencies for Android tests
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     androidTestImplementation Deps.atsl_runner
     androidTestImplementation Deps.atsl_rules
     androidTestImplementation Deps.room_testing
@@ -246,6 +249,10 @@ dependencies {
     // Multidex
     implementation Deps.multidex
     implementation Deps.multidex_instrumentation
+
+    // MVRx
+    implementation Deps.mvrx
+    testImplementation Deps.mvrx_testing
 
     // Navigation
     implementation Deps.navigation_fragment
