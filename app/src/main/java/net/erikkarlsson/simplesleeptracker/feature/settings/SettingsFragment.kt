@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.android.support.AndroidSupportInjection
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.domain.SleepDetection
+import net.erikkarlsson.simplesleeptracker.domain.SleepDetectionScheduler
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     @Inject
-    lateinit var sleepDetection: SleepDetection
+    lateinit var sleepDetectionScheduler: SleepDetectionScheduler
 
     var changeListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
@@ -37,7 +37,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         "prefs_sleep_detection_stop_time", "prefs_sleep_detection_enabled")
 
                 if (sleepDetectionSettings.contains(key)) {
-                    sleepDetection.update()
+                    sleepDetectionScheduler.schedule()
                 }
             }
 

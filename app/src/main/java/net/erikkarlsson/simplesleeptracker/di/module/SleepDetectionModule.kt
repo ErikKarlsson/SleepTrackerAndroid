@@ -4,11 +4,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.data.SleepDatabase
-import net.erikkarlsson.simplesleeptracker.data.sleepdetection.SleepDetectionAlarm
+import net.erikkarlsson.simplesleeptracker.data.sleepdetection.SleepDetectionServiceScheduler
 import net.erikkarlsson.simplesleeptracker.data.sleepdetection.DetectionActionRepository
 import net.erikkarlsson.simplesleeptracker.data.sleepdetection.DetectionDao
 import net.erikkarlsson.simplesleeptracker.domain.DetectionActionDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepDetection
+import net.erikkarlsson.simplesleeptracker.domain.SleepDetectionScheduler
 import javax.inject.Singleton
 
 @Module
@@ -16,7 +16,7 @@ abstract class SleepDetectionModule {
 
     @Binds
     @Singleton
-    abstract fun bindSleepDetection(sleepDetectionAlarm: SleepDetectionAlarm): SleepDetection
+    abstract fun bindSleepDetection(sleepDetectionServiceScheduler: SleepDetectionServiceScheduler): SleepDetectionScheduler
 
     @Binds
     @Singleton

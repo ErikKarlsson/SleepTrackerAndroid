@@ -14,13 +14,13 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class SleepDetectionAlarm @Inject constructor(
+class SleepDetectionServiceScheduler @Inject constructor(
         private val context: Context,
         private val alarmManager: AlarmManager,
         private val preferences: PreferencesDataSource,
-        private val dateTimeProvider: DateTimeProvider) : SleepDetection {
+        private val dateTimeProvider: DateTimeProvider) : SleepDetectionScheduler {
 
-    override fun update() {
+    override fun schedule() {
         cancelAlarms()
 
         if (!isSleepDetectionEnabled()) {
@@ -41,14 +41,14 @@ class SleepDetectionAlarm @Inject constructor(
         }
     }
 
-    override fun onStartDetectionReceived() {
-        Timber.d("onStartDetectionReceived")
+    override fun startDetection() {
+        Timber.d("startDetection")
         resetAlarms()
         startService()
     }
 
-    override fun onStopDetectionReceived() {
-        Timber.d("onStopDetectionReceived")
+    override fun stopDetection() {
+        Timber.d("stopDetection")
         resetAlarms()
         stopService()
     }

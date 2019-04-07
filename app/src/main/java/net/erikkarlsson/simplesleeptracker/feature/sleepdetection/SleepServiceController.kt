@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker.feature.sleepdetection
 
 import com.google.common.collect.ImmutableList
 import com.jakewharton.rxrelay2.PublishRelay
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -40,7 +41,7 @@ class SleepServiceController @Inject constructor(
         detectionActionDataSource
                 .getDetectionAction()
                 .observeOn(Schedulers.io())
-                .doOnNext { analyze(it) }
+                .concatMapSingle { analyze(it) }
                 .publish()
                 .connect()
                 .addTo(disposables)
@@ -56,6 +57,10 @@ class SleepServiceController @Inject constructor(
                 .addTo(disposables)
     }
 
+    fun initSession() {
+        
+    }
+
     fun onAction(actionType: ActionType) {
         actionSubject.accept(DetectionAction(actionType, dateTimeProvider.now()))
     }
@@ -64,31 +69,29 @@ class SleepServiceController @Inject constructor(
         disposables.dispose()
     }
 
-    private fun analyze(actionList: ImmutableList<DetectionAction>) {
+    private fun analyze(actionList: ImmutableList<DetectionAction>): Single<Boolean> {
         val stopDateTimestamp = preferences.getLong(PREFS_SLEEP_DETECTION_ALARM_STOP_DATE).blockingFirst()
         val stopDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(stopDateTimestamp), ZoneId.systemDefault())
         val result = detectionAnalyzer.analyze(actionList, stopDate)
         val bedTime = result.bedTime
         val wakeUp = result.wakeUp
 
-        if (bedTime != null && wakeUp != null) {
-            val sleep = Sleep(
-                    fromDate = bedTime,
-                    toDate = wakeUp)
-
-            sleepRepository.getCurrentSingle()
-                    .subscribeOn(Schedulers.io())
-                    .subscribeBy(
-                            onSuccess = {
-                                if (it.toDate?.toLocalDate() == wakeUp.toLocalDate()) {
-                                    sleepRepository.delete(it)
-                                }
-                                sleepRepository.insert(sleep)
-                            },
-                            onError = { Timber.e(it) }
-                    )
-                    .addTo(disposables)
+        if (bedTime == null || wakeUp == null) {
+            return Single.just(false)
         }
+
+        val sleep = Sleep(
+                fromDate = bedTime,
+                toDate = wakeUp)
+
+        return sleepRepository.getCurrentSingle()
+                .map {
+                    if (it.toDate?.toLocalDate() == wakeUp.toLocalDate()) {
+                        sleepRepository.delete(it)
+                    }
+                    sleepRepository.insert(sleep)
+                    true
+                }
     }
 
 }
