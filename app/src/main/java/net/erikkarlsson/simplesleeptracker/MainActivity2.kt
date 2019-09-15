@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.feature.details
+package net.erikkarlsson.simplesleeptracker
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,10 +7,10 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import net.erikkarlsson.simplesleeptracker.R
+import net.erikkarlsson.simplesleeptracker.users.UsersFragment
 import javax.inject.Inject
 
-class DetailActivity : BaseMvRxActivity(), HasSupportFragmentInjector {
+class MainActivity2 : BaseMvRxActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -22,11 +22,11 @@ class DetailActivity : BaseMvRxActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
-            val sleepId = DetailActivityArgs.fromBundle(intent.extras).sleepId
-
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container1, DetailFragment.newInstance(sleepId))
-                    .commitNow()
+                .replace(R.id.container1, UsersFragment())
+//                .replace(R.id.container1, UserProfileFragment.newInstance(1))
+                .commitNow()
         }
     }
+
 }

@@ -3,12 +3,12 @@ package net.erikkarlsson.simplesleeptracker
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.airbnb.mvrx.BaseMvRxActivity
 import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
 import io.fabric.sdk.android.Fabric
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 const val REQUEST_CODE_SIGN_IN = 1
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseMvRxActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

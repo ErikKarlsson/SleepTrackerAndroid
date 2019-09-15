@@ -65,7 +65,11 @@ class StatisticsTest {
 
         main.launchActivity(null)
 
-        mainRobot.clickStatisticsTab()
+        val diaryRobot = mainRobot.clickDiaryTab()
+        diaryRobot.clickItem(0) // When clicking newly added sleep item
+                .isShowingDetailsScreen() // Then should navigate to details screen
+
+//        mainRobot.clickStatisticsTab()
 
         Thread.sleep(99999999)
 

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AndroidBindingModule::class, AndroidInjectionModule::class,
-    AppModule::class, BackupModule::class, EventModule::class,
+    AppAssistedModule::class, AppModule::class, BackupModule::class, EventModule::class,
     NotificationModule::class, MockDateTimeModule::class, PreferencesModule::class,
     SignInModule::class, SleepModule::class, StatisticsModule::class, ViewModelModule::class, WidgetModule::class])
 interface TestComponent : AppComponent {

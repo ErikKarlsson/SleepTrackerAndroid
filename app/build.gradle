@@ -191,8 +191,10 @@ dependencies {
     implementation Deps.dagger_runtime
     implementation Deps.dagger_android
     implementation Deps.dagger_android_support
+    implementation Deps.dagger_assisted_injection_annotations
     kapt Deps.dagger_compiler
     kapt Deps.dagger_android_support_compiler
+    kapt Deps.dagger_assisted_injection_processor
 
     // Fast CSV
     implementation Deps.fast_csv
@@ -246,6 +248,9 @@ dependencies {
     // Multidex
     implementation Deps.multidex
     implementation Deps.multidex_instrumentation
+
+    // MvRx
+    implementation Deps.mvrx
 
     // Navigation
     implementation Deps.navigation_fragment
