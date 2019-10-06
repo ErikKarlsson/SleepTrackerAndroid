@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker
+package net.erikkarlsson.simplesleeptracker.base
 
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.BuildConfig

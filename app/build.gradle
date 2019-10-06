@@ -90,6 +90,11 @@ android {
         javacOptions {
             option("-Xmaxerrs", 500)
         }
+//        correctErrorTypes = true
+    }
+
+    dataBinding {
+        enabled = true
     }
 
     sourceSets {
@@ -195,6 +200,11 @@ dependencies {
     kapt Deps.dagger_compiler
     kapt Deps.dagger_android_support_compiler
     kapt Deps.dagger_assisted_injection_processor
+
+    // Epoxy
+    implementation Deps.epoxy
+    implementation Deps.epoxy_databinding
+    kapt Deps.epoxy_annotation_processor
 
     // Fast CSV
     implementation Deps.fast_csv

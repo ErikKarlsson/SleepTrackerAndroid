@@ -5,7 +5,7 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.android.parcel.Parcelize
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.base.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.feature.details.domain.DeleteSleepTask
@@ -18,7 +18,7 @@ import org.threeten.bp.LocalTime
 @Parcelize
 data class DetailsArgs(val userId: Int) : Parcelable
 
-data class DetailsStateV2(
+data class DetailsState(
         val sleepId: Int,
         val sleep: Async<Sleep> = Uninitialized,
         val isDeleted: Boolean = false
@@ -28,18 +28,18 @@ data class DetailsStateV2(
     val hoursSlept: Float get() = sleep.invoke()?.hours ?: 0f
 
     companion object {
-        fun empty() = DetailsStateV2(0, Uninitialized, false)
+        fun empty() = DetailsState(0, Uninitialized, false)
     }
 }
 
 class DetailsViewModel @AssistedInject constructor(
-        @Assisted state: DetailsStateV2,
+        @Assisted state: DetailsState,
         sleepRepository: SleepDataSource,
         private val updateStartDateTask: UpdateStartDateTask,
         private val updateTimeAsleepTask: UpdateTimeAsleepTask,
         private val updateTimeAwakeTask: UpdateTimeAwakeTask,
         private val deleteSleepTask: DeleteSleepTask
-) : MvRxViewModel<DetailsStateV2>(state) {
+) : MvRxViewModel<DetailsState>(state) {
 
     init {
         sleepRepository.getSleep(state.sleepId)
@@ -78,11 +78,11 @@ class DetailsViewModel @AssistedInject constructor(
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(state: DetailsStateV2): DetailsViewModel
+        fun create(state: DetailsState): DetailsViewModel
     }
 
-    companion object : MvRxViewModelFactory<DetailsViewModel, DetailsStateV2> {
-        override fun create(viewModelContext: ViewModelContext, state: DetailsStateV2): DetailsViewModel? {
+    companion object : MvRxViewModelFactory<DetailsViewModel, DetailsState> {
+        override fun create(viewModelContext: ViewModelContext, state: DetailsState): DetailsViewModel? {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<DetailFragment>()
             return fragment.viewModelFactory.create(state)
         }

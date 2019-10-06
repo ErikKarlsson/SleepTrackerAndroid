@@ -4,27 +4,18 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.fragmentViewModel
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.toolbar.*
-import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
-import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName2
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalTime
-import org.threeten.bp.OffsetDateTime
+import net.erikkarlsson.simplesleeptracker.base.BaseFragment
+import net.erikkarlsson.simplesleeptracker.base.simpleController
+import net.erikkarlsson.simplesleeptracker.dataBindingItem
 import javax.inject.Inject
 
-class DetailFragment : BaseMvRxFragment() {
+class DetailFragment : BaseFragment() {
 
-    private var _state = DetailsStateV2.empty()
+    private var _state = DetailsState.empty()
 
     private val disposables = CompositeDisposable()
 
@@ -36,6 +27,45 @@ class DetailFragment : BaseMvRxFragment() {
 
     private val viewModel: DetailsViewModel by fragmentViewModel()
 
+    override fun epoxyController() = simpleController(viewModel) { state ->
+
+        marquee {
+            id("marquee")
+            title("Dad Jokes")
+            subtitle("aasdasd")
+        }
+        marquee {
+            id("marquee")
+            title("Dad Jokes")
+            subtitle("eee")
+        }
+
+        dataBindingItem {
+            id("data binding")
+            text("this is a data binding model")
+            onVisibilityStateChanged { model, view, visibilityState ->
+                //                Log.d(TAG, "$model -> $visibilityState")
+            }
+        }
+
+        sampleKotlinModelWithHolder {
+            id("view holder")
+            title("Hello Holder")
+        }
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
+    /*
     override fun invalidate() = withState(viewModel) { state ->
         _state = state
         
@@ -59,15 +89,7 @@ class DetailFragment : BaseMvRxFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_details, container, false)
@@ -79,18 +101,6 @@ class DetailFragment : BaseMvRxFragment() {
 
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    companion object {
-        fun newInstance(sleepId: Int): DetailFragment =
-                DetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable(
-                                MvRx.KEY_ARG,
-                                DetailsArgs(sleepId)
-                        )
-                    }
-                }
     }
 
     private fun showConfirmDeleteDialog() {
@@ -198,6 +208,19 @@ class DetailFragment : BaseMvRxFragment() {
                 localTime.minute,
                 true)
         timePickerDialog?.show()
+    }
+     */
+
+    companion object {
+        fun newInstance(sleepId: Int): DetailFragment =
+                DetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(
+                                MvRx.KEY_ARG,
+                                DetailsArgs(sleepId)
+                        )
+                    }
+                }
     }
 
 }

@@ -4,7 +4,7 @@ import com.airbnb.mvrx.*
 import com.google.api.services.drive.model.User
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.base.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepository
 
 data class UsersState(val users: Async<List<User>> = Uninitialized) : MvRxState
