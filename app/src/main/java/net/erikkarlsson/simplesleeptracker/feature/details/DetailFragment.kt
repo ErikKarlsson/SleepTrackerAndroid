@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class DetailFragment : BaseMvRxFragment() {
 
-    private var _state = DetailsStateV2.empty()
+    private var _state = DetailsState.empty()
 
     private val disposables = CompositeDisposable()
 

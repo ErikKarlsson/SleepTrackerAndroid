@@ -49,10 +49,9 @@ abstract class AndroidBindingModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun bindDetailFragmentMvRxFragment(): DetailFragment
+    abstract fun bindDetailFragment(): DetailFragment
     
     @BroadcastRecieverScope
     @ContributesAndroidInjector
     abstract fun bindsAppWidgetProvider(): SleepAppWidgetProvider
-
 }

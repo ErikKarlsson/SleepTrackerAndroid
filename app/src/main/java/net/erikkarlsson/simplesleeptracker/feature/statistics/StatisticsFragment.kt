@@ -8,24 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
-import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import javax.inject.Inject
 
-class StatisticsFragment : Fragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+class StatisticsFragment : BaseMvRxFragment() {
 
     @Inject
     lateinit var ctx: Context
@@ -33,11 +28,12 @@ class StatisticsFragment : Fragment() {
     @Inject
     lateinit var dateTimeProvider: DateTimeProvider
 
+    @Inject
+    lateinit var viewModelFactory: StatisticsViewModel.Factory
+
     lateinit var statisticsAdapter: StatisticsAdapter
 
-    private val viewModel: StatisticsViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(StatisticsViewModel::class.java)
-    }
+    private val viewModel: StatisticsViewModel by fragmentViewModel()
 
     private val disposables = CompositeDisposable()
 
@@ -72,51 +68,47 @@ class StatisticsFragment : Fragment() {
         viewPager.adapter = statisticsAdapter
 
         slidingTabLayout.setViewPager(viewPager)
-
-        viewModel.state().observe(this, Observer { render(it) })
     }
 
-    private fun render(state: StatisticsState?) {
-        state?.let {
-            val hasFilterChanged = it.filter != prevState.filter
+    override fun invalidate() = withState(viewModel) { state ->
+        val hasFilterChanged = state.filter != prevState.filter
 
-            val selectedItem = if (hasFilterChanged) {
-                it.dateRanges.size - 1
-            } else {
-                viewPager.currentItem
-            }
-
-            val adapterData = when (it.shouldShowEmptyState) {
-                true -> StatisticsItemData.emptyState()
-                false -> StatisticsItemData(it.dateRanges, it.filter)
-            }
-
-            statisticsAdapter.data = adapterData
-            statisticsAdapter.notifyDataSetChanged()
-
-            viewPager.setCurrentItem(selectedItem, false)
-            viewPager.invalidate()
-
-            slidingTabLayout.setViewPager(viewPager)
-            slidingTabLayout.isVisible = it.shouldShowTabs
-
-            emptyGroup.isVisible = it.shouldShowEmptyState
-            spinner.isEnabled = !it.shouldShowEmptyState
-
-            spinner.setSelection(it.filterOrdinal)
-
-            compareSpinner.isVisible = it.shouldShowCompareFilter
-            compareSpinner.setSelection(it.compareFilterOrdinal)
-
-            // TODO (erikkarlsson): Hack to fix scroll not working.
-            Handler().postDelayed({
-                if (isAdded) {
-                    slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
-                }
-            }, 100)
-
-            prevState = it
+        val selectedItem = if (hasFilterChanged) {
+            state.dateRanges.size - 1
+        } else {
+            viewPager.currentItem
         }
+
+        val adapterData = when (state.shouldShowEmptyState) {
+            true -> StatisticsItemData.emptyState()
+            false -> StatisticsItemData(state.dateRanges, state.filter)
+        }
+
+        statisticsAdapter.data = adapterData
+        statisticsAdapter.notifyDataSetChanged()
+
+        viewPager.setCurrentItem(selectedItem, false)
+        viewPager.invalidate()
+
+        slidingTabLayout.setViewPager(viewPager)
+        slidingTabLayout.isVisible = state.shouldShowTabs
+
+        emptyGroup.isVisible = state.shouldShowEmptyState
+        spinner.isEnabled = !state.shouldShowEmptyState
+
+        spinner.setSelection(state.filterOrdinal)
+
+        compareSpinner.isVisible = state.shouldShowCompareFilter
+        compareSpinner.setSelection(state.compareFilterOrdinal)
+
+        // TODO (erikkarlsson): Hack to fix scroll not working.
+        Handler().postDelayed({
+            if (isAdded) {
+                slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
+            }
+        }, 100)
+
+        prevState = state
     }
 
     override fun onStart() {
@@ -142,7 +134,7 @@ class StatisticsFragment : Fragment() {
         }
         spinner.setTag(index)
         val statisticsFilter = StatisticsFilter.values()[index]
-        viewModel.dispatch(StatisticsFilterSelected(statisticsFilter))
+        viewModel.statisticsFilterSelected(statisticsFilter)
     }
 
     private fun onCompareSelected(index: Int) {
@@ -151,9 +143,6 @@ class StatisticsFragment : Fragment() {
         }
         compareSpinner.setTag(index)
         val compareFilter = CompareFilter.values()[index]
-        viewModel.dispatch(CompareFilterSelected(compareFilter))
+        viewModel.compareFilterSelected(compareFilter)
     }
 }
-
-class StatisticsViewModel @Inject constructor(statisticsComponent: StatisticsComponent) :
-        ElmViewModel<StatisticsState, StatisticsMsg, StatisticsCmd>(statisticsComponent)

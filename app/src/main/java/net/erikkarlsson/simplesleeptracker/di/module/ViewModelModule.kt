@@ -24,11 +24,6 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(StatisticsViewModel::class)
-    abstract fun bindStatisticsViewModel(statisticsViewModel: StatisticsViewModel): ViewModel
-
-    @Binds
-    @IntoMap
     @ViewModelKey(StatisticsItemViewModel::class)
     abstract fun bindStatisticsItemViewModel(statisticsItemViewModel: StatisticsItemViewModel): ViewModel
 
