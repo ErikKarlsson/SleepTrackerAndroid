@@ -126,9 +126,7 @@ class StatisticsItemFragment : BaseMvRxFragment() {
 
     private fun renderEmptyState() {
         val statisticComparison = StatisticComparison.demo()
-        val filter = StatisticsFilter.OVERALL
-        val dateRangePair = DateRange.empty() to DateRange.empty()
-        val statisticsItemState = StatisticsItemState(Success(statisticComparison), filter, dateRangePair)
+        val statisticsItemState = StatisticsItemState(Success(statisticComparison))
 
         sleepDurationLabel.text = String.format("%s [%s]", getString(R.string.sleep_duration), getString(R.string.demo))
         longestNightLabel.text = String.format("%s [%s]", getString(R.string.longest_night), getString(R.string.demo))
