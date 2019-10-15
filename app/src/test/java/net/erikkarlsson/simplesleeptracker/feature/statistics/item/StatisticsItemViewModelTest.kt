@@ -1,24 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.feature.statistics.item
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.inOrder
-import com.nhaarman.mockito_kotlin.mock
-import io.reactivex.Observable
-import net.erikkarlsson.simplesleeptracker.base.mockStatistics
-import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
-import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
-import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
-import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFilter
-import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticComparisonTask
-import net.erikkarlsson.simplesleeptracker.feature.statistics.domain.StatisticOverallTask
-import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
-import org.junit.Rule
-import org.junit.Test
-import org.threeten.bp.LocalDate
-
+/*
 class StatisticsItemViewModelTest {
 
     @get:Rule
@@ -93,3 +75,4 @@ class StatisticsItemViewModelTest {
     }
 
 }
+*/

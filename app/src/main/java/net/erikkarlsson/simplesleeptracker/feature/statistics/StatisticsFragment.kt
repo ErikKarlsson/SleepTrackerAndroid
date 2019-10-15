@@ -39,7 +39,7 @@ class StatisticsFragment : BaseMvRxFragment() {
 
     private var prevState: StatisticsState = StatisticsState.empty()
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

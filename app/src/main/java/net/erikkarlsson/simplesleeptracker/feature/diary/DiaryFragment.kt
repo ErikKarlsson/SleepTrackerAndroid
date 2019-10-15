@@ -56,7 +56,7 @@ class DiaryFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory).get(DiaryViewModel::class.java)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

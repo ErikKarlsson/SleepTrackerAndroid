@@ -17,7 +17,7 @@ class UsersFragment : BaseMvRxFragment() {
     lateinit var viewModelFactory: UsersViewModel.Factory
     private val viewModel: UsersViewModel by fragmentViewModel()
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

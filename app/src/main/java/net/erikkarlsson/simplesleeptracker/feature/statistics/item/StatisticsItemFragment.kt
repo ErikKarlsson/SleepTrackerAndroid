@@ -8,19 +8,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_statistics_item.*
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
-import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.feature.statistics.DateRangePair
 import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.feature.statistics.chart.AverageTimeChartRenderer
@@ -33,10 +32,7 @@ import javax.inject.Inject
 
 data class ChartExtra(val displayValue: Boolean)
 
-class StatisticsItemFragment : Fragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+class StatisticsItemFragment : BaseMvRxFragment() {
 
     @Inject
     lateinit var sleepDurationChartRenderer: SleepDurationChartRenderer
@@ -47,35 +43,14 @@ class StatisticsItemFragment : Fragment() {
     @Inject
     lateinit var ctx: Context
 
-    companion object {
-        private const val ARGS_DATE_RANGE_FIRST = "args_date_range_first"
-        private const val ARGS_DATE_RANGE_SECOND = "args_date_range_second"
-        private const val ARGS_STATISTICS_FILTER = "args_statistics_filter"
-        private const val ARGS_IS_EMPTY_STATE = "args_is_empty_state"
+    @Inject
+    lateinit var viewModelFactory: StatisticsItemViewModel.Factory
 
-        fun newInstance(dataRangePair: DateRangePair,
-                        filter: StatisticsFilter,
-                        isEmptyState: Boolean = false): StatisticsItemFragment {
-            val args = Bundle()
-            args.putParcelable(ARGS_DATE_RANGE_FIRST, dataRangePair.first)
-            args.putParcelable(ARGS_DATE_RANGE_SECOND, dataRangePair.second)
-            args.putSerializable(ARGS_STATISTICS_FILTER, filter)
-            args.putBoolean(ARGS_IS_EMPTY_STATE, isEmptyState)
-
-            val fragment = StatisticsItemFragment()
-            fragment.arguments = args
-
-            return fragment
-        }
-    }
-
-    private val viewModel: StatisticsItemViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(StatisticsItemViewModel::class.java)
-    }
+    private val viewModel: StatisticsItemViewModel by fragmentViewModel()
 
     private val disposables = CompositeDisposable()
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -101,15 +76,47 @@ class StatisticsItemFragment : Fragment() {
         }
     }
 
+    override fun invalidate() = withState(viewModel) { state ->
+        render(state)
+    }
+
+    private fun render(state: StatisticsItemState) {
+        when {
+            state.isStatisticsEmpty -> {
+                trackedNightsText.text = "0"
+                avgDurationText.text = "-"
+                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, StatisticComparison.empty())
+            }
+            state.statistics.complete -> {
+                val statistics = state.statistics.invoke() ?: return
+
+                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, statistics)
+
+                with(statistics.first) {
+                    if (!isEmpty) {
+                        trackedNightsText.text = sleepCount.toString()
+                        avgDurationText.text = avgSleepHours.formatHoursMinutesSpannable
+
+                        renderAvgTimeDiff(avgDurationDiffText, statistics.avgSleepDiffHours)
+                        renderLongestNight(longestSleep)
+                        renderShortestNight(shortestSleep, longestSleep)
+                        renderAvgTimeDiff(avgBedDiffText, statistics.avgBedTimeDiffHours)
+                        renderAvgTimeDiff(avgWakeUpDiffText, statistics.avgWakeUpTimeDiffHours)
+                        renderAverageBedTime(statistics)
+                        renderAverageWakeUpTime(statistics)
+                    }
+                }
+            }
+        }
+    }
+
     private fun loadStatistics() {
         val dateRangeFirst = arguments?.getParcelable(ARGS_DATE_RANGE_FIRST) as DateRange
         val dateRangeSecond = arguments?.getParcelable(ARGS_DATE_RANGE_SECOND) as DateRange
         val pair = Pair(dateRangeFirst, dateRangeSecond)
         val filter = arguments?.getSerializable(ARGS_STATISTICS_FILTER) as StatisticsFilter
-        val loadStatistics = LoadStatistics(pair, filter)
 
-        viewModel.dispatch(loadStatistics)
-        viewModel.state().observe(this, Observer { render(it) })
+        viewModel.loadStatistics(pair, filter)
     }
 
     override fun onStop() {
@@ -121,7 +128,7 @@ class StatisticsItemFragment : Fragment() {
         val statisticComparison = StatisticComparison.demo()
         val filter = StatisticsFilter.OVERALL
         val dateRangePair = DateRange.empty() to DateRange.empty()
-        val statisticsItemState = StatisticsItemState(false, statisticComparison, filter, dateRangePair)
+        val statisticsItemState = StatisticsItemState(Success(statisticComparison), filter, dateRangePair)
 
         sleepDurationLabel.text = String.format("%s [%s]", getString(R.string.sleep_duration), getString(R.string.demo))
         longestNightLabel.text = String.format("%s [%s]", getString(R.string.longest_night), getString(R.string.demo))
@@ -130,37 +137,6 @@ class StatisticsItemFragment : Fragment() {
         averageWakeUpTimeLabel.text = String.format("%s [%s]", getString(R.string.average_wake_up_time), getString(R.string.demo))
 
         render(statisticsItemState)
-    }
-
-    private fun render(state: StatisticsItemState?) {
-        state?.let {
-            if (state.isLoading) {
-                return
-            }
-
-            if (state.isStatisticsEmpty) {
-                trackedNightsText.text = "0"
-                avgDurationText.text = "-"
-                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, StatisticComparison.empty())
-            } else {
-                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, state.statistics)
-
-                with(state.statistics.first) {
-                    if (!isEmpty) {
-                        trackedNightsText.text = sleepCount.toString()
-                        avgDurationText.text = avgSleepHours.formatHoursMinutesSpannable
-
-                        renderAvgTimeDiff(avgDurationDiffText, state.statistics.avgSleepDiffHours)
-                        renderLongestNight(longestSleep)
-                        renderShortestNight(shortestSleep, longestSleep)
-                        renderAvgTimeDiff(avgBedDiffText, state.statistics.avgBedTimeDiffHours)
-                        renderAvgTimeDiff(avgWakeUpDiffText, state.statistics.avgWakeUpTimeDiffHours)
-                        renderAverageBedTime(state.statistics)
-                        renderAverageWakeUpTime(state.statistics)
-                    }
-                }
-            }
-        }
     }
 
     private fun renderAvgTimeDiff(avgTimeText: TextView,
@@ -220,7 +196,26 @@ class StatisticsItemFragment : Fragment() {
 
         shortestNightBar.progress = ((value / maxValue) * 100).toInt()
     }
-}
 
-class StatisticsItemViewModel @Inject constructor(statisticsItemComponent: StatisticsItemComponent) :
-        ElmViewModel<StatisticsItemState, StatisticsItemMsg, StatisticsItemCmd>(statisticsItemComponent)
+    companion object {
+        private const val ARGS_DATE_RANGE_FIRST = "args_date_range_first"
+        private const val ARGS_DATE_RANGE_SECOND = "args_date_range_second"
+        private const val ARGS_STATISTICS_FILTER = "args_statistics_filter"
+        private const val ARGS_IS_EMPTY_STATE = "args_is_empty_state"
+
+        fun newInstance(dataRangePair: DateRangePair,
+                        filter: StatisticsFilter,
+                        isEmptyState: Boolean = false): StatisticsItemFragment {
+            val args = Bundle()
+            args.putParcelable(ARGS_DATE_RANGE_FIRST, dataRangePair.first)
+            args.putParcelable(ARGS_DATE_RANGE_SECOND, dataRangePair.second)
+            args.putSerializable(ARGS_STATISTICS_FILTER, filter)
+            args.putBoolean(ARGS_IS_EMPTY_STATE, isEmptyState)
+
+            val fragment = StatisticsItemFragment()
+            fragment.arguments = args
+
+            return fragment
+        }
+    }
+}

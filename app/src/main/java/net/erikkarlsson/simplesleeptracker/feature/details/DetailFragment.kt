@@ -64,7 +64,7 @@ class DetailFragment : BaseMvRxFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -112,12 +112,12 @@ class DetailFragment : BaseMvRxFragment() {
         viewModel.deleteClick()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.detail_menu, menu)
+        inflater.inflate(R.menu.detail_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item?.itemId == R.id.delete_sleep) {
             showConfirmDeleteDialog()
             return true
