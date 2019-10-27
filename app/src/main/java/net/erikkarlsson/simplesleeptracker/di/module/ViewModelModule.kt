@@ -9,7 +9,6 @@ import net.erikkarlsson.simplesleeptracker.MainViewModel
 import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.di.ViewModelKey
 import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepViewModel
-import net.erikkarlsson.simplesleeptracker.feature.home.HomeViewModel
 
 @Module
 abstract class ViewModelModule {
@@ -23,11 +22,6 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AddSleepViewModel::class)
     abstract fun bindAddSleepViewModel(addSleepViewModel: AddSleepViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(HomeViewModel::class)
-    abstract fun bindHomeViewModel(homeViewModel: HomeViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

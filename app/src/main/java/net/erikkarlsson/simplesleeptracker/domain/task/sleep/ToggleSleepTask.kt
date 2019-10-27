@@ -1,6 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.domain.task.sleep
 
 import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
@@ -31,6 +32,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
             sleepRepository.getCurrentSingle()
                     .map(::toggleSleep)
                     .flatMapCompletable(::backupSleep)
+                    .subscribeOn(Schedulers.io())
 
     private fun toggleSleep(currentSleep: Sleep): Boolean =
             if (currentSleep.isSleeping) {

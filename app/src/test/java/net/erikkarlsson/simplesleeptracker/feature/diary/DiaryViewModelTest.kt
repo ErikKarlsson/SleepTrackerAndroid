@@ -11,7 +11,7 @@ import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
-import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetSleepDiaryTask
+import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +28,7 @@ class DiaryViewModelTest {
     val statisticsRepository: StatisticsRepository = mock()
     val observer: Observer<DiaryState> = mock()
     val sleepPaged: PagedList<Sleep> = mock()
-    val getSleepDiaryTask = GetSleepDiaryTask(sleepRepository, statisticsRepository)
+    val getSleepDiaryTask = GetHomeTask(sleepRepository, statisticsRepository)
 
     @Test
     fun `load sleep shows sleep in view`() {

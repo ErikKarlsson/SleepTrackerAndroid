@@ -1,4 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.feature.home
+/*
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -65,9 +66,11 @@ class HomeViewModelTest {
         return HomeViewModel(homeComponent)
     }
 
-    /**
+    */
+/**
      * See [ToggleSleepTaskTest] for extensive coverage of toggle cases.
-     */
+     *//*
+
     @Test
     fun `clicking toggle sleep button toggles sleep`() {
         given(this.sleepDataSource.getSleep()).willReturn(Observable.just(ImmutableList.of()))
@@ -84,3 +87,4 @@ class HomeViewModelTest {
     }
 
 }
+*/

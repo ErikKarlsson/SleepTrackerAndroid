@@ -12,9 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -28,15 +28,14 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.logged_in_content.*
 import kotlinx.android.synthetic.main.logged_out_content.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.REQUEST_CODE_SIGN_IN
 import net.erikkarlsson.simplesleeptracker.base.EventObserver
-import net.erikkarlsson.simplesleeptracker.di.ViewModelFactory
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
-import net.erikkarlsson.simplesleeptracker.elm.ElmViewModel
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes2
@@ -45,10 +44,10 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseMvRxFragment() {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModelFactory: HomeViewModel.Factory
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
@@ -61,9 +60,7 @@ class HomeFragment : Fragment() {
 
     private val disposables = CompositeDisposable()
 
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
-    }
+    private val viewModel: HomeViewModel by fragmentViewModel()
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -76,8 +73,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.state().observe(this, Observer(::render))
 
         homeEvents.observe(this, EventObserver {
             when (it) {
@@ -98,12 +93,18 @@ class HomeFragment : Fragment() {
 
         signInButton.clicksThrottle(disposables) { signIn() }
         signOutButton.clicksThrottle(disposables) { signOut() }
-        widgetBubble.clicksThrottle(disposables) { viewModel.dispatch(BubbleClick) }
+        widgetBubble.clicksThrottle(disposables) { viewModel.onBubbleClick() }
 
         Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
-                .subscribe({ viewModel.dispatch(ToggleSleepClicked) },
-                        { Timber.e(it, "Error merging clicks") })
+                .subscribeBy(
+                        onNext = { viewModel.onToggleSleepClick() },
+                        onError = { Timber.e(it, "Error merging clicks") }
+                )
                 .addTo(disposables)
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        render(state)
     }
 
     @SuppressLint("NewApi")
@@ -111,8 +112,8 @@ class HomeFragment : Fragment() {
         val appWidgetManager = AppWidgetManager.getInstance(requireContext())
         val myProvider = ComponentName(requireContext(), SleepAppWidgetProvider::class.java)
 
-        if (appWidgetManager.isRequestPinAppWidgetSupported()) {
-            appWidgetManager.requestPinAppWidget(myProvider, null, null);
+        if (appWidgetManager.isRequestPinAppWidgetSupported) {
+            appWidgetManager.requestPinAppWidget(myProvider, null, null)
         }
     }
 
@@ -123,8 +124,7 @@ class HomeFragment : Fragment() {
 
         builder.setMessage(getText(R.string.add_widget_instructions))
 
-        builder.setPositiveButton("OK") { dialog, which ->
-        }
+        builder.setPositiveButton("OK") { _, _ -> }
 
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -132,7 +132,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.dispatch(LoadWidgetStatus)
+        viewModel.loadWidgetStatus()
     }
 
     override fun onStop() {
@@ -146,28 +146,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun signIn() {
-        val signInIntent = googleSignInClient.getSignInIntent()
+        val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
     }
 
     private fun signOut() {
         googleSignInClient.signOut()
                 .addOnCompleteListener(activity as Activity) {
-                    viewModel.dispatch(SignOutComplete)
+                    viewModel.onSignOutComplete()
                 }
     }
 
-    private fun render(state: HomeState?) {
-        state?.let {
-            if (it.isLoading) {
-                return
-            }
-            renderOwl(it.isSleeping)
-            renderLogin(it.isLoggedIn)
-            renderUserAccount(it.userAccount)
-            renderBackup(it.lastBackupTimestamp)
-            renderWidgetBubble(it.bubbleState, it.sleepDuration)
+    private fun render(state: HomeState) {
+        if (state.isLoading) {
+            return
         }
+        renderOwl(state.isSleeping)
+        renderLogin(state.isLoggedIn)
+        renderUserAccount(state.userAccount)
+        renderBackup(state.lastBackupTimestamp)
+        renderWidgetBubble(state.bubbleState, state.sleepDuration)
     }
 
     private fun renderWidgetBubble(bubbleState: BubbleState, sleepDuration: Float) {
@@ -262,30 +260,26 @@ class HomeFragment : Fragment() {
 
     private fun onSignInSuccess(account: GoogleSignInAccount) {
         val userAccount = toUserAccount(account)
-        viewModel.dispatch(SignInSuccess(userAccount))
+        viewModel.onSignInSuccess(userAccount)
     }
 
     private fun onSignInRestored(account: GoogleSignInAccount) {
         val userAccount = toUserAccount(account)
-        viewModel.dispatch(SignInRestored(userAccount))
+        viewModel.onSignInRestored(userAccount)
     }
 
     private fun toUserAccount(account: GoogleSignInAccount): UserAccount {
         val email = account.email ?: ""
         val displayName = account.displayName ?: ""
         val photoUrl = account.photoUrl?.toString() ?: ""
-        val userAccount = UserAccount(email, displayName, photoUrl)
-        return userAccount
+        return UserAccount(email, displayName, photoUrl)
     }
 
     private fun onSignInCancelled() {
-        viewModel.dispatch(SignInCancelled)
+        viewModel.onSignInFailed()
     }
 
     private fun onSignInFailed() {
-        viewModel.dispatch(SignInFailed)
+        viewModel.onSignInFailed()
     }
 }
-
-class HomeViewModel @Inject constructor(homeComponent: HomeComponent) :
-        ElmViewModel<HomeState, HomeMsg, HomeCmd>(homeComponent)
