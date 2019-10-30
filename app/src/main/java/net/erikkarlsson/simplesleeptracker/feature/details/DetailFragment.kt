@@ -81,18 +81,6 @@ class DetailFragment : BaseMvRxFragment() {
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    companion object {
-        fun newInstance(sleepId: Int): DetailFragment =
-                DetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable(
-                                MvRx.KEY_ARG,
-                                DetailsArgs(sleepId)
-                        )
-                    }
-                }
-    }
-
     private fun showConfirmDeleteDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(getString(R.string.confirm_delete_sleep))
@@ -118,7 +106,7 @@ class DetailFragment : BaseMvRxFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item?.itemId == R.id.delete_sleep) {
+        if (item.itemId == R.id.delete_sleep) {
             showConfirmDeleteDialog()
             return true
         }
@@ -198,6 +186,18 @@ class DetailFragment : BaseMvRxFragment() {
                 localTime.minute,
                 true)
         timePickerDialog?.show()
+    }
+
+    companion object {
+        fun newInstance(sleepId: Int): DetailFragment =
+                DetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(
+                                MvRx.KEY_ARG,
+                                DetailsArgs(sleepId)
+                        )
+                    }
+                }
     }
 
 }
