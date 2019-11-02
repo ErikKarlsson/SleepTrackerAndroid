@@ -10,14 +10,11 @@ import javax.inject.Inject
 class SleepAppWidgetProvider : AppWidgetProvider() {
 
     @Inject
-    lateinit var sleepAppWidgetViewModel: SleepAppWidgetViewModel
-
-    @Inject
-    lateinit var context: Context
+    lateinit var sleepAppWidgetController: SleepAppWidgetController
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         AndroidInjection.inject(this, context)
-        sleepAppWidgetViewModel.dispatch(WidgetOnUpdate)
+        sleepAppWidgetController.onWidgetUpdate()
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -25,7 +22,7 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         if (ACTION_SIMPLEAPPWIDGET_TOGGLE == intent.action) {
-            sleepAppWidgetViewModel.dispatch(ToggleSleepClicked)
+            sleepAppWidgetController.onToggleSleepClick()
         }
     }
 }

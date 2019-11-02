@@ -21,8 +21,6 @@ import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
-import net.erikkarlsson.simplesleeptracker.elm.LogLevel
-import net.erikkarlsson.simplesleeptracker.elm.RuntimeFactory
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
 import timber.log.Timber
 import javax.inject.Inject
@@ -73,9 +71,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
             Timber.plant(CrashReportingTree())
         }
 
-        RuntimeFactory.defaultLogLevel = if (BuildConfig.DEBUG) LogLevel.FULL else LogLevel.NONE
-
-        sleepWidgetView.init()
+        sleepWidgetView.update()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
