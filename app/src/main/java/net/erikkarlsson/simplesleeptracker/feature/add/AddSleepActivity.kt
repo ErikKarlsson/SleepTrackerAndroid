@@ -1,8 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.feature.add
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.BaseMvRxActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -10,7 +10,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import net.erikkarlsson.simplesleeptracker.R
 import javax.inject.Inject
 
-class AddSleepActivity : BaseMvRxActivity(), HasSupportFragmentInjector {
+class AddSleepActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>

@@ -41,7 +41,7 @@ object Versions {
     val mpandroidchart = "v3.0.3"
     val multidex = "2.0.1"
     val multidex_instrumentation = "2.0.0"
-    val mvrx = "1.2.0"
+    val mvrx = "1.3.0"
     val navigation = "1.0.0-alpha09"
     val navigation_testing = "1.0.0-alpha08"
     val okhttp_logging_interceptor = "3.9.0"
