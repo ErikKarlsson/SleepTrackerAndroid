@@ -1,7 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.feature.home
-/*
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.google.common.collect.ImmutableList
 import com.nhaarman.mockito_kotlin.any
@@ -18,7 +16,7 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
-import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleRestoreBackupTask
+import net.erikkarlsson.simplesleeptracker.feature.home.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.feature.home.domain.LogoutTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
@@ -28,9 +26,6 @@ class HomeViewModelTest {
 
     @get:Rule
     var testSchedulerRule = RxImmediateSchedulerRule()
-
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     val sleepDataSource: SleepDataSource = mock()
 
@@ -51,25 +46,21 @@ class HomeViewModelTest {
     val sleepEvents: Subject<SleepEvent> = PublishSubject.create()
 
     val scheduleBackupTask = ScheduleBackupTask(taskScheduler)
-    val scheduleRestoreBackupTask = ScheduleRestoreBackupTask(taskScheduler)
+    val getHomeTask = GetHomeTask(fileBackupDataSource, sleepDataSource)
     val logoutTask = LogoutTask(this.sleepDataSource, preferencesDataSource)
     val toggleSleepTask = ToggleSleepTask(this.sleepDataSource, dateTimeProvider,
             scheduleBackupTask, appLifecycle, notifications, sleepEvents)
 
-    val homeSubscription = HomeSubscription(fileBackupDataSource, sleepDataSource)
-    val eventSubscription = EventSubscription(sleepEvents)
     val homeEvents: HomeEvents = MutableLiveData()
 
     fun createViewModel(): HomeViewModel {
-        val homeComponent = HomeComponent(toggleSleepTask, scheduleRestoreBackupTask,
-                logoutTask, homeSubscription, eventSubscription, widgetDataSource, homeEvents)
-        return HomeViewModel(homeComponent)
+        return HomeViewModel(HomeState(), getHomeTask, toggleSleepTask, logoutTask,
+                widgetDataSource, sleepEvents, taskScheduler, homeEvents)
     }
 
-    */
-/**
+    /**
      * See [ToggleSleepTaskTest] for extensive coverage of toggle cases.
-     *//*
+     */
 
     @Test
     fun `clicking toggle sleep button toggles sleep`() {
@@ -81,10 +72,9 @@ class HomeViewModelTest {
 
         val viewModel = createViewModel()
 
-        viewModel.dispatch(ToggleSleepClicked)
+        viewModel.onToggleSleepClick()
 
         verify(this.sleepDataSource).insert(any())
     }
 
 }
-*/
