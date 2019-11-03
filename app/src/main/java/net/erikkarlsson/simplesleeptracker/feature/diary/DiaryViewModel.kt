@@ -1,18 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.feature.diary
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import net.erikkarlsson.simplesleeptracker.MvRxViewModel
-import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.feature.diary.domain.GetSleepDiaryTask
-
-
-data class DiaryState(val sleepDiary: Async<SleepDiary> = Uninitialized) : MvRxState {
-
-    val isItemsFound = sleepDiary is Success && sleepDiary.invoke().pagedSleep.size > 0
-}
 
 class DiaryViewModel @AssistedInject constructor(
         @Assisted val initialState: DiaryState,
