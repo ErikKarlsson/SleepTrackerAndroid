@@ -14,7 +14,7 @@ class StatisticOverallTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSource)
     : ObservableTask<StatisticComparison, ObservableTask.None> {
 
-    override fun execute(params: ObservableTask.None): Observable<StatisticComparison> {
+    override fun observable(params: ObservableTask.None): Observable<StatisticComparison> {
         return statisticsRepository.getStatistics()
                 .map { StatisticComparison(it, Statistics.empty()) }
     }

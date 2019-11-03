@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetSleepDetailsTask @Inject constructor(private val sleepRepository: SleepDataSource)
     : ObservableTask<Sleep, GetSleepDetailsTask.Params> {
 
-    override fun execute(params: Params): Observable<Sleep> =
+    override fun observable(params: Params): Observable<Sleep> =
         sleepRepository.getSleep(params.sleepId)
 
     data class Params(val sleepId: Int)

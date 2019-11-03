@@ -17,7 +17,7 @@ class UsersViewModel @AssistedInject constructor(
     fun fetchUser() {
 //        usersService
 //            .users()
-//            .execute {
+//            .completable {
 //                copy(users = it)
 //            }
     }

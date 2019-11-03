@@ -19,7 +19,7 @@ class RestoreSleepBackupTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
         private val fileBackupRepository: FileBackupDataSource) : CompletableTask<None> {
 
-    override fun execute(params: None): Completable =
+    override fun completable(params: None): Completable =
             sleepRepository.getCount()
                     .take(1)
                     .filter { it == 0 }

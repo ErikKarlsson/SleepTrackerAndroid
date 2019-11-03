@@ -20,7 +20,7 @@ class DiaryViewModel @AssistedInject constructor(
     : MvRxViewModel<DiaryState>(initialState) {
 
     init {
-        getSleepDiaryTask.execute(ObservableTask.None())
+        getSleepDiaryTask.observable(ObservableTask.None())
                 .execute {
                     copy(sleepDiary = it)
                 }

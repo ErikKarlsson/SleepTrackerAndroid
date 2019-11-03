@@ -13,12 +13,12 @@ class UpdateStartDateTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
         private val scheduleBackupTask: ScheduleBackupTask) : CompletableTask<UpdateStartDateTask.Params> {
 
-    override fun execute(params: Params): Completable =
+    override fun completable(params: Params): Completable =
             sleepRepository.getSleep(params.sleepId)
                     .take(1)
                     .map { updateStartDate(it, params.startDate)}
                     .ignoreElements()
-                    .andThen(scheduleBackupTask.execute(CompletableTask.None()))
+                    .andThen(scheduleBackupTask.completable(CompletableTask.None()))
 
     private fun updateStartDate(sleep: Sleep, startDate: LocalDate) {
         val updatedSleep = sleep.shiftStartDate(startDate)

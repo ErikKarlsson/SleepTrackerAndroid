@@ -12,12 +12,12 @@ class DeleteSleepTask @Inject constructor(
         private val scheduleBackupTask: ScheduleBackupTask)
     : CompletableTask<DeleteSleepTask.Params> {
 
-    override fun execute(params: Params): Completable =
+    override fun completable(params: Params): Completable =
             sleepRepository.getSleep(params.sleepId)
                     .take(1)
                     .map { deleteSleep(it)}
                     .ignoreElements()
-                    .andThen(scheduleBackupTask.execute(CompletableTask.None()))
+                    .andThen(scheduleBackupTask.completable(CompletableTask.None()))
 
     private fun deleteSleep(sleep: Sleep) {
         sleepRepository.delete(sleep)

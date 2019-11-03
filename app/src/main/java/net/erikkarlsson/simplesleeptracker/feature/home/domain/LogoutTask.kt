@@ -10,7 +10,7 @@ import javax.inject.Inject
 class LogoutTask @Inject constructor(private val sleepRepository: SleepDataSource,
                                      private val preferencesDataSource: PreferencesDataSource)
     : CompletableTask<CompletableTask.None> {
-    override fun execute(params: CompletableTask.None): Completable {
+    override fun completable(params: CompletableTask.None): Completable {
         return Completable.fromCallable {
             preferencesDataSource.clear()
             sleepRepository.deleteAll()

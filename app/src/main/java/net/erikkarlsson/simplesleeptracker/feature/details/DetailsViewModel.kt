@@ -50,28 +50,28 @@ class DetailsViewModel @AssistedInject constructor(
 
     fun deleteClick() {
         withState {
-            deleteSleepTask.execute(DeleteSleepTask.Params(it.sleepId))
+            deleteSleepTask.completable(DeleteSleepTask.Params(it.sleepId))
                     .execute { copy(isDeleted = true) }
         }
     }
 
     fun pickedStartDate(startDate: LocalDate) {
         withState {
-            updateStartDateTask.execute(UpdateStartDateTask.Params(it.sleepId, startDate))
+            updateStartDateTask.completable(UpdateStartDateTask.Params(it.sleepId, startDate))
                     .execute { copy() }
         }
     }
 
     fun pickedTimeAsleep(timeAsleep: LocalTime) {
         withState {
-            updateTimeAsleepTask.execute(UpdateTimeAsleepTask.Params(it.sleepId, timeAsleep))
+            updateTimeAsleepTask.completable(UpdateTimeAsleepTask.Params(it.sleepId, timeAsleep))
                     .execute { copy() }
         }
     }
 
     fun pickedTimeAwake(timeAwake: LocalTime) {
         withState {
-            updateTimeAwakeTask.execute(UpdateTimeAwakeTask.Params(it.sleepId, timeAwake))
+            updateTimeAwakeTask.completable(UpdateTimeAwakeTask.Params(it.sleepId, timeAwake))
                     .execute { copy() }
         }
     }

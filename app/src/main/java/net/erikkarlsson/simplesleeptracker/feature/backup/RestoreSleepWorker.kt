@@ -20,7 +20,7 @@ class RestoreSleepWorker constructor(context : Context, params : WorkerParameter
         // TODO (erikkarlsson): Replace with Dagger Android inject when supported.
         (applicationContext as App).appComponent.inject(this)
 
-        val throwable = restoreSleepBackupTask.execute(CompletableTask.None())
+        val throwable = restoreSleepBackupTask.completable(CompletableTask.None())
                 .blockingGet()
 
         return if (throwable == null) {

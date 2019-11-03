@@ -12,12 +12,12 @@ class UpdateTimeAwakeTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
         private val scheduleBackupTask: ScheduleBackupTask) : CompletableTask<UpdateTimeAwakeTask.Params> {
 
-    override fun execute(params: Params): Completable =
+    override fun completable(params: Params): Completable =
             sleepRepository.getSleep(params.sleepId)
                     .take(1)
                     .map { updateTimeAwake(it, params.timeAwake) }
                     .ignoreElements()
-                    .andThen(scheduleBackupTask.execute(CompletableTask.None()))
+                    .andThen(scheduleBackupTask.completable(CompletableTask.None()))
 
     private fun updateTimeAwake(sleep: Sleep, timeAwake: LocalTime) {
         val fromDate = sleep.fromDate

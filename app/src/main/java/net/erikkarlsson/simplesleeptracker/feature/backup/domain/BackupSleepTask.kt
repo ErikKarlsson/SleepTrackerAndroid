@@ -17,7 +17,7 @@ class BackupSleepTask @Inject constructor(
         private val backupCsvFileWriter: BackupCsvFileWriter,
         private val fileBackupRepository: FileBackupDataSource) : CompletableTask<None> {
 
-    override fun execute(params: None): Completable =
+    override fun completable(params: None): Completable =
             sleepRepository.getSleep()
                     .first(ImmutableList.of())
                     .map(backupCsvFileWriter::write)

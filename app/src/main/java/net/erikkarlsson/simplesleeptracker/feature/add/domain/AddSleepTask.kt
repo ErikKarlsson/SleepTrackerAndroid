@@ -13,9 +13,9 @@ class AddSleepTask @Inject constructor(
         private val scheduleBackupTask: ScheduleBackupTask)
     : CompletableTask<AddSleepTask.Params> {
 
-    override fun execute(params: Params): Completable =
+    override fun completable(params: Params): Completable =
             fromCallable { sleepRepository.insert(params.sleep) }
-                    .andThen(scheduleBackupTask.execute(CompletableTask.None()))
+                    .andThen(scheduleBackupTask.completable(CompletableTask.None()))
 
     data class Params(val sleep: Sleep)
 }

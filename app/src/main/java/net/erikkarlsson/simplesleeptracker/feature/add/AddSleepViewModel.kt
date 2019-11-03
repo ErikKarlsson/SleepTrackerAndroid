@@ -54,7 +54,7 @@ class AddSleepViewModel @AssistedInject constructor(
 
     fun saveClick() {
         withState { state ->
-            addSleepTask.execute(AddSleepTask.Params(state.sleep))
+            addSleepTask.completable(AddSleepTask.Params(state.sleep))
                     .execute {
                         when (it) {
                             is Success -> {

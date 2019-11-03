@@ -88,17 +88,17 @@ class SleepAppWidgetControllerTest {
      */
 
     /**
-     * Verifies that clicking sleep toggle will execute task.
+     * Verifies that clicking sleep toggle will completable task.
      * See [ToggleSleepTaskTest] for extensive coverage of toggle cases.
      */
 
     @Test
     fun `clicking toggle sleep button toggles sleep`() {
-        given(toggleSleepTask.execute(any())).willReturn(Completable.complete())
+        given(toggleSleepTask.completable(any())).willReturn(Completable.complete())
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
         val viewModel = createViewModel()
         viewModel.dispatch(ToggleSleepClicked)
-        verify(toggleSleepTask).execute(any())
+        verify(toggleSleepTask).completable(any())
     }
 
     private fun createViewModel(): SleepAppWidgetController {

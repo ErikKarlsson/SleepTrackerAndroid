@@ -88,7 +88,7 @@ class HomeViewModel @AssistedInject constructor(
 ) : MvRxViewModel<HomeState>(state) {
 
     init {
-        getHomeTask.execute(ObservableTask.None())
+        getHomeTask.observable(ObservableTask.None())
                 .execute {
                     when (it) {
                         is Success -> {
@@ -138,7 +138,7 @@ class HomeViewModel @AssistedInject constructor(
     fun onSignOutComplete() {
         setState { copy(userAccount = null) }
 
-        logoutTask.execute(CompletableTask.None())
+        logoutTask.completable(CompletableTask.None())
                 .execute { copy() }
     }
 
@@ -160,7 +160,7 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     private fun toggleSleep() {
-        toggleSleepTask.execute(CompletableTask.None())
+        toggleSleepTask.completable(CompletableTask.None())
                 .execute { copy() }
     }
 

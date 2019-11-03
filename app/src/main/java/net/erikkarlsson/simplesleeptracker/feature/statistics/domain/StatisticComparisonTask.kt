@@ -16,7 +16,7 @@ class StatisticComparisonTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSource)
     : ObservableTask<StatisticComparison, Params> {
 
-    override fun execute(params: Params): Observable<StatisticComparison> {
+    override fun observable(params: Params): Observable<StatisticComparison> {
         val firstRange = params.rangePair.first
         val secondRange = params.rangePair.second
 

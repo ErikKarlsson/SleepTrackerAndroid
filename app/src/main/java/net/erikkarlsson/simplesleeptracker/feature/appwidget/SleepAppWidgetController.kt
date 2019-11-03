@@ -18,7 +18,7 @@ class SleepAppWidgetController @Inject constructor(private val toggleSleepTask: 
     fun onToggleSleepClick() {
         disposables.clear()
 
-        toggleSleepTask.execute(CompletableTask.None())
+        toggleSleepTask.completable(CompletableTask.None())
                 .subscribeBy(
                         onComplete = { Timber.d("Sleep toggled") },
                         onError = { Timber.e("Error toggling sleep") }

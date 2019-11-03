@@ -34,7 +34,7 @@ class ToggleSleepTaskTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
-        toggleSleepTask.execute(None()).test().assertComplete()
+        toggleSleepTask.completable(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -50,9 +50,9 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = anHourAgo)
         val awake = Sleep(fromDate = anHourAgo, toDate = now)
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        given(scheduleBackupTask.execute(any())).willReturn(Completable.complete())
+        given(scheduleBackupTask.completable(any())).willReturn(Completable.complete())
 
-        toggleSleepTask.execute(None()).test().assertComplete()
+        toggleSleepTask.completable(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -60,7 +60,7 @@ class ToggleSleepTaskTest {
             verifyNoMoreInteractions()
         }
 
-        verify(scheduleBackupTask).execute(any())
+        verify(scheduleBackupTask).completable(any())
         verifyNoMoreInteractions(scheduleBackupTask)
     }
 
@@ -70,7 +70,7 @@ class ToggleSleepTaskTest {
         val sleeping = Sleep(fromDate = now)
         val awake = Sleep(fromDate = now, toDate = now.plusDays(1))
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(awake))
-        toggleSleepTask.execute(None()).test().assertComplete()
+        toggleSleepTask.completable(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -88,7 +88,7 @@ class ToggleSleepTaskTest {
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
         given(appLifecycle.isForegrounded()).willReturn(Single.just(true))
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.execute(None()).test().assertComplete()
+        toggleSleepTask.completable(None()).test().assertComplete()
 
         inOrder(sleepRepository) {
             verify(sleepRepository).getCurrentSingle()
@@ -106,7 +106,7 @@ class ToggleSleepTaskTest {
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
         given(appLifecycle.isForegrounded()).willReturn(Single.just(true))
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.execute(None()).test().assertComplete()
+        toggleSleepTask.completable(None()).test().assertComplete()
 
         verify(sleepEvents).onNext(MinimumSleepEvent)
         verify(notifications, never()).sendMinimumSleepNotification()
@@ -120,7 +120,7 @@ class ToggleSleepTaskTest {
         given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
         given(appLifecycle.isForegrounded()).willReturn(Single.just(false))
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.execute(None()).test().assertComplete()
+        toggleSleepTask.completable(None()).test().assertComplete()
 
         verify(sleepEvents, never()).onNext(MinimumSleepEvent)
         verify(notifications).sendMinimumSleepNotification()

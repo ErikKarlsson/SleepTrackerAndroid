@@ -28,7 +28,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
                                           private val notifications: Notifications,
                                           @Named("sleepEvents") private val sleepEvents: Subject<SleepEvent>) : CompletableTask<None> {
 
-    override fun execute(params: None): Completable =
+    override fun completable(params: None): Completable =
             sleepRepository.getCurrentSingle()
                     .map(::toggleSleep)
                     .flatMapCompletable(::backupSleep)
@@ -73,7 +73,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
 
     private fun backupSleep(shouldBackupSleep: Boolean): Completable =
             if (shouldBackupSleep) {
-                scheduleBackupTask.execute(None())
+                scheduleBackupTask.completable(None())
             } else {
                 Completable.complete()
             }

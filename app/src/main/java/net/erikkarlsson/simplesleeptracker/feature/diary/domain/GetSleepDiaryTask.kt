@@ -13,7 +13,7 @@ class GetSleepDiaryTask @Inject constructor(private val sleepRepository: SleepDa
                                             private val statisticsRepository: StatisticsRepository)
     : ObservableTask<SleepDiary, None> {
 
-    override fun execute(params: None): Observable<SleepDiary> =
+    override fun observable(params: None): Observable<SleepDiary> =
             sleepRepository.getSleepPaged()
                     .zipWith(statisticsRepository.getSleepCountYearMonth())
                     .map { SleepDiary(pagedSleep = it.first,

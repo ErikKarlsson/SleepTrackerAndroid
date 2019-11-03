@@ -27,12 +27,12 @@ class StatisticsItemViewModel @AssistedInject constructor(
     fun loadStatistics(dataRangePair: DateRangePair, filter: StatisticsFilter) {
         when (filter) {
             StatisticsFilter.OVERALL -> {
-                statisticOverallTask.execute(ObservableTask.None())
+                statisticOverallTask.observable(ObservableTask.None())
                         .execute { copy(statistics = it) }
             }
             else -> {
                 val params = StatisticComparisonTask.Params(dataRangePair)
-                statisticComparisonTask.execute(params)
+                statisticComparisonTask.observable(params)
                         .execute { copy(statistics = it) }
             }
         }

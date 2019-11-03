@@ -17,7 +17,7 @@ class GetHomeTask @Inject constructor(private val backupDataSource: FileBackupDa
                                       private val sleepRepository: SleepDataSource)
     : ObservableTask<HomeLoaded, None> {
 
-    override fun execute(params: None): Observable<HomeLoaded> =
+    override fun observable(params: None): Observable<HomeLoaded> =
             Observables.combineLatest(
                     backupDataSource.getLastBackupTimestamp(),
                     sleepRepository.getCurrent(),

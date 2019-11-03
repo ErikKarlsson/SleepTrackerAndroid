@@ -9,7 +9,7 @@ import javax.inject.Named
 class ScheduleBackupTask @Inject constructor(
         @Named("backupScheduler") private val backupScheduler: TaskScheduler)
     : CompletableTask<CompletableTask.None> {
-    override fun execute(params: CompletableTask.None): Completable {
+    override fun completable(params: CompletableTask.None): Completable {
         return Completable.fromCallable {
             backupScheduler.schedule()
         }
