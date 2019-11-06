@@ -6,36 +6,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SleepWidgetView @Inject constructor(private val context: Context,
-                                          private val sleepRepository: SleepDataSource) {
+class SleepWidgetView @Inject constructor(private val context: Context) {
 
-    val disposables = CompositeDisposable()
-
-    fun update() {
-        disposables.clear()
-        sleepRepository.getCurrent()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                        onNext = { render(it.isSleeping) },
-                        onError = { Timber.e(it) }
-                )
-                .addTo(disposables)
-    }
-
-    private fun render(isSleeping: Boolean) {
+    fun render(isSleeping: Boolean) {
         val views = RemoteViews(context.packageName, R.layout.app_widget)
         val imageResId = if (isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
 

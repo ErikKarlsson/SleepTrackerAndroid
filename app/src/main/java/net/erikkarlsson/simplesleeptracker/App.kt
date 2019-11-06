@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
+import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +45,10 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
 
+    @Inject
+    lateinit var sleepAppWidgetController: SleepAppWidgetController
+
+    @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
 
@@ -71,7 +77,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
             Timber.plant(CrashReportingTree())
         }
 
-        sleepWidgetView.update()
+        sleepAppWidgetController.updateWidget()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector

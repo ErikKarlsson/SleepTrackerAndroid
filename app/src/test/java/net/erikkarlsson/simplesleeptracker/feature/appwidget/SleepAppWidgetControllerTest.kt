@@ -1,8 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.feature.appwidget
-/*
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Completable
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
@@ -22,8 +24,10 @@ class SleepAppWidgetControllerTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     val sleepRepository: SleepDataSource = mock()
-    val observer: Observer<WidgetState> = mock()
     val toggleSleepTask: ToggleSleepTask = mock()
+    val sleepWidgetView: SleepWidgetView = mock()
+
+    val sleepAppWidgetController = SleepAppWidgetController(toggleSleepTask, sleepWidgetView, sleepRepository)
 
     /**
      * LoadCases
@@ -32,55 +36,37 @@ class SleepAppWidgetControllerTest {
     @Test
     fun `load empty shows awake in view`() {
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-        val viewModel = createViewModel()
-        viewModel.state().observeForever(observer)
+
+        sleepAppWidgetController.updateWidget()
+
         verify(sleepRepository).getCurrent()
-        verify(observer).onChanged(WidgetState(false, false, 0))
+        verify(sleepWidgetView).render(false)
     }
 
     @Test
     fun `load sleeping shows sleeping in view`() {
         val sleeping = Sleep(fromDate = OffsetDateTime.now())
         given(sleepRepository.getCurrent()).willReturn(Observable.just(sleeping))
-        val viewModel = createViewModel()
-        viewModel.state().observeForever(observer)
+        sleepAppWidgetController.updateWidget()
         verify(sleepRepository).getCurrent()
-        verify(observer).onChanged(WidgetState(false,true, 0))
+        verify(sleepWidgetView).render(true)
     }
 
     @Test
     fun `load awake shows awake in view`() {
         val awake = Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusDays(1))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(awake))
-        val viewModel = createViewModel()
-        viewModel.state().observeForever(observer)
+        sleepAppWidgetController.updateWidget()
         verify(sleepRepository).getCurrent()
-        verify(observer).onChanged(WidgetState(false, false, 0))
+        verify(sleepWidgetView).render(false)
     }
 
     @Test
     fun `load error shows awake in view`() {
         given(sleepRepository.getCurrent()).willReturn(Observable.error(Exception()))
-        val viewModel = createViewModel()
-        viewModel.state().observeForever(observer)
+        sleepAppWidgetController.updateWidget()
         verify(sleepRepository).getCurrent()
-        verify(observer).onChanged(WidgetState(false, false, 0))
-    }
-
-    /**
-     * UpdateCases
-     */
-
-    @Test
-    fun `on widget update renders view`() {
-        given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-        val viewModel = createViewModel()
-        viewModel.state().observeForever(observer)
-        viewModel.dispatch(WidgetOnUpdate)
-        inOrder(observer) {
-            verify(observer).onChanged(WidgetState(false,false, 1))
-            verify(observer, never()).onChanged(any())
-        }
+        verify(sleepWidgetView).render(false)
     }
 
     /**
@@ -96,16 +82,8 @@ class SleepAppWidgetControllerTest {
     fun `clicking toggle sleep button toggles sleep`() {
         given(toggleSleepTask.completable(any())).willReturn(Completable.complete())
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
-        val viewModel = createViewModel()
-        viewModel.dispatch(ToggleSleepClicked)
+        sleepAppWidgetController.onToggleSleepClick()
         verify(toggleSleepTask).completable(any())
     }
 
-    private fun createViewModel(): SleepAppWidgetController {
-        val sleepSubscription = SleepSubscription(sleepRepository)
-        val widgetComponent = AppWidgetComponent(toggleSleepTask, sleepSubscription)
-        return SleepAppWidgetController(widgetComponent)
-    }
-
 }
-*/

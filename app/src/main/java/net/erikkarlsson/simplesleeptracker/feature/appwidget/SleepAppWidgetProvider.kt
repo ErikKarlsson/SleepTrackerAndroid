@@ -14,7 +14,7 @@ class SleepAppWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         AndroidInjection.inject(this, context)
-        sleepAppWidgetController.onWidgetUpdate()
+        sleepAppWidgetController.updateWidget()
     }
 
     override fun onReceive(context: Context, intent: Intent) {
