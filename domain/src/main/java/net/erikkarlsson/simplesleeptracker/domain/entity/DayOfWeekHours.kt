@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data.entity
+package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import org.threeten.bp.DayOfWeek
 

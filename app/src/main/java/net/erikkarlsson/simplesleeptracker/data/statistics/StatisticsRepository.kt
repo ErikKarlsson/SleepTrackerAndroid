@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekMidnightOffset
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource

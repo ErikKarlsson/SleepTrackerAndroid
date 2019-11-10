@@ -13,9 +13,10 @@ import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.*
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
+import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
-import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
 import net.erikkarlsson.simplesleeptracker.feature.home.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.feature.home.domain.LogoutTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule

@@ -12,6 +12,8 @@ import net.erikkarlsson.simplesleeptracker.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.base.Event
 import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_MILLI
 import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
+import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask

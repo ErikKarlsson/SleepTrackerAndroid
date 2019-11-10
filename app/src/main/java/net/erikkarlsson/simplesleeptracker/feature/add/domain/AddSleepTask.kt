@@ -5,7 +5,7 @@ import io.reactivex.Completable.fromCallable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
 import javax.inject.Inject
 
 class AddSleepTask @Inject constructor(

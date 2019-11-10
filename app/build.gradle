@@ -19,15 +19,11 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion Versions.compile_sdk
 
     defaultConfig {
         applicationId "net.erikkarlsson.simplesleeptracker"
-        minSdkVersion Versions.min_sdk
-        targetSdkVersion Versions.target_sdk
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "${applicationId}.runner.TestRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -113,11 +109,6 @@ android {
         textReport true
     }
 
-    compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -154,6 +145,9 @@ androidExtensions {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation project(':features:home')
+    implementation project(':domain')
 
     // Dependencies for Android tests
     androidTestImplementation Deps.atsl_runner

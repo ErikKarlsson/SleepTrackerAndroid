@@ -12,9 +12,6 @@ sealed class HomeEvent // One time event
 object PinWidgetEvent : HomeEvent()
 object AddWidgetEvent : HomeEvent()
 
-sealed class SleepEvent // One time event
-object MinimumSleepEvent : SleepEvent()
-
 typealias HomeEvents = MutableLiveData<Event<HomeEvent>>
 
 enum class BubbleState {

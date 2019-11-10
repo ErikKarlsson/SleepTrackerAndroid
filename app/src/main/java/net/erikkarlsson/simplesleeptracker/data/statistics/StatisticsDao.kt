@@ -3,9 +3,9 @@ package net.erikkarlsson.simplesleeptracker.data.statistics
 import androidx.room.Dao
 import androidx.room.Query
 import io.reactivex.Flowable
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekMidnightOffset
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
+import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekHours
+import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekMidnightOffset
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepCountYearMonth
 
 /**

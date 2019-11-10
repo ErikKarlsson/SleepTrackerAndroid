@@ -1,0 +1,14 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':domain')
+
+    implementation Deps.kotlin_stdlib
+    implementation Deps.support_app_compat
+    implementation Deps.core_ktx
+    implementation Deps.junit
+}

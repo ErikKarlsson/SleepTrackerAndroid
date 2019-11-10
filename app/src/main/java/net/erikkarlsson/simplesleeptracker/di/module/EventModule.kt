@@ -6,8 +6,8 @@ import dagger.Provides
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.Event
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.feature.home.HomeEvents
-import net.erikkarlsson.simplesleeptracker.feature.home.SleepEvent
 import javax.inject.Named
 import javax.inject.Singleton
 

@@ -1,7 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import com.google.common.collect.ImmutableList
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.util.hoursTo
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime

@@ -5,12 +5,12 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
+import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
+import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
 import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
-import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
-import net.erikkarlsson.simplesleeptracker.feature.home.MinimumSleepEvent
-import net.erikkarlsson.simplesleeptracker.feature.home.SleepEvent
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test

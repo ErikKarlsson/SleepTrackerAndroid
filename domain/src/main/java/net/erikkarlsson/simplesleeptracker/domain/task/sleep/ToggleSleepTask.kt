@@ -7,12 +7,12 @@ import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.Notifications
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
-import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
-import net.erikkarlsson.simplesleeptracker.feature.home.MinimumSleepEvent
-import net.erikkarlsson.simplesleeptracker.feature.home.SleepEvent
+import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
 import javax.inject.Inject
 import javax.inject.Named
 

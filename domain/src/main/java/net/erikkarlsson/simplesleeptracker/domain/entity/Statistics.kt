@@ -1,7 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import com.google.common.collect.ImmutableList
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
 import org.threeten.bp.LocalTime
 
 data class Statistics(val sleepCount: Int,
@@ -29,7 +28,7 @@ data class Statistics(val sleepCount: Int,
     }
 
     fun timeDayOfWeekFor(timeDayOfWeek: ImmutableList<DayOfWeekLocalTime>,
-                                   day: Int): DayOfWeekLocalTime? {
+                         day: Int): DayOfWeekLocalTime? {
         for (dayOfWeekLocalTime in timeDayOfWeek) {
             if (dayOfWeekLocalTime.dayOfWeek.value == day) {
                 return dayOfWeekLocalTime

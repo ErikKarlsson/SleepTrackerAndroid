@@ -1,8 +1,6 @@
-package net.erikkarlsson.simplesleeptracker.feature.backup.domain
+package net.erikkarlsson.simplesleeptracker.domain.task
 
 import io.reactivex.Completable
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import javax.inject.Inject
 import javax.inject.Named
 

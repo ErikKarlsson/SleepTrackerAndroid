@@ -4,8 +4,8 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import com.google.common.collect.ImmutableList
-import net.erikkarlsson.simplesleeptracker.data.entity.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.domain.MINUTES_IN_AN_HOUR
+import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekHours
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime

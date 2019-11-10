@@ -5,7 +5,7 @@ import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.shiftStartDate
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.feature.backup.domain.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
