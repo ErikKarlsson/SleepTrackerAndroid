@@ -8,7 +8,16 @@ dependencies {
 
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
+    testImplementation project(':libraries:testutilsnew')
 
+    // Dependencies for local unit tests
+    testImplementation Deps.junit
+    testImplementation Deps.hamcrest
+    testImplementation Deps.mockito_kotlin
+    testImplementation Deps.arch_core_testing
+    testImplementation Deps.mockito_inline
+
+    implementation Deps.guava
     implementation Deps.kotlin_stdlib
     implementation Deps.support_app_compat
     implementation Deps.core_ktx
