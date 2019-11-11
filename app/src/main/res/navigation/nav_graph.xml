@@ -5,17 +5,17 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.home.HomeFragment"
+        android:name="net.erikkarlsson.simplesleeptracker.features.home.HomeFragment"
         android:label="HomeFragment" />
 
     <fragment
         android:id="@+id/statistics"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment"
+        android:name="net.erikkarlsson.simplesleeptracker.features.statistics.StatisticsFragment"
         android:label="StatisticsFragment"/>
 
     <fragment
         android:id="@+id/diary"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment"
+        android:name="net.erikkarlsson.simplesleeptracker.features.diary.DiaryFragment"
         android:label="DiaryFragment">
         <action
             android:id="@+id/actionDiaryToDetail"
@@ -30,7 +30,7 @@
 
     <activity
         android:id="@+id/detail"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity"
+        android:name="net.erikkarlsson.simplesleeptracker.features.details.DetailActivity"
         android:label="DetailActivity">
         <argument
             android:name="sleepId"
@@ -40,13 +40,13 @@
 
     <activity
         android:id="@+id/add"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity"
+        android:name="net.erikkarlsson.simplesleeptracker.features.add.AddSleepActivity"
         android:label="AddSleepActivity">
     </activity>
 
     <activity
         android:id="@+id/settings"
-        android:name="net.erikkarlsson.simplesleeptracker.feature.settings.SettingsActivity"
+        android:name="net.erikkarlsson.simplesleeptracker.features.settings.SettingsActivity"
         android:label="SettingsActivity">
     </activity>
 </navigation>

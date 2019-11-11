@@ -22,8 +22,8 @@ import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
-import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetController
-import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepWidgetView
+import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
+import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
 import timber.log.Timber
 import javax.inject.Inject
 

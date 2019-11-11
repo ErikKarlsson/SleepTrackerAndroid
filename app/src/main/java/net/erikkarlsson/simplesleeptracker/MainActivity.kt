@@ -14,8 +14,6 @@ import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-const val REQUEST_CODE_SIGN_IN = 1
-
 class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController

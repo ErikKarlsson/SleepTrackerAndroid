@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/libraries/domain" />
             <option value="$PROJECT_DIR$/libraries/domaintests" />
             <option value="$PROJECT_DIR$/libraries/testutilsnew" />
+            <option value="$PROJECT_DIR$/libraries/ui-components" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

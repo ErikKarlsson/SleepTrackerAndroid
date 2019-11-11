@@ -14,7 +14,7 @@ import com.google.api.services.drive.model.FileList
 import io.reactivex.Completable
 import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.R
-import net.erikkarlsson.simplesleeptracker.feature.backup.BACKUP_MIME_TYPE
+import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_MIME_TYPE
 import java.io.InputStream
 import java.util.Collections.singletonList
 import javax.inject.Inject

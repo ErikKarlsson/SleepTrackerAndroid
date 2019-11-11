@@ -17,12 +17,18 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
+    // MvRx
+    implementation Deps.mvrx
+
     // Paging
     implementation Deps.paging
     implementation Deps.paging_rx
 
     // RxJava
     implementation Deps.rxjava2
+    implementation Deps.rxandroid
+    implementation Deps.rxkotlin
+    implementation Deps.rxbinding
 
     // ThreeTen Backport
     implementation Deps.threeten_backport_android

@@ -42,7 +42,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <net.erikkarlsson.simplesleeptracker.feature.statistics.tabs.SlidingTabLayout
+        <net.erikkarlsson.simplesleeptracker.features.statistics.tabs.SlidingTabLayout
             android:id="@+id/slidingTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

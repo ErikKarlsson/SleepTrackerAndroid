@@ -6,16 +6,16 @@ import net.erikkarlsson.simplesleeptracker.MainActivity
 import net.erikkarlsson.simplesleeptracker.di.scope.ActivityScope
 import net.erikkarlsson.simplesleeptracker.di.scope.BroadcastRecieverScope
 import net.erikkarlsson.simplesleeptracker.di.scope.FragmentScope
-import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepActivity
-import net.erikkarlsson.simplesleeptracker.feature.add.AddSleepFragment
-import net.erikkarlsson.simplesleeptracker.feature.appwidget.SleepAppWidgetProvider
-import net.erikkarlsson.simplesleeptracker.feature.details.DetailActivity
-import net.erikkarlsson.simplesleeptracker.feature.details.DetailFragment
-import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryFragment
-import net.erikkarlsson.simplesleeptracker.feature.diary.DiaryModule
-import net.erikkarlsson.simplesleeptracker.feature.home.HomeFragment
-import net.erikkarlsson.simplesleeptracker.feature.statistics.StatisticsFragment
-import net.erikkarlsson.simplesleeptracker.feature.statistics.item.StatisticsItemFragment
+import net.erikkarlsson.simplesleeptracker.features.add.AddSleepActivity
+import net.erikkarlsson.simplesleeptracker.features.add.AddSleepFragment
+import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetProvider
+import net.erikkarlsson.simplesleeptracker.features.details.DetailActivity
+import net.erikkarlsson.simplesleeptracker.features.details.DetailFragment
+import net.erikkarlsson.simplesleeptracker.features.diary.DiaryFragment
+import net.erikkarlsson.simplesleeptracker.features.diary.DiaryModule
+import net.erikkarlsson.simplesleeptracker.features.home.HomeFragment
+import net.erikkarlsson.simplesleeptracker.features.statistics.StatisticsFragment
+import net.erikkarlsson.simplesleeptracker.features.statistics.item.StatisticsItemFragment
 
 @Module
 abstract class AndroidBindingModule {

@@ -23,14 +23,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.details.DetailActivity"
+            android:name=".features.details.DetailActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".feature.add.AddSleepActivity"
+            android:name=".features.add.AddSleepActivity"
             android:label="@string/add_sleep_session"
             android:parentActivityName=".MainActivity" />
 
-        <receiver android:name=".feature.appwidget.SleepAppWidgetProvider">
+        <receiver android:name=".features.appwidget.SleepAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -45,7 +45,7 @@
             android:value="fe2ec819a92c92bdf335833374300bb79b6fff00" />
 
         <activity
-            android:name=".feature.settings.SettingsActivity"
+            android:name=".features.settings.SettingsActivity"
             android:label="@string/settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">

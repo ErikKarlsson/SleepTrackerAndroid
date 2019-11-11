@@ -1,14 +1,47 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libraries:domain')
+    implementation project(':libraries:ui-components')
 
     implementation Deps.kotlin_stdlib
     implementation Deps.support_app_compat
     implementation Deps.core_ktx
     implementation Deps.junit
+    implementation Deps.rxjava2
+    implementation Deps.rxkotlin
+
+    // Jsr 305
+    implementation Deps.jsr305
+
+    // Dagger
+    implementation Deps.dagger_runtime
+    implementation Deps.dagger_android
+    implementation Deps.dagger_android_support
+    implementation Deps.dagger_assisted_injection_annotations
+    kapt Deps.dagger_compiler
+    kapt Deps.dagger_android_support_compiler
+    kapt Deps.dagger_assisted_injection_processor
+
+    // Timber
+    implementation Deps.timber
+
+    // MvRx
+    implementation Deps.mvrx
+
+    // Glide
+    implementation Deps.glide
+    kapt Deps.glide_compiler
+
+    implementation Deps.play_services_auth
+
+    implementation Deps.dagger_runtime
+
+    implementation Deps.rxbinding
+
 }

@@ -7,10 +7,10 @@ import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileWriter
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
-import net.erikkarlsson.simplesleeptracker.feature.backup.BackupScheduler
-import net.erikkarlsson.simplesleeptracker.feature.backup.FastBackupCsvFileReader
-import net.erikkarlsson.simplesleeptracker.feature.backup.FastBackupCsvFileWriter
-import net.erikkarlsson.simplesleeptracker.feature.backup.RestoreBackupScheduler
+import net.erikkarlsson.simplesleeptracker.features.backup.BackupScheduler
+import net.erikkarlsson.simplesleeptracker.features.backup.FastBackupCsvFileReader
+import net.erikkarlsson.simplesleeptracker.features.backup.FastBackupCsvFileWriter
+import net.erikkarlsson.simplesleeptracker.features.backup.RestoreBackupScheduler
 import javax.inject.Named
 import javax.inject.Singleton
 

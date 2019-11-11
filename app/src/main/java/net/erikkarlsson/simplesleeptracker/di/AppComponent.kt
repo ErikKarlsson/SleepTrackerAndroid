@@ -5,15 +5,17 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.di.module.*
-import net.erikkarlsson.simplesleeptracker.feature.backup.BackupSleepWorker
-import net.erikkarlsson.simplesleeptracker.feature.backup.RestoreSleepWorker
+import net.erikkarlsson.simplesleeptracker.features.backup.BackupSleepWorker
+import net.erikkarlsson.simplesleeptracker.features.backup.RestoreSleepWorker
+import net.erikkarlsson.simplesleeptracker.features.home.di.module.HomeAssistedModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AndroidBindingModule::class, AndroidInjectionModule::class,
     AppAssistedModule::class, AppModule::class, BackupModule::class, DateTimeModule::class,
     EventModule::class, NotificationModule::class, PreferencesModule::class, SignInModule::class,
-    StatisticsModule::class, SleepModule::class, WidgetModule::class])
+    StatisticsModule::class, SleepModule::class, WidgetModule::class,
+    HomeAssistedModule::class])
 
 interface AppComponent {
     @Component.Builder
