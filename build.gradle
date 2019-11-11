@@ -65,6 +65,17 @@ subprojects {
                     sourceCompatibility Config.javaVersion
                     targetCompatibility Config.javaVersion
                 }
+
+                flavorDimensions "default"
+
+                productFlavors {
+                    dev {
+                    }
+                    internal {
+                    }
+                    playstore {
+                    }
+                }
             }
         }
     }

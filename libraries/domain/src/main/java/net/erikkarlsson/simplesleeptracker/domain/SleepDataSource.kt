@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
 interface SleepDataSource {
     fun getCount(): Observable<Int>

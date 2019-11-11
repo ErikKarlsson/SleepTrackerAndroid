@@ -7,11 +7,9 @@ import com.squareup.inject.assisted.AssistedInject
 import net.erikkarlsson.simplesleeptracker.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.base.Event
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.feature.add.domain.AddSleepTask
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
-import org.threeten.bp.ZoneOffset
 import javax.inject.Named
 
 class AddSleepViewModel @AssistedInject constructor(

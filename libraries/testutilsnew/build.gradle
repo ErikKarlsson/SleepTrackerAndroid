@@ -6,9 +6,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libraries:domain')
-
-    implementation Deps.kotlin_stdlib
-    implementation Deps.support_app_compat
-    implementation Deps.core_ktx
+    implementation Deps.threeten_backport
+    implementation Deps.guava
+    implementation Deps.dagger_runtime
+    implementation Deps.rxjava2
+    implementation Deps.rxandroid
     implementation Deps.junit
 }
