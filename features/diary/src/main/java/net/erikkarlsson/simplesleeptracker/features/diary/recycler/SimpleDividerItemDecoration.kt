@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import net.erikkarlsson.simplesleeptracker.R
+import net.erikkarlsson.simplesleeptracker.features.diary.R
 import net.erikkarlsson.simplesleeptracker.util.px
 import javax.inject.Inject
 

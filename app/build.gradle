@@ -24,7 +24,6 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -142,6 +141,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation project(':features:home')
+    implementation project(':features:diary')
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
     testImplementation project(':libraries:testutilsnew')

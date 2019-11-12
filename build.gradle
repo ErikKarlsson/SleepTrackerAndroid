@@ -59,6 +59,7 @@ subprojects {
                     minSdkVersion Config.minSdk
                     targetSdkVersion Config.targetSdk
                     testInstrumentationRunner "${applicationId}.runner.TestRunner"
+                    vectorDrawables.useSupportLibrary = true
                 }
 
                 compileOptions {

@@ -1,1 +1,1 @@
-include ':app', ':features:home', ':libraries:domain', ':libraries:domaintests', ':libraries:testutilsnew', ':libraries:ui-components'
+include ':app', ':features:home', ':libraries:domain', ':libraries:domaintests', ':libraries:testutilsnew', ':libraries:ui-components', ':features:diary'

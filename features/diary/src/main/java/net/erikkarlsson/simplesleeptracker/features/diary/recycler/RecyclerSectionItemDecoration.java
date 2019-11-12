@@ -2,14 +2,15 @@ package net.erikkarlsson.simplesleeptracker.features.diary.recycler;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.erikkarlsson.simplesleeptracker.R;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import net.erikkarlsson.simplesleeptracker.features.diary.R;
 
 /**
  * https://github.com/paetztm/recycler_view_headers

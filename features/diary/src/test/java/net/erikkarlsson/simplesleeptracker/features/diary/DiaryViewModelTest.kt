@@ -7,8 +7,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.Observable
 import junit.framework.Assert.assertEquals
-import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.features.diary.domain.GetSleepDiaryTask
@@ -22,7 +22,7 @@ class DiaryViewModelTest {
     var testSchedulerRule = RxImmediateSchedulerRule()
 
     val sleepRepository: SleepDataSource = mock()
-    val statisticsRepository: StatisticsRepository = mock()
+    val statisticsRepository: StatisticsDataSource = mock()
     val sleepPaged: PagedList<Sleep> = mock()
     val getSleepDiaryTask = GetSleepDiaryTask(sleepRepository, statisticsRepository)
 

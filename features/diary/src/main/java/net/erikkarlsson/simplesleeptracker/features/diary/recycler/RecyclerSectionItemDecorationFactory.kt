@@ -1,8 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.features.diary.recycler
 
 import android.content.res.Resources
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
+import net.erikkarlsson.simplesleeptracker.features.diary.R
 import javax.inject.Inject
 
 class RecyclerSectionItemDecorationFactory @Inject constructor(

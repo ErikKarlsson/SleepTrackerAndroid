@@ -1,9 +1,9 @@
 package net.erikkarlsson.simplesleeptracker.features.diary.recycler
 
 import android.content.res.Resources
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
+import net.erikkarlsson.simplesleeptracker.features.diary.R
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
