@@ -143,6 +143,7 @@ dependencies {
     implementation project(':features:home')
     implementation project(':features:diary')
     implementation project(':libraries:domain')
+    implementation project(':libraries:navigation')
     implementation project(':libraries:ui-components')
     testImplementation project(':libraries:testutilsnew')
     androidTestImplementation project(':libraries:testutilsnew')

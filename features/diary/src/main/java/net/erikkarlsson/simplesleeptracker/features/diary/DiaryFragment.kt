@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -130,20 +131,14 @@ class DiaryFragment : BaseMvRxFragment() {
     }
 
     private fun navigateToDetails(id: Int?) {
-/*
-        TODO (erikkarlsson): Implement
         id?.let {
             val action = DiaryFragmentDirections.actionDiaryToDetail().setSleepId(id)
-            NavHostFragment.findNavController(this).navigate(action)
+            findNavController().navigate(action)
         }
-*/
     }
 
     private fun navigateToAddSleep() {
-/*
-        TODO (erikkarlsson): Implement
         val action = DiaryFragmentDirections.actionDiaryToAddSleep()
-        NavHostFragment.findNavController(this).navigate(action)
-*/
+        findNavController().navigate(action)
     }
 }
