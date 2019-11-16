@@ -11,9 +11,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/add" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/add" />
             <option value="$PROJECT_DIR$/features/details" />
             <option value="$PROJECT_DIR$/features/diary" />
             <option value="$PROJECT_DIR$/features/home" />

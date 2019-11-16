@@ -143,6 +143,7 @@ dependencies {
     implementation project(':features:home')
     implementation project(':features:diary')
     implementation project(':features:details')
+    implementation project(':features:add')
     implementation project(':libraries:domain')
     implementation project(':libraries:navigation')
     implementation project(':libraries:ui-components')

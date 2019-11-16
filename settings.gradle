@@ -1,1 +1,3 @@
 include ':app', ':features:home', ':libraries:domain', ':libraries:domaintests', ':libraries:testutilsnew', ':libraries:ui-components', ':features:diary', ':libraries:navigation', ':features:details'
+include ':add'
+include ':features:add'
