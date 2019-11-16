@@ -1,7 +1,19 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    implementation Deps.kotlin_stdlib
+    implementation Deps.core_ktx
+
+    // Support libraries
+    implementation Deps.support_app_compat
+    implementation Deps.support_cardview
+    implementation Deps.support_constraint_layout
+    implementation Deps.support_v4
+    implementation Deps.support_vector_drawable
 }

@@ -11,8 +11,6 @@ import com.airbnb.mvrx.*
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.toolbar.*
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.util.formatHHMM

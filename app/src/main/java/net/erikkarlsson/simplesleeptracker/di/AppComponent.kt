@@ -7,6 +7,7 @@ import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.di.module.*
 import net.erikkarlsson.simplesleeptracker.features.backup.BackupSleepWorker
 import net.erikkarlsson.simplesleeptracker.features.backup.RestoreSleepWorker
+import net.erikkarlsson.simplesleeptracker.features.details.di.DetailsAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.diary.di.DiaryAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.home.di.module.HomeAssistedModule
 import javax.inject.Singleton
@@ -16,7 +17,7 @@ import javax.inject.Singleton
     AppAssistedModule::class, AppModule::class, BackupModule::class, DateTimeModule::class,
     EventModule::class, NotificationModule::class, PreferencesModule::class, SignInModule::class,
     StatisticsModule::class, SleepModule::class, WidgetModule::class,
-    HomeAssistedModule::class, DiaryAssistedModule::class])
+    HomeAssistedModule::class, DiaryAssistedModule::class, DetailsAssistedModule::class])
 
 interface AppComponent {
     @Component.Builder

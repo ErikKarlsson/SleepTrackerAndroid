@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker.features.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.toolbar.*
+import androidx.appcompat.widget.Toolbar
 import net.erikkarlsson.simplesleeptracker.R
 
 class SettingsActivity : AppCompatActivity() {
@@ -11,6 +11,8 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_settings)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

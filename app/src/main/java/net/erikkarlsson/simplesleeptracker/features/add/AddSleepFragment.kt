@@ -9,14 +9,14 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.fragment_add.*
 import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName2
@@ -40,6 +40,8 @@ class AddSleepFragment : BaseMvRxFragment() {
 
     private val disposables = CompositeDisposable()
 
+    private lateinit var toolbar: Toolbar
+
     override fun invalidate() = withState(viewModel) { state ->
         this.state = state
         render(state)
@@ -56,11 +58,13 @@ class AddSleepFragment : BaseMvRxFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
+        return inflater.inflate(R.layout.fragment_add, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
 
         val activity = requireActivity() as AppCompatActivity
 

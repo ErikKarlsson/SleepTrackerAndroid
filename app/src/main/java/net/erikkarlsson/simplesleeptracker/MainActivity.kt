@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
@@ -12,11 +13,12 @@ import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
+
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         Fabric.with(this, Crashlytics())
 
         setContentView(R.layout.activity_main)
+
+        toolbar = findViewById(R.id.toolbar)
+
         setSupportActionBar(toolbar)
         toolbar.setTitle(R.string.app_name)
 

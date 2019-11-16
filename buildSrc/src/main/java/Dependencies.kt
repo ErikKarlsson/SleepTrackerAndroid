@@ -1,18 +1,14 @@
 import org.gradle.api.JavaVersion
 
 object Config {
-    val minSdk = 19
+    val minSdk = 21
     val compileSdk = 28
     val targetSdk = 28
     val javaVersion = JavaVersion.VERSION_1_8
 }
 
 object Versions {
-    val compile_sdk = 28
-    val min_sdk = 19
-    val target_sdk = 28
-
-    val android_gradle_plugin = "3.2.0"
+    val android_gradle_plugin = "3.6.0-beta04"
     val arch_core = "2.0.0"
     val atsl_rules = "1.1.1"
     val atsl_runner = "1.1.1"
@@ -25,7 +21,7 @@ object Versions {
     val daggermock = "0.8.4"
     val dexmaker = "2.19.1"
     val espresso = "3.1.1"
-    val fabric = "1.27.0"
+    val fabric = "1.28.0"
     val fast_csv = "1.0.3"
     val firebase = "16.0.6"
     val glide = "4.8.0"
@@ -33,13 +29,13 @@ object Versions {
     val google_api_services_drive = "v3-rev20181101-1.27.0"
     val google_http_client_gson = "1.27.0"
     val google_services_plugin = "4.2.0"
-    val grgit_plugin = "1.5.0"
+    val grgit_plugin = "4.0.0"
     val gson = "2.8.5"
     val guava = "20.0"
     val hamcrest = "1.3"
     val jsr305 = "3.0.2"
     val junit = "4.12"
-    val kotlin = "1.3.11"
+    val kotlin = "1.3.60"
     val leakcanary = "1.6.2"
     val lifecycle = "2.0.0"
     val material = "1.0.0"
@@ -107,7 +103,7 @@ object Deps {
     val google_api_services_drive = "com.google.apis:google-api-services-drive:${Versions.google_api_services_drive}"
     val google_http_client_gson = "com.google.http-client:google-http-client-gson:${Versions.google_http_client_gson}"
     val google_services_plugin = "com.google.gms:google-services:${Versions.google_services_plugin}"
-    val grgit_plugin = "org.ajoberstar:grgit:${Versions.grgit_plugin}"
+    val grgit_plugin = "org.ajoberstar.grgit:grgit-gradle:${Versions.grgit_plugin}"
     val gson = "com.google.code.gson:gson:${Versions.gson}"
     val guava = "com.google.guava:guava:${Versions.guava}"
     val hamcrest = "org.hamcrest:hamcrest-all:${Versions.hamcrest}"

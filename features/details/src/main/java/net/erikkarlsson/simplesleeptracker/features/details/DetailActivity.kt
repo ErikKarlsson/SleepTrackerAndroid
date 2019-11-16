@@ -7,7 +7,6 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import net.erikkarlsson.simplesleeptracker.R
 import javax.inject.Inject
 
 class DetailActivity : AppCompatActivity(), HasSupportFragmentInjector {
