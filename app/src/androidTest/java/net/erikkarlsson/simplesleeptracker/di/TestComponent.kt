@@ -10,6 +10,7 @@ import net.erikkarlsson.simplesleeptracker.features.details.di.AddAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.details.di.DetailsAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.diary.di.DiaryAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.home.di.module.HomeAssistedModule
+import net.erikkarlsson.simplesleeptracker.features.statistics.di.StatisticsAssistedModule
 import javax.inject.Singleton
 
 @Singleton
@@ -18,7 +19,7 @@ import javax.inject.Singleton
     NotificationModule::class, MockDateTimeModule::class, PreferencesModule::class,
     SignInModule::class, SleepModule::class, StatisticsModule::class, WidgetModule::class,
     HomeAssistedModule::class, DiaryAssistedModule::class, DetailsAssistedModule::class,
-    AddAssistedModule::class
+    AddAssistedModule::class, StatisticsAssistedModule::class
 ])
 interface TestComponent : AppComponent {
     @Component.Builder

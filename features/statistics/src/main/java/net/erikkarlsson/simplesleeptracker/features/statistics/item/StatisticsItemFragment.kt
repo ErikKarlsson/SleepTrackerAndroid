@@ -16,11 +16,11 @@ import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_statistics_item.*
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.features.statistics.DateRangePair
+import net.erikkarlsson.simplesleeptracker.features.statistics.R
 import net.erikkarlsson.simplesleeptracker.features.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.features.statistics.chart.AverageTimeChartRenderer
 import net.erikkarlsson.simplesleeptracker.features.statistics.chart.SleepDurationChartRenderer

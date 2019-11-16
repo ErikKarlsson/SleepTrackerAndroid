@@ -16,7 +16,6 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_statistics.*
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import javax.inject.Inject
 

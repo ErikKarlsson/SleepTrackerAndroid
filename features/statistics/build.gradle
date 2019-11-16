@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':libraries:domain')
+    implementation project(':libraries:ui-components')
+    implementation project(':libraries:navigation')
+    testImplementation project(':libraries:testutilsnew')
+
+    // MPAndroidChart
+    implementation Deps.mpandroidchart
+
+    // Material progress bar
+    implementation Deps.materialprogressbar
+
+    // Dependencies for local unit tests
+    testImplementation Deps.junit
+    testImplementation Deps.hamcrest
+    testImplementation Deps.mockito_kotlin
+    testImplementation Deps.arch_core_testing
+    testImplementation Deps.mockito_inline
+
+    // Navigation
+    implementation Deps.navigation_fragment
+    implementation Deps.navigation_ui
+    androidTestImplementation Deps.navigation_testing
+
+    // Paging
+    implementation Deps.paging
+    implementation Deps.paging_rx
+
+    // Kotlin
+    implementation Deps.kotlin_stdlib
+    implementation Deps.core_ktx
+
+    implementation Deps.guava
+    implementation Deps.core_ktx
+    implementation Deps.junit
+    implementation Deps.rxjava2
+    implementation Deps.rxkotlin
+
+    // Support libraries
+    implementation Deps.support_app_compat
+    implementation Deps.support_cardview
+    implementation Deps.support_constraint_layout
+    implementation Deps.support_v4
+    implementation Deps.support_vector_drawable
+
+    // Jsr 305
+    implementation Deps.jsr305
+
+    // Dagger
+    implementation Deps.dagger_runtime
+    implementation Deps.dagger_android
+    implementation Deps.dagger_android_support
+    implementation Deps.dagger_assisted_injection_annotations
+    kapt Deps.dagger_compiler
+    kapt Deps.dagger_android_support_compiler
+    kapt Deps.dagger_assisted_injection_processor
+
+    // Timber
+    implementation Deps.timber
+
+    // MvRx
+    implementation Deps.mvrx
+
+    // Glide
+    implementation Deps.glide
+    kapt Deps.glide_compiler
+
+    implementation Deps.play_services_auth
+
+    implementation Deps.dagger_runtime
+
+    implementation Deps.rxbinding
+
+    // ThreeTen Backport
+    implementation Deps.threeten_backport_android
+    testImplementation Deps.threeten_backport
+}

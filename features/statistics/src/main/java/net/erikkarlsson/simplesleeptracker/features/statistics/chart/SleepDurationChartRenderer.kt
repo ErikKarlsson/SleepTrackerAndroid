@@ -11,12 +11,8 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
-import net.erikkarlsson.simplesleeptracker.features.statistics.ANIMATION_DURATION
-import net.erikkarlsson.simplesleeptracker.features.statistics.AXIS_TEXT_SIZE
-import net.erikkarlsson.simplesleeptracker.features.statistics.BAR_WIDTH
-import net.erikkarlsson.simplesleeptracker.features.statistics.VALUE_TEXT_SIZE
+import net.erikkarlsson.simplesleeptracker.features.statistics.*
 import net.erikkarlsson.simplesleeptracker.features.statistics.item.ChartExtra
 import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes3
 import org.threeten.bp.DayOfWeek

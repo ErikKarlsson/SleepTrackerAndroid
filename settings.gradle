@@ -2,3 +2,4 @@ include ':app', ':features:home', ':libraries:domain', ':libraries:domaintests',
 include ':add'
 include ':features:add'
 include ':features:settings'
+include ':features:statistics'
