@@ -144,6 +144,7 @@ dependencies {
     implementation project(':features:diary')
     implementation project(':features:details')
     implementation project(':features:add')
+    implementation project(':features:settings')
     implementation project(':libraries:domain')
     implementation project(':libraries:navigation')
     implementation project(':libraries:ui-components')

@@ -1,0 +1,21 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':libraries:ui-components')
+
+    // Support libraries
+    implementation Deps.support_app_compat
+    implementation Deps.support_cardview
+    implementation Deps.support_constraint_layout
+    implementation Deps.support_v4
+    implementation Deps.support_vector_drawable
+
+    // Preferences
+    implementation Deps.preferences
+
+    // Play Services
+    implementation Deps.play_services_oss_licenses
+}

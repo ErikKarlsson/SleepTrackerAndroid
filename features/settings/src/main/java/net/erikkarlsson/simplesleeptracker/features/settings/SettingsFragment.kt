@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import androidx.preference.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import net.erikkarlsson.simplesleeptracker.R
-
 
 class SettingsFragment : PreferenceFragmentCompat() {
 

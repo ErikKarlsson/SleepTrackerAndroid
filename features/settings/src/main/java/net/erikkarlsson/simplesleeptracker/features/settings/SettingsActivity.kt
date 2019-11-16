@@ -3,7 +3,6 @@ package net.erikkarlsson.simplesleeptracker.features.settings
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import net.erikkarlsson.simplesleeptracker.R
 
 class SettingsActivity : AppCompatActivity() {
 
