@@ -6,6 +6,7 @@ import dagger.android.AndroidInjectionModule
 import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.TestApp
 import net.erikkarlsson.simplesleeptracker.di.module.*
+import net.erikkarlsson.simplesleeptracker.features.backup.di.BackupAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.details.di.AddAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.details.di.DetailsAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.diary.di.DiaryAssistedModule
@@ -19,7 +20,8 @@ import javax.inject.Singleton
     NotificationModule::class, MockDateTimeModule::class, PreferencesModule::class,
     SignInModule::class, SleepModule::class, StatisticsModule::class, WidgetModule::class,
     HomeAssistedModule::class, DiaryAssistedModule::class, DetailsAssistedModule::class,
-    AddAssistedModule::class, StatisticsAssistedModule::class
+    AddAssistedModule::class, StatisticsAssistedModule::class, WorkerBindingModule::class,
+    BackupAssistedModule::class
 ])
 interface TestComponent : AppComponent {
     @Component.Builder

@@ -3,22 +3,20 @@ package net.erikkarlsson.simplesleeptracker.features.backup
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import net.erikkarlsson.simplesleeptracker.App
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.features.backup.domain.RestoreSleepBackupTask
 import timber.log.Timber
-import javax.inject.Inject
 
-class RestoreSleepWorker constructor(context : Context, params : WorkerParameters)
-    : Worker(context, params) {
-
-    @Inject lateinit var restoreSleepBackupTask: RestoreSleepBackupTask
+class RestoreSleepWorker @AssistedInject constructor(
+        @Assisted private val appContext: Context,
+        @Assisted private val params: WorkerParameters,
+        private val restoreSleepBackupTask: RestoreSleepBackupTask)
+    : Worker(appContext, params) {
 
     override fun doWork(): Result {
         Timber.d("Restore data from Google Drive")
-
-        // TODO (erikkarlsson): Replace with Dagger Android inject when supported.
-        (applicationContext as App).appComponent.inject(this)
 
         val throwable = restoreSleepBackupTask.completable(CompletableTask.None())
                 .blockingGet()
@@ -29,4 +27,7 @@ class RestoreSleepWorker constructor(context : Context, params : WorkerParameter
             Result.failure()
         }
     }
+
+    @AssistedInject.Factory
+    interface Factory : ChildWorkerFactory
 }

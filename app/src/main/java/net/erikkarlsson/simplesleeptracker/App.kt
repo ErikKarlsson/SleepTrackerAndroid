@@ -9,6 +9,8 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -22,6 +24,7 @@ import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.base.CrashReportingTree
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
+import net.erikkarlsson.simplesleeptracker.di.module.MyWorkerFactory
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
 import timber.log.Timber
@@ -48,6 +51,9 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
     @Inject
     lateinit var sleepAppWidgetController: SleepAppWidgetController
 
+    @Inject
+    lateinit var myWorkerFactory: MyWorkerFactory
+
     @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
@@ -70,6 +76,8 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
 
         appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
+
+        WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(myWorkerFactory).build())
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

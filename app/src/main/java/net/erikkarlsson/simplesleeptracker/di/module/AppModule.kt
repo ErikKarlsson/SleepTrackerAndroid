@@ -1,7 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.di.module
 
 import android.content.Context
-import androidx.work.WorkManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,11 +27,6 @@ abstract class AppModule {
         @Singleton
         @JvmStatic
         fun providesResources(context: Context) = context.resources
-
-        @Provides
-        @Singleton
-        @JvmStatic
-        fun providesWorkManager(): WorkManager = WorkManager.getInstance()
 
         @Provides
         @Singleton

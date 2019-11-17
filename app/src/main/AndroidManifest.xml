@@ -53,6 +53,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.erikkarlsson.simplesleeptracker.MainActivity" />
         </activity>
+
+        <!-- Disable default provider - https://stackoverflow.com/a/55875560/6733544 -->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:enabled="false"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':libraries:domain')
+    testImplementation project(':libraries:testutilsnew')
+
+    // RxJava
+    implementation Deps.rxjava2
+    implementation Deps.rxandroid
+
+    // Kotlin
+    implementation Deps.kotlin_stdlib
+    implementation Deps.core_ktx
+
+    // Dagger
+    implementation Deps.dagger_runtime
+    implementation Deps.dagger_android
+    implementation Deps.dagger_android_support
+    implementation Deps.dagger_assisted_injection_annotations
+    kapt Deps.dagger_compiler
+    kapt Deps.dagger_android_support_compiler
+    kapt Deps.dagger_assisted_injection_processor
+
+    // Fast CSV
+    implementation Deps.fast_csv
+
+    // Guava
+    implementation Deps.guava
+
+    // Timber
+    implementation Deps.timber
+
+    // ThreeTen Backport
+    implementation Deps.threeten_backport_android
+    testImplementation Deps.threeten_backport
+    androidTestImplementation Deps.threeten_backport
+
+    // Work Manager
+    // TODO (erikkarlsson): Exclude fixes bug in alpha09 https://stackoverflow.com/questions/52467819/compile-errors-after-updating-to-workmanager-1-0-0-alpha09
+    // Remove when updating to stable release.
+    implementation(Deps.work_manager_runtime) {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+
+    androidTestImplementation Deps.work_manager_testing
+
+}

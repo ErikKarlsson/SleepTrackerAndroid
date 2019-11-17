@@ -28,13 +28,16 @@ dependencies {
     implementation Deps.paging
     implementation Deps.paging_rx
 
+    // Guava
     implementation Deps.guava
+
+    // Kotlin
     implementation Deps.kotlin_stdlib
+
+    // Support libraries
     implementation Deps.support_app_compat
     implementation Deps.core_ktx
     implementation Deps.junit
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
 
     // Jsr 305
     implementation Deps.jsr305
@@ -58,11 +61,15 @@ dependencies {
     implementation Deps.glide
     kapt Deps.glide_compiler
 
+    // RxJava
+    implementation Deps.rxbinding
+    implementation Deps.rxjava2
+    implementation Deps.rxkotlin
+
+
     implementation Deps.play_services_auth
 
     implementation Deps.dagger_runtime
-
-    implementation Deps.rxbinding
 
     // ThreeTen Backport
     implementation Deps.threeten_backport_android
