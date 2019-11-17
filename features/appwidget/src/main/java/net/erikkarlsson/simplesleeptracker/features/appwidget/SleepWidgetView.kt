@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import net.erikkarlsson.simplesleeptracker.R
 import javax.inject.Inject
 import javax.inject.Singleton
 

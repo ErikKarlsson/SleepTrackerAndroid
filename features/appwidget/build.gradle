@@ -1,0 +1,35 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':libraries:domain')
+    implementation project(':libraries:ui-components')
+    testImplementation project(':libraries:testutilsnew')
+
+    // Dependencies for local unit tests
+    testImplementation Deps.junit
+    testImplementation Deps.hamcrest
+    testImplementation Deps.mockito_kotlin
+    testImplementation Deps.arch_core_testing
+    testImplementation Deps.mockito_inline
+
+    // Dagger
+    implementation Deps.dagger_runtime
+    implementation Deps.dagger_android
+
+    // RxJava
+    implementation Deps.rxjava2
+    implementation Deps.rxkotlin
+    implementation Deps.rxandroid
+
+    // Timber
+    implementation Deps.timber
+
+    // ThreeTen Backport
+    implementation Deps.threeten_backport_android
+    testImplementation Deps.threeten_backport
+    androidTestImplementation Deps.threeten_backport
+}
