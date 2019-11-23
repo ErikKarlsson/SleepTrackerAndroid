@@ -1,7 +1,6 @@
-package net.erikkarlsson.simplesleeptracker.util
+package net.easypark.dateutil
 
 import junit.framework.Assert.assertEquals
-import net.easypark.dateutil.*
 import org.junit.Test
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime

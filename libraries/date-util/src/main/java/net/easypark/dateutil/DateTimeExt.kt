@@ -61,21 +61,3 @@ val String.offsetDateTime: OffsetDateTime get() = OffsetDateTime.parse(this)
  */
 val Int.hoursToSeconds: Int get() = this * SECONDS_IN_AN_HOUR
 val Int.minutesToSeconds: Int get() = this * SECONDS_IN_A_MINUTE
-
-val Float.formatHoursMinutes: String
-    get() {
-        val totalMinutes = Math.round((Math.abs(this) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
-        val hours = Math.floor((totalMinutes / MINUTES_IN_AN_HOUR).toDouble()).toInt()
-        val minutes = if (hours > 0) {
-            totalMinutes % (hours * MINUTES_IN_AN_HOUR)
-        } else {
-            totalMinutes
-        }
-
-        return when {
-            hours == 0 && minutes > 0 -> String.format("%dmin", minutes)
-            hours > 0 && minutes == 0 -> String.format("%dh", hours)
-            hours > 0 && minutes > 0 -> String.format("%dh %dmin", hours, minutes)
-            else -> "0h"
-        }
-    }

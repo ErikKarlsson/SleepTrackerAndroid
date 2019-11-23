@@ -4,7 +4,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import net.easypark.dateutil.MINUTES_IN_AN_HOUR
-import net.easypark.dateutil.formatHoursMinutes
 import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -132,6 +131,24 @@ val Float.formatHoursMinutes3: String
             hours > 0 && minutes == 0 -> String.format("%d", hours)
             hours > 0 && minutes > 0 -> String.format("%d.%02d", hours, minutes)
             else -> "0"
+        }
+    }
+
+val Float.formatHoursMinutes: String
+    get() {
+        val totalMinutes = Math.round((Math.abs(this) * MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val hours = Math.floor((totalMinutes / MINUTES_IN_AN_HOUR).toDouble()).toInt()
+        val minutes = if (hours > 0) {
+            totalMinutes % (hours * MINUTES_IN_AN_HOUR)
+        } else {
+            totalMinutes
+        }
+
+        return when {
+            hours == 0 && minutes > 0 -> String.format("%dmin", minutes)
+            hours > 0 && minutes == 0 -> String.format("%dh", hours)
+            hours > 0 && minutes > 0 -> String.format("%dh %dmin", hours, minutes)
+            else -> "0h"
         }
     }
 
