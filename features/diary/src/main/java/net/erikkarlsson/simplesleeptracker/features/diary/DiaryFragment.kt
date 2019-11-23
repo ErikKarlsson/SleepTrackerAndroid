@@ -18,12 +18,12 @@ import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_diary.*
-import net.erikkarlsson.simplesleeptracker.base.Event
-import net.erikkarlsson.simplesleeptracker.base.EventObserver
+import net.erikkarlsson.simplesleeptracker.core.livedata.Event
+import net.erikkarlsson.simplesleeptracker.core.livedata.EventObserver
+import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecoration
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecorationFactory
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.SimpleDividerItemDecoration
-import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
 import javax.inject.Inject
 import javax.inject.Named
 

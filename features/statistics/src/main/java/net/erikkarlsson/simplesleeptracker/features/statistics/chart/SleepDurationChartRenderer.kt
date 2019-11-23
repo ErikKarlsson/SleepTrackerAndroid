@@ -14,7 +14,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.features.statistics.*
 import net.erikkarlsson.simplesleeptracker.features.statistics.item.ChartExtra
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes3
+import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes3
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.format.TextStyle
 import java.util.*

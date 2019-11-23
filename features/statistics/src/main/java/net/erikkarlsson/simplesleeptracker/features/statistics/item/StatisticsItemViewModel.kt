@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.features.statistics.item
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask

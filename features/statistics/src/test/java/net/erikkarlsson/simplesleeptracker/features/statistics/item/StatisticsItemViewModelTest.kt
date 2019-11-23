@@ -6,7 +6,7 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.Observable
 import junit.framework.Assert.assertEquals
-import net.erikkarlsson.simplesleeptracker.base.mockStatistics
+import net.erikkarlsson.simplesleeptracker.testutil.mockStatistics
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison

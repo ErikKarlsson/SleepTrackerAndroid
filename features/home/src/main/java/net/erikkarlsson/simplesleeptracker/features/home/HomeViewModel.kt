@@ -8,8 +8,8 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
-import net.erikkarlsson.simplesleeptracker.base.Event
+import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_MILLI
 import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
@@ -18,7 +18,7 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.LogoutTask
 import java.util.concurrent.TimeUnit

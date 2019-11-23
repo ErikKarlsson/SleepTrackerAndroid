@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.Module
 import dagger.Provides
-import net.erikkarlsson.simplesleeptracker.di.scope.FragmentScope
+import net.erikkarlsson.simplesleeptracker.core.di.scope.FragmentScope
 
 @Module
 class DiaryModule {

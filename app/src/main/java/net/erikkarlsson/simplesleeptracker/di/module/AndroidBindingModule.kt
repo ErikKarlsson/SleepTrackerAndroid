@@ -3,9 +3,9 @@ package net.erikkarlsson.simplesleeptracker.di.module
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import net.erikkarlsson.simplesleeptracker.MainActivity
-import net.erikkarlsson.simplesleeptracker.di.scope.ActivityScope
-import net.erikkarlsson.simplesleeptracker.di.scope.BroadcastRecieverScope
-import net.erikkarlsson.simplesleeptracker.di.scope.FragmentScope
+import net.erikkarlsson.simplesleeptracker.core.di.scope.ActivityScope
+import net.erikkarlsson.simplesleeptracker.core.di.scope.BroadcastRecieverScope
+import net.erikkarlsson.simplesleeptracker.core.di.scope.FragmentScope
 import net.erikkarlsson.simplesleeptracker.features.add.AddSleepActivity
 import net.erikkarlsson.simplesleeptracker.features.add.AddSleepFragment
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetProvider

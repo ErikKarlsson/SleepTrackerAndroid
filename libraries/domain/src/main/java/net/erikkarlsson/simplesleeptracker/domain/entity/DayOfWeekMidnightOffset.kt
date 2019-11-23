@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
-import net.erikkarlsson.simplesleeptracker.util.midnightOffsetToLocalTime
+import net.easypark.dateutil.midnightOffsetToLocalTime
 import org.threeten.bp.DayOfWeek
 
 data class DayOfWeekMidnightOffset(val day: Int, val midnightOffsetInSeconds: Int) {

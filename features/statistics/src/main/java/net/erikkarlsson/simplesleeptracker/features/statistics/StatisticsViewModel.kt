@@ -7,7 +7,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.reactivex.rxkotlin.zipWith
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_COMPARE_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource

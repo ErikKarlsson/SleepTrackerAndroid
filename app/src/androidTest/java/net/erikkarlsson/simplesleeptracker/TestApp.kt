@@ -1,9 +1,9 @@
 package net.erikkarlsson.simplesleeptracker
 
-import net.erikkarlsson.simplesleeptracker.base.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepository
 import net.erikkarlsson.simplesleeptracker.di.DaggerTestComponent
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.testutil.MockDateTimeProvider
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 

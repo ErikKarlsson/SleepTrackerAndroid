@@ -1,6 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
+import com.google.common.collect.ImmutableList
+import net.easypark.dateutil.formatHoursMinutes
 import org.threeten.bp.DayOfWeek
+import org.threeten.bp.format.TextStyle
+import java.util.*
 
 data class DayOfWeekHours(val day: Int, val hours: Float) {
 
@@ -12,3 +16,11 @@ data class DayOfWeekHours(val day: Int, val hours: Float) {
         return DayOfWeek.of(dayOfWeekIso)
     }
 }
+
+val DayOfWeekHours.formatDisplayName: String
+    get() = String.format("%s: %s",
+            this.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(),
+            this.hours.formatHoursMinutes)
+
+val ImmutableList<DayOfWeekHours>.formatDisplayName: String
+    get() = this.map { " - " + it.formatDisplayName }.joinToString(separator = "\n")

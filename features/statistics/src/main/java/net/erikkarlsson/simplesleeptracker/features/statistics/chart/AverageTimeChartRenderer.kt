@@ -11,14 +11,14 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.google.common.collect.ImmutableList
-import net.erikkarlsson.simplesleeptracker.domain.SECONDS_IN_AN_HOUR
+import net.easypark.dateutil.SECONDS_IN_AN_HOUR
+import net.easypark.dateutil.formatHHMM
+import net.easypark.dateutil.midnightOffsetInSeconds
 import net.erikkarlsson.simplesleeptracker.domain.entity.DayOfWeekLocalTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.features.statistics.AXIS_TEXT_SIZE
 import net.erikkarlsson.simplesleeptracker.features.statistics.R
 import net.erikkarlsson.simplesleeptracker.features.statistics.VALUE_TEXT_SIZE
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.midnightOffsetInSeconds
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.TextStyle

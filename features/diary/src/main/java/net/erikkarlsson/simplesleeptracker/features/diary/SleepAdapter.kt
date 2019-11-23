@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_sleep.view.*
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes2
+import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName
+import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
+import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
 
 class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sleep, SleepAdapter.ViewHolder>(diffCallback) {
 

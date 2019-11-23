@@ -7,8 +7,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
-import net.erikkarlsson.simplesleeptracker.base.Event
+import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.features.add.domain.AddSleepTask
 import org.threeten.bp.LocalDate

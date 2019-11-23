@@ -5,7 +5,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.features.details.domain.DeleteSleepTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateStartDateTask

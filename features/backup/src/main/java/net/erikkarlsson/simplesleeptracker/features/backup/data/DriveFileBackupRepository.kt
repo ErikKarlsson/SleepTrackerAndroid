@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import net.erikkarlsson.simplesleeptracker.core.util.toFile
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_LAST_SYNC_TIMESTAMP
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
@@ -12,7 +13,6 @@ import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_FOLDER_NAME
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_MIME_TYPE
 import net.erikkarlsson.simplesleeptracker.features.backup.RESTORE_FILE_NAME
-import net.erikkarlsson.simplesleeptracker.util.toFile
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named

@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.util.toImmutableList
+import net.erikkarlsson.simplesleeptracker.core.util.toImmutableList
 import javax.inject.Inject
 
 class SleepRepository @Inject constructor(private val sleepDao: SleepDao,

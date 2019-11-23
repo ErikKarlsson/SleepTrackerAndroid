@@ -7,6 +7,7 @@ apply plugin: 'androidx.navigation.safeargs'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation project(':libraries:core')
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
     implementation project(':libraries:navigation')

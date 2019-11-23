@@ -7,7 +7,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

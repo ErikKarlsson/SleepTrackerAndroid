@@ -9,7 +9,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.sleep.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import org.junit.Rule
 import org.junit.Test

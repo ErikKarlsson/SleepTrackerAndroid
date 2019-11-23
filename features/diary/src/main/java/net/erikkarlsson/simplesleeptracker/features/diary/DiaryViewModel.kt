@@ -5,7 +5,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import net.erikkarlsson.simplesleeptracker.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.features.diary.domain.GetSleepDiaryTask
 

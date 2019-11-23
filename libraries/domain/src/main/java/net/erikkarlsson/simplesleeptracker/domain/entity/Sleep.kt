@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
-import net.erikkarlsson.simplesleeptracker.util.hoursTo
-import net.erikkarlsson.simplesleeptracker.util.midnightOffsetInSeconds
+import net.easypark.dateutil.hoursTo
+import net.easypark.dateutil.midnightOffsetInSeconds
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime

@@ -30,11 +30,11 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.logged_in_content.*
 import kotlinx.android.synthetic.main.logged_out_content.*
-import net.erikkarlsson.simplesleeptracker.base.EventObserver
+import net.erikkarlsson.simplesleeptracker.core.livedata.EventObserver
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
-import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes2
-import net.erikkarlsson.simplesleeptracker.util.formatTimestamp
+import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
+import net.erikkarlsson.simplesleeptracker.core.util.formatTimestamp
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named

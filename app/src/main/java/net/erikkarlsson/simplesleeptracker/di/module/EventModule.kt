@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import net.erikkarlsson.simplesleeptracker.base.Event
+import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.features.home.HomeEvents
 import javax.inject.Named

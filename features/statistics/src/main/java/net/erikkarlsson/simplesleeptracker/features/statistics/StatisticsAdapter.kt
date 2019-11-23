@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.features.statistics.item.StatisticsItemFragment
-import net.erikkarlsson.simplesleeptracker.util.formatDateShort
-import net.erikkarlsson.simplesleeptracker.util.yearLastTwoDigits
+import net.erikkarlsson.simplesleeptracker.core.util.formatDateShort
+import net.erikkarlsson.simplesleeptracker.core.util.yearLastTwoDigits
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.TextStyle
 import java.util.*

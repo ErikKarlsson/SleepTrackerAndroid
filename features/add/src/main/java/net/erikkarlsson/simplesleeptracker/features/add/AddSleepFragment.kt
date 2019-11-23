@@ -17,10 +17,10 @@ import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_add.*
-import net.erikkarlsson.simplesleeptracker.util.clicksThrottle
-import net.erikkarlsson.simplesleeptracker.util.formatDateDisplayName2
-import net.erikkarlsson.simplesleeptracker.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.util.formatHoursMinutes
+import net.easypark.dateutil.formatHHMM
+import net.easypark.dateutil.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import javax.inject.Inject

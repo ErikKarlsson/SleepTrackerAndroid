@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import net.erikkarlsson.simplesleeptracker.features.diary.R
-import net.erikkarlsson.simplesleeptracker.util.px
+import net.erikkarlsson.simplesleeptracker.core.util.px
 import javax.inject.Inject
 
 class SimpleDividerItemDecoration @Inject constructor(context: Context) : RecyclerView.ItemDecoration() {

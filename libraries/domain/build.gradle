@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':libraries:date-util')
 
     // Dagger
     implementation Deps.dagger_runtime

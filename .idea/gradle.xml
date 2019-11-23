@@ -23,7 +23,9 @@
             <option value="$PROJECT_DIR$/features/settings" />
             <option value="$PROJECT_DIR$/features/statistics" />
             <option value="$PROJECT_DIR$/libraries" />
+            <option value="$PROJECT_DIR$/libraries/core" />
             <option value="$PROJECT_DIR$/libraries/data" />
+            <option value="$PROJECT_DIR$/libraries/date-util" />
             <option value="$PROJECT_DIR$/libraries/domain" />
             <option value="$PROJECT_DIR$/libraries/domaintests" />
             <option value="$PROJECT_DIR$/libraries/navigation" />
