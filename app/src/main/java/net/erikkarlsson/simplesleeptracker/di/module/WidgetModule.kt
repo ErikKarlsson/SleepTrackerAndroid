@@ -2,8 +2,8 @@ package net.erikkarlsson.simplesleeptracker.di.module
 
 import dagger.Binds
 import dagger.Module
-import net.erikkarlsson.simplesleeptracker.data.widget.WidgetRepository
 import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
+import net.erikkarlsson.simplesleeptracker.features.appwidget.data.WidgetRepository
 
 @Module
 abstract class WidgetModule {

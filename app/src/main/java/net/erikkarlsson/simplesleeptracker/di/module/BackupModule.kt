@@ -2,7 +2,6 @@ package net.erikkarlsson.simplesleeptracker.di.module
 
 import dagger.Binds
 import dagger.Module
-import net.erikkarlsson.simplesleeptracker.data.backup.DriveFileBackupRepository
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileWriter
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
@@ -11,6 +10,7 @@ import net.erikkarlsson.simplesleeptracker.features.backup.BackupScheduler
 import net.erikkarlsson.simplesleeptracker.features.backup.FastBackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.features.backup.FastBackupCsvFileWriter
 import net.erikkarlsson.simplesleeptracker.features.backup.RestoreBackupScheduler
+import net.erikkarlsson.simplesleeptracker.features.backup.data.DriveFileBackupRepository
 import javax.inject.Named
 import javax.inject.Singleton
 

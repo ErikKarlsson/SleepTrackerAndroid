@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data.backup
+package net.erikkarlsson.simplesleeptracker.features.backup.data
 
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,8 +13,8 @@ import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import io.reactivex.Completable
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.R
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_MIME_TYPE
+import net.erikkarlsson.simplesleeptracker.features.backup.R
 import java.io.InputStream
 import java.util.Collections.singletonList
 import javax.inject.Inject

@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.App
-import net.erikkarlsson.simplesleeptracker.data.AndroidAppLifecycle
+import net.erikkarlsson.simplesleeptracker.AndroidAppLifecycle
 import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import javax.inject.Named
 import javax.inject.Singleton

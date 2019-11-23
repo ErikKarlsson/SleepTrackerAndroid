@@ -1,7 +1,6 @@
-package net.erikkarlsson.simplesleeptracker.data
+package net.erikkarlsson.simplesleeptracker
 
 import io.reactivex.Single
-import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import javax.inject.Inject
 

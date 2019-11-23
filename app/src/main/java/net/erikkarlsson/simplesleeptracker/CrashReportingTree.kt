@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.base
+package net.erikkarlsson.simplesleeptracker
 
 import android.util.Log
 import com.crashlytics.android.Crashlytics

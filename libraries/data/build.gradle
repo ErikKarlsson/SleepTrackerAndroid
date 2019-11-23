@@ -8,7 +8,6 @@ dependencies {
 
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
-    testImplementation project(':libraries:testutilsnew')
 
     // BubbleLayout
     implementation Deps.bubble_layout
@@ -131,7 +130,4 @@ dependencies {
     implementation(Deps.work_manager_runtime) {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
-
-    androidTestImplementation Deps.work_manager_testing
-
 }

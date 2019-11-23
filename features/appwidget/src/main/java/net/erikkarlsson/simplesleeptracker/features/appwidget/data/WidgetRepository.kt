@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.data.widget
+package net.erikkarlsson.simplesleeptracker.features.appwidget.data
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName

@@ -149,6 +149,7 @@ dependencies {
     implementation project(':features:backup')
     implementation project(':features:appwidget')
     implementation project(':libraries:domain')
+    implementation project(':libraries:data')
     implementation project(':libraries:navigation')
     implementation project(':libraries:ui-components')
     testImplementation project(':libraries:testutilsnew')
