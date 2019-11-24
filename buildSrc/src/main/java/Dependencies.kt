@@ -13,7 +13,7 @@ object Versions {
     val atsl_rules = "1.1.1"
     val atsl_runner = "1.1.1"
     val bubble_layout = "1.2.0"
-    val constraint_layout = "1.1.2"
+    val constraint_layout = "1.1.3"
     val core_ktx = "1.0.0"
     val crashlytics = "2.9.8"
     val dagger = "2.16"
