@@ -8,7 +8,7 @@ object Config {
 }
 
 object Versions {
-    val android_gradle_plugin = "3.6.0-beta04"
+    val android_gradle_plugin = "3.5.2"
     val arch_core = "2.0.0"
     val atsl_rules = "1.1.1"
     val atsl_runner = "1.1.1"
@@ -47,7 +47,7 @@ object Versions {
     val multidex = "2.0.1"
     val multidex_instrumentation = "2.0.0"
     val mvrx = "1.3.0"
-    val navigation = "1.0.0-alpha09"
+    val navigation = "1.0.0"
     val navigation_testing = "1.0.0-alpha08"
     val okhttp_logging_interceptor = "3.9.0"
     val paging = "2.0.0"
