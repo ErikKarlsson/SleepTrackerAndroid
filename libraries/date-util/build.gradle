@@ -8,8 +8,8 @@ dependencies {
     testImplementation project(':libraries:testutilsnew')
 
     // ThreeTen Backport
-    implementation Deps.threeten_backport_android
-    testImplementation Deps.threeten_backport
+    api Deps.threeten_backport_android
+    testApi Deps.threeten_backport
 
     // Dependencies for local unit tests
     testImplementation Deps.junit

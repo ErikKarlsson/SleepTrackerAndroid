@@ -29,8 +29,4 @@ dependencies {
     implementation Deps.rxandroid
     implementation Deps.rxkotlin
     implementation Deps.rxbinding
-
-    // ThreeTen Backport
-    implementation Deps.threeten_backport_android
-    testImplementation Deps.threeten_backport
 }

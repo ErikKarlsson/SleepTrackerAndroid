@@ -153,10 +153,10 @@ dependencies {
     implementation project(':libraries:data')
     implementation project(':libraries:navigation')
     implementation project(':libraries:ui-components')
-    testImplementation project(':libraries:testutilsnew')
-    androidTestImplementation project(':libraries:testutilsnew')
 
     // Dependencies for Android tests
+    androidTestImplementation project(':libraries:testutilsnew')
+
     androidTestImplementation Deps.atsl_runner
     androidTestImplementation Deps.atsl_rules
     androidTestImplementation Deps.room_testing
@@ -175,16 +175,6 @@ dependencies {
     kaptAndroidTest Deps.dagger_compiler
     kaptAndroidTest Deps.dagger_android_support_compiler
 
-    // Dependencies for local unit tests
-    testImplementation Deps.junit
-    testImplementation Deps.hamcrest
-    testImplementation Deps.mockito_kotlin
-    testImplementation Deps.arch_core_testing
-    testImplementation Deps.mockito_inline
-
-    // BubbleLayout
-    implementation Deps.bubble_layout
-
     // Crashlytics
     implementation Deps.crashlytics
 
@@ -197,16 +187,6 @@ dependencies {
     kapt Deps.dagger_android_support_compiler
     kapt Deps.dagger_assisted_injection_processor
 
-    // Fast CSV
-    implementation Deps.fast_csv
-
-    // Firebase
-    implementation Deps.firebase_core
-
-    // Glide
-    implementation Deps.glide
-    kapt Deps.glide_compiler
-
     // Google Drive REST API
     implementation Deps.google_http_client_gson
     implementation(Deps.google_api_client_android) {
@@ -216,18 +196,12 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    // Gson
-    implementation Deps.gson
-
-    // Guava
-    implementation Deps.guava
-
-    // Jsr 305
-    implementation Deps.jsr305
-
     // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
+
+    // Guava
+    implementation Deps.guava
 
     // LeakCanary
     debugImplementation Deps.leakcanary
@@ -236,9 +210,6 @@ dependencies {
     // Lifecycle
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
-
-    // Material
-    implementation Deps.material
 
     // Material progress bar
     implementation Deps.materialprogressbar
@@ -258,21 +229,9 @@ dependencies {
     implementation Deps.navigation_ui
     androidTestImplementation Deps.navigation_testing
 
-    // Paging
-    implementation Deps.paging
-    implementation Deps.paging_rx
-
-    // Preferences
-    implementation Deps.preferences
-
     // Play Services
     implementation Deps.play_services_auth
     implementation Deps.play_services_oss_licenses
-
-    // Room
-    implementation Deps.room_runtime
-    implementation Deps.room_rxjava2
-    kapt Deps.room_compiler
 
     // RxJava
     implementation Deps.rxjava2
@@ -281,13 +240,6 @@ dependencies {
     implementation Deps.rxbinding
     implementation Deps.rxkotlin
     implementation Deps.rx_preferences
-
-    // Support libraries
-    implementation Deps.support_app_compat
-    implementation Deps.support_cardview
-    implementation Deps.support_constraint_layout
-    implementation Deps.support_v4
-    implementation Deps.support_vector_drawable
 
     // ThreeTen Backport
     implementation Deps.threeten_backport_android

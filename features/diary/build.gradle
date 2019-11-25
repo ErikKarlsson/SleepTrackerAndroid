@@ -29,19 +29,14 @@ dependencies {
     implementation Deps.paging
     implementation Deps.paging_rx
 
-    // Guava
-    implementation Deps.guava
+    // RxJava
+    implementation Deps.rxjava2
+    implementation Deps.rxandroid
+    implementation Deps.rxkotlin
 
     // Kotlin
     implementation Deps.kotlin_stdlib
-
-    // Support libraries
-    implementation Deps.support_app_compat
     implementation Deps.core_ktx
-    implementation Deps.junit
-
-    // Jsr 305
-    implementation Deps.jsr305
 
     // Dagger
     implementation Deps.dagger_runtime
@@ -58,21 +53,10 @@ dependencies {
     // MvRx
     implementation Deps.mvrx
 
-    // Glide
-    implementation Deps.glide
-    kapt Deps.glide_compiler
-
-    // RxJava
-    implementation Deps.rxbinding
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
-
-
-    implementation Deps.play_services_auth
-
-    implementation Deps.dagger_runtime
-
-    // ThreeTen Backport
-    implementation Deps.threeten_backport_android
-    testImplementation Deps.threeten_backport
+    // Support libraries
+    implementation Deps.support_app_compat
+    implementation Deps.support_cardview
+    implementation Deps.support_constraint_layout
+    implementation Deps.support_v4
+    implementation Deps.support_vector_drawable
 }

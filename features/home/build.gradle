@@ -18,16 +18,8 @@ dependencies {
     testImplementation Deps.arch_core_testing
     testImplementation Deps.mockito_inline
 
-    implementation Deps.guava
-    implementation Deps.kotlin_stdlib
-    implementation Deps.support_app_compat
-    implementation Deps.core_ktx
-    implementation Deps.junit
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
-
-    // Jsr 305
-    implementation Deps.jsr305
+    // BubbleLayout
+    implementation Deps.bubble_layout
 
     // Dagger
     implementation Deps.dagger_runtime
@@ -38,20 +30,44 @@ dependencies {
     kapt Deps.dagger_android_support_compiler
     kapt Deps.dagger_assisted_injection_processor
 
-    // Timber
-    implementation Deps.timber
-
-    // MvRx
-    implementation Deps.mvrx
-
     // Glide
     implementation Deps.glide
     kapt Deps.glide_compiler
 
+    // Google Drive REST API
+    implementation Deps.google_http_client_gson
+    implementation(Deps.google_api_client_android) {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation(Deps.google_api_services_drive) {
+        exclude group: 'org.apache.httpcomponents'
+    }
+
+    // RxJava
+    implementation Deps.rxjava2
+    implementation Deps.rxbinding
+    implementation Deps.rxkotlin
+
+    // Kotlin
+    implementation Deps.kotlin_stdlib
+    implementation Deps.core_ktx
+
+    // Material
+    implementation Deps.material
+
+    // MvRx
+    implementation Deps.mvrx
+
+    // Play Services
     implementation Deps.play_services_auth
 
-    implementation Deps.dagger_runtime
+    // Support libraries
+    implementation Deps.support_app_compat
+    implementation Deps.support_cardview
+    implementation Deps.support_constraint_layout
+    implementation Deps.support_v4
+    implementation Deps.support_vector_drawable
 
-    implementation Deps.rxbinding
-
+    // Timber
+    implementation Deps.timber
 }
