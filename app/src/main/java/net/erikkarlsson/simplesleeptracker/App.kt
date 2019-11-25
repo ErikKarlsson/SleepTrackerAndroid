@@ -23,7 +23,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
-import net.erikkarlsson.simplesleeptracker.di.module.MyWorkerFactory
+import net.erikkarlsson.simplesleeptracker.features.backup.di.MyWorkerFactory
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
 import timber.log.Timber

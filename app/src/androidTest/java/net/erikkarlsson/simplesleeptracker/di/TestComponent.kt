@@ -6,7 +6,10 @@ import dagger.android.AndroidInjectionModule
 import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.TestApp
 import net.erikkarlsson.simplesleeptracker.di.module.*
+import net.erikkarlsson.simplesleeptracker.features.appwidget.di.WidgetModule
 import net.erikkarlsson.simplesleeptracker.features.backup.di.BackupAssistedModule
+import net.erikkarlsson.simplesleeptracker.features.backup.di.BackupModule
+import net.erikkarlsson.simplesleeptracker.features.backup.di.WorkerBindingModule
 import net.erikkarlsson.simplesleeptracker.features.details.di.AddAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.details.di.DetailsAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.diary.di.DiaryAssistedModule

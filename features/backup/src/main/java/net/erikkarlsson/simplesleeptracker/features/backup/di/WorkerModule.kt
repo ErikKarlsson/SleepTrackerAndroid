@@ -1,4 +1,4 @@
-package net.erikkarlsson.simplesleeptracker.di.module
+package net.erikkarlsson.simplesleeptracker.features.backup.di
 
 import android.content.Context
 import androidx.work.ListenableWorker
