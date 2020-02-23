@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -7,17 +8,19 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.reactivex.rxkotlin.zipWith
+import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_COMPARE_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
-import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
+import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
 class StatisticsViewModel @AssistedInject constructor(
         @Assisted val initialState: StatisticsState,
-        private val statisticsDataSource: StatisticsDataSource,
+        private val statisticsDataSource: StatisticsDataSourceCoroutines,
         private val preferences: PreferencesDataSource)
     : MvRxViewModel<StatisticsState>(initialState) {
 
@@ -52,29 +55,32 @@ class StatisticsViewModel @AssistedInject constructor(
     }
 
     private fun subscribeOldestYoungest() {
-        statisticsDataSource.getYoungestSleep()
-                .zipWith(statisticsDataSource.getOldestSleep())
-                .map { YoungestOldest(it.first, it.second) }
-                .execute {
-                    if (it is Success) {
-                        val filter = this.filter
-                        val compareFilter = this.compareFilter
-                        val youngest = it()!!.youngest
-                        val oldest = it()!!.oldest
-                        val sleepFound = youngest != Sleep.empty()
-
-                        val dateRanges = if (sleepFound) {
-                            getDateRanges(filter, compareFilter, youngest, oldest)
-                        } else {
-                            listOf()
-                        }
-
-                        copy(youngest = youngest, oldest = oldest, dateRanges = dateRanges,
-                                isLoading = false, sleepFound = sleepFound)
-                    } else {
-                        copy()
+        viewModelScope.launch {
+            statisticsDataSource.getYoungestSleep()
+                    .zip(statisticsDataSource.getOldestSleep()) { first, second ->
+                        YoungestOldest(first, second)
                     }
-                }
+                    .execute {
+                        if (it is Success) {
+                            val filter = this.filter
+                            val compareFilter = this.compareFilter
+                            val youngest = it().youngest
+                            val oldest = it().oldest
+                            val sleepFound = youngest != Sleep.empty()
+
+                            val dateRanges = if (sleepFound) {
+                                getDateRanges(filter, compareFilter, youngest, oldest)
+                            } else {
+                                listOf()
+                            }
+
+                            copy(youngest = youngest, oldest = oldest, dateRanges = dateRanges,
+                                    isLoading = false, sleepFound = sleepFound)
+                        } else {
+                            copy()
+                        }
+                    }
+        }
     }
 
     fun subscribeSavedFilters() {

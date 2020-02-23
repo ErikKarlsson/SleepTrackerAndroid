@@ -1,13 +1,14 @@
 package net.erikkarlsson.simplesleeptracker.data.sleep
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import android.content.Context
 import net.erikkarlsson.simplesleeptracker.data.TiviTypeConverters
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDao
+import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDaoCoroutines
 
 /**
  * The Room database that contains the Sleep table
@@ -19,6 +20,8 @@ abstract class SleepDatabase : RoomDatabase() {
     abstract fun sleepDao(): SleepDao
 
     abstract fun statisticsDao(): StatisticsDao
+
+    abstract fun statisticsDaoCoroutines(): StatisticsDaoCoroutines
 
     companion object {
 

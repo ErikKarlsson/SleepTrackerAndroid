@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableList
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
+import net.easypark.dateutil.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.core.util.toImmutableList
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.*
-import net.easypark.dateutil.midnightOffsetToLocalTime
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
