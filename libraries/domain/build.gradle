@@ -7,6 +7,10 @@ dependencies {
 
     implementation project(':libraries:date-util')
 
+    // Coroutines
+    implementation Deps.coroutines_core
+    implementation Deps.coroutines_android
+
     // Dagger
     implementation Deps.dagger_runtime
 

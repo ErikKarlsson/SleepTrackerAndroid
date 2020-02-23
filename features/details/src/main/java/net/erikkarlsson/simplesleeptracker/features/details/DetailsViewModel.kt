@@ -1,13 +1,15 @@
 package net.erikkarlsson.simplesleeptracker.features.details
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.features.details.domain.DeleteSleepTask
+import net.erikkarlsson.simplesleeptracker.features.details.domain.DeleteSleepTaskCoroutines
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateStartDateTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateTimeAsleepTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateTimeAwakeTask
@@ -20,41 +22,47 @@ class DetailsViewModel @AssistedInject constructor(
         private val updateStartDateTask: UpdateStartDateTask,
         private val updateTimeAsleepTask: UpdateTimeAsleepTask,
         private val updateTimeAwakeTask: UpdateTimeAwakeTask,
-        private val deleteSleepTask: DeleteSleepTask
+        private val deleteSleepTask: DeleteSleepTaskCoroutines
 ) : MvRxViewModel<DetailsState>(state) {
 
     init {
-        sleepRepository.getSleep(state.sleepId)
-                .execute {
-                    copy(sleep = it)
-                }
+        viewModelScope.launch {
+            sleepRepository.getSleepCoroutine(state.sleepId).execute {
+                copy(sleep = it)
+            }
+        }
     }
 
     fun deleteClick() {
-        withState {
-            deleteSleepTask.completable(DeleteSleepTask.Params(it.sleepId))
-                    .execute { copy(isDeleted = true) }
+        withState { state ->
+            viewModelScope.launch {
+                deleteSleepTask.completable(DeleteSleepTaskCoroutines.Params(state.sleepId))
+                setState { copy(isDeleted = true) }
+            }
         }
     }
 
     fun pickedStartDate(startDate: LocalDate) {
         withState {
-            updateStartDateTask.completable(UpdateStartDateTask.Params(it.sleepId, startDate))
-                    .execute { copy() }
+            viewModelScope.launch {
+                updateStartDateTask.completable(UpdateStartDateTask.Params(it.sleepId, startDate))
+            }
         }
     }
 
     fun pickedTimeAsleep(timeAsleep: LocalTime) {
         withState {
-            updateTimeAsleepTask.completable(UpdateTimeAsleepTask.Params(it.sleepId, timeAsleep))
-                    .execute { copy() }
+            viewModelScope.launch {
+                updateTimeAsleepTask.completable(UpdateTimeAsleepTask.Params(it.sleepId, timeAsleep))
+            }
         }
     }
 
     fun pickedTimeAwake(timeAwake: LocalTime) {
         withState {
-            updateTimeAwakeTask.completable(UpdateTimeAwakeTask.Params(it.sleepId, timeAwake))
-                    .execute { copy() }
+            viewModelScope.launch {
+                updateTimeAwakeTask.completable(UpdateTimeAwakeTask.Params(it.sleepId, timeAwake))
+            }
         }
     }
 

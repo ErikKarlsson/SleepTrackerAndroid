@@ -10,6 +10,10 @@ dependencies {
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
 
+    // Coroutines
+    implementation Deps.coroutines_core
+    implementation Deps.coroutines_android
+
     // Dagger
     implementation Deps.dagger_runtime
 
@@ -27,6 +31,7 @@ dependencies {
     // Room
     implementation Deps.room_runtime
     implementation Deps.room_rxjava2
+    implementation Deps.room_ktx
     kapt Deps.room_compiler
 
     // RxJava

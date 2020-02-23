@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import androidx.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 
 /**
@@ -15,6 +16,9 @@ interface SleepDao {
     @Query("SELECT count(*) FROM Sleep")
     fun getSleepCount(): Flowable<Int>
 
+    @Query("SELECT count(*) FROM Sleep")
+    fun getSleepCountFlow(): Flow<Int>
+
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
     fun getSleep(): Flowable<List<SleepEntity>>
 
@@ -24,11 +28,17 @@ interface SleepDao {
     @Query("SELECT * FROM Sleep WHERE id == :id")
     fun getSleep(id: Int): Flowable<List<SleepEntity>>
 
+    @Query("SELECT * FROM Sleep WHERE id == :id")
+    fun getSleepFlow(id: Int): Flow<List<SleepEntity>>
+
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     fun getCurrentSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     fun getCurrentSleepSingle(): Single<SleepEntity>
+
+    @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
+    suspend fun getCurrentSleepCoroutines(): SleepEntity
 
     @Insert
     fun insertAll(sleepList: List<SleepEntity>)
@@ -44,8 +54,14 @@ interface SleepDao {
     @Update
     fun updateSleep(sleep: SleepEntity): Int
 
+    @Update
+    suspend fun updateSleepCoroutine(sleep: SleepEntity): Int
+
     @Delete
     fun deleteSleep(sleep: SleepEntity)
+
+    @Delete
+    suspend fun deleteSleepCoroutines(sleep: SleepEntity)
 
     /**
      * Delete all sleep.

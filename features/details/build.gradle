@@ -12,6 +12,11 @@ dependencies {
     implementation project(':libraries:ui-components')
     implementation project(':libraries:navigation')
 
+    // Lifecycle
+    api Deps.lifecycle_extensions
+    api Deps.lifecycle_viewmodel
+    kapt Deps.lifecycle_compiler
+
     // Navigation
     implementation Deps.navigation_fragment
     implementation Deps.navigation_ui
@@ -25,6 +30,10 @@ dependencies {
     implementation Deps.rxjava2
     implementation Deps.rxkotlin
     implementation Deps.rxbinding
+
+    // Coroutines
+    implementation Deps.coroutines_core
+    implementation Deps.coroutines_android
 
     // Dagger
     implementation Deps.dagger_runtime

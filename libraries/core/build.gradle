@@ -8,6 +8,15 @@ dependencies {
 
     api project(':libraries:date-util')
 
+    // Coroutines
+    api Deps.coroutines_core
+    api Deps.coroutines_android
+
+    // Lifecycle
+    api Deps.lifecycle_extensions
+    api Deps.lifecycle_viewmodel
+    kapt Deps.lifecycle_compiler
+
     // Dagger
     implementation Deps.dagger_runtime
 

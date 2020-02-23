@@ -11,13 +11,20 @@ import com.airbnb.mvrx.*
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
+import timber.log.Timber
 import javax.inject.Inject
 
 class DetailFragment : BaseMvRxFragment() {
@@ -31,6 +38,9 @@ class DetailFragment : BaseMvRxFragment() {
 
     @Inject
     lateinit var viewModelFactory: DetailsViewModel.Factory
+
+    @Inject
+    lateinit var sleepRepository: SleepDataSource
 
     private val viewModel: DetailsViewModel by fragmentViewModel()
 
@@ -60,6 +70,8 @@ class DetailFragment : BaseMvRxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+
     }
 
     override fun onAttach(context: Context) {
@@ -77,6 +89,24 @@ class DetailFragment : BaseMvRxFragment() {
 
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val sleep = sleepRepository.getCurrentCoroutines()
+            Timber.d("sleep %s", sleep.toString())
+
+
+        }
+
+//        sleepRepository.getCountFlow().collect {
+//
+//        }
+
+    }
+
+    private suspend fun getCurrentSleep(): Sleep {
+        return withContext(Dispatchers.IO) {
+            sleepRepository.getCurrentCoroutines()
+        }
     }
 
     private fun showConfirmDeleteDialog() {
