@@ -242,6 +242,9 @@ dependencies {
     implementation Deps.rxkotlin
     implementation Deps.rx_preferences
 
+    // Flow
+    implementation Deps.flow_preferences
+
     // ThreeTen Backport
     implementation Deps.threeten_backport_android
     testImplementation Deps.threeten_backport

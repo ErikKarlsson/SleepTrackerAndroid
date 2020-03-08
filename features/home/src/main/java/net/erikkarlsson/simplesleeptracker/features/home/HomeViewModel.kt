@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.features.home
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -8,6 +9,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_MILLI
@@ -16,7 +18,7 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.GetHomeTask
@@ -36,17 +38,19 @@ class HomeViewModel @AssistedInject constructor(
 ) : MvRxViewModel<HomeState>(state) {
 
     init {
-        getHomeTask.observable(ObservableTask.None())
-                .execute {
-                    when (it) {
-                        is Success -> {
-                            copy(lastBackupTimestamp = it().lastBackupTimestamp,
-                                    sleep = it().currentSleep, isLoadingHome = false,
-                                    sleepCount = it().sleepCount)
+        viewModelScope.launch {
+            getHomeTask.flow(None())
+                    .execute {
+                        when (it) {
+                            is Success -> {
+                                copy(lastBackupTimestamp = it().lastBackupTimestamp,
+                                        sleep = it().currentSleep, isLoadingHome = false,
+                                        sleepCount = it().sleepCount)
+                            }
+                            else -> copy()
                         }
-                        else -> copy()
                     }
-                }
+        }
 
         sleepEvents.filter { it is MinimumSleepEvent }
                 .doOnNext {

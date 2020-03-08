@@ -40,6 +40,9 @@ interface SleepDao {
     @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
     suspend fun getCurrentSleepCoroutines(): SleepEntity
 
+    @Query("SELECT * FROM Sleep ORDER BY id DESC LIMIT 1")
+    fun getCurrentSleepFlow(): Flow<SleepEntity>
+
     @Insert
     fun insertAll(sleepList: List<SleepEntity>)
 

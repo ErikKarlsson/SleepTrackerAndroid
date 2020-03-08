@@ -19,6 +19,7 @@ interface SleepDataSource {
     fun getCurrent(): Observable<Sleep>
     fun getCurrentSingle(): Single<Sleep>
     suspend fun getCurrentCoroutines(): Sleep
+    fun getCurrentFlow(): Flow<Sleep>
     fun insert(newSleep: Sleep): Long
     fun update(updatedSleep: Sleep): Int
     suspend fun updateCoroutine(updatedSleep: Sleep): Int

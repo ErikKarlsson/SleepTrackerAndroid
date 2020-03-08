@@ -81,6 +81,10 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
         return sleepMapper.mapFromEntity(sleepEntity)
     }
 
+    override fun getCurrentFlow(): Flow<Sleep> =
+        sleepDao.getCurrentSleepFlow()
+                .map { sleepMapper.mapFromEntity(it) }
+
     override fun getCurrent(): Observable<Sleep> =
             sleepDao.getCurrentSleep()
                     .map {

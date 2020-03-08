@@ -41,6 +41,9 @@ dependencies {
     implementation Deps.rxkotlin
     implementation Deps.rx_preferences
 
+    // Flow
+    implementation Deps.flow_preferences
+
     // Guava
     implementation Deps.guava
 

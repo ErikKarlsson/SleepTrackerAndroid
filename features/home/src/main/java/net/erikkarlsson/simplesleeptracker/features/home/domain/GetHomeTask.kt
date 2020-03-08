@@ -1,29 +1,27 @@
 package net.erikkarlsson.simplesleeptracker.features.home.domain
 
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
-import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask.None
+import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
+import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask.None
 import javax.inject.Inject
 
 data class HomeLoaded(val lastBackupTimestamp: Long,
                       val currentSleep: Sleep,
                       val sleepCount: Int)
 
-class GetHomeTask @Inject constructor(private val backupDataSource: FileBackupDataSource,
+class GetHomeTask @Inject constructor(private val backupDataSource: FileBackupDataSourceCoroutines,
                                       private val sleepRepository: SleepDataSource)
-    : ObservableTask<HomeLoaded, None> {
+    : FlowTask<HomeLoaded, None> {
 
-    override fun observable(params: None): Observable<HomeLoaded> =
-            Observables.combineLatest(
+    override fun flow(params: None): Flow<HomeLoaded> =
+            combine(listOf(
                     backupDataSource.getLastBackupTimestamp(),
-                    sleepRepository.getCurrent(),
-                    sleepRepository.getCount())
-            { lastBackupTimestamp, currentSleep, sleepCount ->
-                HomeLoaded(lastBackupTimestamp, currentSleep, sleepCount)
+                    sleepRepository.getCurrentFlow(),
+                    sleepRepository.getCountFlow())) {
+                HomeLoaded(it[0] as Long, it[1] as Sleep, it[2] as Int)
             }
-
 }
