@@ -128,6 +128,7 @@ configurations.all { config ->
     resolutionStrategy.force Deps.kotlin_stdlib
     resolutionStrategy.force Deps.threeten_backport
     resolutionStrategy.force Deps.core_ktx
+    resolutionStrategy.force Deps.gson
 
     // https://stackoverflow.com/questions/46989310/commons-logging-defines-classes-that-conflict-with-classes-now-provided-by-andro
     exclude module: 'httpclient'

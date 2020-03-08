@@ -1,8 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics.item
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
@@ -25,15 +27,17 @@ class StatisticsItemViewModel @AssistedInject constructor(
     : MvRxViewModel<StatisticsItemState>(initialState) {
 
     fun loadStatistics(dataRangePair: DateRangePair, filter: StatisticsFilter) {
-        when (filter) {
-            StatisticsFilter.OVERALL -> {
-                statisticOverallTask.observable(ObservableTask.None())
-                        .execute { copy(statistics = it) }
-            }
-            else -> {
-                val params = StatisticComparisonTask.Params(dataRangePair)
-                statisticComparisonTask.observable(params)
-                        .execute { copy(statistics = it) }
+        viewModelScope.launch {
+            when (filter) {
+                StatisticsFilter.OVERALL -> {
+                    statisticOverallTask.flow(ObservableTask.None())
+                            .execute { copy(statistics = it) }
+                }
+                else -> {
+                    val params = StatisticComparisonTask.Params(dataRangePair)
+                    statisticComparisonTask.flow(params)
+                            .execute { copy(statistics = it) }
+                }
             }
         }
     }
