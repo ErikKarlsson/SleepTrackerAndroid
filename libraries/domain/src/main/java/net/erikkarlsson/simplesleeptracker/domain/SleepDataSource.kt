@@ -13,6 +13,7 @@ interface SleepDataSource {
     fun getCountFlow(): Flow<Int>
     fun getSleep(): Observable<ImmutableList<Sleep>>
     fun getSleepPaged(): Observable<PagedList<Sleep>>
+    fun getSleepPagedFlow(): Flow<PagedList<Sleep>>
     fun getSleep(id: Int): Observable<Sleep>
     suspend fun getSleepCoroutine(id: Int): Flow<Sleep>
     fun getCurrent(): Observable<Sleep>

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import net.erikkarlsson.simplesleeptracker.core.util.toImmutableList
+import net.erikkarlsson.simplesleeptracker.data.FlowPagedListBuilder
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -42,6 +43,17 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     sleepDao.getSleepFactory().map { sleepMapper.mapFromEntity(it) },
                     50)
                     .buildObservable()
+
+    override fun getSleepPagedFlow(): Flow<PagedList<Sleep>> {
+        val dataSource = sleepDao.getSleepFactory()
+                .map { sleepMapper.mapFromEntity(it) }
+
+        val config = PagedList.Config.Builder()
+                .setPageSize(50)
+                .build()
+
+        return FlowPagedListBuilder(dataSource, config).buildFlow()
+    }
 
     override fun getSleep(id: Int): Observable<Sleep> =
             sleepDao.getSleep(id)

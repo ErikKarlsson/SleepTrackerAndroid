@@ -1,10 +1,12 @@
 package net.erikkarlsson.simplesleeptracker.features.diary
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import net.erikkarlsson.simplesleeptracker.features.diary.domain.GetSleepDiaryTask
@@ -15,10 +17,12 @@ class DiaryViewModel @AssistedInject constructor(
     : MvRxViewModel<DiaryState>(initialState) {
 
     init {
-        getSleepDiaryTask.observable(ObservableTask.None())
-                .execute {
-                    copy(sleepDiary = it)
-                }
+        viewModelScope.launch {
+            getSleepDiaryTask.flow(ObservableTask.None())
+                    .execute {
+                        copy(sleepDiary = it)
+                    }
+        }
     }
 
     @AssistedInject.Factory

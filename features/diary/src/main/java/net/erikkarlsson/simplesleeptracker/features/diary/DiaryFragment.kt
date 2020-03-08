@@ -88,7 +88,7 @@ class DiaryFragment : BaseMvRxFragment() {
 
         floatingActionButton.clicksThrottle(compositeDisposable) { navigateToAddSleep() }
 
-        sleepAddedEvents.observe(this, EventObserver {
+        sleepAddedEvents.observe(viewLifecycleOwner, EventObserver {
             // Add scroll delay to give RecyclerView time to update.
             Handler().postDelayed({ scrollToTop() }, 100)
         })
