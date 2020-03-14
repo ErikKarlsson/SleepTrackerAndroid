@@ -7,8 +7,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import io.reactivex.Observable
-import io.reactivex.subjects.Subject
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
@@ -23,7 +26,6 @@ import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.LogoutTask
-import java.util.concurrent.TimeUnit
 import javax.inject.Named
 
 class HomeViewModel @AssistedInject constructor(
@@ -32,7 +34,7 @@ class HomeViewModel @AssistedInject constructor(
         private val toggleSleepTask: ToggleSleepTask,
         private val logoutTask: LogoutTask,
         private val widgetDataSource: WidgetDataSource,
-        @Named("sleepEvents") private val sleepEvents: Subject<SleepEvent>,
+        @Named("sleepEvents") private val sleepEvents: BroadcastChannel<SleepEvent>,
         @Named("restoreBackupScheduler") private val restoreBackupScheduler: TaskScheduler,
         @Named("homeEvents") private val homeEvents: HomeEvents
 ) : MvRxViewModel<HomeState>(state) {
@@ -40,31 +42,22 @@ class HomeViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             getHomeTask.flow(None())
-                    .execute {
-                        when (it) {
-                            is Success -> {
-                                copy(lastBackupTimestamp = it().lastBackupTimestamp,
-                                        sleep = it().currentSleep, isLoadingHome = false,
-                                        sleepCount = it().sleepCount)
-                            }
-                            else -> copy()
-                        }
+                    .collect {
+                        setState { copy(lastBackupTimestamp = it.lastBackupTimestamp,
+                                sleep = it.currentSleep, isLoadingHome = false,
+                                sleepCount = it.sleepCount) }
                     }
         }
 
-        sleepEvents.filter { it is MinimumSleepEvent }
-                .doOnNext {
-                    setState { copy(isShowingMinimalSleep = true) }
-                }
-                .switchMap {
-                    Observable.timer(BUBBLE_DURATION_MILLI, TimeUnit.MILLISECONDS)
-                }
-                .execute {
-                    when (it) {
-                        is Success -> copy(isShowingMinimalSleep = false)
-                        else -> copy()
+        viewModelScope.launch {
+            sleepEvents.asFlow()
+                    .filter { it is MinimumSleepEvent }
+                    .collect {
+                        setState { copy(isShowingMinimalSleep = true) }
+                        delay(BUBBLE_DURATION_MILLI)
+                        setState { copy(isShowingMinimalSleep = false) }
                     }
-                }
+        }
     }
 
     fun loadWidgetStatus() {

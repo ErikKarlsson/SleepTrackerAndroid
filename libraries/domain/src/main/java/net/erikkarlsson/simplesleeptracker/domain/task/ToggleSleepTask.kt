@@ -2,7 +2,10 @@ package net.erikkarlsson.simplesleeptracker.domain.task
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.Subject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.Notifications
@@ -24,7 +27,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
                                           private val scheduleBackupTask: ScheduleBackupTask,
                                           private val appLifecycle: AppLifecycle,
                                           private val notifications: Notifications,
-                                          @Named("sleepEvents") private val sleepEvents: Subject<SleepEvent>) : CompletableTask<None> {
+                                          @Named("sleepEvents") private val sleepEvents: BroadcastChannel<SleepEvent>) : CompletableTask<None> {
 
     override fun completable(params: None): Completable =
             sleepRepository.getCurrentSingle()
@@ -61,7 +64,9 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
         val isForegrounded = appLifecycle.isForegrounded().blockingGet()
 
         if (isForegrounded) {
-            sleepEvents.onNext(MinimumSleepEvent)
+            GlobalScope.launch (Dispatchers.Main) {
+                sleepEvents.send(MinimumSleepEvent)
+            }
         } else {
             notifications.sendMinimumSleepNotification()
         }
