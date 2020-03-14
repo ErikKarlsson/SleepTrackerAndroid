@@ -10,15 +10,12 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
 interface SleepDataSource {
     fun getCount(): Observable<Int>
-    fun getCountFlow(): Flow<Int>
     fun getSleep(): Observable<ImmutableList<Sleep>>
     fun getSleepPaged(): Observable<PagedList<Sleep>>
-    fun getSleepPagedFlow(): Flow<PagedList<Sleep>>
     fun getSleep(id: Int): Observable<Sleep>
     suspend fun getSleepCoroutine(id: Int): Flow<Sleep>
     fun getCurrent(): Observable<Sleep>
     fun getCurrentSingle(): Single<Sleep>
-    suspend fun getCurrentCoroutines(): Sleep
     fun getCurrentFlow(): Flow<Sleep>
     fun insert(newSleep: Sleep): Long
     fun update(updatedSleep: Sleep): Int

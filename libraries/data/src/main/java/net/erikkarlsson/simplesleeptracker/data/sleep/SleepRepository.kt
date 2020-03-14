@@ -9,10 +9,8 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import net.erikkarlsson.simplesleeptracker.core.util.toImmutableList
-import net.erikkarlsson.simplesleeptracker.data.FlowPagedListBuilder
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -23,9 +21,6 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                                           private val sleepMapper: SleepMapper) : SleepDataSource {
     override fun getCount(): Observable<Int> =
             sleepDao.getSleepCount().toObservable()
-
-    override fun getCountFlow(): Flow<Int> =
-            sleepDao.getSleepCountFlow().distinctUntilChanged()
 
     override fun getSleep(): Observable<ImmutableList<Sleep>> =
             sleepDao.getSleep()
@@ -43,17 +38,6 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     sleepDao.getSleepFactory().map { sleepMapper.mapFromEntity(it) },
                     50)
                     .buildObservable()
-
-    override fun getSleepPagedFlow(): Flow<PagedList<Sleep>> {
-        val dataSource = sleepDao.getSleepFactory()
-                .map { sleepMapper.mapFromEntity(it) }
-
-        val config = PagedList.Config.Builder()
-                .setPageSize(50)
-                .build()
-
-        return FlowPagedListBuilder(dataSource, config).buildFlow()
-    }
 
     override fun getSleep(id: Int): Observable<Sleep> =
             sleepDao.getSleep(id)
@@ -76,14 +60,14 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     .map { sleepMapper.mapFromEntity(it) }
                     .onErrorReturnItem(Sleep.empty())
 
-    override suspend fun getCurrentCoroutines(): Sleep {
-        val sleepEntity = sleepDao.getCurrentSleepCoroutines();
-        return sleepMapper.mapFromEntity(sleepEntity)
-    }
-
     override fun getCurrentFlow(): Flow<Sleep> =
-        sleepDao.getCurrentSleepFlow()
-                .map { sleepMapper.mapFromEntity(it) }
+            sleepDao.getCurrentSleepFlow()
+                    .map {
+                        when (it.isEmpty()) {
+                            true -> Sleep.empty()
+                            false -> sleepMapper.mapFromEntity(it[0])
+                        }
+                    }
 
     override fun getCurrent(): Observable<Sleep> =
             sleepDao.getCurrentSleep()

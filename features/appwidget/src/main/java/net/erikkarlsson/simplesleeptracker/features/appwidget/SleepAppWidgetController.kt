@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker.features.appwidget
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
@@ -13,17 +14,17 @@ import javax.inject.Singleton
 class SleepAppWidgetController @Inject constructor(private val toggleSleepTask: ToggleSleepTask,
                                                    private val sleepWidgetView: SleepWidgetView,
                                                    private val sleepRepository: SleepDataSourceCoroutines) {
-    fun onToggleSleepClick() {
+    fun initialize() {
         GlobalScope.launch(Dispatchers.IO) {
-            toggleSleepTask.completable(CoroutineTask.None())
-            updateWidget()
+            sleepRepository.getCurrentFlow().collect {
+                sleepWidgetView.render(it.isSleeping)
+            }
         }
     }
 
-    fun updateWidget() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val sleep = sleepRepository.getCurrent()
-            sleepWidgetView.render(sleep.isSleeping)
+    fun onToggleSleepClick() {
+        GlobalScope.launch(Dispatchers.IO) {
+            toggleSleepTask.completable(CoroutineTask.None())
         }
     }
 

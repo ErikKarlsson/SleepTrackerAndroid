@@ -37,7 +37,7 @@ class SleepAppWidgetControllerTest {
     fun `load empty shows awake in view`() {
         given(sleepRepository.getCurrent()).willReturn(Observable.just(Sleep.empty()))
 
-        sleepAppWidgetController.updateWidget()
+        sleepAppWidgetController.initialize()
 
         verify(sleepRepository).getCurrent()
         verify(sleepWidgetView).render(false)
@@ -47,7 +47,7 @@ class SleepAppWidgetControllerTest {
     fun `load sleeping shows sleeping in view`() {
         val sleeping = Sleep(fromDate = OffsetDateTime.now())
         given(sleepRepository.getCurrent()).willReturn(Observable.just(sleeping))
-        sleepAppWidgetController.updateWidget()
+        sleepAppWidgetController.initialize()
         verify(sleepRepository).getCurrent()
         verify(sleepWidgetView).render(true)
     }
@@ -56,7 +56,7 @@ class SleepAppWidgetControllerTest {
     fun `load awake shows awake in view`() {
         val awake = Sleep(fromDate = OffsetDateTime.now(), toDate = OffsetDateTime.now().plusDays(1))
         given(sleepRepository.getCurrent()).willReturn(Observable.just(awake))
-        sleepAppWidgetController.updateWidget()
+        sleepAppWidgetController.initialize()
         verify(sleepRepository).getCurrent()
         verify(sleepWidgetView).render(false)
     }
@@ -64,7 +64,7 @@ class SleepAppWidgetControllerTest {
     @Test
     fun `load error shows awake in view`() {
         given(sleepRepository.getCurrent()).willReturn(Observable.error(Exception()))
-        sleepAppWidgetController.updateWidget()
+        sleepAppWidgetController.initialize()
         verify(sleepRepository).getCurrent()
         verify(sleepWidgetView).render(false)
     }

@@ -23,9 +23,9 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
-import net.erikkarlsson.simplesleeptracker.features.backup.di.MyWorkerFactory
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
+import net.erikkarlsson.simplesleeptracker.features.backup.di.MyWorkerFactory
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -84,7 +84,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
             Timber.plant(CrashReportingTree())
         }
 
-        sleepAppWidgetController.updateWidget()
+        sleepAppWidgetController.initialize()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector

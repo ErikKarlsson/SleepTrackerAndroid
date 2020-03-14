@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import net.erikkarlsson.simplesleeptracker.data.FlowPagedListBuilder
+import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import javax.inject.Inject
@@ -37,12 +38,20 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
 
     override suspend fun getCurrent(): Sleep {
         val sleepEntity = sleepDao.getCurrentSleepCoroutines();
-        return sleepMapper.mapFromEntity(sleepEntity)
+        return when (sleepEntity == null) {
+            true -> Sleep.empty()
+            false -> sleepMapper.mapFromEntity(sleepEntity)
+        }
     }
 
     override fun getCurrentFlow(): Flow<Sleep> =
         sleepDao.getCurrentSleepFlow()
-                .map { sleepMapper.mapFromEntity(it) }
+                .map {
+                    when (it.isEmpty()) {
+                        true -> Sleep.empty()
+                        false -> sleepMapper.mapFromEntity(it[0])
+                    }
+                }
 
     override suspend fun update(updatedSleep: Sleep): Int {
         val sleepEntity = sleepMapper.mapToEntity(updatedSleep)
@@ -56,4 +65,7 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
         val sleepEntity = sleepMapper.mapToEntity(newSleep)
         return sleepDao.insertSleepSuspend(sleepEntity)
     }
+
+    private fun firstOrEmpty(sleepList: List<SleepEntity>): SleepEntity =
+            sleepList.firstOrNull() ?: SleepEntity.empty()
 }

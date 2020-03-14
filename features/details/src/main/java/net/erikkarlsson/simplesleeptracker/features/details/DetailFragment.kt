@@ -19,7 +19,7 @@ import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -40,7 +40,7 @@ class DetailFragment : BaseMvRxFragment() {
     lateinit var viewModelFactory: DetailsViewModel.Factory
 
     @Inject
-    lateinit var sleepRepository: SleepDataSource
+    lateinit var sleepRepository: SleepDataSourceCoroutines
 
     private val viewModel: DetailsViewModel by fragmentViewModel()
 
@@ -91,21 +91,16 @@ class DetailFragment : BaseMvRxFragment() {
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val sleep = sleepRepository.getCurrentCoroutines()
+            val sleep = sleepRepository.getCurrent()
             Timber.d("sleep %s", sleep.toString())
 
 
         }
-
-//        sleepRepository.getCountFlow().collect {
-//
-//        }
-
     }
 
     private suspend fun getCurrentSleep(): Sleep {
         return withContext(Dispatchers.IO) {
-            sleepRepository.getCurrentCoroutines()
+            sleepRepository.getCurrent()
         }
     }
 
