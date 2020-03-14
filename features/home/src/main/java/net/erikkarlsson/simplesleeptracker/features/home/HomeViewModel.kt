@@ -3,7 +3,6 @@ package net.erikkarlsson.simplesleeptracker.features.home
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -46,9 +45,11 @@ class HomeViewModel @AssistedInject constructor(
         viewModelScope.launch {
             getHomeTask.flow(None())
                     .collect {
-                        setState { copy(lastBackupTimestamp = it.lastBackupTimestamp,
-                                sleep = it.currentSleep, isLoadingHome = false,
-                                sleepCount = it.sleepCount) }
+                        setState {
+                            copy(lastBackupTimestamp = it.lastBackupTimestamp,
+                                    sleep = it.currentSleep, isLoadingHome = false,
+                                    sleepCount = it.sleepCount)
+                        }
                     }
         }
 
@@ -64,13 +65,8 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     fun loadWidgetStatus() {
-        widgetDataSource.isWidgetAdded()
-                .execute {
-                    when (it) {
-                        is Success -> copy(isWidgetAdded = it(), isLoadingWidgetStatus = false)
-                        else -> copy()
-                    }
-                }
+        val isWidgetAdded = widgetDataSource.isWidgetAdded()
+        setState { copy(isWidgetAdded = isWidgetAdded, isLoadingWidgetStatus = false) }
     }
 
     fun onBubbleClick() {
