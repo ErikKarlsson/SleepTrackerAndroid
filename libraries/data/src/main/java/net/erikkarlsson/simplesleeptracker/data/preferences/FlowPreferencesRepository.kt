@@ -8,13 +8,13 @@ import javax.inject.Inject
 class FlowPreferencesRepository @Inject constructor(private val flowSharedPreferences: FlowSharedPreferences)
     : PreferencesDataSourceFlow {
 
-    override suspend fun set(key: String, value: Long) =
+    override fun set(key: String, value: Long) =
              flowSharedPreferences.getLong(key).set(value)
 
-    override suspend fun set(key: String, value: Int) =
+    override fun set(key: String, value: Int) =
             flowSharedPreferences.getInt(key).set(value)
 
-    override suspend fun set(key: String, value: Boolean) =
+    override fun set(key: String, value: Boolean) =
             flowSharedPreferences.getBoolean(key).set(value)
 
     override fun getLong(key: String): Flow<Long> =
@@ -26,6 +26,6 @@ class FlowPreferencesRepository @Inject constructor(private val flowSharedPrefer
     override fun getBoolean(key: String): Flow<Boolean> =
             flowSharedPreferences.getBoolean(key, false).asFlow()
 
-    override suspend fun clear() =
+    override fun clear() =
             flowSharedPreferences.clear()
 }

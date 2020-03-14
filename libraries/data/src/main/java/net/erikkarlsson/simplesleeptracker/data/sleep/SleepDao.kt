@@ -75,4 +75,7 @@ interface SleepDao {
     @Query("DELETE FROM Sleep")
     fun deleteAllSleep()
 
+    @Query("DELETE FROM Sleep")
+    suspend fun deleteAllSleepCoroutines()
+
 }

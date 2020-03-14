@@ -21,7 +21,6 @@ import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
 import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
@@ -82,8 +81,9 @@ class HomeViewModel @AssistedInject constructor(
     fun onSignOutComplete() {
         setState { copy(userAccount = null) }
 
-        logoutTask.completable(CompletableTask.None())
-                .execute { copy() }
+        viewModelScope.launch {
+            logoutTask.completable(CoroutineTask.None())
+        }
     }
 
     fun onToggleSleepClick() {

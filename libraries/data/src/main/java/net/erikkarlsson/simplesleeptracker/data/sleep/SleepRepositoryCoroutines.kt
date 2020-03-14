@@ -61,6 +61,9 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
     override suspend fun delete(sleep: Sleep) =
         sleepDao.deleteSleepCoroutines(sleepMapper.mapToEntity(sleep))
 
+    override suspend fun deleteAll() =
+        sleepDao.deleteAllSleepCoroutines()
+
     override suspend fun insert(newSleep: Sleep): Long {
         val sleepEntity = sleepMapper.mapToEntity(newSleep)
         return sleepDao.insertSleepSuspend(sleepEntity)

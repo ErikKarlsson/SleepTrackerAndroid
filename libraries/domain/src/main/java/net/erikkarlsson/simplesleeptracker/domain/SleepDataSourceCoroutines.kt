@@ -12,5 +12,6 @@ interface SleepDataSourceCoroutines {
     suspend fun getCurrent(): Sleep
     suspend fun update(updatedSleep: Sleep): Int
     suspend fun delete(sleep: Sleep)
+    suspend fun deleteAll()
     suspend fun insert(newSleep: Sleep): Long
 }
