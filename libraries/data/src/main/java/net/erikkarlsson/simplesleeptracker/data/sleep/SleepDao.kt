@@ -54,6 +54,9 @@ interface SleepDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSleep(sleep: SleepEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSleepSuspend(sleep: SleepEntity): Long
+
     @Update
     fun updateSleep(sleep: SleepEntity): Int
 

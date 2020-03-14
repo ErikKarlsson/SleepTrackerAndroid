@@ -7,6 +7,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
@@ -21,6 +23,7 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
 import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask.None
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
@@ -105,8 +108,9 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     private fun toggleSleep() {
-        toggleSleepTask.completable(CompletableTask.None())
-                .execute { copy() }
+        GlobalScope.launch(Dispatchers.IO) {
+            toggleSleepTask.completable(CoroutineTask.None())
+        }
     }
 
     @AssistedInject.Factory
