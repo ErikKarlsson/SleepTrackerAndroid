@@ -58,7 +58,7 @@ class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepData
     }
 
     private suspend fun minimumSleep(currentSleep: Sleep) {
-        val isForegrounded = appLifecycle.isForegrounded().blockingGet()
+        val isForegrounded = appLifecycle.isForegrounded()
 
         when (isForegrounded) {
             true -> sleepEvents.send(MinimumSleepEvent)
