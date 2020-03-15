@@ -6,7 +6,6 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
 import javax.inject.Inject
 
 /**
@@ -14,9 +13,9 @@ import javax.inject.Inject
  */
 class StatisticOverallTask @Inject constructor(
         private val statisticsRepository: StatisticsDataSourceCoroutines)
-    : FlowTask<StatisticComparison, ObservableTask.None> {
+    : FlowTask<StatisticComparison, FlowTask.None> {
 
-    override fun flow(params: ObservableTask.None): Flow<StatisticComparison> {
+    override fun flow(params: FlowTask.None): Flow<StatisticComparison> {
         return statisticsRepository.getStatistics()
                 .map { StatisticComparison(it, Statistics.empty()) }
     }

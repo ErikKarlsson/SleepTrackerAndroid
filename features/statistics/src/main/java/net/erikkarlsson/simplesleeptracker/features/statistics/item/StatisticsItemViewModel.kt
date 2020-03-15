@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
 import net.erikkarlsson.simplesleeptracker.features.statistics.DateRangePair
 import net.erikkarlsson.simplesleeptracker.features.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.features.statistics.domain.StatisticComparisonTask
@@ -30,7 +30,7 @@ class StatisticsItemViewModel @AssistedInject constructor(
         viewModelScope.launch {
             when (filter) {
                 StatisticsFilter.OVERALL -> {
-                    statisticOverallTask.flow(ObservableTask.None())
+                    statisticOverallTask.flow(FlowTask.None())
                             .execute { copy(statistics = it) }
                 }
                 else -> {
