@@ -19,7 +19,7 @@ import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -40,7 +40,7 @@ class DetailFragment : BaseMvRxFragment() {
     lateinit var viewModelFactory: DetailsViewModel.Factory
 
     @Inject
-    lateinit var sleepRepository: SleepDataSourceCoroutines
+    lateinit var sleepRepository: SleepDataSource
 
     private val viewModel: DetailsViewModel by fragmentViewModel()
 

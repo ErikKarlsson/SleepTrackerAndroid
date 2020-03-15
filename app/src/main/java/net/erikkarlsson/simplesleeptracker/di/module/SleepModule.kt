@@ -7,9 +7,7 @@ import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDao
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDatabase
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepository
-import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepositoryCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
 import javax.inject.Singleton
 
 @Module
@@ -17,11 +15,7 @@ abstract class SleepModule {
 
     @Binds
     @Singleton
-    abstract fun bindSleepDataSource(sleepRepository: SleepRepository): SleepDataSource
-
-    @Binds
-    @Singleton
-    abstract fun bindSleepDataSourceCoroutines(sleepRepository: SleepRepositoryCoroutines): SleepDataSourceCoroutines
+    abstract fun bindSleepDataSourceCoroutines(sleepRepository: SleepRepository): SleepDataSource
 
     @Module
     companion object {

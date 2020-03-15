@@ -27,7 +27,7 @@ class DetailsViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
-            sleepRepository.getSleepCoroutine(state.sleepId).execute {
+            sleepRepository.getSleepFlow(state.sleepId).execute {
                 copy(sleep = it)
             }
         }

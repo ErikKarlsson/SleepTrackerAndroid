@@ -13,8 +13,8 @@ class DeleteSleepTask @Inject constructor(
     : CoroutineTask<DeleteSleepTask.Params> {
 
     override suspend fun completable(params: Params) {
-        val sleep = sleepRepository.getSleepCoroutine(params.sleepId).first()
-        sleepRepository.deleteCoroutines(sleep)
+        val sleep = sleepRepository.getSleepFlow(params.sleepId).first()
+        sleepRepository.delete(sleep)
         backupScheduler.schedule()
     }
 

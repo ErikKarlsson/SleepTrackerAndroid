@@ -14,12 +14,12 @@ class UpdateTimeAwakeTask @Inject constructor(
         @Named("backupScheduler") private val backupScheduler: TaskScheduler) : CoroutineTask<UpdateTimeAwakeTask.Params> {
 
     override suspend fun completable(params: Params) {
-        val sleep = sleepRepository.getSleepCoroutine(params.sleepId).first()
+        val sleep = sleepRepository.getSleepFlow(params.sleepId).first()
         updateTimeAwake(sleep, params.timeAwake)
         backupScheduler.schedule()
     }
 
-    private fun updateTimeAwake(sleep: Sleep, timeAwake: LocalTime) {
+    private suspend fun updateTimeAwake(sleep: Sleep, timeAwake: LocalTime) {
         val fromDate = sleep.fromDate
         val startDate = fromDate.toLocalDate()
         val startTime = fromDate.toLocalTime()

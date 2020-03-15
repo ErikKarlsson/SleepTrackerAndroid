@@ -1,5 +1,7 @@
 package net.erikkarlsson.simplesleeptracker
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepRepository
 import net.erikkarlsson.simplesleeptracker.di.DaggerTestComponent
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -16,11 +18,15 @@ class TestApp : App(), TestableApplication {
     }
 
     override fun clearDataBetweenTests() {
-        sleepRepository.deleteAll()
+        GlobalScope.launch {
+            sleepRepository.deleteAll()
+        }
     }
 
     override fun insertSleep(sleep: Sleep) {
-        sleepRepository.insert(sleep)
+        GlobalScope.launch {
+            sleepRepository.insert(sleep)
+        }
     }
 
     override fun mockDateTimeNow(offsetDateTime: OffsetDateTime) {

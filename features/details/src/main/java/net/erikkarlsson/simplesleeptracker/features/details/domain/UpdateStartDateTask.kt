@@ -16,9 +16,9 @@ class UpdateStartDateTask @Inject constructor(
 
     override suspend fun completable(params: Params) {
         val startDate = params.startDate
-        val sleep = sleepRepository.getSleepCoroutine(params.sleepId).first()
+        val sleep = sleepRepository.getSleepFlow(params.sleepId).first()
         val updatedSleep = sleep.shiftStartDate(startDate)
-        sleepRepository.updateCoroutine(updatedSleep)
+        sleepRepository.update(updatedSleep)
         backupScheduler.schedule()
     }
 

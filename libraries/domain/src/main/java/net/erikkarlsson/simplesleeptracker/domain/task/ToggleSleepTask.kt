@@ -4,7 +4,7 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import net.erikkarlsson.simplesleeptracker.domain.AppLifecycle
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.domain.Notifications
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
@@ -17,7 +17,7 @@ private const val MINIMUM_SLEEP_DURATION_HOURS = 1 // Minimum hours to count as 
 /**
  * Toggle between awake and asleep state.
  */
-class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSourceCoroutines,
+class ToggleSleepTask @Inject constructor(private val sleepRepository: SleepDataSource,
                                           private val dateTimeProvider: DateTimeProvider,
                                           private val appLifecycle: AppLifecycle,
                                           private val notifications: Notifications,

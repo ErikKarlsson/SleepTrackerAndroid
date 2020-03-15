@@ -2,26 +2,19 @@ package net.erikkarlsson.simplesleeptracker.domain
 
 import androidx.paging.PagedList
 import com.google.common.collect.ImmutableList
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
 interface SleepDataSource {
-    fun getCount(): Observable<Int>
-    fun getSleep(): Observable<ImmutableList<Sleep>>
-    fun getSleepPaged(): Observable<PagedList<Sleep>>
-    fun getSleep(id: Int): Observable<Sleep>
-    suspend fun getSleepCoroutine(id: Int): Flow<Sleep>
-    fun getCurrent(): Observable<Sleep>
-    fun getCurrentSingle(): Single<Sleep>
+    fun getCountFlow(): Flow<Int>
+    fun getSleepPaged(): Flow<PagedList<Sleep>>
+    fun getSleepListFlow(): Flow<ImmutableList<Sleep>>
     fun getCurrentFlow(): Flow<Sleep>
-    fun insert(newSleep: Sleep): Long
-    fun update(updatedSleep: Sleep): Int
-    suspend fun updateCoroutine(updatedSleep: Sleep): Int
-    fun delete(sleep: Sleep)
-    suspend fun deleteCoroutines(sleep: Sleep)
-    fun deleteAll()
-    fun insertAll(sleepList: ImmutableList<Sleep>): Completable
+    fun getSleepFlow(id: Int): Flow<Sleep>
+    suspend fun getCurrent(): Sleep
+    suspend fun update(updatedSleep: Sleep): Int
+    suspend fun delete(sleep: Sleep)
+    suspend fun deleteAll()
+    suspend fun insert(newSleep: Sleep): Long
+    suspend fun insertAll(sleepList: ImmutableList<Sleep>)
 }

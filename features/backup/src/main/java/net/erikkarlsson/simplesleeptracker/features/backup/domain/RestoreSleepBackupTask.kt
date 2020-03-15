@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.features.backup.domain
 import kotlinx.coroutines.flow.first
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSourceCoroutines
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 class RestoreSleepBackupTask @Inject constructor(
         private val backupCsvFileReader: BackupCsvFileReader,
-        private val sleepRepository: SleepDataSourceCoroutines,
+        private val sleepRepository: SleepDataSource,
         private val fileBackupRepository: FileBackupDataSourceCoroutines) : CoroutineTask<CoroutineTask.None> {
 
     override suspend fun completable(params: CoroutineTask.None) {

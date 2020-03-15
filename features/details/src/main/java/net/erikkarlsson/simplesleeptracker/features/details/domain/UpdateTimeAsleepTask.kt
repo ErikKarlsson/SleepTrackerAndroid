@@ -14,7 +14,7 @@ class UpdateTimeAsleepTask @Inject constructor(
         @Named("backupScheduler") private val backupScheduler: TaskScheduler) : CoroutineTask<UpdateTimeAsleepTask.Params> {
 
     override suspend fun completable(params: Params) {
-        val sleep = sleepRepository.getSleepCoroutine(params.sleepId).first()
+        val sleep = sleepRepository.getSleepFlow(params.sleepId).first()
         updateTimeAsleep(sleep, params.timeAsleep)
         backupScheduler.schedule()
     }
@@ -32,7 +32,7 @@ class UpdateTimeAsleepTask @Inject constructor(
                                       endTime = endTime,
                                       zoneOffset = zoneOffset)
 
-        sleepRepository.updateCoroutine(updatedSleep)
+        sleepRepository.update(updatedSleep)
     }
 
     data class Params(val sleepId: Int, val timeAsleep: LocalTime)
