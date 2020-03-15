@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker.features.statistics.domain
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
 import net.erikkarlsson.simplesleeptracker.features.statistics.DateRangePair
@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Get stream of statistic comparison between current and previous week
  */
 class StatisticComparisonTask @Inject constructor(
-        private val statisticsRepository: StatisticsDataSourceCoroutines)
+        private val statisticsRepository: StatisticsDataSource)
     : FlowTask<StatisticComparison, Params> {
 
     override fun flow(params: Params): Flow<StatisticComparison> {

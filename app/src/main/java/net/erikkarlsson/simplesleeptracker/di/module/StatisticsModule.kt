@@ -7,9 +7,7 @@ import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDatabase
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDao
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDaoCoroutines
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
-import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepositoryCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
-import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
 import javax.inject.Singleton
 
 @Module
@@ -18,10 +16,6 @@ abstract class StatisticsModule {
     @Binds
     @Singleton
     abstract fun bindStatisticsDataSource(statisticsRepository: StatisticsRepository): StatisticsDataSource
-
-    @Binds
-    @Singleton
-    abstract fun bindStatisticsDataSourceCoroutines(statisticsRepository: StatisticsRepositoryCoroutines): StatisticsDataSourceCoroutines
 
     @Module
     companion object {

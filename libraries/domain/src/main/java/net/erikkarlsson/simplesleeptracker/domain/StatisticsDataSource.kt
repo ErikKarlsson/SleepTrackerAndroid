@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepCountYearMonth
@@ -11,26 +11,26 @@ interface StatisticsDataSource {
     /**
      * Get stream of overall statistics
      */
-    fun getStatistics(): Observable<Statistics>
+    fun getStatistics(): Flow<Statistics>
 
     /**
      * Get stream of statistics for date range
      */
-    fun getStatistics(dateRange: DateRange): Observable<Statistics>
+    fun getStatistics(dateRange: DateRange): Flow<Statistics>
 
     /**
      * Get stream of sleep count grouped by year and month.
      */
-    fun getSleepCountYearMonth(): Observable<List<SleepCountYearMonth>>
+    fun getSleepCountYearMonth(): Flow<List<SleepCountYearMonth>>
 
     /**
      * Get stream of youngest sleep. Emits empty list if no sleep found.
      */
-    fun getYoungestSleep(): Observable<Sleep>
+    fun getYoungestSleep(): Flow<Sleep>
 
     /**
      * Get stream of oldest sleep. Emits empty list if no sleep found.
      */
-    fun getOldestSleep(): Observable<Sleep>
+    fun getOldestSleep(): Flow<Sleep>
 }
 

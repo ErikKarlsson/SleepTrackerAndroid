@@ -14,13 +14,13 @@ import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_COMPARE_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
-import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
 class StatisticsViewModel @AssistedInject constructor(
         @Assisted val initialState: StatisticsState,
-        private val statisticsDataSource: StatisticsDataSourceCoroutines,
+        private val statisticsDataSource: StatisticsDataSource,
         private val preferences: PreferencesDataSource)
     : MvRxViewModel<StatisticsState>(initialState) {
 
