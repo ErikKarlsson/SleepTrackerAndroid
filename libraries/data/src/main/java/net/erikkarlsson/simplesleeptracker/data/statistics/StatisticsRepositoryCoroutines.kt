@@ -4,25 +4,25 @@ import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.flow.*
 import net.easypark.dateutil.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
-import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapperCoroutines
+import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.*
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class StatisticsRepositoryCoroutines @Inject constructor(private val statisticsDao: StatisticsDaoCoroutines,
-                                                         private val sleepMapper: SleepMapperCoroutines)
+                                                         private val sleepMapper: SleepMapper)
     : StatisticsDataSourceCoroutines {
 
     override fun getYoungestSleep(): Flow<Sleep> =
             statisticsDao.getYoungestSleep()
                     .map(::firstInListOrEmpty)
-                    .map(sleepMapper::mapFromEntity)
+                    .map { sleepMapper.mapFromEntity(it) }
 
     override fun getOldestSleep(): Flow<Sleep> =
             statisticsDao.getOldestSleep()
                     .map(::firstInListOrEmpty)
-                    .map(sleepMapper::mapFromEntity)
+                    .map { sleepMapper.mapFromEntity(it) }
 
     override fun getStatistics(): Flow<Statistics> {
         val infiniteDateRange = DateRange.infinite()
@@ -104,5 +104,5 @@ class StatisticsRepositoryCoroutines @Inject constructor(private val statisticsD
         val list = dayOfWeekMidnightOffset.map { it.toDayOfWeekLocalTime }.toList()
         return ImmutableList.builder<DayOfWeekLocalTime>().addAll(list).build()
     }
-
 }
+
