@@ -9,7 +9,7 @@ import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.features.details.domain.DeleteSleepTaskCoroutines
+import net.erikkarlsson.simplesleeptracker.features.details.domain.DeleteSleepTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateStartDateTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateTimeAsleepTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateTimeAwakeTask
@@ -22,7 +22,7 @@ class DetailsViewModel @AssistedInject constructor(
         private val updateStartDateTask: UpdateStartDateTask,
         private val updateTimeAsleepTask: UpdateTimeAsleepTask,
         private val updateTimeAwakeTask: UpdateTimeAwakeTask,
-        private val deleteSleepTask: DeleteSleepTaskCoroutines
+        private val deleteSleepTask: DeleteSleepTask
 ) : MvRxViewModel<DetailsState>(state) {
 
     init {
@@ -36,7 +36,7 @@ class DetailsViewModel @AssistedInject constructor(
     fun deleteClick() {
         withState { state ->
             viewModelScope.launch {
-                deleteSleepTask.completable(DeleteSleepTaskCoroutines.Params(state.sleepId))
+                deleteSleepTask.completable(DeleteSleepTask.Params(state.sleepId))
                 setState { copy(isDeleted = true) }
             }
         }

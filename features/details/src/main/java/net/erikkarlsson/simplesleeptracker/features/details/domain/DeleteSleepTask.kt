@@ -1,26 +1,21 @@
 package net.erikkarlsson.simplesleeptracker.features.details.domain
 
-import io.reactivex.Completable
+import kotlinx.coroutines.flow.first
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
+import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import javax.inject.Inject
+import javax.inject.Named
 
 class DeleteSleepTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
-        private val scheduleBackupTask: ScheduleBackupTask)
-    : CompletableTask<DeleteSleepTask.Params> {
+        @Named("backupScheduler") private val backupScheduler: TaskScheduler)
+    : CoroutineTask<DeleteSleepTask.Params> {
 
-    override fun completable(params: Params): Completable =
-            sleepRepository.getSleep(params.sleepId)
-                    .take(1)
-                    .map { deleteSleep(it)}
-                    .ignoreElements()
-                    .andThen(scheduleBackupTask.completable(CompletableTask.None()))
-
-    private fun deleteSleep(sleep: Sleep) {
-        sleepRepository.delete(sleep)
+    override suspend fun completable(params: Params) {
+        val sleep = sleepRepository.getSleepCoroutine(params.sleepId).first()
+        sleepRepository.deleteCoroutines(sleep)
+        backupScheduler.schedule()
     }
 
     data class Params(val sleepId: Int)
