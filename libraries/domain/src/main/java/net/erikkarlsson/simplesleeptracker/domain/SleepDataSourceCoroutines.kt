@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
 interface SleepDataSourceCoroutines {
-    fun getCount(): Flow<Int>
+    fun getCountFlow(): Flow<Int>
     fun getSleepPaged(): Flow<PagedList<Sleep>>
     fun getSleepListFlow(): Flow<ImmutableList<Sleep>>
     fun getCurrentFlow(): Flow<Sleep>
@@ -16,4 +16,5 @@ interface SleepDataSourceCoroutines {
     suspend fun delete(sleep: Sleep)
     suspend fun deleteAll()
     suspend fun insert(newSleep: Sleep): Long
+    suspend fun insertAll(sleepList: ImmutableList<Sleep>)
 }

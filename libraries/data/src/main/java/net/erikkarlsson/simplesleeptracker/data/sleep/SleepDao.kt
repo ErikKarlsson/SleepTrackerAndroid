@@ -49,6 +49,9 @@ interface SleepDao {
     @Insert
     fun insertAll(sleepList: List<SleepEntity>)
 
+    @Insert
+    suspend fun insertAllCoroutines(sleepList: List<SleepEntity>)
+
     /**
      * Insert a sleep in the database. If the sleep already exists, replace it.
 

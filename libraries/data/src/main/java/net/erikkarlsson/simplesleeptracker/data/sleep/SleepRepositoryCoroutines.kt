@@ -17,7 +17,7 @@ import javax.inject.Inject
 class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepDao,
                                                     private val sleepMapper: SleepMapper) : SleepDataSourceCoroutines {
 
-    override fun getCount(): Flow<Int> =
+    override fun getCountFlow(): Flow<Int> =
             sleepDao.getSleepCountFlow().distinctUntilChanged()
 
     override fun getSleepPaged(): Flow<PagedList<Sleep>> {
@@ -82,6 +82,11 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
         return sleepDao.insertSleepSuspend(sleepEntity)
     }
 
-    private fun firstOrEmpty(sleepList: List<SleepEntity>): SleepEntity =
-            sleepList.firstOrNull() ?: SleepEntity.empty()
+    override suspend fun insertAll(sleepList: ImmutableList<Sleep>) {
+        val sleepListBuilder = ImmutableList.Builder<SleepEntity>()
+        for (sleep in sleepList) {
+            sleepListBuilder.add(sleepMapper.mapToEntity(sleep))
+        }
+        sleepDao.insertAllCoroutines(sleepListBuilder.build())
+    }
 }

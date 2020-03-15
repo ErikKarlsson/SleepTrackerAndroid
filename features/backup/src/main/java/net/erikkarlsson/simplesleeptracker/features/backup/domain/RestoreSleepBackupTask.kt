@@ -1,12 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.features.backup.domain
 
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.first
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
-import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
+import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import javax.inject.Inject
 
 /**
@@ -16,22 +14,24 @@ import javax.inject.Inject
  */
 class RestoreSleepBackupTask @Inject constructor(
         private val backupCsvFileReader: BackupCsvFileReader,
-        private val sleepRepository: SleepDataSource,
-        private val fileBackupRepository: FileBackupDataSource) : CompletableTask<None> {
+        private val sleepRepository: SleepDataSourceCoroutines,
+        private val fileBackupRepository: FileBackupDataSourceCoroutines) : CoroutineTask<CoroutineTask.None> {
 
-    override fun completable(params: None): Completable =
-            sleepRepository.getCount()
-                    .take(1)
-                    .filter { it == 0 }
-                    .flatMapCompletable { restoreBackup() }
+    override suspend fun completable(params: CoroutineTask.None) {
+        val count = sleepRepository.getCountFlow().first()
 
-    private fun restoreBackup(): Completable =
-            fileBackupRepository.get()
-                    .subscribeOn(Schedulers.io())
-                    .map(backupCsvFileReader::read)
-                    .flatMapCompletable {
-                        sleepRepository.insertAll(it)
-                                .subscribeOn(Schedulers.io())
-                    }
-                    .andThen(fileBackupRepository.updateLastBackupTimestamp())
+        if (count == 0) {
+            restoreBackup()
+        }
+    }
+
+    private suspend fun restoreBackup() {
+        val file = fileBackupRepository.get()
+
+        file?.let {
+            val sleepList = backupCsvFileReader.read(it)
+            sleepRepository.insertAll(sleepList)
+            fileBackupRepository.updateLastBackupTimestamp()
+        }
+    }
 }

@@ -21,7 +21,7 @@ class GetHomeTask @Inject constructor(private val backupDataSource: FileBackupDa
             combine(listOf(
                     backupDataSource.getLastBackupTimestamp(),
                     sleepRepository.getCurrentFlow(),
-                    sleepRepository.getCount())) {
+                    sleepRepository.getCountFlow())) {
                 HomeLoaded(it[0] as Long, it[1] as Sleep, it[2] as Int)
             }
 }
