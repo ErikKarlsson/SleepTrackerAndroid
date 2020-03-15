@@ -11,8 +11,6 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
-import io.reactivex.Completable
-import io.reactivex.Single
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_MIME_TYPE
 import net.erikkarlsson.simplesleeptracker.features.backup.R
 import java.io.InputStream
@@ -20,9 +18,9 @@ import java.util.Collections.singletonList
 import javax.inject.Inject
 
 /**
- * RxJava wrapper for Google Drive REST API.
+ * Wrapper for Google Drive REST API.
  */
-class RxDrive @Inject constructor(private val context: Context) {
+class DriveApi @Inject constructor(private val context: Context) {
 
     /**
      * Query meta data for existing file.
@@ -30,53 +28,46 @@ class RxDrive @Inject constructor(private val context: Context) {
      * @param fileTitle the file title.
      */
 
-    fun queryFileMeta(fileTitle: String): Single<FileList> =
-            Single.fromCallable {
-                driveService.files()
-                        .list()
-                        .setQ("name='$fileTitle'")
-                        .setSpaces("drive")
-                        .execute()
-            }
+    fun queryFileMeta(fileTitle: String): FileList =
+            drive.files()
+                    .list()
+                    .setQ("name='$fileTitle'")
+                    .setSpaces("drive")
+                    .execute()
 
     /**
      * Query meta data for existing folder.
      *
      * @param folderTitle the folder title.
      */
-    fun queryFolderMeta(folderTitle: String): Single<FileList> =
-            Single.fromCallable {
-                driveService.files()
-                        .list()
-                        .setQ("name='$folderTitle' and mimeType='application/vnd.google-apps.folder' and trashed=false")
-                        .setSpaces("drive")
-                        .execute()
-            }
+    fun queryFolderMeta(folderTitle: String): FileList =
+            drive.files()
+                    .list()
+                    .setQ("name='$folderTitle' and mimeType='application/vnd.google-apps.folder' and trashed=false")
+                    .setSpaces("drive")
+                    .execute()
 
     /**
      * Open existing file for reading.
      */
-    fun openFile(fileId: String): Single<InputStream> =
-            Single.fromCallable {
-                driveService.files().get(fileId)
-                        .executeMediaAsInputStream()
-            }
+    fun openFile(fileId: String): InputStream =
+            drive.files().get(fileId)
+                    .executeMediaAsInputStream()
 
     /**
      * Create new folder on drive.
      *
      * @param folderTitle the folder title.
      */
-    fun createFolder(folderTitle: String): Single<File> =
-            Single.fromCallable {
-                val fileMetadata = File()
-                        .setName(folderTitle)
-                        .setMimeType("application/vnd.google-apps.folder")
+    fun createFolder(folderTitle: String): File {
+        val fileMetadata = File()
+                .setName(folderTitle)
+                .setMimeType("application/vnd.google-apps.folder")
 
-                driveService.files().create(fileMetadata)
-                        .setFields("id")
-                        .execute()
-            }
+        return drive.files().create(fileMetadata)
+                .setFields("id")
+                .execute()
+    }
 
     /**
      * Create new file on drive.
@@ -87,18 +78,17 @@ class RxDrive @Inject constructor(private val context: Context) {
      */
     fun createFile(folderId: String,
                    file: java.io.File,
-                   mimeType: String): Completable =
-            Completable.fromCallable {
-                val fileMetadata = File()
-                        .setName(file.name)
-                        .setParents(singletonList(folderId))
+                   mimeType: String) {
+        val fileMetadata = File()
+                .setName(file.name)
+                .setParents(singletonList(folderId))
 
-                val mediaContent = FileContent(mimeType, file)
+        val mediaContent = FileContent(mimeType, file)
 
-                driveService.files().create(fileMetadata, mediaContent)
-                        .setFields("id, parents")
-                        .execute()
-            }
+        drive.files().create(fileMetadata, mediaContent)
+                .setFields("id, parents")
+                .execute()
+    }
 
     /**
      * Overwrite content of existing drive file.
@@ -107,17 +97,16 @@ class RxDrive @Inject constructor(private val context: Context) {
      * @param file the new file content.
      */
     fun commitContent(fileId: String,
-                      file: java.io.File): Completable =
-            Completable.fromCallable {
-                val metadata = File().setName(file.name)
-                val content = FileContent(BACKUP_MIME_TYPE, file)
+                      file: java.io.File) {
+        val metadata = File().setName(file.name)
+        val content = FileContent(BACKUP_MIME_TYPE, file)
 
-                driveService.files()
-                        .update(fileId, metadata, content)
-                        .execute()
-            }
+        drive.files()
+                .update(fileId, metadata, content)
+                .execute()
+    }
 
-    private val driveService: Drive
+    private val drive: Drive
         get() = Drive.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 GsonFactory(),
