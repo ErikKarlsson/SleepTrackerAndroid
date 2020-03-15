@@ -47,7 +47,7 @@ class StatisticsRepository @Inject constructor(private val statisticsDao: Statis
         return getSleepCount(from, to)
                 .flatMapLatest { sleepCount ->
                     if (sleepCount == 0) {
-                        flow { Statistics.empty() }
+                        flowOf(Statistics.empty())
                     } else {
                         combine(flowList) {
                             Statistics(sleepCount,

@@ -23,8 +23,8 @@ class StatisticComparisonTask @Inject constructor(
         val firstFlow = statisticsRepository.getStatistics(firstRange)
         val secondFlow = statisticsRepository.getStatistics(secondRange)
 
-        return firstFlow.combine(secondFlow) { firstWeek, secondWeek ->
-            StatisticComparison(firstWeek, secondWeek)
+        return firstFlow.combine(secondFlow) { first, second ->
+            StatisticComparison(first, second)
         }
     }
 
