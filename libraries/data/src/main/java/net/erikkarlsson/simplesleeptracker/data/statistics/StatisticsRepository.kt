@@ -10,7 +10,7 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.*
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
-class StatisticsRepository @Inject constructor(private val statisticsDao: StatisticsDaoCoroutines,
+class StatisticsRepository @Inject constructor(private val statisticsDao: StatisticsDao,
                                                private val sleepMapper: SleepMapper)
     : StatisticsDataSource {
 

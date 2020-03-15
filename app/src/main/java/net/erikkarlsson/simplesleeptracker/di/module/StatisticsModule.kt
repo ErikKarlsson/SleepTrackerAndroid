@@ -5,7 +5,6 @@ import dagger.Module
 import dagger.Provides
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDatabase
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDao
-import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDaoCoroutines
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import javax.inject.Singleton
@@ -24,10 +23,5 @@ abstract class StatisticsModule {
         @Provides
         @Singleton
         fun provideStatisticsDao(sleepDatabase: SleepDatabase): StatisticsDao = sleepDatabase.statisticsDao()
-
-        @JvmStatic
-        @Provides
-        @Singleton
-        fun provideStatisticsDaoCoroutines(sleepDatabase: SleepDatabase): StatisticsDaoCoroutines = sleepDatabase.statisticsDaoCoroutines()
     }
 }

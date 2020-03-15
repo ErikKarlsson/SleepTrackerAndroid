@@ -50,7 +50,7 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
                     }
 
     override suspend fun getCurrent(): Sleep {
-        val sleepEntity = sleepDao.getCurrentSleepCoroutines();
+        val sleepEntity = sleepDao.getCurrentSleep();
         return when (sleepEntity == null) {
             true -> Sleep.empty()
             false -> sleepMapper.mapFromEntity(sleepEntity)
@@ -68,18 +68,18 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
 
     override suspend fun update(updatedSleep: Sleep): Int {
         val sleepEntity = sleepMapper.mapToEntity(updatedSleep)
-        return sleepDao.updateSleepCoroutine(sleepEntity)
+        return sleepDao.updateSleep(sleepEntity)
     }
 
     override suspend fun delete(sleep: Sleep) =
-            sleepDao.deleteSleepCoroutines(sleepMapper.mapToEntity(sleep))
+            sleepDao.deleteSleep(sleepMapper.mapToEntity(sleep))
 
     override suspend fun deleteAll() =
-            sleepDao.deleteAllSleepCoroutines()
+            sleepDao.deleteAllSleep()
 
     override suspend fun insert(newSleep: Sleep): Long {
         val sleepEntity = sleepMapper.mapToEntity(newSleep)
-        return sleepDao.insertSleepSuspend(sleepEntity)
+        return sleepDao.insertSleep(sleepEntity)
     }
 
     override suspend fun insertAll(sleepList: ImmutableList<Sleep>) {
@@ -87,6 +87,6 @@ class SleepRepository @Inject constructor(private val sleepDao: SleepDao,
         for (sleep in sleepList) {
             sleepListBuilder.add(sleepMapper.mapToEntity(sleep))
         }
-        sleepDao.insertAllCoroutines(sleepListBuilder.build())
+        sleepDao.insertAll(sleepListBuilder.build())
     }
 }
