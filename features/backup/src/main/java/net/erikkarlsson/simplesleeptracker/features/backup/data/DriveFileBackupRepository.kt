@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import net.erikkarlsson.simplesleeptracker.core.util.toFile
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_LAST_SYNC_TIMESTAMP
-import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSourceFlow
+import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_FILE_NAME
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_FOLDER_NAME
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_MIME_TYPE
@@ -22,7 +22,7 @@ import javax.inject.Named
 class DriveFileBackupRepository @Inject constructor(
         private val drive: DriveApi,
         @Named("filePath") private val filePath: String,
-        private val preferencesDataSourceFlow: PreferencesDataSourceFlow)
+        private val preferencesDataSource: PreferencesDataSource)
     : FileBackupDataSource {
 
     override fun get(): File? {
@@ -41,10 +41,10 @@ class DriveFileBackupRepository @Inject constructor(
     }
 
     override fun getLastBackupTimestamp(): Flow<Long> =
-            preferencesDataSourceFlow.getLong(PREFS_LAST_SYNC_TIMESTAMP)
+            preferencesDataSource.getLong(PREFS_LAST_SYNC_TIMESTAMP)
 
     override fun updateLastBackupTimestamp() =
-            preferencesDataSourceFlow.set(PREFS_LAST_SYNC_TIMESTAMP, System.currentTimeMillis())
+            preferencesDataSource.set(PREFS_LAST_SYNC_TIMESTAMP, System.currentTimeMillis())
 
     private fun openFile(file: com.google.api.services.drive.model.File): File {
         val inputStream = drive.openFile(file.id)

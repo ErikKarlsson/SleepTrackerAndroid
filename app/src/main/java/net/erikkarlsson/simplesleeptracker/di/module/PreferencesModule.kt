@@ -8,22 +8,16 @@ import com.tfcporciuncula.flow.FlowSharedPreferences
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import net.erikkarlsson.simplesleeptracker.data.preferences.FlowPreferencesRepository
-import net.erikkarlsson.simplesleeptracker.data.preferences.RxPreferencesRepository
+import net.erikkarlsson.simplesleeptracker.data.preferences.PreferencesRepository
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
-import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSourceFlow
 import javax.inject.Singleton
 
 @Module
 abstract class PreferencesModule {
 
     @Binds
-    abstract fun bindsPreferencesDataSource(rxPreferencesRepository: RxPreferencesRepository)
+    abstract fun bindsPreferencesDataSource(preferencesRepository: PreferencesRepository)
             : PreferencesDataSource
-
-    @Binds
-    abstract fun bindsPreferencesDataSourceFlow(flowPreferencesRepository: FlowPreferencesRepository)
-            : PreferencesDataSourceFlow
 
     @Module
     companion object {

@@ -2,11 +2,11 @@ package net.erikkarlsson.simplesleeptracker.data.preferences
 
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import kotlinx.coroutines.flow.Flow
-import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSourceFlow
+import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import javax.inject.Inject
 
-class FlowPreferencesRepository @Inject constructor(private val flowSharedPreferences: FlowSharedPreferences)
-    : PreferencesDataSourceFlow {
+class PreferencesRepository @Inject constructor(private val flowSharedPreferences: FlowSharedPreferences)
+    : PreferencesDataSource {
 
     override fun set(key: String, value: Long) =
              flowSharedPreferences.getLong(key).set(value)

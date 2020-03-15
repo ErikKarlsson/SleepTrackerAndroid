@@ -1,14 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import io.reactivex.Completable
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 
 interface PreferencesDataSource {
     fun set(key: String, value: Long)
     fun set(key: String, value: Int)
-    fun set(key: String, value: Boolean): Completable
-    fun getLong(key: String): Observable<Long>
-    fun getInt(key: String): Observable<Int>
-    fun getBoolean(key: String): Observable<Boolean>
+    fun set(key: String, value: Boolean)
+    fun getLong(key: String): Flow<Long>
+    fun getInt(key: String): Flow<Int>
+    fun getBoolean(key: String): Flow<Boolean>
     fun clear()
 }

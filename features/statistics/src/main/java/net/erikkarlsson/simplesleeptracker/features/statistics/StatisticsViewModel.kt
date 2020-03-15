@@ -7,7 +7,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import io.reactivex.rxkotlin.zipWith
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
@@ -84,22 +85,18 @@ class StatisticsViewModel @AssistedInject constructor(
     }
 
     fun subscribeSavedFilters() {
-        preferences.getInt(PREFS_SELECTED_FILTER)
-                .zipWith(preferences.getInt(PREFS_SELECTED_COMPARE_FILTER))
-                .take(1)
-                .map {
-                    val statisticsFilter = StatisticsFilter.values()[it.first]
-                    val compareFilter = CompareFilter.values()[it.second]
-                    SavedFilters(statisticsFilter, compareFilter)
-                }
-                .execute {
-                    if (it is Success) {
-                        val savedFilterLoaded = it()
-                        copy(filter = it()!!.filter, compareFilter = savedFilterLoaded!!.compareFilter)
-                    } else {
-                        copy()
+        viewModelScope.launch {
+            preferences.getInt(PREFS_SELECTED_FILTER)
+                    .zip(preferences.getInt(PREFS_SELECTED_COMPARE_FILTER)) { selectedFilter, selectedCompareFilter ->
+                        val statisticsFilter = StatisticsFilter.values()[selectedFilter]
+                        val compareFilter = CompareFilter.values()[selectedCompareFilter]
+                        SavedFilters(statisticsFilter, compareFilter)
                     }
-                }
+                    .take(1)
+                    .collect {
+                        setState { copy(filter = it.filter, compareFilter = it.compareFilter) }
+                    }
+        }
     }
 
     private fun getDateRanges(statisticFilter: StatisticsFilter,
