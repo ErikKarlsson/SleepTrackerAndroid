@@ -1,29 +1,27 @@
 package net.erikkarlsson.simplesleeptracker.features.backup
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import net.erikkarlsson.simplesleeptracker.features.backup.domain.BackupSleepTask
 import timber.log.Timber
 
 class BackupSleepWorker @AssistedInject constructor(
-        @Assisted private val appContext : Context,
-        @Assisted private val params : WorkerParameters,
+        @Assisted private val appContext: Context,
+        @Assisted private val params: WorkerParameters,
         private val backupSleepTask: BackupSleepTask)
-    : Worker(appContext, params) {
+    : CoroutineWorker(appContext, params) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         Timber.d("Backup data to Google Drive")
 
-        val throwable = backupSleepTask.completable(CompletableTask.None())
-                .blockingGet()
-
-        return if (throwable == null) {
+        return try {
+            backupSleepTask.completable(CoroutineTask.None())
             Result.success()
-        } else {
+        } catch (error: Throwable) {
             Result.failure()
         }
     }

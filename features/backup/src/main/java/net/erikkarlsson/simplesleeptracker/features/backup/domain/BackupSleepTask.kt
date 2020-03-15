@@ -1,26 +1,24 @@
 package net.erikkarlsson.simplesleeptracker.features.backup.domain
 
-import com.google.common.collect.ImmutableList
-import io.reactivex.Completable
+import kotlinx.coroutines.flow.first
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileWriter
-import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
+import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import javax.inject.Inject
 
 /**
  * Backup sleep to file.
  */
 class BackupSleepTask @Inject constructor(
-        private val sleepRepository: SleepDataSource,
+        private val sleepRepository: SleepDataSourceCoroutines,
         private val backupCsvFileWriter: BackupCsvFileWriter,
-        private val fileBackupRepository: FileBackupDataSource) : CompletableTask<None> {
+        private val fileBackupRepository: FileBackupDataSourceCoroutines) : CoroutineTask<CoroutineTask.None> {
 
-    override fun completable(params: None): Completable =
-            sleepRepository.getSleep()
-                    .first(ImmutableList.of())
-                    .map(backupCsvFileWriter::write)
-                    .flatMapCompletable(fileBackupRepository::put)
-                    .andThen(fileBackupRepository.updateLastBackupTimestamp())
+    override suspend fun completable(params: CoroutineTask.None) {
+        val sleepList = sleepRepository.getSleepListFlow().first()
+        val file = backupCsvFileWriter.write(sleepList)
+        fileBackupRepository.put(file)
+        fileBackupRepository.updateLastBackupTimestamp()
+    }
 }

@@ -29,7 +29,7 @@ dependencies {
     implementation Deps.paging_rx
 
     // Room
-    implementation Deps.room_runtime
+    api Deps.room_runtime
     implementation Deps.room_rxjava2
     implementation Deps.room_ktx
     kapt Deps.room_compiler

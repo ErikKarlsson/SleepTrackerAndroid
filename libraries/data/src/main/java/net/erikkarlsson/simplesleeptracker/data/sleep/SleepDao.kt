@@ -23,6 +23,9 @@ interface SleepDao {
     fun getSleep(): Flowable<List<SleepEntity>>
 
     @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
+    fun getSleepFlow(): Flow<List<SleepEntity>>
+
+    @Query("SELECT * FROM Sleep WHERE to_date != 0 ORDER BY datetime(from_date) DESC")
     fun getSleepFactory(): DataSource.Factory<Int, SleepEntity>
 
     @Query("SELECT * FROM Sleep WHERE id == :id")

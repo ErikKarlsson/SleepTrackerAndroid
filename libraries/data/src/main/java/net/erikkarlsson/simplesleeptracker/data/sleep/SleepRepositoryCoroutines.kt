@@ -1,10 +1,12 @@
 package net.erikkarlsson.simplesleeptracker.data.sleep
 
 import androidx.paging.PagedList
+import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import net.erikkarlsson.simplesleeptracker.data.FlowPagedListBuilder
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
@@ -29,7 +31,18 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
         return FlowPagedListBuilder(dataSource, config).buildFlow()
     }
 
-    override suspend fun getSleep(id: Int): Flow<Sleep> =
+    override fun getSleepListFlow(): Flow<ImmutableList<Sleep>> =
+            sleepDao.getSleepFlow()
+                    .mapLatest { sleepList ->
+                        val sleepListBuilder = ImmutableList.Builder<Sleep>()
+
+                        sleepList.map { sleepMapper.mapFromEntity(it) }
+                                .onEach { sleepListBuilder.add(it) }
+
+                        sleepListBuilder.build()
+                    }
+
+    override fun getSleepFlow(id: Int): Flow<Sleep> =
             sleepDao.getSleepFlow(id)
                     .map {
                         if (it.isEmpty()) Sleep.empty()
@@ -45,13 +58,13 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
     }
 
     override fun getCurrentFlow(): Flow<Sleep> =
-        sleepDao.getCurrentSleepFlow()
-                .map {
-                    when (it.isEmpty()) {
-                        true -> Sleep.empty()
-                        false -> sleepMapper.mapFromEntity(it[0])
+            sleepDao.getCurrentSleepFlow()
+                    .map {
+                        when (it.isEmpty()) {
+                            true -> Sleep.empty()
+                            false -> sleepMapper.mapFromEntity(it[0])
+                        }
                     }
-                }
 
     override suspend fun update(updatedSleep: Sleep): Int {
         val sleepEntity = sleepMapper.mapToEntity(updatedSleep)
@@ -59,10 +72,10 @@ class SleepRepositoryCoroutines @Inject constructor(private val sleepDao: SleepD
     }
 
     override suspend fun delete(sleep: Sleep) =
-        sleepDao.deleteSleepCoroutines(sleepMapper.mapToEntity(sleep))
+            sleepDao.deleteSleepCoroutines(sleepMapper.mapToEntity(sleep))
 
     override suspend fun deleteAll() =
-        sleepDao.deleteAllSleepCoroutines()
+            sleepDao.deleteAllSleepCoroutines()
 
     override suspend fun insert(newSleep: Sleep): Long {
         val sleepEntity = sleepMapper.mapToEntity(newSleep)

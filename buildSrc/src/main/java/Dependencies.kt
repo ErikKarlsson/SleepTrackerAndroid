@@ -71,7 +71,7 @@ object Versions {
     val threeten_backport = "1.3.8"
     val threeten_backport_android = "1.1.1"
     val timber = "4.7.1"
-    val work_manager = "1.0.0-beta01"
+    val work_manager = "2.3.3"
 }
 
 object Deps {
@@ -82,7 +82,6 @@ object Deps {
     val bubble_layout = "com.daasuu:BubbleLayout:${Versions.bubble_layout}"
     val core_ktx = "androidx.core:core-ktx:${Versions.core_ktx}"
     val crashlytics = "com.crashlytics.sdk.android:crashlytics:${Versions.crashlytics}"
-
     val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     val coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
@@ -173,6 +172,6 @@ object Deps {
     val threeten_backport = "org.threeten:threetenbp:${Versions.threeten_backport}"
     val threeten_backport_android = "com.jakewharton.threetenabp:threetenabp:${Versions.threeten_backport_android}"
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
-    val work_manager_runtime = "android.arch.work:work-runtime-ktx:${Versions.work_manager}"
-    val work_manager_testing = "android.arch.work:work-testing:${Versions.work_manager}"
+    val work_manager_runtime = "androidx.work:work-runtime-ktx:${Versions.work_manager}"
+    val work_manager_testing = "androidx.work:work-testing:${Versions.work_manager}"
 }
