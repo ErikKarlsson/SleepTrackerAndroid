@@ -15,6 +15,7 @@ dependencies {
     // Lifecycle
     api Deps.lifecycle_extensions
     api Deps.lifecycle_viewmodel
+    api Deps.lifecycle_runtime
     kapt Deps.lifecycle_compiler
 
     // Dagger

@@ -16,7 +16,7 @@ class EventModule {
     @Provides
     @Singleton
     @Named("sleepAddedEvents")
-    fun providesSleepAddedEvents(): MutableLiveData<Event<Unit>> = MutableLiveData()
+    fun providesSleepAddedEvents(): BroadcastChannel<Event<Unit>> = BroadcastChannel(1)
 
     @Provides
     @Singleton

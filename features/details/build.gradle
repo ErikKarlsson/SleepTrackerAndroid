@@ -12,11 +12,6 @@ dependencies {
     implementation project(':libraries:ui-components')
     implementation project(':libraries:navigation')
 
-    // Lifecycle
-    api Deps.lifecycle_extensions
-    api Deps.lifecycle_viewmodel
-    kapt Deps.lifecycle_compiler
-
     // Navigation
     implementation Deps.navigation_fragment
     implementation Deps.navigation_ui

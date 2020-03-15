@@ -8,7 +8,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask
+import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
 import net.erikkarlsson.simplesleeptracker.features.diary.domain.GetSleepDiaryTask
 
 class DiaryViewModel @AssistedInject constructor(
@@ -18,7 +18,7 @@ class DiaryViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
-            getSleepDiaryTask.flow(ObservableTask.None())
+            getSleepDiaryTask.flow(FlowTask.None())
                     .execute {
                         copy(sleepDiary = it)
                     }

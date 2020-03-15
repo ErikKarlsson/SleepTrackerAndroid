@@ -6,14 +6,13 @@ import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepDiary
 import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ObservableTask.None
 import javax.inject.Inject
 
 class GetSleepDiaryTask @Inject constructor(private val sleepRepository: SleepDataSourceCoroutines,
                                             private val statisticsRepository: StatisticsDataSourceCoroutines)
-    : FlowTask<SleepDiary, None> {
+    : FlowTask<SleepDiary, FlowTask.None> {
 
-    override fun flow(params: None): Flow<SleepDiary> =
+    override fun flow(params: FlowTask.None): Flow<SleepDiary> =
             sleepRepository.getSleepPaged()
                     .zip(statisticsRepository.getSleepCountYearMonth()) { pagedSleep, sleepCountYearMonth ->
                         SleepDiary(pagedSleep = pagedSleep,

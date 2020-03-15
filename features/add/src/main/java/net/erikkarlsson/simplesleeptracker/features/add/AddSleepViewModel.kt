@@ -1,12 +1,13 @@
 package net.erikkarlsson.simplesleeptracker.features.add
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
@@ -19,7 +20,7 @@ class AddSleepViewModel @AssistedInject constructor(
         @Assisted state: AddSleepState,
         private val addSleepTask: AddSleepTask,
         dateTimeProvider: DateTimeProvider,
-        @Named("sleepAddedEvents") private val sleepAddedEvents: MutableLiveData<Event<Unit>>
+        @Named("sleepAddedEvents") private val sleepAddedEvents: BroadcastChannel<Event<Unit>>
 ) : MvRxViewModel<AddSleepState>(state) {
 
     init {
@@ -35,16 +36,11 @@ class AddSleepViewModel @AssistedInject constructor(
 
     fun saveClick() {
         withState { state ->
-            addSleepTask.completable(AddSleepTask.Params(state.sleep))
-                    .execute {
-                        when (it) {
-                            is Success -> {
-                                sleepAddedEvents.postValue(Event(Unit))
-                                copy(isSaveSuccess = true)
-                            }
-                            else -> copy()
-                        }
-                    }
+            viewModelScope.launch {
+                addSleepTask.completable(AddSleepTask.Params(state.sleep))
+                sleepAddedEvents.send(Event(Unit))
+                setState { copy(isSaveSuccess = true) }
+            }
         }
     }
 

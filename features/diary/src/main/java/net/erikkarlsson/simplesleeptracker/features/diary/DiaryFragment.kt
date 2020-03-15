@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +18,10 @@ import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_diary.*
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
-import net.erikkarlsson.simplesleeptracker.core.livedata.EventObserver
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecoration
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecorationFactory
@@ -39,7 +41,7 @@ class DiaryFragment : BaseMvRxFragment() {
     lateinit var sectionItemDecorationFactory: RecyclerSectionItemDecorationFactory
 
     @field:[Inject Named("sleepAddedEvents")]
-    lateinit var sleepAddedEvents: MutableLiveData<Event<Unit>>
+    lateinit var sleepAddedEvents: BroadcastChannel<Event<Unit>>
 
     @Inject
     lateinit var viewModelFactory: DiaryViewModel.Factory
@@ -88,10 +90,12 @@ class DiaryFragment : BaseMvRxFragment() {
 
         floatingActionButton.clicksThrottle(compositeDisposable) { navigateToAddSleep() }
 
-        sleepAddedEvents.observe(viewLifecycleOwner, EventObserver {
-            // Add scroll delay to give RecyclerView time to update.
-            Handler().postDelayed({ scrollToTop() }, 100)
-        })
+        lifecycleScope.launch {
+            sleepAddedEvents.consumeEach {
+                // Add scroll delay to give RecyclerView time to update.
+                Handler().postDelayed({ scrollToTop() }, 100)
+            }
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->

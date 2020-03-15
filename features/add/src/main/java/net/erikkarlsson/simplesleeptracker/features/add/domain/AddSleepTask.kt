@@ -1,21 +1,21 @@
 package net.erikkarlsson.simplesleeptracker.features.add.domain
 
-import io.reactivex.Completable
-import io.reactivex.Completable.fromCallable
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
+import net.erikkarlsson.simplesleeptracker.domain.SleepDataSourceCoroutines
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask
-import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
+import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import javax.inject.Inject
+import javax.inject.Named
 
 class AddSleepTask @Inject constructor(
-        private val sleepRepository: SleepDataSource,
-        private val scheduleBackupTask: ScheduleBackupTask)
-    : CompletableTask<AddSleepTask.Params> {
+        private val sleepRepository: SleepDataSourceCoroutines,
+        @Named("backupScheduler") private val backupScheduler: TaskScheduler)
+    : CoroutineTask<AddSleepTask.Params> {
 
-    override fun completable(params: Params): Completable =
-            fromCallable { sleepRepository.insert(params.sleep) }
-                    .andThen(scheduleBackupTask.completable(CompletableTask.None()))
+    override suspend fun completable(params: Params) {
+        sleepRepository.insert(params.sleep)
+        backupScheduler.schedule()
+    }
 
     data class Params(val sleep: Sleep)
 }

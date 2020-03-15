@@ -125,7 +125,7 @@ object Deps {
     val lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycle}"
     val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     val lifecycle_java8 = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
-    val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycle}"
+    val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
     val material = "com.google.android.material:material:${Versions.material}"
     val materialprogressbar = "me.zhanghai.android.materialprogressbar:library:${Versions.materialprogressbar}"
     val mock_web_server = "com.squareup.okhttp3:mockwebserver:${Versions.mockwebserver}"
