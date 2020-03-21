@@ -201,6 +201,9 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
+    implementation Deps.coroutines_core
+    implementation Deps.coroutines_android
+
     // Guava
     implementation Deps.guava
 

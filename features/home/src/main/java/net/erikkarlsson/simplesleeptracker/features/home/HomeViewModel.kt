@@ -6,8 +6,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
@@ -104,7 +102,7 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     private fun toggleSleep() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleSleepTask.completable(CoroutineTask.None())
         }
     }

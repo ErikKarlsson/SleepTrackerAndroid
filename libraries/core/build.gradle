@@ -11,6 +11,7 @@ dependencies {
     // Coroutines
     api Deps.coroutines_core
     api Deps.coroutines_android
+    testApi Deps.coroutines_test
 
     // Lifecycle
     api Deps.lifecycle_extensions

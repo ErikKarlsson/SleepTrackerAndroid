@@ -14,6 +14,8 @@ dependencies {
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
     testImplementation Deps.mockito_inline
+    testImplementation Deps.coroutines_android
+    testImplementation Deps.coroutines_core
 
     // RxJava
     implementation Deps.rxjava2

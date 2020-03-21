@@ -1,128 +1,130 @@
 package net.erikkarlsson.simplesleeptracker.domain
 
-import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.subjects.Subject
-import net.erikkarlsson.simplesleeptracker.testutil.MockDateTimeProvider
+import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.channels.BroadcastChannel
 import net.erikkarlsson.simplesleeptracker.domain.entity.MinimumSleepEvent
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
-import net.erikkarlsson.simplesleeptracker.domain.task.CompletableTask.None
-import net.erikkarlsson.simplesleeptracker.domain.task.ScheduleBackupTask
+import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
+import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
+import net.erikkarlsson.simplesleeptracker.testutil.MockDateTimeProvider
 import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
+import net.erikkarlsson.simplesleeptracker.testutil.TestCoroutineRule
 import org.junit.Rule
 import org.junit.Test
 
 class ToggleSleepTaskTest {
 
     @get:Rule
+    val testCoroutineRule = TestCoroutineRule()
+
+    @get:Rule
     var testSchedulerRule = RxImmediateSchedulerRule()
 
     val dateTimeProvider = MockDateTimeProvider()
     val sleepRepository: SleepDataSource = mock()
-    val scheduleBackupTask: ScheduleBackupTask = mock()
+    val backupScheduler: TaskScheduler = mock()
     val appLifecycle: AppLifecycle = mock()
     val notifications: Notifications = mock()
-    val sleepEvents: Subject<SleepEvent> = mock()
-    val toggleSleepTask = ToggleSleepTask(sleepRepository, dateTimeProvider, scheduleBackupTask,
-            appLifecycle, notifications, sleepEvents)
+    val sleepEvents: BroadcastChannel<SleepEvent> = mock()
+    val toggleSleepTask = ToggleSleepTask(sleepRepository, dateTimeProvider,
+            appLifecycle, notifications, backupScheduler, sleepEvents)
 
     @Test
-    fun `toggle from empty inserts sleep`() {
-        val now = dateTimeProvider.mockDateTime()
-        val sleeping = Sleep(fromDate = now)
-        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(Sleep.empty()))
-        toggleSleepTask.completable(None()).test().assertComplete()
+    fun `toggle from empty inserts sleep`() = testCoroutineRule.runBlockingTest {
+            val now = dateTimeProvider.mockDateTime()
+            val sleeping = Sleep(fromDate = now)
+            given(sleepRepository.getCurrent()).willReturn(Sleep.empty())
 
-        inOrder(sleepRepository) {
-            verify(sleepRepository).getCurrentSingle()
-            verify(sleepRepository).insert(sleeping)
-            verifyNoMoreInteractions()
-        }
+            toggleSleepTask.completable(CoroutineTask.None())
+
+            inOrder(sleepRepository) {
+                verify(sleepRepository).getCurrent()
+                verify(sleepRepository).insert(sleeping)
+                verifyNoMoreInteractions()
+            }
     }
 
     @Test
-    fun `toggle from sleeping updates to awake`() {
+    fun `toggle from sleeping updates to awake`() = testCoroutineRule.runBlockingTest {
         val now = dateTimeProvider.mockDateTime()
         val anHourAgo = now.minusHours(1)
         val sleeping = Sleep(fromDate = anHourAgo)
         val awake = Sleep(fromDate = anHourAgo, toDate = now)
-        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        given(scheduleBackupTask.completable(any())).willReturn(Completable.complete())
+        given(sleepRepository.getCurrent()).willReturn(sleeping)
 
-        toggleSleepTask.completable(None()).test().assertComplete()
+        toggleSleepTask.completable(CoroutineTask.None())
 
         inOrder(sleepRepository) {
-            verify(sleepRepository).getCurrentSingle()
+            verify(sleepRepository).getCurrent()
             verify(sleepRepository).update(awake)
             verifyNoMoreInteractions()
         }
 
-        verify(scheduleBackupTask).completable(any())
-        verifyNoMoreInteractions(scheduleBackupTask)
+        verify(backupScheduler).schedule()
+        verifyNoMoreInteractions(backupScheduler)
     }
 
     @Test
-    fun `toggle from awake inserts sleeping`() {
+    fun `toggle from awake inserts sleeping`() = testCoroutineRule.runBlockingTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
         val awake = Sleep(fromDate = now, toDate = now.plusDays(1))
-        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(awake))
-        toggleSleepTask.completable(None()).test().assertComplete()
+        given(sleepRepository.getCurrent()).willReturn(awake)
+        toggleSleepTask.completable(CoroutineTask.None())
 
         inOrder(sleepRepository) {
-            verify(sleepRepository).getCurrentSingle()
+            verify(sleepRepository).getCurrent()
             verify(sleepRepository).insert(sleeping)
             verifyNoMoreInteractions()
         }
 
-        verifyNoMoreInteractions(scheduleBackupTask)
+        verifyNoMoreInteractions(backupScheduler)
     }
 
     @Test
-    fun `sleep duration less than an hour should not count as tracked night`() {
+    fun `sleep duration less than an hour should not count as tracked night`() = testCoroutineRule.runBlockingTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
-        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        given(appLifecycle.isForegrounded()).willReturn(Single.just(true))
+        given(sleepRepository.getCurrent()).willReturn(sleeping)
+        given(appLifecycle.isForegrounded()).willReturn(true)
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.completable(None()).test().assertComplete()
+        toggleSleepTask.completable(CoroutineTask.None())
 
         inOrder(sleepRepository) {
-            verify(sleepRepository).getCurrentSingle()
+            verify(sleepRepository).getCurrent()
             verify(sleepRepository).delete(sleeping)
             verifyNoMoreInteractions()
         }
 
-        verifyNoMoreInteractions(scheduleBackupTask)
+        verifyNoMoreInteractions(backupScheduler)
     }
 
     @Test
-    fun `sleep duration less than an hour should send sleep event when foregrounded`() {
+    fun `sleep duration less than an hour should send sleep event when foregrounded`() = testCoroutineRule.runBlockingTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
-        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        given(appLifecycle.isForegrounded()).willReturn(Single.just(true))
+        given(sleepRepository.getCurrent()).willReturn(sleeping)
+        given(appLifecycle.isForegrounded()).willReturn(true)
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.completable(None()).test().assertComplete()
+        toggleSleepTask.completable(CoroutineTask.None())
 
-        verify(sleepEvents).onNext(MinimumSleepEvent)
+        verify(sleepEvents).send(MinimumSleepEvent)
         verify(notifications, never()).sendMinimumSleepNotification()
         verifyNoMoreInteractions(sleepEvents)
     }
 
     @Test
-    fun `sleep duration less than an hour should show notification when backgrounded`() {
+    fun `sleep duration less than an hour should show notification when backgrounded`() = testCoroutineRule.runBlockingTest {
         val now = dateTimeProvider.mockDateTime()
         val sleeping = Sleep(fromDate = now)
-        given(sleepRepository.getCurrentSingle()).willReturn(Single.just(sleeping))
-        given(appLifecycle.isForegrounded()).willReturn(Single.just(false))
+        given(sleepRepository.getCurrent()).willReturn(sleeping)
+        given(appLifecycle.isForegrounded()).willReturn(false)
         dateTimeProvider.nowValue = now.plusMinutes(59)
-        toggleSleepTask.completable(None()).test().assertComplete()
+        toggleSleepTask.completable(CoroutineTask.None())
 
-        verify(sleepEvents, never()).onNext(MinimumSleepEvent)
+        verify(sleepEvents, never()).send(MinimumSleepEvent)
         verify(notifications).sendMinimumSleepNotification()
         verifyNoMoreInteractions(notifications)
     }

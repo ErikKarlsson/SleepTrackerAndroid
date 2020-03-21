@@ -5,12 +5,13 @@ apply plugin: 'kotlin-android-extensions'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(':libraries:date-util')
     implementation project(':libraries:domain')
+    implementation project(':libraries:core')
     implementation Deps.threeten_backport
     implementation Deps.guava
     implementation Deps.dagger_runtime
     implementation Deps.rxjava2
     implementation Deps.rxandroid
     implementation Deps.junit
+    implementation Deps.coroutines_test
 }
