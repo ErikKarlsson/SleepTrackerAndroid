@@ -1,9 +1,6 @@
 package net.erikkarlsson.simplesleeptracker
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.BroadcastReceiver
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -17,9 +14,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasBroadcastReceiverInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
@@ -29,20 +24,13 @@ import net.erikkarlsson.simplesleeptracker.features.backup.di.MyWorkerFactory
 import timber.log.Timber
 import javax.inject.Inject
 
-open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentInjector,
-        HasBroadcastReceiverInjector, LifecycleObserver {
+open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
 
     // TODO (erikkarlsson): Only needed for injecting Worker, remove once Dagger has released WorkerInjector.
     lateinit var appComponent: AppComponent
 
     @Inject
-    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
-
-    @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
-
-    @Inject
-    lateinit var broadcastInjector: DispatchingAndroidInjector<BroadcastReceiver>
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
@@ -87,11 +75,7 @@ open class App : MultiDexApplication(), HasActivityInjector, HasSupportFragmentI
         sleepAppWidgetController.initialize()
     }
 
-    override fun activityInjector(): AndroidInjector<Activity> = activityInjector
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
-
-    override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastInjector
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
     // https://android.jlelse.eu/how-to-detect-android-application-open-and-close-background-and-foreground-events-1b4713784b57
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)

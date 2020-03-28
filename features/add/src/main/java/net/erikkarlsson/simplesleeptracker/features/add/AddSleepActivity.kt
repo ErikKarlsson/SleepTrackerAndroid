@@ -2,19 +2,18 @@ package net.erikkarlsson.simplesleeptracker.features.add
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class AddSleepActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class AddSleepActivity : AppCompatActivity(), HasAndroidInjector {
 
     @Inject
-    lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var supportFragmentInjector: DispatchingAndroidInjector<Any>
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+    override fun androidInjector(): AndroidInjector<Any> = supportFragmentInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -26,4 +25,5 @@ class AddSleepActivity : AppCompatActivity(), HasSupportFragmentInjector {
                     .commitNow()
         }
     }
+
 }
