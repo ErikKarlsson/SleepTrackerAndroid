@@ -115,15 +115,6 @@ android {
 
 configurations.all { config ->
 
-    // Ensure the LeakCanary no-op dependency is always used in JVM and Android tests.
-    if (config.name.contains('UnitTest') || config.name.contains('AndroidTest')) {
-        config.resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'com.squareup.leakcanary' && details.requested.name == 'leakcanary-android') {
-                details.useTarget(group: details.requested.group, name: 'leakcanary-android-no-op', version: details.requested.version)
-            }
-        }
-    }
-
     // Force version
     resolutionStrategy.force Deps.kotlin_stdlib
     resolutionStrategy.force Deps.threeten_backport
@@ -209,7 +200,7 @@ dependencies {
 
     // LeakCanary
     debugImplementation Deps.leakcanary
-    releaseImplementation Deps.leakcanary_no_op
+    androidTestImplementation Deps.leakcanary_instrumentation
 
     // Lifecycle
     implementation Deps.lifecycle_extensions

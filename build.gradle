@@ -59,6 +59,7 @@ subprojects {
                     minSdkVersion Config.minSdk
                     targetSdkVersion Config.targetSdk
                     testInstrumentationRunner "${applicationId}.runner.TestRunner"
+                    testInstrumentationRunnerArgument "listener", "leakcanary.FailTestOnLeakRunListener"
                     vectorDrawables.useSupportLibrary = true
                 }
 

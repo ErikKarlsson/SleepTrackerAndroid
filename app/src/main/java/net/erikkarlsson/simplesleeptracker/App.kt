@@ -11,7 +11,6 @@ import androidx.work.WorkManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -45,13 +44,7 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
     override fun onCreate() {
         super.onCreate()
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
-        LeakCanary.install(this)
 
         val crashlytics = Crashlytics.Builder()
                 .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
