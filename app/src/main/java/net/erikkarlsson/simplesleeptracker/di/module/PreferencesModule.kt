@@ -3,7 +3,6 @@ package net.erikkarlsson.simplesleeptracker.di.module
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import dagger.Binds
 import dagger.Module
@@ -26,12 +25,6 @@ abstract class PreferencesModule {
         @JvmStatic
         fun providesSharedPreferences(context: Context): SharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context)
-
-        @Provides
-        @Singleton
-        @JvmStatic
-        fun providesRxSharedPreferences(sharedPreferences: SharedPreferences) =
-                RxSharedPreferences.create(sharedPreferences)
 
         @Provides
         @Singleton

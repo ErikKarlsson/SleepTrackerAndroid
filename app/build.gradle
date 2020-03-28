@@ -240,10 +240,8 @@ dependencies {
     // RxJava
     implementation Deps.rxjava2
     implementation Deps.rxandroid
-    implementation Deps.rxrelay
     implementation Deps.rxbinding
     implementation Deps.rxkotlin
-    implementation Deps.rx_preferences
 
     // Flow
     implementation Deps.flow_preferences

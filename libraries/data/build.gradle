@@ -35,7 +35,6 @@ dependencies {
     // RxJava
     implementation Deps.rxjava2
     implementation Deps.rxkotlin
-    implementation Deps.rx_preferences
 
     // Flow
     implementation Deps.flow_preferences
