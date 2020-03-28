@@ -18,7 +18,6 @@ abstract class StatisticsModule {
 
     companion object {
 
-        @JvmStatic
         @Provides
         @Singleton
         fun provideStatisticsDao(sleepDatabase: SleepDatabase): StatisticsDao = sleepDatabase.statisticsDao()

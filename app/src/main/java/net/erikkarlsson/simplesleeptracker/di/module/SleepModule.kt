@@ -19,12 +19,10 @@ abstract class SleepModule {
 
     companion object {
 
-        @JvmStatic
         @Provides
         @Singleton
         fun provideSleepDatabase(context: Context): SleepDatabase = SleepDatabase.getInstance(context)
 
-        @JvmStatic
         @Provides
         @Singleton
         fun provideSleepDao(sleepDatabase: SleepDatabase): SleepDao = sleepDatabase.sleepDao()

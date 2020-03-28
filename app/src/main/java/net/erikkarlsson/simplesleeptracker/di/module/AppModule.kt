@@ -21,22 +21,18 @@ abstract class AppModule {
     companion object {
         @Provides
         @Singleton
-        @JvmStatic
         fun providesApplication(app: App): Context = app
 
         @Provides
         @Singleton
-        @JvmStatic
         fun providesResources(context: Context) = context.resources
 
         @Provides
         @Singleton
-        @JvmStatic
         @Named("filePath")
         fun providesFilePath(context: Context): String = context.getFilesDir().getPath().toString()
 
         @Provides
-        @JvmStatic
         fun providesDispatcherProvider(): DispatcherProvider = DefaultDispatcherProvider()
     }
 

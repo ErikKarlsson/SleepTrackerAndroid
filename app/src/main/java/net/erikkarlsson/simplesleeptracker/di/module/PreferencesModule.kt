@@ -21,13 +21,11 @@ abstract class PreferencesModule {
     companion object {
         @Provides
         @Singleton
-        @JvmStatic
         fun providesSharedPreferences(context: Context): SharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context)
 
         @Provides
         @Singleton
-        @JvmStatic
         fun providesFlowSharedPreferences(sharedPreferences: SharedPreferences) =
                 FlowSharedPreferences(sharedPreferences)
     }
