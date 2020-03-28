@@ -16,7 +16,6 @@ abstract class StatisticsModule {
     @Singleton
     abstract fun bindStatisticsDataSource(statisticsRepository: StatisticsRepository): StatisticsDataSource
 
-    @Module
     companion object {
 
         @JvmStatic

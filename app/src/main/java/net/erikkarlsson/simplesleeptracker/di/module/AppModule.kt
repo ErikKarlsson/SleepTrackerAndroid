@@ -18,7 +18,6 @@ abstract class AppModule {
     @Binds
     abstract fun bindsAppLifecycle(appLifecycle: AndroidAppLifecycle): AppLifecycle
 
-    @Module
     companion object {
         @Provides
         @Singleton

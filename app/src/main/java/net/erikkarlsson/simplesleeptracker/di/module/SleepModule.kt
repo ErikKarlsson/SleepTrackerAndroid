@@ -17,7 +17,6 @@ abstract class SleepModule {
     @Singleton
     abstract fun bindSleepDataSourceCoroutines(sleepRepository: SleepRepository): SleepDataSource
 
-    @Module
     companion object {
 
         @JvmStatic

@@ -18,7 +18,6 @@ abstract class PreferencesModule {
     abstract fun bindsPreferencesDataSource(preferencesRepository: PreferencesRepository)
             : PreferencesDataSource
 
-    @Module
     companion object {
         @Provides
         @Singleton
