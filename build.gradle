@@ -19,19 +19,23 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-4"
+    id "io.gitlab.arturbosch.detekt" version "1.7.2"
     id "com.github.ben-manes.versions" version "0.28.0"
 }
 
 detekt {
-    version = "1.0.0.RC6-4"
-    profile("main") {
-        input = "$projectDir/app/src/main/java"
-        config = "$projectDir/code-quality/detekt-config.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-        output = "$projectDir/app/build/reports"
+    toolVersion = "1.7.2"
+    input = files("$projectDir")
+    config = files("$projectDir/code-quality/detekt.yml")
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        txt.enabled = true
     }
 }
+
+tasks.detekt.jvmTarget = "1.8"
 
 allprojects {
     repositories {
