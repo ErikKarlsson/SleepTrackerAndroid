@@ -70,8 +70,6 @@ class DetailFragment : BaseMvRxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-
     }
 
     override fun onAttach(context: Context) {
@@ -95,8 +93,6 @@ class DetailFragment : BaseMvRxFragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val sleep = sleepRepository.getCurrent()
             Timber.d("sleep %s", sleep.toString())
-
-
         }
     }
 

@@ -1,30 +1,29 @@
 package net.erikkarlsson.simplesleeptracker.features.diary
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_sleep.view.*
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
+import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.features.diary.databinding.ItemSleepBinding
 
 class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sleep, SleepAdapter.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_sleep, parent, false)
-        return ViewHolder(view, itemClick)
+        val binding = ItemSleepBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, itemClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindSleep(getItem(position))
     }
 
-    class ViewHolder(v: View, private val itemClick: (Sleep) -> Unit)
-        : RecyclerView.ViewHolder(v) {
+    class ViewHolder(private val binding: ItemSleepBinding, private val itemClick: (Sleep) -> Unit)
+        : RecyclerView.ViewHolder(binding.root) {
 
         fun bindSleep(sleep: Sleep?) {
             val hours = sleep?.hours ?: 0f
@@ -35,11 +34,11 @@ class SleepAdapter(private val itemClick: (Sleep) -> Unit) : PagedListAdapter<Sl
                 else -> R.drawable.ic_so_so_sleep
             }
 
-            itemView.iconImage.setImageResource(imageResId)
-            itemView.hoursText.text = sleep?.hours?.formatHoursMinutes2
-            itemView.dateText.text = sleep?.toDate?.formatDateDisplayName
-            itemView.timeText.text = sleep?.fromDate?.formatHHMM
-            itemView.setOnClickListener {
+            binding.iconImage.setImageResource(imageResId)
+            binding.hoursText.text = sleep?.hours?.formatHoursMinutes2
+            binding.dateText.text = sleep?.toDate?.formatDateDisplayName
+            binding.timeText.text = sleep?.fromDate?.formatHHMM
+            binding.root.setOnClickListener {
                 sleep?.let(itemClick)
             }
         }

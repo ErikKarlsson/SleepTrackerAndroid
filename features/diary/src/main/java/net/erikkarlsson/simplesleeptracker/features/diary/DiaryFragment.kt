@@ -17,12 +17,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_diary.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.features.diary.databinding.FragmentDiaryBinding
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecoration
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecorationFactory
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.SimpleDividerItemDecoration
@@ -54,6 +54,8 @@ class DiaryFragment : BaseMvRxFragment() {
 
     private val viewModel: DiaryViewModel by fragmentViewModel()
 
+    private lateinit var binding: FragmentDiaryBinding
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -61,18 +63,19 @@ class DiaryFragment : BaseMvRxFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_diary, container, false)
+        binding = FragmentDiaryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = adapter
-        recyclerView.itemAnimator = null
-        recyclerView.addItemDecoration(dividerItemDecoration)
+        binding.recyclerView.layoutManager = linearLayoutManager
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.itemAnimator = null
+        binding.recyclerView.addItemDecoration(dividerItemDecoration)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -80,15 +83,15 @@ class DiaryFragment : BaseMvRxFragment() {
                     return
                 }
 
-                if (dy > 0 && floatingActionButton.isVisible) {
-                    floatingActionButton.hide()
-                } else if (dy < 0 && !floatingActionButton.isVisible) {
-                    floatingActionButton.show()
+                if (dy > 0 && binding.floatingActionButton.isVisible) {
+                    binding.floatingActionButton.hide()
+                } else if (dy < 0 && !binding.floatingActionButton.isVisible) {
+                    binding.floatingActionButton.show()
                 }
             }
         })
 
-        floatingActionButton.clicksThrottle(compositeDisposable) { navigateToAddSleep() }
+        binding.floatingActionButton.clicksThrottle(compositeDisposable) { navigateToAddSleep() }
 
         lifecycleScope.launch {
             sleepAddedEvents.consumeEach {
@@ -105,21 +108,21 @@ class DiaryFragment : BaseMvRxFragment() {
     private fun render(state: DiaryState) {
         when (state.sleepDiary) {
             is Success -> {
-                emptyState.isVisible = !state.isItemsFound
-                recyclerView.isVisible = state.isItemsFound
+                binding.emptyState.isVisible = !state.isItemsFound
+                binding.recyclerView.isVisible = state.isItemsFound
 
                 val diary = state.sleepDiary.invoke()
 
                 adapter.submitList(diary.pagedSleep)
 
                 sectionItemDecoration?.let { sectionItemDecoration ->
-                    recyclerView.removeItemDecoration(sectionItemDecoration)
+                    binding.recyclerView.removeItemDecoration(sectionItemDecoration)
                 }
 
                 sectionItemDecoration = sectionItemDecorationFactory.create(diary)
 
                 sectionItemDecoration?.let { sectionItemDecoration ->
-                    recyclerView.addItemDecoration(sectionItemDecoration)
+                    binding.recyclerView.addItemDecoration(sectionItemDecoration)
                 }
             }
             else -> {
@@ -130,7 +133,7 @@ class DiaryFragment : BaseMvRxFragment() {
 
     private fun scrollToTop() {
         if (isAdded) {
-            recyclerView.scrollToPosition(0)
+            binding.recyclerView.scrollToPosition(0)
         }
     }
 
