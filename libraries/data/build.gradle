@@ -26,7 +26,6 @@ dependencies {
 
     // Paging
     implementation Deps.paging
-    implementation Deps.paging_rx
 
     // Room
     api Deps.room_runtime
