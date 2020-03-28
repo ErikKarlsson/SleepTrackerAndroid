@@ -15,19 +15,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
-        preferenceManager.findPreference("privacyPolicy").setOnPreferenceClickListener {
+        preferenceManager.findPreference<Preference>("privacyPolicy")?.setOnPreferenceClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/view/simplesleeptracker/"))
             startActivity(browserIntent)
             true
         }
 
-        preferenceManager.findPreference("termsAndConditions").setOnPreferenceClickListener {
+        preferenceManager.findPreference<Preference>("termsAndConditions")?.setOnPreferenceClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/view/simplesleeptracker/terms-and-conditions?authuser=0"))
             startActivity(browserIntent)
             true
         }
 
-        preferenceManager.findPreference("thirdPartyLicenses").setOnPreferenceClickListener {
+        preferenceManager.findPreference<Preference>("thirdPartyLicenses")?.setOnPreferenceClickListener {
             startActivity(Intent(activity, OssLicensesMenuActivity::class.java))
             true
         }
