@@ -10,17 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.*
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
+import net.erikkarlsson.simplesleeptracker.features.details.databinding.FragmentDetailsBinding
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -44,6 +42,8 @@ class DetailFragment : BaseMvRxFragment() {
 
     private val viewModel: DetailsViewModel by fragmentViewModel()
 
+    private lateinit var binding: FragmentDetailsBinding
+
     override fun invalidate() = withState(viewModel) { state ->
         _state = state
         
@@ -52,11 +52,11 @@ class DetailFragment : BaseMvRxFragment() {
                 val sleep = state.sleep.invoke()
                 val fromDateString = sleep.fromDate.formatDateDisplayName2
                 val toDateString = sleep.toDate?.formatDateDisplayName2
-                toolbar.setTitle(toDateString)
-                startDateText.text = fromDateString
-                timeAsleepText.text = sleep.fromDate.formatHHMM
-                timeAwakeText.text = sleep.toDate?.formatHHMM
-                sleptHoursText.text = String.format("%s %s",
+                binding.toolbar.setTitle(toDateString)
+                binding.startDateText.text = fromDateString
+                binding.timeAsleepText.text = sleep.fromDate.formatHHMM
+                binding.timeAwakeText.text = sleep.toDate?.formatHHMM
+                binding.sleptHoursText.text = String.format("%s %s",
                         getString(R.string.you_have_slept_for),
                         state.hoursSlept.formatHoursMinutes)
             }
@@ -79,15 +79,17 @@ class DetailFragment : BaseMvRxFragment() {
         super.onAttach(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_details, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val activity = requireActivity() as AppCompatActivity
 
-        activity.setSupportActionBar(toolbar)
+        activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -95,12 +97,6 @@ class DetailFragment : BaseMvRxFragment() {
             Timber.d("sleep %s", sleep.toString())
 
 
-        }
-    }
-
-    private suspend fun getCurrentSleep(): Sleep {
-        return withContext(Dispatchers.IO) {
-            sleepRepository.getCurrent()
         }
     }
 
@@ -139,9 +135,9 @@ class DetailFragment : BaseMvRxFragment() {
 
     override fun onStart() {
         super.onStart()
-        startDateText.clicksThrottle(disposables) { onStartDateClick() }
-        timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
-        timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
+        binding.startDateText.clicksThrottle(disposables) { onStartDateClick() }
+        binding.timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
+        binding.timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
     }
 
     override fun onStop() {
