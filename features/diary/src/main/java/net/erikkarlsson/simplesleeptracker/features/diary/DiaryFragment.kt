@@ -40,7 +40,7 @@ class DiaryFragment : BaseMvRxFragment() {
     @Inject
     lateinit var sectionItemDecorationFactory: RecyclerSectionItemDecorationFactory
 
-    @field:[Inject Named("sleepAddedEvents")]
+    @Inject @Named("sleepAddedEvents")
     lateinit var sleepAddedEvents: BroadcastChannel<Event<Unit>>
 
     @Inject

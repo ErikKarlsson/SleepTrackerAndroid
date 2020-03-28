@@ -52,7 +52,7 @@ class HomeFragment : BaseMvRxFragment() {
     @Inject
     lateinit var ctx: Context
 
-    @field:[Inject Named("homeEvents")]
+    @Inject @Named("homeEvents")
     lateinit var homeEvents: HomeEvents
 
     private val disposables = CompositeDisposable()
