@@ -17,7 +17,7 @@ object Versions {
     val cardview = "1.0.0"
     val core_ktx = "1.2.0"
     val coroutines = "1.3.5"
-    val crashlytics = "2.9.8"
+    val crashlytics = "2.10.1"
     val dagger = "2.16"
     val dagger_assisted_injection = "0.4.0"
     val daggermock = "0.8.4"
