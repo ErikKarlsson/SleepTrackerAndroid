@@ -9,7 +9,7 @@ object Config {
 
 object Versions {
     val android_gradle_plugin = "3.5.2"
-    val arch_core = "2.0.0"
+    val arch_core = "2.1.0"
     val atsl_rules = "1.1.1"
     val atsl_runner = "1.1.1"
     val bubble_layout = "1.2.0"
