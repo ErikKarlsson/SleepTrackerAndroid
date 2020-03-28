@@ -27,7 +27,7 @@ object Versions {
     val fast_csv = "1.0.3"
     val firebase = "16.0.6"
     val flow_preferences = "1.1.1"
-    val glide = "4.8.0"
+    val glide = "4.11.0"
     val google_api_client_android = "1.27.0"
     val google_api_services_drive = "v3-rev20181101-1.27.0"
     val google_http_client_gson = "1.27.0"
