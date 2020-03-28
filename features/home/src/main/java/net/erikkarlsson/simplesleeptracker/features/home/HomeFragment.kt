@@ -27,14 +27,12 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.logged_in_content.*
-import kotlinx.android.synthetic.main.logged_out_content.*
 import net.erikkarlsson.simplesleeptracker.core.livedata.EventObserver
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
 import net.erikkarlsson.simplesleeptracker.core.util.formatTimestamp
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
+import net.erikkarlsson.simplesleeptracker.features.home.databinding.FragmentHomeBinding
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -59,13 +57,16 @@ class HomeFragment : BaseMvRxFragment() {
 
     private val viewModel: HomeViewModel by fragmentViewModel()
 
+    private lateinit var binding: FragmentHomeBinding
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,11 +89,11 @@ class HomeFragment : BaseMvRxFragment() {
     override fun onStart() {
         super.onStart()
 
-        signInButton.clicksThrottle(disposables) { signIn() }
-        signOutButton.clicksThrottle(disposables) { signOut() }
-        widgetBubble.clicksThrottle(disposables) { viewModel.onBubbleClick() }
+        binding.loggedOutContent.signInButton.clicksThrottle(disposables) { signIn() }
+        binding.loggedInContent.signOutButton.clicksThrottle(disposables) { signOut() }
+        binding.widgetBubble.clicksThrottle(disposables) { viewModel.onBubbleClick() }
 
-        Observable.merge(toggleSleepButton.clicks(), owlImage.clicks())
+        Observable.merge(binding.toggleSleepButton.clicks(), binding.owlImage.clicks())
                 .subscribeBy(
                         onNext = { viewModel.onToggleSleepClick() },
                         onError = { Timber.e(it, "Error merging clicks") }
@@ -168,7 +169,7 @@ class HomeFragment : BaseMvRxFragment() {
     }
 
     private fun renderWidgetBubble(bubbleState: BubbleState, sleepDuration: Float) {
-        widgetBubbleText.text = when (bubbleState) {
+        binding.widgetBubbleText.text = when (bubbleState) {
             BubbleState.SLEEPING_ONBOARDING -> getText(R.string.sleeping_zzz_onboarding)
             BubbleState.SLEEPING -> getText(R.string.sleeping_zzz)
             BubbleState.ADD_WIDGET -> getText(R.string.add_widget)
@@ -179,25 +180,25 @@ class HomeFragment : BaseMvRxFragment() {
             BubbleState.EMPTY -> ""
         }
 
-        widgetBubble.isVisible = bubbleState != BubbleState.EMPTY
+        binding.widgetBubble.isVisible = bubbleState != BubbleState.EMPTY
     }
 
     private fun renderLogin(loggedIn: Boolean) {
-        signInButton.isVisible = !loggedIn
-        loggedInContent.isVisible = loggedIn
-        loggedOutContent.isVisible = !loggedIn
+        binding.loggedOutContent.signInButton.isVisible = !loggedIn
+        binding.loggedInContent.root.isVisible = loggedIn
+        binding.loggedOutContent.root.isVisible = !loggedIn
     }
 
     private fun renderOwl(isSleeping: Boolean) {
         val imageRes = if (isSleeping) R.drawable.owl_asleep else R.drawable.own_awake
-        owlImage.setImageResource(imageRes)
+        binding.owlImage.setImageResource(imageRes)
 
         val textRes = if (isSleeping) {
             R.string.wake_up
         } else {
             R.string.go_to_bed
         }
-        toggleSleepButton.setText(textRes)
+        binding.toggleSleepButton.setText(textRes)
     }
 
     private fun renderBackup(timestamp: Long) {
@@ -207,7 +208,7 @@ class HomeFragment : BaseMvRxFragment() {
         } else {
             getString(R.string.not_backed_up_yet)
         }
-        lastBackupText.text = String.format("%s: %s", backupString, dateString)
+        binding.loggedInContent.lastBackupText.text = String.format("%s: %s", backupString, dateString)
     }
 
     private fun renderUserAccount(userAccount: UserAccount?) {
@@ -215,10 +216,10 @@ class HomeFragment : BaseMvRxFragment() {
             Glide.with(this)
                     .load(it.photoUrl)
                     .apply(RequestOptions.circleCropTransform())
-                    .into(photoImage)
+                    .into(binding.loggedInContent.photoImage)
 
-            emailText.text = it.email
-            displayNameText.text = it.displayName
+            binding.loggedInContent.emailText.text = it.email
+            binding.loggedInContent.displayNameText.text = it.displayName
         }
     }
 

@@ -52,10 +52,6 @@ subprojects {
         if (project.hasProperty('android')) {
             apply plugin: "com.github.ben-manes.versions"
 
-            androidExtensions {
-                experimental = true
-            }
-
             android {
                 compileSdkVersion Config.compileSdk
 
@@ -74,6 +70,10 @@ subprojects {
 
                 kotlinOptions {
                     jvmTarget = Config.javaVersion
+                }
+
+                viewBinding {
+                    enabled = true
                 }
 
                 flavorDimensions "default"
