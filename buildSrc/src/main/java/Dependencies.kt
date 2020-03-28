@@ -15,7 +15,7 @@ object Versions {
     val bubble_layout = "1.2.0"
     val constraint_layout = "1.1.3"
     val cardview = "1.0.0"
-    val core_ktx = "1.0.0"
+    val core_ktx = "1.2.0"
     val coroutines = "1.3.5"
     val crashlytics = "2.9.8"
     val dagger = "2.16"
