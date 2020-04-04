@@ -16,11 +16,11 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_add.*
 import net.easypark.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.features.add.databinding.FragmentAddSleepBinding
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
@@ -41,6 +41,8 @@ class AddSleepFragment : BaseMvRxFragment() {
 
     private lateinit var toolbar: Toolbar
 
+    private lateinit var binding: FragmentAddSleepBinding
+
     override fun invalidate() = withState(viewModel) { state ->
         this.state = state
         render(state)
@@ -57,7 +59,8 @@ class AddSleepFragment : BaseMvRxFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add, container, false)
+        binding = FragmentAddSleepBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,9 +97,9 @@ class AddSleepFragment : BaseMvRxFragment() {
 
     override fun onStart() {
         super.onStart()
-        startDateText.clicksThrottle(disposables) { onStartDateClick() }
-        timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
-        timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
+        binding.startDateText.clicksThrottle(disposables) { onStartDateClick() }
+        binding.timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
+        binding.timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
     }
 
     override fun onStop() {
@@ -165,10 +168,10 @@ class AddSleepFragment : BaseMvRxFragment() {
     }
 
     private fun render(state: AddSleepState) {
-        startDateText.text = state.startDate.formatDateDisplayName2
-        timeAsleepText.text = state.startTime.formatHHMM
-        timeAwakeText.text = state.endTime.formatHHMM
-        sleptHoursText.text = String.format("%s %s",
+        binding.startDateText.text = state.startDate.formatDateDisplayName2
+        binding.timeAsleepText.text = state.startTime.formatHHMM
+        binding.timeAwakeText.text = state.endTime.formatHHMM
+        binding.sleptHoursText.text = String.format("%s %s",
                 getString(R.string.you_have_slept_for),
                 state.hoursSlept.formatHoursMinutes)
 
