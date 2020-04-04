@@ -12,7 +12,7 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
 import io.fabric.sdk.android.Fabric
-import kotlinx.android.synthetic.main.activity_main.*
+import net.erikkarlsson.simplesleeptracker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,13 +20,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
 
         Fabric.with(this, Crashlytics())
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
 
         toolbar = findViewById(R.id.toolbar)
 
@@ -38,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = host.navController
 
-        setupWithNavController(bottomNavigation, navController)
+        setupWithNavController(binding.bottomNavigation, navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
