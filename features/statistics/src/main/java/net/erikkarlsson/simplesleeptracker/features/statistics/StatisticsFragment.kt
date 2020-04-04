@@ -15,8 +15,8 @@ import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_statistics.*
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
+import net.erikkarlsson.simplesleeptracker.features.statistics.databinding.FragmentStatisticsBinding
 import javax.inject.Inject
 
 class StatisticsFragment : BaseMvRxFragment() {
@@ -38,6 +38,8 @@ class StatisticsFragment : BaseMvRxFragment() {
 
     private var prevState: StatisticsState = StatisticsState.empty()
 
+    private lateinit var binding: FragmentStatisticsBinding
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -45,7 +47,8 @@ class StatisticsFragment : BaseMvRxFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
+        binding = FragmentStatisticsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,20 +56,20 @@ class StatisticsFragment : BaseMvRxFragment() {
 
         val spinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = spinnerAdapter
-        spinner.setTag(0) // Avoid triggering selection on initialization.
-        spinner.isEnabled = false
+        binding.spinner.adapter = spinnerAdapter
+        binding.spinner.setTag(0) // Avoid triggering selection on initialization.
+        binding.spinner.isEnabled = false
 
         val compareSpinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_compare_array, android.R.layout.simple_spinner_item)
         compareSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        compareSpinner.adapter = compareSpinnerAdapter
-        compareSpinner.setTag(0) // Avoid triggering selection on initialization.
+        binding.compareSpinner.adapter = compareSpinnerAdapter
+        binding.compareSpinner.setTag(0) // Avoid triggering selection on initialization.
 
         statisticsAdapter = StatisticsAdapter(requireFragmentManager(), dateTimeProvider)
 
-        viewPager.adapter = statisticsAdapter
+        binding.viewPager.adapter = statisticsAdapter
 
-        slidingTabLayout.setViewPager(viewPager)
+        binding.slidingTabLayout.setViewPager(binding.viewPager)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -75,7 +78,7 @@ class StatisticsFragment : BaseMvRxFragment() {
         val selectedItem = if (hasFilterChanged) {
             state.dateRanges.size - 1
         } else {
-            viewPager.currentItem
+            binding.viewPager.currentItem
         }
 
         val adapterData = when (state.shouldShowEmptyState) {
@@ -86,24 +89,24 @@ class StatisticsFragment : BaseMvRxFragment() {
         statisticsAdapter.data = adapterData
         statisticsAdapter.notifyDataSetChanged()
 
-        viewPager.setCurrentItem(selectedItem, false)
-        viewPager.invalidate()
+        binding.viewPager.setCurrentItem(selectedItem, false)
+        binding.viewPager.invalidate()
 
-        slidingTabLayout.setViewPager(viewPager)
-        slidingTabLayout.isVisible = state.shouldShowTabs
+        binding.slidingTabLayout.setViewPager(binding.viewPager)
+        binding.slidingTabLayout.isVisible = state.shouldShowTabs
 
-        emptyGroup.isVisible = state.shouldShowEmptyState
-        spinner.isEnabled = !state.shouldShowEmptyState
+        binding.emptyGroup.isVisible = state.shouldShowEmptyState
+        binding.spinner.isEnabled = !state.shouldShowEmptyState
 
-        spinner.setSelection(state.filterOrdinal)
+        binding.spinner.setSelection(state.filterOrdinal)
 
-        compareSpinner.isVisible = state.shouldShowCompareFilter
-        compareSpinner.setSelection(state.compareFilterOrdinal)
+        binding.compareSpinner.isVisible = state.shouldShowCompareFilter
+        binding.compareSpinner.setSelection(state.compareFilterOrdinal)
 
         // TODO (erikkarlsson): Hack to fix scroll not working.
         Handler().postDelayed({
             if (isAdded) {
-                slidingTabLayout.scrollToTab(viewPager.currentItem, 0)
+                binding.slidingTabLayout.scrollToTab(binding.viewPager.currentItem, 0)
             }
         }, 100)
 
@@ -113,11 +116,11 @@ class StatisticsFragment : BaseMvRxFragment() {
     override fun onStart() {
         super.onStart()
 
-        spinner.itemSelections()
+        binding.spinner.itemSelections()
                 .subscribe { onFilterSelected(it) }
                 .addTo(disposables)
 
-        compareSpinner.itemSelections()
+        binding.compareSpinner.itemSelections()
                 .subscribe { onCompareSelected(it) }
                 .addTo(disposables)
     }
@@ -128,19 +131,19 @@ class StatisticsFragment : BaseMvRxFragment() {
     }
 
     private fun onFilterSelected(index: Int) {
-        if (spinner.getTag() == index) {
+        if (binding.spinner.getTag() == index) {
             return
         }
-        spinner.setTag(index)
+        binding.spinner.setTag(index)
         val statisticsFilter = StatisticsFilter.values()[index]
         viewModel.statisticsFilterSelected(statisticsFilter)
     }
 
     private fun onCompareSelected(index: Int) {
-        if (compareSpinner.getTag() == index) {
+        if (binding.compareSpinner.getTag() == index) {
             return
         }
-        compareSpinner.setTag(index)
+        binding.compareSpinner.setTag(index)
         val compareFilter = CompareFilter.values()[index]
         viewModel.compareFilterSelected(compareFilter)
     }

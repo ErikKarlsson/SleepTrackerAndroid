@@ -15,7 +15,6 @@ import com.airbnb.mvrx.withState
 import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_statistics_item.*
 import net.easypark.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesSpannable
@@ -28,6 +27,7 @@ import net.erikkarlsson.simplesleeptracker.features.statistics.R
 import net.erikkarlsson.simplesleeptracker.features.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.features.statistics.chart.AverageTimeChartRenderer
 import net.erikkarlsson.simplesleeptracker.features.statistics.chart.SleepDurationChartRenderer
+import net.erikkarlsson.simplesleeptracker.features.statistics.databinding.FragmentStatisticsItemBinding
 import javax.inject.Inject
 
 data class ChartExtra(val displayValue: Boolean)
@@ -50,6 +50,8 @@ class StatisticsItemFragment : BaseMvRxFragment() {
 
     private val disposables = CompositeDisposable()
 
+    private lateinit var binding: FragmentStatisticsItemBinding
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -57,15 +59,16 @@ class StatisticsItemFragment : BaseMvRxFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_statistics_item, container, false)
+        binding = FragmentStatisticsItemBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sleepDurationChart.setNoDataText("")
-        averageBedTimeChart.setNoDataText("")
-        averageWakeUpTimeChart.setNoDataText("")
+        binding.sleepDurationChart.setNoDataText("")
+        binding.averageBedTimeChart.setNoDataText("")
+        binding.averageWakeUpTimeChart.setNoDataText("")
 
         val isEmptyState = arguments?.getBoolean(ARGS_IS_EMPTY_STATE) ?: false
 
@@ -83,25 +86,25 @@ class StatisticsItemFragment : BaseMvRxFragment() {
     private fun render(state: StatisticsItemState) {
         when {
             state.isStatisticsEmpty -> {
-                trackedNightsText.text = "0"
-                avgDurationText.text = "-"
-                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, StatisticComparison.empty())
+                binding.trackedNightsText.text = "0"
+                binding.avgDurationText.text = "-"
+                sleepDurationChartRenderer.render(binding.sleepDurationChart as BarChart, StatisticComparison.empty())
             }
             state.statistics.complete -> {
                 val statistics = state.statistics.invoke() ?: return
 
-                sleepDurationChartRenderer.render(sleepDurationChart as BarChart, statistics)
+                sleepDurationChartRenderer.render(binding.sleepDurationChart as BarChart, statistics)
 
                 with(statistics.first) {
                     if (!isEmpty) {
-                        trackedNightsText.text = sleepCount.toString()
-                        avgDurationText.text = avgSleepHours.formatHoursMinutesSpannable
+                        binding.trackedNightsText.text = sleepCount.toString()
+                        binding.avgDurationText.text = avgSleepHours.formatHoursMinutesSpannable
 
-                        renderAvgTimeDiff(avgDurationDiffText, statistics.avgSleepDiffHours)
+                        renderAvgTimeDiff(binding.avgDurationDiffText, statistics.avgSleepDiffHours)
                         renderLongestNight(longestSleep)
                         renderShortestNight(shortestSleep, longestSleep)
-                        renderAvgTimeDiff(avgBedDiffText, statistics.avgBedTimeDiffHours)
-                        renderAvgTimeDiff(avgWakeUpDiffText, statistics.avgWakeUpTimeDiffHours)
+                        renderAvgTimeDiff(binding.avgBedDiffText, statistics.avgBedTimeDiffHours)
+                        renderAvgTimeDiff(binding.avgWakeUpDiffText, statistics.avgWakeUpTimeDiffHours)
                         renderAverageBedTime(statistics)
                         renderAverageWakeUpTime(statistics)
                     }
@@ -128,11 +131,11 @@ class StatisticsItemFragment : BaseMvRxFragment() {
         val statisticComparison = StatisticComparison.demo()
         val statisticsItemState = StatisticsItemState(Success(statisticComparison))
 
-        sleepDurationLabel.text = String.format("%s [%s]", getString(R.string.sleep_duration), getString(R.string.demo))
-        longestNightLabel.text = String.format("%s [%s]", getString(R.string.longest_night), getString(R.string.demo))
-        shortestNightLabel.text = String.format("%s [%s]", getString(R.string.shortest_night), getString(R.string.demo))
-        averageBedTimeLabel.text = String.format("%s [%s]", getString(R.string.average_bed_time), getString(R.string.demo))
-        averageWakeUpTimeLabel.text = String.format("%s [%s]", getString(R.string.average_wake_up_time), getString(R.string.demo))
+        binding.sleepDurationLabel.text = String.format("%s [%s]", getString(R.string.sleep_duration), getString(R.string.demo))
+        binding.longestNightLabel.text = String.format("%s [%s]", getString(R.string.longest_night), getString(R.string.demo))
+        binding.shortestNightLabel.text = String.format("%s [%s]", getString(R.string.shortest_night), getString(R.string.demo))
+        binding.averageBedTimeLabel.text = String.format("%s [%s]", getString(R.string.average_bed_time), getString(R.string.demo))
+        binding.averageWakeUpTimeLabel.text = String.format("%s [%s]", getString(R.string.average_wake_up_time), getString(R.string.demo))
 
         render(statisticsItemState)
     }
@@ -159,22 +162,22 @@ class StatisticsItemFragment : BaseMvRxFragment() {
     private fun renderAverageBedTime(statistics: StatisticComparison) {
         val current = statistics.first
         val averageBedTime = current.averageBedTime
-        averageBedText.text = averageBedTime.formatHHMM
-        averageTimeChartRenderer.render(averageBedTimeChart, current.averageBedTime,
+        binding.averageBedText.text = averageBedTime.formatHHMM
+        averageTimeChartRenderer.render(binding.averageBedTimeChart, current.averageBedTime,
                 statistics.first.averageBedTimeDayOfWeek, statistics.first)
     }
 
     private fun renderAverageWakeUpTime(statistics: StatisticComparison) {
         val current = statistics.first
         val averageWakeUpTime = current.averageWakeUpTime
-        averageWakeUpText.text = averageWakeUpTime.formatHHMM
-        averageTimeChartRenderer.render(averageWakeUpTimeChart, current.averageWakeUpTime,
+        binding.averageWakeUpText.text = averageWakeUpTime.formatHHMM
+        averageTimeChartRenderer.render(binding.averageWakeUpTimeChart, current.averageWakeUpTime,
                 statistics.first.averageWakeUpTimeDayOfWeek, statistics.first)
     }
 
     private fun renderLongestNight(longestSleep: Sleep) {
-        longestNightDurationText.text = longestSleep.hours.formatHoursMinutesSpannable
-        longestNightDateText.text = longestSleep.toDate?.formatDateDisplayName
+        binding.longestNightDurationText.text = longestSleep.hours.formatHoursMinutesSpannable
+        binding.longestNightDateText.text = longestSleep.toDate?.formatDateDisplayName
 
         val value = if (longestSleep.hours == 0f) {
             0f
@@ -182,17 +185,17 @@ class StatisticsItemFragment : BaseMvRxFragment() {
             1f
         }
 
-        longestNightBar.progress = (value * 100).toInt()
+        binding.longestNightBar.progress = (value * 100).toInt()
     }
 
     private fun renderShortestNight(shortestSleep: Sleep, longestSleep: Sleep) {
-        shortestNightDurationText.text = shortestSleep.hours.formatHoursMinutesSpannable
-        shortestNightDateText.text = shortestSleep.toDate?.formatDateDisplayName
+        binding.shortestNightDurationText.text = shortestSleep.hours.formatHoursMinutesSpannable
+        binding.shortestNightDateText.text = shortestSleep.toDate?.formatDateDisplayName
 
         val value = shortestSleep.hours
         val maxValue = longestSleep.hours
 
-        shortestNightBar.progress = ((value / maxValue) * 100).toInt()
+        binding.shortestNightBar.progress = ((value / maxValue) * 100).toInt()
     }
 
     companion object {
