@@ -1,6 +1,5 @@
 package net.erikkarlsson.simplesleeptracker
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -15,7 +14,6 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.fabric.sdk.android.Fabric
-import net.erikkarlsson.simplesleeptracker.di.AppComponent
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
