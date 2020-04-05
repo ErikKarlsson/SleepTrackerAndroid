@@ -5,9 +5,11 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import net.erikkarlsson.simplesleeptracker.features.diary.R
 import net.erikkarlsson.simplesleeptracker.core.util.px
+import net.erikkarlsson.simplesleeptracker.features.diary.R
 import javax.inject.Inject
+
+private const val LEFT_PADDING_DP = 72
 
 class SimpleDividerItemDecoration @Inject constructor(context: Context) : RecyclerView.ItemDecoration() {
     private val divider: Drawable
@@ -17,7 +19,7 @@ class SimpleDividerItemDecoration @Inject constructor(context: Context) : Recycl
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val left = 72.px // TODO (erikkarlsson: Hardcoded value
+        val left = LEFT_PADDING_DP.px
         val right = parent.width - parent.paddingRight
 
         val childCount = parent.childCount
