@@ -27,9 +27,9 @@
             <option value="$PROJECT_DIR$/libraries/data" />
             <option value="$PROJECT_DIR$/libraries/date-util" />
             <option value="$PROJECT_DIR$/libraries/domain" />
-            <option value="$PROJECT_DIR$/libraries/domaintests" />
+            <option value="$PROJECT_DIR$/libraries/domain-test" />
             <option value="$PROJECT_DIR$/libraries/navigation" />
-            <option value="$PROJECT_DIR$/libraries/test-utils" />
+            <option value="$PROJECT_DIR$/libraries/test-util" />
             <option value="$PROJECT_DIR$/libraries/ui-components" />
           </set>
         </option>

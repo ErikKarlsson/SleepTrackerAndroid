@@ -1,6 +1,6 @@
 include ':app'
 include ':libraries:domain'
-include ':libraries:domaintests'
+include ':libraries:domain-test'
 include ':libraries:test-util'
 include ':libraries:ui-components'
 include ':libraries:data'
