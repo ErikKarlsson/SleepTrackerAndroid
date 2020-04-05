@@ -29,7 +29,7 @@
             <option value="$PROJECT_DIR$/libraries/domain" />
             <option value="$PROJECT_DIR$/libraries/domaintests" />
             <option value="$PROJECT_DIR$/libraries/navigation" />
-            <option value="$PROJECT_DIR$/libraries/testutilsnew" />
+            <option value="$PROJECT_DIR$/libraries/test-utils" />
             <option value="$PROJECT_DIR$/libraries/ui-components" />
           </set>
         </option>

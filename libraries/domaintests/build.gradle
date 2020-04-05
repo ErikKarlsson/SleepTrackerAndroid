@@ -5,7 +5,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libraries:domain')
-    testImplementation project(':libraries:testutilsnew')
+    testImplementation project(':libraries:test-util')
 
     // Dependencies for local unit tests
     testImplementation Deps.junit

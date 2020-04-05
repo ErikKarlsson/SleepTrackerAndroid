@@ -141,7 +141,7 @@ dependencies {
     implementation project(':libraries:ui-components')
 
     // Dependencies for Android tests
-    androidTestImplementation project(':libraries:testutilsnew')
+    androidTestImplementation project(':libraries:test-util')
 
     androidTestImplementation Deps.atsl_runner
     androidTestImplementation Deps.atsl_rules

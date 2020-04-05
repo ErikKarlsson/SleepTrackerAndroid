@@ -7,7 +7,7 @@ dependencies {
     implementation project(':libraries:core')
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
-    testImplementation project(':libraries:testutilsnew')
+    testImplementation project(':libraries:test-util')
 
     // Dependencies for local unit tests
     testImplementation Deps.junit

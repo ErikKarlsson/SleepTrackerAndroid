@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation project(':libraries:testutilsnew')
+    testImplementation project(':libraries:test-util')
 
     // ThreeTen Backport
     api Deps.threeten_backport_android

@@ -1,7 +1,7 @@
 include ':app'
 include ':libraries:domain'
 include ':libraries:domaintests'
-include ':libraries:testutilsnew'
+include ':libraries:test-util'
 include ':libraries:ui-components'
 include ':libraries:data'
 include ':libraries:navigation'
