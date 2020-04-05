@@ -15,7 +15,7 @@ import com.airbnb.mvrx.withState
 import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import net.easypark.dateutil.formatHHMM
+import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesSpannable
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesWithPrefix

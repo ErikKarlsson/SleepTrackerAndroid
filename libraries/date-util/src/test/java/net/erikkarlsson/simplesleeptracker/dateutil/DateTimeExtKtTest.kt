@@ -1,4 +1,4 @@
-package net.easypark.dateutil
+package net.erikkarlsson.simplesleeptracker.dateutil
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test

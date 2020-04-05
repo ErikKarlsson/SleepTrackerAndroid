@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import com.google.common.collect.ImmutableList
-import net.easypark.dateutil.hoursTo
+import net.erikkarlsson.simplesleeptracker.dateutil.hoursTo
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime

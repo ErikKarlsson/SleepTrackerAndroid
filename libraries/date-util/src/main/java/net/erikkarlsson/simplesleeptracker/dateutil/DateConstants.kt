@@ -1,4 +1,4 @@
-package net.easypark.dateutil
+package net.erikkarlsson.simplesleeptracker.dateutil
 
 const val HOURS_PRECISION: Int = 3 // Decimals used when rounding hours. e.g. 7.895
 

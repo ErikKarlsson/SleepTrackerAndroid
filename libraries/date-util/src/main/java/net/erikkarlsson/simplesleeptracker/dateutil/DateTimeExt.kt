@@ -1,4 +1,4 @@
-package net.easypark.dateutil
+package net.erikkarlsson.simplesleeptracker.dateutil
 
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime

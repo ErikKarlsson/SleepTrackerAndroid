@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker.data.statistics
 
 import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.flow.*
-import net.easypark.dateutil.midnightOffsetToLocalTime
+import net.erikkarlsson.simplesleeptracker.dateutil.midnightOffsetToLocalTime
 import net.erikkarlsson.simplesleeptracker.data.entity.SleepEntity
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepMapper
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource

@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.core.util
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
-import net.easypark.dateutil.MINUTES_IN_AN_HOUR
+import net.erikkarlsson.simplesleeptracker.dateutil.MINUTES_IN_AN_HOUR
 import org.threeten.bp.LocalDate
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
