@@ -2,6 +2,8 @@ package net.erikkarlsson.simplesleeptracker.features.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -32,6 +34,7 @@ import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
 import net.erikkarlsson.simplesleeptracker.core.util.formatTimestamp
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
+import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetProvider
 import net.erikkarlsson.simplesleeptracker.features.home.databinding.FragmentHomeBinding
 import timber.log.Timber
 import javax.inject.Inject
@@ -107,14 +110,12 @@ class HomeFragment : BaseMvRxFragment() {
 
     @SuppressLint("NewApi")
     private fun pinWidget() {
-        /*
-        TODO (erikkarlsson): Fix
         val appWidgetManager = AppWidgetManager.getInstance(requireContext())
         val myProvider = ComponentName(requireContext(), SleepAppWidgetProvider::class.java)
 
         if (appWidgetManager.isRequestPinAppWidgetSupported) {
             appWidgetManager.requestPinAppWidget(myProvider, null, null)
-        }*/
+        }
     }
 
     private fun addWidget() {
