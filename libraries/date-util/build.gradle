@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -10,6 +9,10 @@ dependencies {
     // ThreeTen Backport
     api Deps.threeten_backport_android
     testApi Deps.threeten_backport
+    
+    // Kotlin
+    implementation Deps.kotlin_stdlib
+    implementation Deps.core_ktx
 
     // Dependencies for local unit tests
     testImplementation Deps.junit

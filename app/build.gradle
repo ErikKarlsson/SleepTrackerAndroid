@@ -6,8 +6,6 @@ apply plugin: 'io.fabric'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 apply plugin: 'androidx.navigation.safeargs'
@@ -123,10 +121,6 @@ configurations.all { config ->
 
     // https://stackoverflow.com/questions/46989310/commons-logging-defines-classes-that-conflict-with-classes-now-provided-by-andro
     exclude module: 'httpclient'
-}
-
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
