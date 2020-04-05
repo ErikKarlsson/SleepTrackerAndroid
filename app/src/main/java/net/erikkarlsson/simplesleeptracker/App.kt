@@ -37,7 +37,6 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
     @Inject
     lateinit var myWorkerFactory: MyWorkerFactory
 
-    @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
 
