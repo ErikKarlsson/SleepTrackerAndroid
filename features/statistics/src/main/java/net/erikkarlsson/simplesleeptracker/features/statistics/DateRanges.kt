@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics
 
-import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.core.util.weekOfWeekBasedYear
+import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import org.threeten.bp.DayOfWeek
 
 object DateRanges {

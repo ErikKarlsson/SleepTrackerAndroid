@@ -1,8 +1,8 @@
 package net.erikkarlsson.simplesleeptracker.util
 
 import androidx.test.InstrumentationRegistry
-import net.erikkarlsson.simplesleeptracker.dateutil.offsetDateTime
 import net.erikkarlsson.simplesleeptracker.TestableApplication
+import net.erikkarlsson.simplesleeptracker.dateutil.offsetDateTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.junit.rules.TestRule
 import org.junit.runner.Description

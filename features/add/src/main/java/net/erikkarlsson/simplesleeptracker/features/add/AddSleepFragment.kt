@@ -16,10 +16,10 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.features.add.databinding.FragmentAddSleepBinding
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime

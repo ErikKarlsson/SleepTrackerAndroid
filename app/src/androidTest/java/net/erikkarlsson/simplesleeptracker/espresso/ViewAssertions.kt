@@ -1,10 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.espresso
 
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import android.view.View
 import org.hamcrest.Matchers.not
 
 object ViewAssertions {

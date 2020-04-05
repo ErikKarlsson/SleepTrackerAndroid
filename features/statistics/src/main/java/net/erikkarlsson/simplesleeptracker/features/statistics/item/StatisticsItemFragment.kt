@@ -15,10 +15,10 @@ import com.airbnb.mvrx.withState
 import com.github.mikephil.charting.charts.BarChart
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
-import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesSpannable
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesWithPrefix
+import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
