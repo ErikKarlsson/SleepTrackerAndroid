@@ -25,9 +25,6 @@ import javax.inject.Inject
 
 open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
 
-    // TODO (erikkarlsson): Only needed for injecting Worker, remove once Dagger has released WorkerInjector.
-    lateinit var appComponent: AppComponent
-
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
@@ -54,8 +51,7 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
 
         AndroidThreeTen.init(this)
 
-        appComponent = DaggerAppComponent.builder().application(this).build()
-        appComponent.inject(this)
+        DaggerAppComponent.builder().application(this).build().inject(this)
 
         WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(myWorkerFactory).build())
 
