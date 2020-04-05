@@ -6,8 +6,6 @@ import dagger.android.AndroidInjectionModule
 import net.erikkarlsson.simplesleeptracker.App
 import net.erikkarlsson.simplesleeptracker.di.module.*
 import net.erikkarlsson.simplesleeptracker.features.appwidget.di.WidgetModule
-import net.erikkarlsson.simplesleeptracker.features.backup.BackupSleepWorker
-import net.erikkarlsson.simplesleeptracker.features.backup.RestoreSleepWorker
 import net.erikkarlsson.simplesleeptracker.features.backup.di.BackupAssistedModule
 import net.erikkarlsson.simplesleeptracker.features.backup.di.BackupModule
 import net.erikkarlsson.simplesleeptracker.features.backup.di.WorkerBindingModule
@@ -38,8 +36,4 @@ interface AppComponent {
     }
 
     fun inject(app: App)
-
-    // TODO (erikkarlsson): Only needed for injecting Worker, remove once Dagger has released WorkerInjector.
-    fun inject(backupSleepWorker: BackupSleepWorker)
-    fun inject(restoreSleepWorker: RestoreSleepWorker)
 }
