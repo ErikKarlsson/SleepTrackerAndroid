@@ -31,12 +31,6 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxandroid
-    implementation Deps.rxbinding
-    implementation Deps.rxkotlin
-
     // Flow
     implementation Deps.flow_preferences
 

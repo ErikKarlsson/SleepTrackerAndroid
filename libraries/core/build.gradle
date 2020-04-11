@@ -10,6 +10,7 @@ dependencies {
     // Coroutines
     api Deps.coroutines_core
     api Deps.coroutines_android
+    api Deps.corbind
     testApi Deps.coroutines_test
 
     // Fragment

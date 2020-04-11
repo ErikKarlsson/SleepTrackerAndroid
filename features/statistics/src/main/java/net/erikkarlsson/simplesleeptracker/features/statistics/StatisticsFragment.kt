@@ -8,15 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding2.widget.itemSelections
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.features.statistics.databinding.FragmentStatisticsBinding
+import ru.ldralighieri.corbind.widget.itemSelections
 import javax.inject.Inject
 
 class StatisticsFragment : BaseMvRxFragment() {
@@ -33,8 +34,6 @@ class StatisticsFragment : BaseMvRxFragment() {
     lateinit var statisticsAdapter: StatisticsAdapter
 
     private val viewModel: StatisticsViewModel by fragmentViewModel()
-
-    private val disposables = CompositeDisposable()
 
     private var prevState: StatisticsState = StatisticsState.empty()
 
@@ -117,17 +116,12 @@ class StatisticsFragment : BaseMvRxFragment() {
         super.onStart()
 
         binding.spinner.itemSelections()
-                .subscribe { onFilterSelected(it) }
-                .addTo(disposables)
+                .onEach { onFilterSelected(it) }
+                .launchIn(lifecycleScope)
 
         binding.compareSpinner.itemSelections()
-                .subscribe { onCompareSelected(it) }
-                .addTo(disposables)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
+                .onEach { onCompareSelected(it) }
+                .launchIn(lifecycleScope)
     }
 
     private fun onFilterSelected(index: Int) {
