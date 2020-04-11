@@ -44,11 +44,6 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxbinding
-    implementation Deps.rxkotlin
-
     // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx

@@ -31,10 +31,6 @@ dependencies {
     implementation Deps.room_ktx
     kapt Deps.room_compiler
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
-
     // Flow
     implementation Deps.flow_preferences
 

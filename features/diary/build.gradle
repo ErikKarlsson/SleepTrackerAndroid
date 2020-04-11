@@ -27,11 +27,6 @@ dependencies {
     // Paging
     implementation Deps.paging
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxandroid
-    implementation Deps.rxkotlin
-
     // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx

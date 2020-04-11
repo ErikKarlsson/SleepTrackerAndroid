@@ -38,11 +38,6 @@ dependencies {
     // MvRx
     implementation Deps.mvrx
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxbinding
-    implementation Deps.rxkotlin
-
     // Timber
     implementation Deps.timber
 }

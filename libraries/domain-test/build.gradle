@@ -16,10 +16,6 @@ dependencies {
     testImplementation Deps.coroutines_android
     testImplementation Deps.coroutines_core
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxandroid
-
     // ThreeTen Backport
     implementation Deps.threeten_backport_android
     testImplementation Deps.threeten_backport

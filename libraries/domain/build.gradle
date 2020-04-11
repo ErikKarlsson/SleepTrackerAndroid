@@ -31,10 +31,4 @@ dependencies {
 
     // Paging
     implementation Deps.paging
-
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxandroid
-    implementation Deps.rxkotlin
-    implementation Deps.rxbinding
 }

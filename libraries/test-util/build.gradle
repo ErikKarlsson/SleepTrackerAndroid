@@ -9,8 +9,8 @@ dependencies {
     implementation Deps.threeten_backport
     implementation Deps.guava
     implementation Deps.dagger_runtime
-    implementation Deps.rxjava2
     implementation Deps.rxandroid
+    implementation Deps.rxjava2
     implementation Deps.junit
     implementation Deps.coroutines_test
 }

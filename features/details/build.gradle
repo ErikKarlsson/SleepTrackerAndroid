@@ -26,11 +26,6 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
-    implementation Deps.rxbinding
-
     // Coroutines
     implementation Deps.coroutines_core
     implementation Deps.coroutines_android

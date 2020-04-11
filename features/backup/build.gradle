@@ -38,10 +38,6 @@ dependencies {
     implementation Deps.play_services_auth
     implementation Deps.play_services_oss_licenses
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
-
     // Timber
     implementation Deps.timber
 

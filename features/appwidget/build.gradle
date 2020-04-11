@@ -20,11 +20,6 @@ dependencies {
     implementation Deps.dagger_runtime
     implementation Deps.dagger_android
 
-    // RxJava
-    implementation Deps.rxjava2
-    implementation Deps.rxkotlin
-    implementation Deps.rxandroid
-
     // Timber
     implementation Deps.timber
 
