@@ -9,11 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.*
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
@@ -28,8 +27,6 @@ import javax.inject.Inject
 class DetailFragment : BaseMvRxFragment() {
 
     private var _state = DetailsState.empty()
-
-    private val disposables = CompositeDisposable()
 
     var timePickerDialog: TimePickerDialog? = null
     var datePickDialog: DatePickerDialog? = null
@@ -131,14 +128,9 @@ class DetailFragment : BaseMvRxFragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.startDateText.clicksThrottle(disposables) { onStartDateClick() }
-        binding.timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
-        binding.timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
+        binding.startDateText.clicksDebounce { onStartDateClick() }
+        binding.timeAsleepText.clicksDebounce { onTimeAsleepClick() }
+        binding.timeAwakeText.clicksDebounce { onTimeAwakeClick() }
     }
 
     override fun onDestroy() {

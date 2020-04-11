@@ -15,8 +15,7 @@ import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.disposables.CompositeDisposable
-import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
 import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
@@ -36,8 +35,6 @@ class AddSleepFragment : BaseMvRxFragment() {
     var datePickDialog: DatePickerDialog? = null
 
     private var state = AddSleepState.empty()
-
-    private val disposables = CompositeDisposable()
 
     private lateinit var toolbar: Toolbar
 
@@ -97,14 +94,9 @@ class AddSleepFragment : BaseMvRxFragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.startDateText.clicksThrottle(disposables) { onStartDateClick() }
-        binding.timeAsleepText.clicksThrottle(disposables) { onTimeAsleepClick() }
-        binding.timeAwakeText.clicksThrottle(disposables) { onTimeAwakeClick() }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
+        binding.startDateText.clicksDebounce { onStartDateClick() }
+        binding.timeAsleepText.clicksDebounce { onTimeAsleepClick() }
+        binding.timeAwakeText.clicksDebounce { onTimeAwakeClick() }
     }
 
     override fun onDestroy() {

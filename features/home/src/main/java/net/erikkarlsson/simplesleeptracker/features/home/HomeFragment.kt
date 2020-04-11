@@ -23,14 +23,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.jakewharton.rxbinding2.view.clicks
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
 import net.erikkarlsson.simplesleeptracker.core.livedata.EventObserver
-import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
 import net.erikkarlsson.simplesleeptracker.core.util.formatTimestamp
 import net.erikkarlsson.simplesleeptracker.domain.entity.UserAccount
@@ -55,8 +50,6 @@ class HomeFragment : BaseMvRxFragment() {
 
     @Inject @Named("homeEvents")
     lateinit var homeEvents: HomeEvents
-
-    private val disposables = CompositeDisposable()
 
     private val viewModel: HomeViewModel by fragmentViewModel()
 
@@ -92,16 +85,11 @@ class HomeFragment : BaseMvRxFragment() {
     override fun onStart() {
         super.onStart()
 
-        binding.loggedOutContent.signInButton.clicksThrottle(disposables) { signIn() }
-        binding.loggedInContent.signOutButton.clicksThrottle(disposables) { signOut() }
-        binding.widgetBubble.clicksThrottle(disposables) { viewModel.onBubbleClick() }
-
-        Observable.merge(binding.toggleSleepButton.clicks(), binding.owlImage.clicks())
-                .subscribeBy(
-                        onNext = { viewModel.onToggleSleepClick() },
-                        onError = { Timber.e(it, "Error merging clicks") }
-                )
-                .addTo(disposables)
+        binding.loggedOutContent.signInButton.clicksDebounce { signIn() }
+        binding.loggedInContent.signOutButton.clicksDebounce { signOut() }
+        binding.widgetBubble.clicksDebounce { viewModel.onBubbleClick() }
+        binding.toggleSleepButton.clicksDebounce { viewModel.onToggleSleepClick() }
+        binding.owlImage.clicksDebounce { viewModel.onToggleSleepClick() }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -134,16 +122,6 @@ class HomeFragment : BaseMvRxFragment() {
     override fun onResume() {
         super.onResume()
         viewModel.loadWidgetStatus()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        disposables.clear()
     }
 
     private fun signIn() {

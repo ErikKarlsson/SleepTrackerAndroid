@@ -16,12 +16,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
-import net.erikkarlsson.simplesleeptracker.core.util.clicksThrottle
+import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
 import net.erikkarlsson.simplesleeptracker.features.diary.databinding.FragmentDiaryBinding
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecoration
 import net.erikkarlsson.simplesleeptracker.features.diary.recycler.RecyclerSectionItemDecorationFactory
@@ -47,8 +46,6 @@ class DiaryFragment : BaseMvRxFragment() {
     lateinit var viewModelFactory: DiaryViewModel.Factory
 
     private var sectionItemDecoration: RecyclerSectionItemDecoration? = null
-
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private val adapter = SleepAdapter { navigateToDetails(it.id) }
 
@@ -91,7 +88,7 @@ class DiaryFragment : BaseMvRxFragment() {
             }
         })
 
-        binding.floatingActionButton.clicksThrottle(compositeDisposable) { navigateToAddSleep() }
+        binding.floatingActionButton.clicksDebounce { navigateToAddSleep() }
 
         lifecycleScope.launch {
             sleepAddedEvents.consumeEach {
