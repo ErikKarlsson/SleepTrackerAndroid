@@ -7,6 +7,8 @@ buildscript {
         classpath Deps.kotlin_plugin
         classpath Deps.navigation_plugin
         classpath Deps.play_services_oss_licenses_plugin
+        classpath Deps.facebook_screenshot_plugin
+        classpath Deps.karumi_shot_plugin
     }
 
     repositories {

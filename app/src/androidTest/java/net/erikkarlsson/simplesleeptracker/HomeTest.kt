@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker
 
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
+import com.facebook.testing.screenshot.Screenshot
 import net.erikkarlsson.simplesleeptracker.robot.HomeRobot
 import net.erikkarlsson.simplesleeptracker.robot.MainRobot
 import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
@@ -23,6 +24,12 @@ class HomeTest {
     var chain: TestRule = RuleChain.outerRule(component).around(main)
 
     @Test
+    fun testHomeTab() {
+        val activity = main.launchActivity(null)
+        Screenshot.snapActivity(activity).record()
+    }
+
+    @Test
     fun testToggleSleepNavigateToDetailsFlow() {
         main.launchActivity(null)
 
@@ -38,8 +45,11 @@ class HomeTest {
         }
 
         homeRobot.clickToggleSleepButton() // toggle to awake
-        mainRobot.clickDiaryTab()
-                .clickItem(0) // When clicking newly added sleep item
+
+        val diaryRobot = mainRobot.clickDiaryTab()
+        diaryRobot.clickItem(0) // When clicking newly added sleep item
                 .isShowingDetailsScreen() // Then should navigate to details screen
+
+        Screenshot.snapActivity(component.getCurrentActivity()).record()
     }
 }

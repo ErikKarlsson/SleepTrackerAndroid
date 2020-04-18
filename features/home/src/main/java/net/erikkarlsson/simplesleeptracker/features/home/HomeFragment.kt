@@ -88,8 +88,8 @@ class HomeFragment : BaseMvRxFragment() {
         binding.loggedOutContent.signInButton.clicksDebounce { signIn() }
         binding.loggedInContent.signOutButton.clicksDebounce { signOut() }
         binding.widgetBubble.clicksDebounce { viewModel.onBubbleClick() }
-        binding.toggleSleepButton.clicksDebounce { viewModel.onToggleSleepClick() }
-        binding.owlImage.clicksDebounce { viewModel.onToggleSleepClick() }
+        binding.owlImage.setOnClickListener { viewModel.onToggleSleepClick() }
+        binding.toggleSleepButton.setOnClickListener { viewModel.onToggleSleepClick() }
     }
 
     override fun invalidate() = withState(viewModel) { state ->

@@ -2,7 +2,7 @@ package net.erikkarlsson.simplesleeptracker
 
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import net.erikkarlsson.simplesleeptracker.robot.DiaryRobot
+import com.facebook.testing.screenshot.Screenshot
 import net.erikkarlsson.simplesleeptracker.robot.MainRobot
 import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
 import org.junit.Rule
@@ -18,14 +18,11 @@ class DiaryTest {
     val component = TestComponentRule()
     val mainRobot = MainRobot()
 
-    lateinit var diaryRobot: DiaryRobot
-
     @get:Rule
     var chain: TestRule = RuleChain.outerRule(component).around(main)
 
     @Test
-    fun testToggleSleepNavigateToDetailsFlow() {
-
+    fun testDiary() {
         with(component) {
             // Given current time
             mockDateTimeNow("2018-03-14T22:30:00+01:00")
@@ -36,9 +33,10 @@ class DiaryTest {
             insertSleep(fromDate = "2018-03-13T21:20:00+01:00", toDate = "2018-03-14T06:33:00+01:00")
         }
 
-        main.launchActivity(null)
-        diaryRobot = mainRobot.clickDiaryTab()
-        diaryRobot.clickItem(0) // When clicking newly added sleep item
-                .isShowingDetailsScreen() // Then should navigate to details screen
+        val activity = main.launchActivity(null)
+
+        mainRobot.clickDiaryTab()
+
+        Screenshot.snapActivity(activity).record()
     }
 }

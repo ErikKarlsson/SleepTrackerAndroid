@@ -1,6 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.util
 
+import android.app.Activity
 import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import net.erikkarlsson.simplesleeptracker.TestableApplication
 import net.erikkarlsson.simplesleeptracker.dateutil.offsetDateTime
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -23,6 +27,12 @@ class TestComponentRule() : TestRule {
     fun insertSleep(fromDate: String, toDate: String) {
         val sleep = Sleep(fromDate = fromDate.offsetDateTime, toDate = toDate.offsetDateTime)
         application.insertSleep(sleep)
+    }
+
+    fun getCurrentActivity(): Activity? {
+        var currentActivity: Activity? = null
+        getInstrumentation().runOnMainSync { run { currentActivity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0) } }
+        return currentActivity
     }
 
     override fun apply(base: Statement, description: Description): Statement {

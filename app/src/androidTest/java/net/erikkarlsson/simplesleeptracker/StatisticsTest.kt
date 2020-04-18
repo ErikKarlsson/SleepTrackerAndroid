@@ -1,9 +1,9 @@
 package net.erikkarlsson.simplesleeptracker
 
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
+import com.facebook.testing.screenshot.Screenshot
 import net.erikkarlsson.simplesleeptracker.robot.MainRobot
-import net.erikkarlsson.simplesleeptracker.robot.StatisticsRobot
 import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
 import org.junit.Rule
 import org.junit.Test
@@ -11,12 +11,11 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class StatisticsTest {
 
     val main = ActivityTestRule(MainActivity::class.java, false, false)
     val component = TestComponentRule()
-    val robot = StatisticsRobot()
     val mainRobot = MainRobot()
 
     @get:Rule
@@ -63,16 +62,10 @@ class StatisticsTest {
             insertSleep(fromDate = "2018-03-17T22:37:00+01:00", toDate = "2018-03-18T06:20:00+01:00")
         }
 
-        main.launchActivity(null)
+        val activity = main.launchActivity(null)
 
-        val diaryRobot = mainRobot.clickDiaryTab()
-        diaryRobot.clickItem(0) // When clicking newly added sleep item
-                .isShowingDetailsScreen() // Then should navigate to details screen
+        mainRobot.clickStatisticsTab()
 
-//        mainRobot.clickStatisticsTab()
-
-        Thread.sleep(99999999)
-
-        // TODO (erikkarlsson): Verify statistics are rendered in view
+        Screenshot.snapActivity(activity).record()
     }
 }

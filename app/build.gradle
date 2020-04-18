@@ -10,6 +10,10 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'androidx.navigation.safeargs'
 
+apply plugin: 'com.facebook.testing.screenshot'
+
+apply plugin: 'shot'
+
 apply from: "$project.rootDir/git-version.gradle"
 
 def keystorePropertiesFile = new File(System.getProperty("user.home") + '/android/files/simplesleeptracker/keystore.properties')
