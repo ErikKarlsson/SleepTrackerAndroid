@@ -152,6 +152,7 @@ dependencies {
     androidTestImplementation Deps.room_testing
     androidTestImplementation Deps.arch_core_testing
     androidTestImplementation Deps.junit
+    androidTestImplementation Deps.junit_ext
     androidTestImplementation Deps.mockito_core, { exclude group: 'net.bytebuddy' }
     androidTestImplementation Deps.dexmaker
     androidTestImplementation Deps.espresso_core

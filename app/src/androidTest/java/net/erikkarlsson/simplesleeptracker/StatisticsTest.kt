@@ -1,6 +1,6 @@
 package net.erikkarlsson.simplesleeptracker
 
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.facebook.testing.screenshot.Screenshot
 import net.erikkarlsson.simplesleeptracker.robot.MainRobot
@@ -11,7 +11,7 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4ClassRunner::class)
+@RunWith(AndroidJUnit4::class)
 class StatisticsTest {
 
     val main = ActivityTestRule(MainActivity::class.java, false, false)
