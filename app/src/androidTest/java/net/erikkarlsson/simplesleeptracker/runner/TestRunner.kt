@@ -14,8 +14,8 @@ class TestRunner : AndroidJUnitRunner() {
     }
 
     override fun onCreate(arguments: Bundle?) {
-        super.onCreate(arguments)
         ScreenshotRunner.onCreate(this, arguments)
+        super.onCreate(arguments)
     }
 
     override fun finish(resultCode: Int, results: Bundle?) {
