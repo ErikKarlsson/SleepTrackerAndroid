@@ -22,7 +22,7 @@ class StatisticsTest {
     var chain: TestRule = RuleChain.outerRule(component).around(main)
 
     @Test
-    fun testCompareStatisticsBetweenWeeks() {
+    fun testCompareStatisticsBetweenYears() {
         with(component) {
             // Given current time
             mockDateTimeNow("2018-03-14T22:30:00+01:00")
@@ -64,7 +64,9 @@ class StatisticsTest {
 
         val activity = main.launchActivity(null)
 
-        mainRobot.clickStatisticsTab()
+        val statisticsRobot = mainRobot.clickStatisticsTab()
+
+        statisticsRobot.selectYearFilter()
 
         Screenshot.snapActivity(activity).record()
     }
