@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 apply plugin: 'kotlin-android'
 
@@ -52,8 +52,13 @@ android {
     buildTypes {
         debug {
             crunchPngs false
-            ext.alwaysUpdateBuildId = false
             signingConfig signingConfigs.debug
+
+            firebaseCrashlytics {
+                // If you don't need crash reporting for your debug build,
+                // you can speed up your build by disabling mapping file uploading.
+                mappingFileUploadEnabled false
+            }
         }
         release {
             minifyEnabled true

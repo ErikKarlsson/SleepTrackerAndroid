@@ -7,13 +7,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
@@ -39,12 +36,6 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
         super.onCreate()
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
-        val crashlytics = Crashlytics.Builder()
-                .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-                .build()
-
-        Fabric.with(this, crashlytics)
 
         AndroidThreeTen.init(this)
 

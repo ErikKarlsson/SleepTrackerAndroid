@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 
 
@@ -13,12 +13,14 @@ class CrashReportingTree : Timber.Tree() {
             return
         }
 
-        Crashlytics.log(priority, tag, message)
+        val crashlytics = FirebaseCrashlytics.getInstance();
+
+        crashlytics.log(message)
 
         if (t == null) {
-            Crashlytics.logException(Exception(message));
+            crashlytics.recordException(Exception(message));
         } else {
-            Crashlytics.logException(t);
+            crashlytics.recordException(t);
         }
     }
 }

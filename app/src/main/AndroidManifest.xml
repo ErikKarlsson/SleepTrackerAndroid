@@ -40,10 +40,6 @@
                 android:resource="@xml/appwidget_info" />
         </receiver>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="fe2ec819a92c92bdf335833374300bb79b6fff00" />
-
         <activity
             android:name=".features.settings.SettingsActivity"
             android:label="@string/settings"

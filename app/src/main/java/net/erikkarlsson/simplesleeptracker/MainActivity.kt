@@ -9,9 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjection
-import io.fabric.sdk.android.Fabric
 import net.erikkarlsson.simplesleeptracker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +23,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
-
-        Fabric.with(this, Crashlytics())
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
