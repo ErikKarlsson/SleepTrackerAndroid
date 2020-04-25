@@ -25,17 +25,17 @@ platform :android do
     gradle(task: "test")
   end
 
+  desc "Submit a new internal Build to Firebase App Tester"
   lane :internal do
-    # build the release variant
-    build_android_app(task: "assembleInternalRelease")
+            build_android_app(task: "assembleInternalRelease")
 
-    # upload to Beta by Crashlytics
-    crashlytics(
-      # keys for organization: Erik Karlsson’s Projects
-      api_token: "fe2ec819a92c92bdf335833374300bb79b6fff00",
-      build_secret: "e61b972516adb33a74fa135266efd04318d7950a13f87e0fa06e0063464f38c9"
-    )
-  end
+            firebase_app_distribution(
+                app: "1:513153680889:android:9275847f99e1001e",
+                groups: "beta-testers",
+                release_notes: changelog_from_git_commits(pretty: '%h %s'),
+                firebase_cli_path: "/usr/local/bin/firebase"
+            )
+        end
 
   desc "Submit a new internal Build to Play Store"
   lane :internal_play_store do

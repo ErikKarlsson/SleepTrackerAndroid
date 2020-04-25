@@ -5,22 +5,27 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: Verifying fastlane version" time="0.013589">
+      <testcase classname="fastlane.lanes" name="0: Verifying fastlane version" time="0.003773">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.004021">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.003686">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: gradle" time="43.14187">
+      <testcase classname="fastlane.lanes" name="2: build_android_app" time="14.684002">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: upload_to_play_store" time="20.481389">
+      <testcase classname="fastlane.lanes" name="3: changelog_from_git_commits" time="0.031436">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: firebase_app_distribution" time="14.622332">
         
       </testcase>
     
