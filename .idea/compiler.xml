@@ -11,5 +11,25 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
+    <bytecodeTargetLevel>
+      <module name="SleepTracker.app" target="1.8" />
+      <module name="SleepTracker.buildSrc" target="1.8" />
+      <module name="SleepTracker.features.add" target="1.8" />
+      <module name="SleepTracker.features.appwidget" target="1.8" />
+      <module name="SleepTracker.features.backup" target="1.8" />
+      <module name="SleepTracker.features.details" target="1.8" />
+      <module name="SleepTracker.features.diary" target="1.8" />
+      <module name="SleepTracker.features.home" target="1.8" />
+      <module name="SleepTracker.features.settings" target="1.8" />
+      <module name="SleepTracker.features.statistics" target="1.8" />
+      <module name="SleepTracker.libraries.core" target="1.8" />
+      <module name="SleepTracker.libraries.data" target="1.8" />
+      <module name="SleepTracker.libraries.date-util" target="1.8" />
+      <module name="SleepTracker.libraries.domain" target="1.8" />
+      <module name="SleepTracker.libraries.domain-test" target="1.8" />
+      <module name="SleepTracker.libraries.navigation" target="1.8" />
+      <module name="SleepTracker.libraries.test-util" target="1.8" />
+      <module name="SleepTracker.libraries.ui-components" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

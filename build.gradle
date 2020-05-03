@@ -73,8 +73,8 @@ subprojects {
                     jvmTarget = Config.javaVersion
                 }
 
-                viewBinding {
-                    enabled = true
+                buildFeatures {
+                    viewBinding = true
                 }
 
                 flavorDimensions "default"

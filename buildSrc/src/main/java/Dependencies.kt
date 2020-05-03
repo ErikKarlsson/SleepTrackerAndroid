@@ -8,7 +8,7 @@ object Config {
 }
 
 object Versions {
-    val android_gradle_plugin = "3.6.3"
+    val android_gradle_plugin = "4.1.0-alpha08"
     val arch_core = "2.1.0"
     val atsl_rules = "1.2.0"
     val atsl_runner = "1.2.0"
@@ -43,7 +43,7 @@ object Versions {
     val junit = "4.13"
     val junit_ext = "1.1.1"
     val karumi_shot_plugin = "4.0.0"
-    val kotlin = "1.3.71"
+    val kotlin = "1.3.72"
     val leakcanary = "2.2"
     val lifecycle = "2.2.0"
     val material = "1.0.0"
