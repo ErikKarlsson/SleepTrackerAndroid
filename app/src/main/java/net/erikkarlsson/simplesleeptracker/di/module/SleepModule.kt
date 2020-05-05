@@ -30,6 +30,7 @@ abstract class SleepModule {
         @Provides
         @Singleton
         fun provideSleepDao(sleepDatabase: SleepDatabase): SleepDao = sleepDatabase.sleepDao()
+
     }
 
 }
