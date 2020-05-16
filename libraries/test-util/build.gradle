@@ -6,7 +6,6 @@ dependencies {
 
     implementation project(':libraries:domain')
     implementation project(':libraries:core')
-    implementation Deps.threeten_backport
     implementation Deps.guava
     implementation Deps.dagger_runtime
     implementation Deps.rxandroid

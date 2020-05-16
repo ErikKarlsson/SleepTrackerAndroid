@@ -22,9 +22,4 @@ dependencies {
 
     // Timber
     implementation Deps.timber
-
-    // ThreeTen Backport
-    implementation Deps.threeten_backport_android
-    testImplementation Deps.threeten_backport
-    androidTestImplementation Deps.threeten_backport
 }

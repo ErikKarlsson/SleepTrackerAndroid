@@ -17,7 +17,7 @@ object Versions {
     val constraint_layout = "1.1.3"
     val corbind = "1.3.1"
     val core_ktx = "1.2.0"
-    val coroutines = "1.3.5"
+    val coroutines = "1.3.6"
     val crashlytics = "17.0.0-beta04"
     val dagger = "2.27"
     val dagger_assisted_injection = "0.5.2"

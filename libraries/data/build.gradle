@@ -34,11 +34,6 @@ dependencies {
     // Flow
     implementation Deps.flow_preferences
 
-    // ThreeTen Backport
-    implementation Deps.threeten_backport_android
-    testImplementation Deps.threeten_backport
-    androidTestImplementation Deps.threeten_backport
-
     // Timber
     implementation Deps.timber
 }
