@@ -8,7 +8,7 @@ object Config {
 }
 
 object Versions {
-    val android_gradle_plugin = "4.1.0-alpha08"
+    val android_gradle_plugin = "4.1.0-beta05"
     val arch_core = "2.1.0"
     val atsl_rules = "1.2.0"
     val atsl_runner = "1.2.0"
