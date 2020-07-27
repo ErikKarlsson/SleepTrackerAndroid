@@ -8,8 +8,12 @@ import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
+@InstallIn(ApplicationComponent::class)
 class SignInModule {
 
     @Provides
@@ -20,7 +24,7 @@ class SignInModule {
                 .build()
 
     @Provides
-    fun providesGoogleSignInClient(context: Context,
+    fun providesGoogleSignInClient(@ApplicationContext context: Context,
                                    googleSignInOptions: GoogleSignInOptions): GoogleSignInClient =
             GoogleSignIn.getClient(context, googleSignInOptions)
 

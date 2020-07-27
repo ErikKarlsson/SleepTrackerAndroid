@@ -3,6 +3,8 @@ package net.erikkarlsson.simplesleeptracker.di.module
 import androidx.lifecycle.MutableLiveData
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import kotlinx.coroutines.channels.BroadcastChannel
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.entity.SleepEvent
@@ -11,6 +13,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
+@InstallIn(ApplicationComponent::class)
 class EventModule {
 
     @Provides

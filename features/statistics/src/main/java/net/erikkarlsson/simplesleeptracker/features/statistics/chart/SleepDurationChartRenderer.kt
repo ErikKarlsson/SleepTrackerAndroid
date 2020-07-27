@@ -11,6 +11,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import dagger.hilt.android.qualifiers.ApplicationContext
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes3
 import net.erikkarlsson.simplesleeptracker.domain.entity.StatisticComparison
 import net.erikkarlsson.simplesleeptracker.features.statistics.*
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 private const val MAX_VALUE_WHEN_EMPTY = 8
 
-class SleepDurationChartRenderer @Inject constructor(private val ctx: Context) {
+class SleepDurationChartRenderer @Inject constructor(@ApplicationContext private val ctx: Context) {
 
     fun render(sleepDurationChart: BarChart,
                statisticsComparison: StatisticComparison) {

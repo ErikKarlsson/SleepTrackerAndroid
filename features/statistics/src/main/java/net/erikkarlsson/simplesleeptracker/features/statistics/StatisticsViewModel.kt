@@ -1,17 +1,11 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.ReduxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_COMPARE_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PREFS_SELECTED_FILTER
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
@@ -19,11 +13,10 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
-class StatisticsViewModel @AssistedInject constructor(
-        @Assisted val initialState: StatisticsState,
+class StatisticsViewModel @ViewModelInject constructor(
         private val statisticsDataSource: StatisticsDataSource,
         private val preferences: PreferencesDataSource)
-    : MvRxViewModel<StatisticsState>(initialState) {
+    : ReduxViewModel<StatisticsState>(StatisticsState()) {
 
     init {
         subscribeOldestYoungest()
@@ -31,12 +24,13 @@ class StatisticsViewModel @AssistedInject constructor(
     }
 
     fun statisticsFilterSelected(filter: StatisticsFilter) {
-        withState {
+        viewModelScope.withState {
             val compareFilter = it.compareFilter
             val youngest = it.youngest
             val oldest = it.oldest
             val dateRanges = getDateRanges(filter, compareFilter, youngest, oldest)
-            setState {
+
+            viewModelScope.launchSetState {
                 copy(filter = filter, dateRanges = dateRanges)
             }
         }
@@ -45,9 +39,9 @@ class StatisticsViewModel @AssistedInject constructor(
     }
 
     fun compareFilterSelected(compareFilter: CompareFilter) {
-        withState {
+        viewModelScope.withState {
             val dateRanges = getDateRanges(it.filter, compareFilter, it.youngest, it.oldest)
-            setState {
+            viewModelScope.launchSetState {
                 copy(compareFilter = compareFilter, dateRanges = dateRanges)
             }
         }
@@ -61,25 +55,21 @@ class StatisticsViewModel @AssistedInject constructor(
                     .zip(statisticsDataSource.getOldestSleep()) { first, second ->
                         YoungestOldest(first, second)
                     }
-                    .execute {
-                        if (it is Success) {
-                            val filter = this.filter
-                            val compareFilter = this.compareFilter
-                            val youngest = it().youngest
-                            val oldest = it().oldest
-                            val sleepFound = youngest != Sleep.empty()
+                    .collectAndSetState {
+                        val filter = this.filter
+                        val compareFilter = this.compareFilter
+                        val youngest = it.youngest
+                        val oldest = it.oldest
+                        val sleepFound = youngest != Sleep.empty()
 
-                            val dateRanges = if (sleepFound) {
-                                getDateRanges(filter, compareFilter, youngest, oldest)
-                            } else {
-                                listOf()
-                            }
-
-                            copy(youngest = youngest, oldest = oldest, dateRanges = dateRanges,
-                                    isLoading = false, sleepFound = sleepFound)
+                        val dateRanges = if (sleepFound) {
+                            getDateRanges(filter, compareFilter, youngest, oldest)
                         } else {
-                            copy()
+                            listOf()
                         }
+
+                        copy(youngest = youngest, oldest = oldest, dateRanges = dateRanges,
+                                isLoading = false, sleepFound = sleepFound)
                     }
         }
     }
@@ -93,8 +83,8 @@ class StatisticsViewModel @AssistedInject constructor(
                         SavedFilters(statisticsFilter, compareFilter)
                     }
                     .take(1)
-                    .collect {
-                        setState { copy(filter = it.filter, compareFilter = it.compareFilter) }
+                    .collectAndSetState {
+                        copy(filter = it.filter, compareFilter = it.compareFilter)
                     }
         }
     }
@@ -122,18 +112,6 @@ class StatisticsViewModel @AssistedInject constructor(
             StatisticsFilter.MONTH -> DateRanges.getMonthDateRanges(startEndDateRange, compareFilter)
             StatisticsFilter.YEAR -> DateRanges.getYearDateRanges(startEndDateRange, compareFilter)
             StatisticsFilter.NONE -> listOf()
-        }
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: StatisticsState): StatisticsViewModel
-    }
-
-    companion object : MvRxViewModelFactory<StatisticsViewModel, StatisticsState> {
-        override fun create(viewModelContext: ViewModelContext, state: StatisticsState): StatisticsViewModel? {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<StatisticsFragment>()
-            return fragment.viewModelFactory.create(state)
         }
     }
 }

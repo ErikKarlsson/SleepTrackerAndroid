@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,7 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import net.erikkarlsson.simplesleeptracker.core.livedata.EventObserver
 import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes2
@@ -37,28 +36,18 @@ import javax.inject.Named
 
 const val REQUEST_CODE_SIGN_IN = 1
 
-class HomeFragment : BaseMvRxFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: HomeViewModel.Factory
+@AndroidEntryPoint
+class HomeFragment : Fragment() {
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
 
-    @Inject
-    lateinit var ctx: Context
-
     @Inject @Named("homeEvents")
     lateinit var homeEvents: HomeEvents
 
-    private val viewModel: HomeViewModel by fragmentViewModel()
+    private val viewModel: HomeViewModel by viewModels()
 
     private lateinit var binding: FragmentHomeBinding
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -75,11 +64,13 @@ class HomeFragment : BaseMvRxFragment() {
             }
         })
 
-        val account = GoogleSignIn.getLastSignedInAccount(ctx)
+        val account = GoogleSignIn.getLastSignedInAccount(context)
 
         if (account != null) {
             onSignInRestored(account)
         }
+
+        viewModel.liveData.observe(viewLifecycleOwner, ::render)
     }
 
     override fun onStart() {
@@ -90,10 +81,6 @@ class HomeFragment : BaseMvRxFragment() {
         binding.widgetBubble.clicksDebounce { viewModel.onBubbleClick() }
         binding.owlImage.setOnClickListener { viewModel.onToggleSleepClick() }
         binding.toggleSleepButton.setOnClickListener { viewModel.onToggleSleepClick() }
-    }
-
-    override fun invalidate() = withState(viewModel) { state ->
-        render(state)
     }
 
     @SuppressLint("NewApi")

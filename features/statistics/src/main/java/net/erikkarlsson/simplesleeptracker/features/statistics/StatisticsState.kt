@@ -1,6 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics
 
-import com.airbnb.mvrx.MvRxState
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 
@@ -16,7 +15,7 @@ data class StatisticsState(val filter: StatisticsFilter = StatisticsFilter.OVERA
                            val oldest: Sleep = Sleep.empty(),
                            val dateRanges: List<DateRangePair> = listOf(),
                            val sleepFound: Boolean = false,
-                           val isLoading: Boolean = true) : MvRxState {
+                           val isLoading: Boolean = true) {
 
     val shouldShowEmptyState: Boolean = !isLoading && !sleepFound
 

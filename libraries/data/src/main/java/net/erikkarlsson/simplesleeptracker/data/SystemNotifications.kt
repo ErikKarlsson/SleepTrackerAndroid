@@ -6,13 +6,14 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import net.erikkarlsson.simplesleeptracker.domain.Notifications
 import javax.inject.Inject
 
 private const val MINIMUM_SLEEP_NOTIFICATION_ID = 1
 private const val CHANNEL_ID = "sleep_channel_id"
 
-class SystemNotifications @Inject constructor(private val context: Context): Notifications {
+class SystemNotifications @Inject constructor(@ApplicationContext private val context: Context): Notifications {
     override fun sendMinimumSleepNotification() {
         createNotificationChannel()
 

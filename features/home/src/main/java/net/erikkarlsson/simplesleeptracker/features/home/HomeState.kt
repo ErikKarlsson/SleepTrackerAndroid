@@ -2,7 +2,6 @@ package net.erikkarlsson.simplesleeptracker.features.home
 
 import android.os.Build
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.MvRxState
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.HIDE_WIDGET_BUBBLE_AFTER_SLEEP_COUNT
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
@@ -28,7 +27,7 @@ data class HomeState(
         val userAccount: UserAccount? = null,
         val lastBackupTimestamp: Long = -1,
         val isWidgetAdded: Boolean = true
-) : MvRxState {
+) {
 
     val isLoading = isLoadingHome || isLoadingWidgetStatus
 

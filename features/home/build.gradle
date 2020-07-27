@@ -2,6 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+kapt {
+    correctErrorTypes = true
+}
+
+apply plugin: 'dagger.hilt.android.plugin'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -12,30 +18,23 @@ dependencies {
     implementation project(':libraries:ui-components')
     testImplementation project(':libraries:test-util')
 
-    // Dependencies for local unit tests
+    implementation( Deps.dagger_hilt)
+    kapt Deps.dagger_hilt_compiler
+
+    kapt Deps.hilt_viewmodel
+    kapt Deps.hilt_compiler
+
     testImplementation Deps.junit
     testImplementation Deps.hamcrest
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
     testImplementation Deps.mockito_inline
 
-    // BubbleLayout
     implementation Deps.bubble_layout
 
-    // Dagger
-    implementation Deps.dagger_runtime
-    implementation Deps.dagger_android
-    implementation Deps.dagger_android_support
-    implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_compiler
-    kapt Deps.dagger_android_support_compiler
-    kapt Deps.dagger_assisted_injection_processor
-
-    // Glide
     implementation Deps.glide
     kapt Deps.glide_compiler
 
-    // Google Drive REST API
     implementation Deps.google_http_client_gson
     implementation(Deps.google_api_client_android) {
         exclude group: 'org.apache.httpcomponents'
@@ -44,26 +43,18 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Material
     implementation Deps.material
 
-    // MvRx
-    implementation Deps.mvrx
-
-    // Play Services
     implementation Deps.play_services_auth
 
-    // Support libraries
     implementation Deps.support_app_compat
     implementation Deps.support_cardview
     implementation Deps.support_constraint_layout
     implementation Deps.support_v4
     implementation Deps.support_vector_drawable
 
-    // Timber
     implementation Deps.timber
 }

@@ -2,20 +2,19 @@ package net.erikkarlsson.simplesleeptracker.features.details
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.mvrx.*
-import dagger.android.support.AndroidSupportInjection
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
-import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
-import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
-import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
+import net.erikkarlsson.simplesleeptracker.core.util.*
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.features.details.databinding.FragmentDetailsBinding
 import org.threeten.bp.LocalDate
@@ -24,7 +23,12 @@ import org.threeten.bp.OffsetDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
-class DetailFragment : BaseMvRxFragment() {
+@AndroidEntryPoint
+class DetailFragment : Fragment() {
+
+    @Inject
+    @JvmField
+    internal var vmFactory: DetailsViewModel.Factory? = null
 
     private var _state = DetailsState.empty()
 
@@ -32,46 +36,19 @@ class DetailFragment : BaseMvRxFragment() {
     var datePickDialog: DatePickerDialog? = null
 
     @Inject
-    lateinit var viewModelFactory: DetailsViewModel.Factory
-
-    @Inject
     lateinit var sleepRepository: SleepDataSource
 
-    private val viewModel: DetailsViewModel by fragmentViewModel()
-
-    private lateinit var binding: FragmentDetailsBinding
-
-    override fun invalidate() = withState(viewModel) { state ->
-        _state = state
-        
-        when (state.sleep) {
-            is Success -> {
-                val sleep = state.sleep.invoke()
-                val fromDateString = sleep.fromDate.formatDateDisplayName2
-                val toDateString = sleep.toDate?.formatDateDisplayName2
-                binding.toolbar.setTitle(toDateString)
-                binding.startDateText.text = fromDateString
-                binding.timeAsleepText.text = sleep.fromDate.formatHHMM
-                binding.timeAwakeText.text = sleep.toDate?.formatHHMM
-                binding.sleptHoursText.text = String.format("%s %s",
-                        getString(R.string.you_have_slept_for),
-                        state.hoursSlept.formatHoursMinutes)
-            }
-        }
-
-        if (state.isDeleted) {
-            requireActivity().finish()
+    private val viewModel: DetailsViewModel by viewModels {
+        viewModelProviderFactoryOf {
+            vmFactory!!.create(requireArguments().getInt(ARG_KEY_ID))
         }
     }
+
+    private lateinit var binding: FragmentDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -90,6 +67,30 @@ class DetailFragment : BaseMvRxFragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val sleep = sleepRepository.getCurrent()
             Timber.d("sleep %s", sleep.toString())
+        }
+
+        viewModel.liveData.observe(viewLifecycleOwner, ::render)
+    }
+
+    fun render(state: DetailsState) {
+        _state = state
+
+        val sleep = state.sleep
+
+        if (sleep != null) {
+            val fromDateString = sleep.fromDate.formatDateDisplayName2
+            val toDateString = sleep.toDate?.formatDateDisplayName2
+            binding.toolbar.setTitle(toDateString)
+            binding.startDateText.text = fromDateString
+            binding.timeAsleepText.text = sleep.fromDate.formatHHMM
+            binding.timeAwakeText.text = sleep.toDate?.formatHHMM
+            binding.sleptHoursText.text = String.format("%s %s",
+                    getString(R.string.you_have_slept_for),
+                    state.hoursSlept.formatHoursMinutes)
+        }
+
+        if (state.isDeleted) {
+            requireActivity().finish()
         }
     }
 
@@ -140,21 +141,21 @@ class DetailFragment : BaseMvRxFragment() {
     }
 
     private fun onStartDateClick() {
-        pickDate(_state.sleep.invoke()!!.fromDate,
+        pickDate(_state.sleep!!.fromDate,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     onStartDateSet(year, month, dayOfMonth)
                 })
     }
 
     private fun onTimeAsleepClick() {
-        pickTime(_state.sleep.invoke()!!.fromDate.toLocalTime(),
+        pickTime(_state.sleep!!.fromDate.toLocalTime(),
                 TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                     onTimeAsleepSet(hour, minute)
                 })
     }
 
     private fun onTimeAwakeClick() {
-        _state.sleep.invoke()!!.toDate?.let {
+        _state.sleep!!.toDate?.let {
             pickTime(it.toLocalTime(),
                     TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                         onTimeAwakeSet(hour, minute)
@@ -196,14 +197,11 @@ class DetailFragment : BaseMvRxFragment() {
     }
 
     companion object {
+        private const val ARG_KEY_ID = "sleep_id"
+
         fun newInstance(sleepId: Int): DetailFragment =
                 DetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable(
-                                MvRx.KEY_ARG,
-                                DetailsArgs(sleepId)
-                        )
-                    }
+                    arguments = bundleOf(ARG_KEY_ID to sleepId)
                 }
     }
 

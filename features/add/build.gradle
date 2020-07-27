@@ -2,6 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+kapt {
+    correctErrorTypes = true
+}
+
+apply plugin: 'dagger.hilt.android.plugin'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -9,30 +15,23 @@ dependencies {
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
 
-    // Kotlin
+    implementation Deps.dagger_hilt
+    kapt Deps.dagger_hilt_compiler
+
+    kapt Deps.hilt_viewmodel
+    kapt Deps.hilt_compiler
+
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Dagger
-    implementation Deps.dagger_runtime
-    implementation Deps.dagger_android
-    implementation Deps.dagger_android_support
     implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_compiler
-    kapt Deps.dagger_android_support_compiler
     kapt Deps.dagger_assisted_injection_processor
 
-    // Timber
     implementation Deps.timber
 
-    // MvRx
-    implementation Deps.mvrx
-
-    // ThreeTen Backport
     implementation Deps.threeten_backport_android
     testImplementation Deps.threeten_backport
 
-    // Support libraries
     implementation Deps.support_app_compat
     implementation Deps.support_cardview
     implementation Deps.support_constraint_layout

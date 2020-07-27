@@ -1,18 +1,14 @@
 package net.erikkarlsson.simplesleeptracker.features.home
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.ReduxViewModel
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.BUBBLE_DURATION_MILLI
 import net.erikkarlsson.simplesleeptracker.domain.WidgetDataSource
@@ -27,8 +23,7 @@ import net.erikkarlsson.simplesleeptracker.features.home.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.LogoutTask
 import javax.inject.Named
 
-class HomeViewModel @AssistedInject constructor(
-        @Assisted state: HomeState,
+class HomeViewModel @ViewModelInject constructor(
         getHomeTask: GetHomeTask,
         private val toggleSleepTask: ToggleSleepTask,
         private val logoutTask: LogoutTask,
@@ -36,17 +31,15 @@ class HomeViewModel @AssistedInject constructor(
         @Named("sleepEvents") private val sleepEvents: BroadcastChannel<SleepEvent>,
         @Named("restoreBackupScheduler") private val restoreBackupScheduler: TaskScheduler,
         @Named("homeEvents") private val homeEvents: HomeEvents
-) : MvRxViewModel<HomeState>(state) {
+) : ReduxViewModel<HomeState>(HomeState()) {
 
     init {
         viewModelScope.launch {
             getHomeTask.flow(None())
-                    .collect {
-                        setState {
-                            copy(lastBackupTimestamp = it.lastBackupTimestamp,
-                                    sleep = it.currentSleep, isLoadingHome = false,
-                                    sleepCount = it.sleepCount)
-                        }
+                    .collectAndSetState {
+                        copy(lastBackupTimestamp = it.lastBackupTimestamp,
+                                sleep = it.currentSleep, isLoadingHome = false,
+                                sleepCount = it.sleepCount)
                     }
         }
 
@@ -54,20 +47,22 @@ class HomeViewModel @AssistedInject constructor(
             sleepEvents.asFlow()
                     .filter { it is MinimumSleepEvent }
                     .collect {
-                        setState { copy(isShowingMinimalSleep = true) }
+                        viewModelScope.launchSetState { copy(isShowingMinimalSleep = true) }
                         delay(BUBBLE_DURATION_MILLI)
-                        setState { copy(isShowingMinimalSleep = false) }
+                        viewModelScope.launchSetState { copy(isShowingMinimalSleep = false) }
                     }
         }
     }
 
     fun loadWidgetStatus() {
-        val isWidgetAdded = widgetDataSource.isWidgetAdded()
-        setState { copy(isWidgetAdded = isWidgetAdded, isLoadingWidgetStatus = false) }
+        viewModelScope.launchSetState {
+            val isWidgetAdded = widgetDataSource.isWidgetAdded()
+            copy(isWidgetAdded = isWidgetAdded, isLoadingWidgetStatus = false)
+        }
     }
 
     fun onBubbleClick() {
-        withState {
+        viewModelScope.withState {
             when {
                 it.bubbleState == BubbleState.PIN_WIDGET -> homeEvents.postValue(Event(PinWidgetEvent))
                 it.bubbleState == BubbleState.ADD_WIDGET -> homeEvents.postValue(Event(AddWidgetEvent))
@@ -77,7 +72,9 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     fun onSignOutComplete() {
-        setState { copy(userAccount = null) }
+        viewModelScope.launchSetState {
+            copy(userAccount = null)
+        }
 
         viewModelScope.launch {
             logoutTask.completable(CoroutineTask.None())
@@ -89,16 +86,22 @@ class HomeViewModel @AssistedInject constructor(
     }
 
     fun onSignInSuccess(userAccount: UserAccount) {
-        setState { copy(userAccount = userAccount) }
+        viewModelScope.launchSetState {
+            copy(userAccount = userAccount)
+        }
         restoreBackupScheduler.schedule()
     }
 
     fun onSignInRestored(userAccount: UserAccount) {
-        setState { copy(userAccount = userAccount) }
+        viewModelScope.launchSetState {
+            copy(userAccount = userAccount)
+        }
     }
 
     fun onSignInFailed() {
-        setState { copy(userAccount = null) }
+        viewModelScope.launchSetState {
+            copy(userAccount = null)
+        }
     }
 
     private fun toggleSleep() {
@@ -106,17 +109,4 @@ class HomeViewModel @AssistedInject constructor(
             toggleSleepTask.completable(CoroutineTask.None())
         }
     }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(state: HomeState): HomeViewModel
-    }
-
-    companion object : MvRxViewModelFactory<HomeViewModel, HomeState> {
-        override fun create(viewModelContext: ViewModelContext, state: HomeState): HomeViewModel? {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<HomeFragment>()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
-
 }

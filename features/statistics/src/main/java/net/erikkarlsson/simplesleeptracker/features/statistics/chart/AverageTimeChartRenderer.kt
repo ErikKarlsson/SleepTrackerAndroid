@@ -11,6 +11,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.google.common.collect.ImmutableList
+import dagger.hilt.android.qualifiers.ApplicationContext
 import net.erikkarlsson.simplesleeptracker.dateutil.SECONDS_IN_AN_HOUR
 import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.dateutil.midnightOffsetInSeconds
@@ -26,7 +27,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class AverageTimeChartRenderer @Inject constructor(private val ctx: Context) {
+class AverageTimeChartRenderer @Inject constructor(@ApplicationContext private val ctx: Context) {
 
     fun render(avergeTimeChart: BarChart,
                averageTime: LocalTime,

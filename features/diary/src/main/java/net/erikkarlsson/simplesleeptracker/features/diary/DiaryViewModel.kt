@@ -1,39 +1,22 @@
 package net.erikkarlsson.simplesleeptracker.features.diary
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.ReduxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.task.FlowTask
 import net.erikkarlsson.simplesleeptracker.features.diary.domain.GetSleepDiaryTask
 
-class DiaryViewModel @AssistedInject constructor(
-        @Assisted val initialState: DiaryState,
+class DiaryViewModel @ViewModelInject constructor(
         getSleepDiaryTask: GetSleepDiaryTask)
-    : MvRxViewModel<DiaryState>(initialState) {
+    : ReduxViewModel<DiaryState>(DiaryState()) {
 
     init {
         viewModelScope.launch {
             getSleepDiaryTask.flow(FlowTask.None())
-                    .execute {
+                    .collectAndSetState {
                         copy(sleepDiary = it)
                     }
-        }
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: DiaryState): DiaryViewModel
-    }
-
-    companion object : MvRxViewModelFactory<DiaryViewModel, DiaryState> {
-        override fun create(viewModelContext: ViewModelContext, state: DiaryState): DiaryViewModel? {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<DiaryFragment>()
-            return fragment.viewModelFactory.create(state)
         }
     }
 

@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
+kapt {
+    correctErrorTypes = true
+}
+
+apply plugin: 'dagger.hilt.android.plugin'
+
 androidExtensions {
     features = ["parcelize"]
     experimental = true
@@ -17,35 +23,26 @@ dependencies {
     implementation project(':libraries:ui-components')
     implementation project(':libraries:navigation')
 
-    // Navigation
+    implementation Deps.dagger_hilt
+    implementation Deps.dagger_assisted_injection_annotations
+    kapt Deps.dagger_assisted_injection_processor
+    kapt Deps.dagger_hilt_compiler
+
+    kapt Deps.hilt_viewmodel
+    kapt Deps.hilt_compiler
+
     implementation Deps.navigation_fragment
     implementation Deps.navigation_ui
     androidTestImplementation Deps.navigation_testing
 
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Coroutines
     implementation Deps.coroutines_core
     implementation Deps.coroutines_android
 
-    // Dagger
-    implementation Deps.dagger_runtime
-    implementation Deps.dagger_android
-    implementation Deps.dagger_android_support
-    implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_compiler
-    kapt Deps.dagger_android_support_compiler
-    kapt Deps.dagger_assisted_injection_processor
-
-    // Timber
     implementation Deps.timber
 
-    // MvRx
-    implementation Deps.mvrx
-
-    // Support libraries
     implementation Deps.support_app_compat
     implementation Deps.support_cardview
     implementation Deps.support_constraint_layout

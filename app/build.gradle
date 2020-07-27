@@ -14,6 +14,8 @@ apply plugin: 'com.facebook.testing.screenshot'
 
 apply plugin: 'shot'
 
+apply plugin: 'dagger.hilt.android.plugin'
+
 apply from: "$project.rootDir/git-version.gradle"
 
 def keystorePropertiesFile = new File(System.getProperty("user.home") + '/android/files/simplesleeptracker/keystore.properties')
@@ -29,7 +31,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
     }
@@ -88,6 +90,8 @@ android {
     }
 
     kapt {
+        correctErrorTypes true
+
         javacOptions {
             option("-Xmaxerrs", 500)
         }
@@ -138,7 +142,6 @@ dependencies {
     implementation project(':libraries:navigation')
     implementation project(':libraries:ui-components')
 
-    // Dependencies for Android tests
     androidTestImplementation project(':libraries:test-util')
 
     androidTestImplementation Deps.atsl_runner
@@ -154,25 +157,16 @@ dependencies {
     androidTestImplementation Deps.espresso_intents
     androidTestImplementation Deps.daggermock_android
     androidTestImplementation Deps.daggermock_kotlin
-    androidTestImplementation Deps.dagger_runtime
-    androidTestImplementation Deps.dagger_android
-    androidTestImplementation Deps.dagger_android_support
-    kaptAndroidTest Deps.dagger_compiler
-    kaptAndroidTest Deps.dagger_android_support_compiler
 
-    // Crashlytics
     implementation Deps.crashlytics
 
-    // Dagger
-    implementation Deps.dagger_runtime
-    implementation Deps.dagger_android
-    implementation Deps.dagger_android_support
     implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_compiler
-    kapt Deps.dagger_android_support_compiler
     kapt Deps.dagger_assisted_injection_processor
 
-    // Google Drive REST API
+    implementation Deps.hilt_work
+    implementation Deps.dagger_hilt
+    kapt Deps.dagger_hilt_compiler
+
     implementation Deps.google_http_client_gson
     implementation(Deps.google_api_client_android) {
         exclude group: 'org.apache.httpcomponents'
@@ -181,58 +175,42 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
     implementation Deps.coroutines_core
     implementation Deps.coroutines_android
 
-    // Guava
     implementation Deps.guava
 
-    // LeakCanary
     debugImplementation Deps.leakcanary
     androidTestImplementation Deps.leakcanary_instrumentation
 
-    // Lifecycle
     implementation Deps.lifecycle_extensions
     kapt Deps.lifecycle_compiler
 
-    // Material progress bar
     implementation Deps.materialprogressbar
 
-    // MPAndroidChart
     implementation Deps.mpandroidchart
 
-    // Multidex
     implementation Deps.multidex
     implementation Deps.multidex_instrumentation
 
-    // MvRx
-    implementation Deps.mvrx
-
-    // Navigation
     implementation Deps.navigation_fragment
     implementation Deps.navigation_ui
     androidTestImplementation Deps.navigation_testing
 
-    // Play Services
     implementation Deps.play_services_auth
     implementation Deps.play_services_oss_licenses
 
-    // Flow
     implementation Deps.flow_preferences
 
-    // ThreeTen Backport
     implementation Deps.threeten_backport_android
     testImplementation Deps.threeten_backport
     androidTestImplementation Deps.threeten_backport
 
-    // Timber
     implementation Deps.timber
 
-    // Work Manager
     implementation Deps.work_manager_runtime
 
     androidTestImplementation Deps.work_manager_testing

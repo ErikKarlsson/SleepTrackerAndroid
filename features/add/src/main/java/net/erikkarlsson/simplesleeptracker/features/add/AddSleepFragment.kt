@@ -4,17 +4,16 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
-import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
-import dagger.android.support.AndroidSupportInjection
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import dagger.hilt.android.AndroidEntryPoint
 import net.erikkarlsson.simplesleeptracker.core.util.clicksDebounce
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
@@ -22,14 +21,11 @@ import net.erikkarlsson.simplesleeptracker.dateutil.formatHHMM
 import net.erikkarlsson.simplesleeptracker.features.add.databinding.FragmentAddSleepBinding
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
-import javax.inject.Inject
 
-class AddSleepFragment : BaseMvRxFragment() {
+@AndroidEntryPoint
+class AddSleepFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory: AddSleepViewModel.Factory
-
-    private val viewModel: AddSleepViewModel by fragmentViewModel()
+    private val viewModel: AddSleepViewModel by viewModels()
 
     var timePickerDialog: TimePickerDialog? = null
     var datePickDialog: DatePickerDialog? = null
@@ -39,16 +35,6 @@ class AddSleepFragment : BaseMvRxFragment() {
     private lateinit var toolbar: Toolbar
 
     private lateinit var binding: FragmentAddSleepBinding
-
-    override fun invalidate() = withState(viewModel) { state ->
-        this.state = state
-        render(state)
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +62,8 @@ class AddSleepFragment : BaseMvRxFragment() {
         activity.supportActionBar?.setHomeAsUpIndicator(closeIcon)
 
         toolbar.setTitle(getString(R.string.add_sleep_session))
+
+        viewModel.liveData.observe(viewLifecycleOwner, ::render)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -160,6 +148,8 @@ class AddSleepFragment : BaseMvRxFragment() {
     }
 
     private fun render(state: AddSleepState) {
+        this.state = state
+
         binding.startDateText.text = state.startDate.formatDateDisplayName2
         binding.timeAsleepText.text = state.startTime.formatHHMM
         binding.timeAwakeText.text = state.endTime.formatHHMM

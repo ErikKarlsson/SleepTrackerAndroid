@@ -9,7 +9,8 @@ import javax.inject.Named
 
 class DeleteSleepTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
-        @Named("backupScheduler") private val backupScheduler: TaskScheduler)
+        @Named("backupScheduler") private val backupScheduler: TaskScheduler
+)
     : CoroutineTask<DeleteSleepTask.Params> {
 
     override suspend fun completable(params: Params) {

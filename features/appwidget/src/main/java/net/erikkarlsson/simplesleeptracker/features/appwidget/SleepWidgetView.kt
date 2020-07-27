@@ -6,11 +6,12 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SleepWidgetView @Inject constructor(private val context: Context) {
+class SleepWidgetView @Inject constructor(@ApplicationContext private val context: Context) {
 
     fun render(isSleeping: Boolean) {
         val views = RemoteViews(context.packageName, R.layout.app_widget)

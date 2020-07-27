@@ -1,27 +1,21 @@
 package net.erikkarlsson.simplesleeptracker
 
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
 import androidx.work.Configuration
-import androidx.work.WorkManager
 import com.jakewharton.threetenabp.AndroidThreeTen
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import net.erikkarlsson.simplesleeptracker.di.DaggerAppComponent
+import dagger.hilt.android.HiltAndroidApp
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepAppWidgetController
 import net.erikkarlsson.simplesleeptracker.features.appwidget.SleepWidgetView
-import net.erikkarlsson.simplesleeptracker.features.backup.di.MyWorkerFactory
 import timber.log.Timber
 import javax.inject.Inject
 
-open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+@HiltAndroidApp
+open class App : MultiDexApplication(), Configuration.Provider, LifecycleObserver {
 
     @Inject
     lateinit var sleepWidgetView: SleepWidgetView
@@ -30,7 +24,7 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
     lateinit var sleepAppWidgetController: SleepAppWidgetController
 
     @Inject
-    lateinit var myWorkerFactory: MyWorkerFactory
+    lateinit var workerFactory: HiltWorkerFactory
 
     override fun onCreate() {
         super.onCreate()
@@ -38,10 +32,6 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         AndroidThreeTen.init(this)
-
-        DaggerAppComponent.builder().application(this).build().inject(this)
-
-        WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(myWorkerFactory).build())
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -52,7 +42,10 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
         sleepAppWidgetController.initialize()
     }
 
-    override fun androidInjector(): AndroidInjector<Any> = androidInjector
+    override fun getWorkManagerConfiguration() =
+            Configuration.Builder()
+                    .setWorkerFactory(workerFactory)
+                    .build()
 
     // https://android.jlelse.eu/how-to-detect-android-application-open-and-close-background-and-foreground-events-1b4713784b57
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -64,6 +57,7 @@ open class App : MultiDexApplication(), HasAndroidInjector, LifecycleObserver {
     fun onAppForegrounded() {
         isForegrounded = true
     }
+
     companion object {
         var isForegrounded = false
     }

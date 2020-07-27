@@ -5,13 +5,14 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.qualifiers.ApplicationContext
 import net.erikkarlsson.simplesleeptracker.core.util.px
 import net.erikkarlsson.simplesleeptracker.features.diary.R
 import javax.inject.Inject
 
 private const val LEFT_PADDING_DP = 72
 
-class SimpleDividerItemDecoration @Inject constructor(context: Context) : RecyclerView.ItemDecoration() {
+class SimpleDividerItemDecoration @Inject constructor(@ApplicationContext context: Context) : RecyclerView.ItemDecoration() {
     private val divider: Drawable
 
     init {

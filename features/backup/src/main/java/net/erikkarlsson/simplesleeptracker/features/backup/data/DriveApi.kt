@@ -11,6 +11,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import dagger.hilt.android.qualifiers.ApplicationContext
 import net.erikkarlsson.simplesleeptracker.features.backup.BACKUP_MIME_TYPE
 import net.erikkarlsson.simplesleeptracker.features.backup.R
 import java.io.InputStream
@@ -20,7 +21,7 @@ import javax.inject.Inject
 /**
  * Wrapper for Google Drive REST API.
  */
-class DriveApi @Inject constructor(private val context: Context) {
+class DriveApi @Inject constructor(@ApplicationContext private val context: Context) {
 
     /**
      * Query meta data for existing file.

@@ -1,6 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics.item
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import com.github.mikephil.charting.charts.BarChart
-import dagger.android.support.AndroidSupportInjection
-import io.reactivex.disposables.CompositeDisposable
+import dagger.hilt.android.AndroidEntryPoint
 import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesSpannable
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutesWithPrefix
@@ -32,7 +29,8 @@ import javax.inject.Inject
 
 data class ChartExtra(val displayValue: Boolean)
 
-class StatisticsItemFragment : BaseMvRxFragment() {
+@AndroidEntryPoint
+class StatisticsItemFragment : Fragment() {
 
     @Inject
     lateinit var sleepDurationChartRenderer: SleepDurationChartRenderer
@@ -40,22 +38,9 @@ class StatisticsItemFragment : BaseMvRxFragment() {
     @Inject
     lateinit var averageTimeChartRenderer: AverageTimeChartRenderer
 
-    @Inject
-    lateinit var ctx: Context
-
-    @Inject
-    lateinit var viewModelFactory: StatisticsItemViewModel.Factory
-
-    private val viewModel: StatisticsItemViewModel by fragmentViewModel()
-
-    private val disposables = CompositeDisposable()
+    private val viewModel: StatisticsItemViewModel by viewModels()
 
     private lateinit var binding: FragmentStatisticsItemBinding
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -77,10 +62,8 @@ class StatisticsItemFragment : BaseMvRxFragment() {
         } else {
             loadStatistics()
         }
-    }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        render(state)
+        viewModel.liveData.observe(viewLifecycleOwner, ::render)
     }
 
     private fun render(state: StatisticsItemState) {
@@ -90,8 +73,8 @@ class StatisticsItemFragment : BaseMvRxFragment() {
                 binding.avgDurationText.text = "-"
                 sleepDurationChartRenderer.render(binding.sleepDurationChart as BarChart, StatisticComparison.empty())
             }
-            state.statistics.complete -> {
-                val statistics = state.statistics.invoke() ?: return
+            state.statistics != null -> {
+                val statistics = state.statistics
 
                 sleepDurationChartRenderer.render(binding.sleepDurationChart as BarChart, statistics)
 
@@ -122,14 +105,9 @@ class StatisticsItemFragment : BaseMvRxFragment() {
         viewModel.loadStatistics(pair, filter)
     }
 
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
-    }
-
     private fun renderEmptyState() {
         val statisticComparison = StatisticComparison.demo()
-        val statisticsItemState = StatisticsItemState(Success(statisticComparison))
+        val statisticsItemState = StatisticsItemState(statisticComparison)
 
         binding.sleepDurationLabel.text = String.format("%s [%s]", getString(R.string.sleep_duration), getString(R.string.demo))
         binding.longestNightLabel.text = String.format("%s [%s]", getString(R.string.longest_night), getString(R.string.demo))

@@ -1,13 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.features.details
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.ReduxViewModel
 import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
 import net.erikkarlsson.simplesleeptracker.features.details.domain.DeleteSleepTask
 import net.erikkarlsson.simplesleeptracker.features.details.domain.UpdateStartDateTask
@@ -17,24 +14,24 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 
 class DetailsViewModel @AssistedInject constructor(
-        @Assisted state: DetailsState,
+        @Assisted initialState: DetailsState,
         sleepRepository: SleepDataSource,
         private val updateStartDateTask: UpdateStartDateTask,
         private val updateTimeAsleepTask: UpdateTimeAsleepTask,
         private val updateTimeAwakeTask: UpdateTimeAwakeTask,
         private val deleteSleepTask: DeleteSleepTask
-) : MvRxViewModel<DetailsState>(state) {
+) : ReduxViewModel<DetailsState>(initialState) {
 
     init {
         viewModelScope.launch {
-            sleepRepository.getSleepFlow(state.sleepId).execute {
+            sleepRepository.getSleepFlow(initialState.sleepId).collectAndSetState {
                 copy(sleep = it)
             }
         }
     }
 
     fun deleteClick() {
-        withState { state ->
+        viewModelScope.withState { state ->
             viewModelScope.launch {
                 deleteSleepTask.completable(DeleteSleepTask.Params(state.sleepId))
                 setState { copy(isDeleted = true) }
@@ -43,7 +40,7 @@ class DetailsViewModel @AssistedInject constructor(
     }
 
     fun pickedStartDate(startDate: LocalDate) {
-        withState {
+        viewModelScope.withState {
             viewModelScope.launch {
                 updateStartDateTask.completable(UpdateStartDateTask.Params(it.sleepId, startDate))
             }
@@ -51,7 +48,7 @@ class DetailsViewModel @AssistedInject constructor(
     }
 
     fun pickedTimeAsleep(timeAsleep: LocalTime) {
-        withState {
+        viewModelScope.withState {
             viewModelScope.launch {
                 updateTimeAsleepTask.completable(UpdateTimeAsleepTask.Params(it.sleepId, timeAsleep))
             }
@@ -59,7 +56,7 @@ class DetailsViewModel @AssistedInject constructor(
     }
 
     fun pickedTimeAwake(timeAwake: LocalTime) {
-        withState {
+        viewModelScope.withState {
             viewModelScope.launch {
                 updateTimeAwakeTask.completable(UpdateTimeAwakeTask.Params(it.sleepId, timeAwake))
             }
@@ -68,14 +65,12 @@ class DetailsViewModel @AssistedInject constructor(
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(state: DetailsState): DetailsViewModel
+        fun create(initialState: DetailsState): DetailsViewModel
     }
+}
 
-    companion object : MvRxViewModelFactory<DetailsViewModel, DetailsState> {
-        override fun create(viewModelContext: ViewModelContext, state: DetailsState): DetailsViewModel? {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<DetailFragment>()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
-
+internal fun DetailsViewModel.Factory.create(
+        sleepId: Int
+): DetailsViewModel {
+    return create(DetailsState(sleepId = sleepId))
 }

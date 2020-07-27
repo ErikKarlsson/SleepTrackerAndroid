@@ -1,14 +1,10 @@
 package net.erikkarlsson.simplesleeptracker.features.add
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.MvRxViewModel
+import net.erikkarlsson.simplesleeptracker.core.ReduxViewModel
 import net.erikkarlsson.simplesleeptracker.core.livedata.Event
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.features.add.domain.AddSleepTask
@@ -16,12 +12,11 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import javax.inject.Named
 
-class AddSleepViewModel @AssistedInject constructor(
-        @Assisted state: AddSleepState,
+class AddSleepViewModel @ViewModelInject constructor(
         private val addSleepTask: AddSleepTask,
         dateTimeProvider: DateTimeProvider,
         @Named("sleepAddedEvents") private val sleepAddedEvents: BroadcastChannel<Event<Unit>>
-) : MvRxViewModel<AddSleepState>(state) {
+) : ReduxViewModel<AddSleepState>(AddSleepState()) {
 
     init {
         val startDate = dateTimeProvider.now().minusDays(1).toLocalDate()
@@ -29,48 +24,39 @@ class AddSleepViewModel @AssistedInject constructor(
         val endTime = LocalTime.of(DEFAULT_END_TIME_HOUR, DEFAULT_END_TIME_MINUTE)
         val zoneOffset = dateTimeProvider.now().offset
 
-        setState {
+        viewModelScope.launchSetState {
             copy(startDate = startDate, startTime = startTime, endTime = endTime, zoneOffset = zoneOffset)
         }
     }
 
     fun saveClick() {
-        withState { state ->
+        viewModelScope.withState { state ->
             viewModelScope.launch {
                 addSleepTask.completable(AddSleepTask.Params(state.sleep))
                 sleepAddedEvents.send(Event(Unit))
-                setState { copy(isSaveSuccess = true) }
+            }
+
+            viewModelScope.launchSetState {
+                copy(isSaveSuccess = true)
             }
         }
     }
 
     fun pickStartDate(startDate: LocalDate) {
-        setState {
+        viewModelScope.launchSetState {
             copy(startDate = startDate)
         }
     }
 
     fun pickTimeAsleep(timeAsleep: LocalTime) {
-        setState {
+        viewModelScope.launchSetState {
             copy(startTime = timeAsleep)
         }
     }
 
     fun pickTimeAwake(timeAwake: LocalTime) {
-        setState {
+        viewModelScope.launchSetState {
             copy(endTime = timeAwake)
-        }
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(state: AddSleepState): AddSleepViewModel
-    }
-
-    companion object : MvRxViewModelFactory<AddSleepViewModel, AddSleepState> {
-        override fun create(viewModelContext: ViewModelContext, state: AddSleepState): AddSleepViewModel? {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<AddSleepFragment>()
-            return fragment.viewModelFactory.create(state)
         }
     }
 

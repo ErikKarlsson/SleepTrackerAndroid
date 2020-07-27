@@ -1,6 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.features.add
 
-import com.airbnb.mvrx.MvRxState
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -10,7 +9,7 @@ data class AddSleepState(val startDate: LocalDate = LocalDate.MIN,
                          val startTime: LocalTime = LocalTime.MIN,
                          val endTime: LocalTime = LocalTime.MIN,
                          val zoneOffset: ZoneOffset = ZoneOffset.MIN,
-                         val isSaveSuccess: Boolean = false) : MvRxState {
+                         val isSaveSuccess: Boolean = false) {
 
     val hoursSlept: Float
         get() = sleep.hours

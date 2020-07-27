@@ -1,6 +1,5 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -8,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
-import dagger.android.support.AndroidSupportInjection
+import androidx.lifecycle.observe
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
@@ -20,58 +19,51 @@ import net.erikkarlsson.simplesleeptracker.features.statistics.databinding.Fragm
 import ru.ldralighieri.corbind.widget.itemSelections
 import javax.inject.Inject
 
-class StatisticsFragment : BaseMvRxFragment() {
-
-    @Inject
-    lateinit var ctx: Context
+@AndroidEntryPoint
+class StatisticsFragment : Fragment() {
 
     @Inject
     lateinit var dateTimeProvider: DateTimeProvider
 
-    @Inject
-    lateinit var viewModelFactory: StatisticsViewModel.Factory
-
     lateinit var statisticsAdapter: StatisticsAdapter
 
-    private val viewModel: StatisticsViewModel by fragmentViewModel()
+    private val viewModel: StatisticsViewModel by viewModels()
 
     private var prevState: StatisticsState = StatisticsState.empty()
 
     private lateinit var binding: FragmentStatisticsBinding
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val spinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
+        val spinnerAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.statistic_filter_array, android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = spinnerAdapter
         binding.spinner.setTag(0) // Avoid triggering selection on initialization.
         binding.spinner.isEnabled = false
 
-        val compareSpinnerAdapter = ArrayAdapter.createFromResource(ctx, R.array.statistic_compare_array, android.R.layout.simple_spinner_item)
+        val compareSpinnerAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.statistic_compare_array, android.R.layout.simple_spinner_item)
         compareSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.compareSpinner.adapter = compareSpinnerAdapter
         binding.compareSpinner.setTag(0) // Avoid triggering selection on initialization.
 
-        statisticsAdapter = StatisticsAdapter(requireFragmentManager(), dateTimeProvider)
+        statisticsAdapter = StatisticsAdapter(parentFragmentManager, dateTimeProvider)
 
         binding.viewPager.adapter = statisticsAdapter
 
         binding.slidingTabLayout.setViewPager(binding.viewPager)
+
+        viewModel.liveData.observe(viewLifecycleOwner, ::render)
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
+    fun render(state: StatisticsState) {
         val hasFilterChanged = state.filter != prevState.filter
 
         val selectedItem = if (hasFilterChanged) {

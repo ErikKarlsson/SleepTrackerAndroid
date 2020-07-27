@@ -15,15 +15,18 @@ dependencies {
 
     // Fragment
     api Deps.fragment
+    api Deps.fragment_ktx
 
     // Lifecycle
     api Deps.lifecycle_extensions
     api Deps.lifecycle_viewmodel
+    api Deps.lifecycle_livedata
     api Deps.lifecycle_runtime
     kapt Deps.lifecycle_compiler
 
     // Dagger
-    implementation Deps.dagger_runtime
+    api Deps.dagger_hilt
+    api Deps.hilt_viewmodel
 
     // Jsr 305
     implementation Deps.jsr305
@@ -34,9 +37,6 @@ dependencies {
 
     // Guava
     implementation Deps.guava
-
-    // MvRx
-    implementation Deps.mvrx
 
     // Timber
     implementation Deps.timber

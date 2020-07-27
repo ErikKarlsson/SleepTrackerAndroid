@@ -2,6 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+kapt {
+    correctErrorTypes = true
+}
+
+apply plugin: 'dagger.hilt.android.plugin'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -9,19 +15,17 @@ dependencies {
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
 
-    // Dagger
-    implementation Deps.dagger_runtime
-    implementation Deps.dagger_android
-    implementation Deps.dagger_android_support
+    implementation Deps.dagger_hilt
     implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_compiler
-    kapt Deps.dagger_android_support_compiler
     kapt Deps.dagger_assisted_injection_processor
+    kapt Deps.dagger_hilt_compiler
 
-    // Fast CSV
+    implementation Deps.hilt_work
+    kapt Deps.hilt_viewmodel
+    kapt Deps.hilt_compiler
+
     implementation Deps.fast_csv
 
-    // Google Drive REST API
     implementation Deps.google_http_client_gson
     implementation(Deps.google_api_client_android) {
         exclude group: 'org.apache.httpcomponents'
@@ -30,18 +34,14 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Play Services
     implementation Deps.play_services_auth
     implementation Deps.play_services_oss_licenses
 
-    // Timber
     implementation Deps.timber
 
-    // Work Manager
     implementation Deps.work_manager_runtime
 
     androidTestImplementation Deps.work_manager_testing

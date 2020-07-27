@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="net.erikkarlsson.simplesleeptracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -50,12 +51,11 @@
                 android:value="net.erikkarlsson.simplesleeptracker.MainActivity" />
         </activity>
 
-        <!-- Disable default provider - https://stackoverflow.com/a/55875560/6733544 -->
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
-            android:enabled="false"
-            android:exported="false" />
+            tools:node="remove" />
+
     </application>
 
 </manifest>

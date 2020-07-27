@@ -11,7 +11,8 @@ import javax.inject.Named
 
 class UpdateTimeAwakeTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
-        @Named("backupScheduler") private val backupScheduler: TaskScheduler) : CoroutineTask<UpdateTimeAwakeTask.Params> {
+        @Named("backupScheduler") private val backupScheduler: TaskScheduler
+) : CoroutineTask<UpdateTimeAwakeTask.Params> {
 
     override suspend fun completable(params: Params) {
         val sleep = sleepRepository.getSleepFlow(params.sleepId).first()

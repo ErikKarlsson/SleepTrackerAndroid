@@ -7,7 +7,6 @@ dependencies {
     implementation project(':libraries:domain')
     implementation project(':libraries:core')
     implementation Deps.guava
-    implementation Deps.dagger_runtime
     implementation Deps.rxandroid
     implementation Deps.rxjava2
     implementation Deps.junit

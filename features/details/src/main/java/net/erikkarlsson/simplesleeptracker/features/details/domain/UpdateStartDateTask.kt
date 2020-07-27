@@ -11,7 +11,8 @@ import javax.inject.Named
 
 class UpdateStartDateTask @Inject constructor(
         private val sleepRepository: SleepDataSource,
-        @Named("backupScheduler") private val backupScheduler: TaskScheduler)
+        @Named("backupScheduler") private val backupScheduler: TaskScheduler
+)
     : CoroutineTask<UpdateStartDateTask.Params> {
 
     override suspend fun completable(params: Params) {
