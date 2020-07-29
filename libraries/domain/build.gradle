@@ -1,6 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    correctErrorTypes = true
+}
+
+apply plugin: 'dagger.hilt.android.plugin'
 
 androidExtensions {
     features = ["parcelize"]
@@ -12,20 +19,18 @@ dependencies {
 
     implementation project(':libraries:date-util')
 
-    // Coroutines
     implementation Deps.coroutines_core
     implementation Deps.coroutines_android
 
-    // Dagger
-    implementation Deps.dagger_hilt
+    implementation( Deps.dagger_hilt)
+    kapt Deps.dagger_hilt_compiler
 
-    // Guava
+    kapt Deps.hilt_compiler
+
     implementation Deps.guava
 
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Paging
     implementation Deps.paging
 }

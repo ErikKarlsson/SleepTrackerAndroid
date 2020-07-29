@@ -7,7 +7,6 @@ dependencies {
     implementation project(':libraries:domain')
     testImplementation project(':libraries:test-util')
 
-    // Dependencies for local unit tests
     testImplementation Deps.junit
     testImplementation Deps.hamcrest
     testImplementation Deps.mockito_kotlin
@@ -16,7 +15,6 @@ dependencies {
     testImplementation Deps.coroutines_android
     testImplementation Deps.coroutines_core
 
-    // ThreeTen Backport
     implementation Deps.threeten_backport_android
     testImplementation Deps.threeten_backport
 }

@@ -29,4 +29,7 @@ dependencies {
     testImplementation Deps.mockito_inline
 
     implementation Deps.timber
+
+    implementation Deps.threeten_backport_android
+    testImplementation Deps.threeten_backport
 }

@@ -1,29 +1,42 @@
 package net.erikkarlsson.simplesleeptracker
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.rules.activityScenarioRule
 import com.facebook.testing.screenshot.Screenshot
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import net.erikkarlsson.simplesleeptracker.di.module.DateTimeModule
 import net.erikkarlsson.simplesleeptracker.robot.MainRobot
-import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
+import net.erikkarlsson.simplesleeptracker.util.TestUtil
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
-import org.junit.rules.TestRule
-import org.junit.runner.RunWith
+import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
+@UninstallModules(DateTimeModule::class)
+@HiltAndroidTest
 class StatisticsTest {
 
-    val main = ActivityTestRule(MainActivity::class.java, false, false)
-    val component = TestComponentRule()
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    var activityRule = activityScenarioRule<MainActivity>()
+
     val mainRobot = MainRobot()
 
-    @get:Rule
-    var chain: TestRule = RuleChain.outerRule(component).around(main)
+    @Before
+    fun init() {
+        hiltRule.inject()
+        testUtil.initTest()
+    }
+
+    @Inject
+    lateinit var testUtil: TestUtil
 
     @Test
     fun testCompareStatisticsBetweenYears() {
-        with(component) {
+        with(testUtil) {
             // Given current time
             mockDateTimeNow("2018-03-14T22:30:00+01:00")
 
@@ -62,12 +75,14 @@ class StatisticsTest {
             insertSleep(fromDate = "2018-03-17T22:37:00+01:00", toDate = "2018-03-18T06:20:00+01:00")
         }
 
-        val activity = main.launchActivity(null)
+        val scenario = activityRule.scenario
 
         val statisticsRobot = mainRobot.clickStatisticsTab()
 
         statisticsRobot.selectYearFilter()
 
-        Screenshot.snapActivity(activity).record()
+        scenario.onActivity { activity ->
+            Screenshot.snapActivity(activity).setName("testCompareStatisticsBetweenYears").record()
+        }
     }
 }

@@ -6,15 +6,12 @@ dependencies {
 
     testImplementation project(':libraries:test-util')
 
-    // ThreeTen Backport
     api Deps.threeten_backport_android
     testApi Deps.threeten_backport
     
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Dependencies for local unit tests
     testImplementation Deps.junit
     testImplementation Deps.hamcrest
     testImplementation Deps.mockito_kotlin

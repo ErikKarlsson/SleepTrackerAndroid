@@ -1,10 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.features.statistics.item
 
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.withState
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.flow.flowOf
 import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import net.erikkarlsson.simplesleeptracker.domain.entity.DateRange
@@ -13,9 +10,9 @@ import net.erikkarlsson.simplesleeptracker.domain.entity.Statistics
 import net.erikkarlsson.simplesleeptracker.features.statistics.StatisticsFilter
 import net.erikkarlsson.simplesleeptracker.features.statistics.domain.StatisticComparisonTask
 import net.erikkarlsson.simplesleeptracker.features.statistics.domain.StatisticOverallTask
-import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import net.erikkarlsson.simplesleeptracker.testutil.TestCoroutineRule
 import net.erikkarlsson.simplesleeptracker.testutil.mockStatistics
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.threeten.bp.LocalDate
@@ -25,17 +22,13 @@ class StatisticsItemViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    @get:Rule
-    var testSchedulerRule = RxImmediateSchedulerRule()
-
     val statisticsDataSource: StatisticsDataSource = mock()
 
     val statisticOverallTask = StatisticOverallTask(statisticsDataSource)
     val statisticComparisonTask = StatisticComparisonTask(statisticsDataSource)
 
     private fun createViewModel(): StatisticsItemViewModel {
-        return StatisticsItemViewModel(StatisticsItemState(),
-                statisticOverallTask, statisticComparisonTask)
+        return StatisticsItemViewModel(statisticOverallTask, statisticComparisonTask)
     }
 
     @Test
@@ -50,9 +43,7 @@ class StatisticsItemViewModelTest {
 
         viewModel.loadStatistics(dateRangePair, StatisticsFilter.OVERALL)
 
-        withState(viewModel) {
-            assertEquals(it, StatisticsItemState(Success(expectedStatisticComparison)))
-        }
+        assertEquals(viewModel.currentState(), StatisticsItemState(expectedStatisticComparison))
     }
 
     @Test
@@ -76,9 +67,7 @@ class StatisticsItemViewModelTest {
 
         viewModel.loadStatistics(dateRangePair, StatisticsFilter.WEEK)
 
-        withState(viewModel) {
-            assertEquals(it, StatisticsItemState(Success(expectedStatisticComparison)))
-        }
+        assertEquals(viewModel.currentState(), StatisticsItemState(expectedStatisticComparison))
     }
 
 }

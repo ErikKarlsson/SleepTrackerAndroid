@@ -54,7 +54,7 @@ Executing a single test
 ### Espresso tests
 
 ```
-./gradlew connectedAndroidTest
+./gradlew connectedDevDebugAndroidTest
 ```
 
 ## Static analysis

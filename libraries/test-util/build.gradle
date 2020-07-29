@@ -7,8 +7,6 @@ dependencies {
     implementation project(':libraries:domain')
     implementation project(':libraries:core')
     implementation Deps.guava
-    implementation Deps.rxandroid
-    implementation Deps.rxjava2
     implementation Deps.junit
     implementation Deps.coroutines_test
 }

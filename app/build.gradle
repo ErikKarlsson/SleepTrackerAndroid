@@ -28,12 +28,6 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
     }
 
     signingConfigs {
@@ -155,8 +149,8 @@ dependencies {
     androidTestImplementation Deps.espresso_core
     androidTestImplementation Deps.espresso_contrib
     androidTestImplementation Deps.espresso_intents
-    androidTestImplementation Deps.daggermock_android
-    androidTestImplementation Deps.daggermock_kotlin
+    androidTestImplementation Deps.core_test_ktx
+    androidTestImplementation Deps.junit_ktx
 
     implementation Deps.crashlytics
 
@@ -166,6 +160,9 @@ dependencies {
     implementation Deps.hilt_work
     implementation Deps.dagger_hilt
     kapt Deps.dagger_hilt_compiler
+
+    androidTestImplementation Deps.dagger_hilt_testing
+    kaptAndroidTest Deps.dagger_hilt_testing_compiler
 
     implementation Deps.google_http_client_gson
     implementation(Deps.google_api_client_android) {

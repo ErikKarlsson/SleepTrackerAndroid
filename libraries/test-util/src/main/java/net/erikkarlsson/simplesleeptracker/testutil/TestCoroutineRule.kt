@@ -7,6 +7,7 @@ import net.erikkarlsson.simplesleeptracker.core.DispatcherProvider
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import kotlin.jvm.Throws
 
 class TestCoroutineRule : TestRule {
     private val testCoroutineDispatcher = TestCoroutineDispatcher()

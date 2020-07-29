@@ -5,12 +5,12 @@ import android.content.Context
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
 import com.facebook.testing.screenshot.ScreenshotRunner
-import net.erikkarlsson.simplesleeptracker.TestApp
+import dagger.hilt.android.testing.HiltTestApplication
 
 class TestRunner : AndroidJUnitRunner() {
-    @Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
-    override fun newApplication(cl: ClassLoader, className: String, context: Context): Application {
-        return super.newApplication(cl, TestApp::class.java.name, context)
+
+    override fun newApplication(cl: ClassLoader?, className: String?, context: Context?): Application {
+        return super.newApplication(cl, HiltTestApplication::class.java.name, context)
     }
 
     override fun onCreate(arguments: Bundle?) {

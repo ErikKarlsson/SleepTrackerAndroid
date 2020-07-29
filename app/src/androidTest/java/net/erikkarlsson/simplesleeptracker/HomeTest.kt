@@ -1,39 +1,54 @@
 package net.erikkarlsson.simplesleeptracker
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.rules.activityScenarioRule
 import com.facebook.testing.screenshot.Screenshot
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import net.erikkarlsson.simplesleeptracker.di.module.DateTimeModule
 import net.erikkarlsson.simplesleeptracker.robot.HomeRobot
 import net.erikkarlsson.simplesleeptracker.robot.MainRobot
-import net.erikkarlsson.simplesleeptracker.util.TestComponentRule
+import net.erikkarlsson.simplesleeptracker.util.TestUtil
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
-import org.junit.rules.TestRule
-import org.junit.runner.RunWith
+import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
+@UninstallModules(DateTimeModule::class)
+@HiltAndroidTest
 class HomeTest {
 
-    val main = ActivityTestRule(MainActivity::class.java, false, false)
-    val component = TestComponentRule()
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    var activityRule = activityScenarioRule<MainActivity>()
+
+    @Inject
+    lateinit var testUtil: TestUtil
+
     val mainRobot = MainRobot()
     val homeRobot = HomeRobot()
 
-    @get:Rule
-    var chain: TestRule = RuleChain.outerRule(component).around(main)
+    @Before
+    fun init() {
+        hiltRule.inject()
+        testUtil.initTest()
+    }
 
     @Test
     fun testHomeTab() {
-        val activity = main.launchActivity(null)
-        Screenshot.snapActivity(activity).record()
+        val scenario = activityRule.scenario
+        scenario.onActivity { activity ->
+            Screenshot.snapActivity(activity).setName("testHomeTab").record()
+        }
     }
 
     @Test
     fun testToggleSleepNavigateToDetailsFlow() {
-        main.launchActivity(null)
+        val scenario = activityRule.scenario
 
-        with(component) {
+        with(testUtil) {
             // Given is evening
             mockDateTimeNow("2018-03-17T22:30:00+01:00")
 
@@ -50,6 +65,8 @@ class HomeTest {
         diaryRobot.clickItem(0) // When clicking newly added sleep item
                 .isShowingDetailsScreen() // Then should navigate to details screen
 
-        Screenshot.snapActivity(component.getCurrentActivity()).record()
+        scenario.onActivity { activity ->
+            Screenshot.snapActivity(activity).setName("testToggleSleepNavigateToDetailsFlow").record()
+        }
     }
 }

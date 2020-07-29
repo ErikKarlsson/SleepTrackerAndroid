@@ -9,7 +9,6 @@ import net.erikkarlsson.simplesleeptracker.domain.task.CoroutineTask
 import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.testutil.MockDateTimeProvider
-import net.erikkarlsson.simplesleeptracker.testutil.RxImmediateSchedulerRule
 import net.erikkarlsson.simplesleeptracker.testutil.TestCoroutineRule
 import org.junit.Rule
 import org.junit.Test
@@ -18,9 +17,6 @@ class ToggleSleepTaskTest {
 
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
-
-    @get:Rule
-    var testSchedulerRule = RxImmediateSchedulerRule()
 
     val dateTimeProvider = MockDateTimeProvider()
     val sleepRepository: SleepDataSource = mock()

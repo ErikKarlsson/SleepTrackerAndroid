@@ -54,4 +54,7 @@ dependencies {
 
     implementation Deps.glide
     kapt Deps.glide_compiler
+
+    implementation Deps.threeten_backport_android
+    testImplementation Deps.threeten_backport
 }

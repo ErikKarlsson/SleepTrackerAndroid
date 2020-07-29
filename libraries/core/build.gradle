@@ -7,37 +7,29 @@ dependencies {
 
     api project(':libraries:date-util')
 
-    // Coroutines
     api Deps.coroutines_core
     api Deps.coroutines_android
     api Deps.corbind
     testApi Deps.coroutines_test
 
-    // Fragment
     api Deps.fragment
     api Deps.fragment_ktx
 
-    // Lifecycle
     api Deps.lifecycle_extensions
     api Deps.lifecycle_viewmodel
     api Deps.lifecycle_livedata
     api Deps.lifecycle_runtime
     kapt Deps.lifecycle_compiler
 
-    // Dagger
     api Deps.dagger_hilt
     api Deps.hilt_viewmodel
 
-    // Jsr 305
     implementation Deps.jsr305
 
-    // Kotlin
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    // Guava
     implementation Deps.guava
 
-    // Timber
     implementation Deps.timber
 }
