@@ -23,7 +23,7 @@ dependencies {
     kapt Deps.dagger_assisted_injection_processor
     kapt Deps.dagger_hilt_compiler
 
-    kapt Deps.hilt_viewmodel
+    implementation Deps.hilt_viewmodel
     kapt Deps.hilt_compiler
 
     testImplementation Deps.junit

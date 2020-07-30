@@ -18,7 +18,7 @@ dependencies {
     implementation Deps.dagger_hilt
     kapt Deps.dagger_hilt_compiler
 
-    kapt Deps.hilt_viewmodel
+    implementation Deps.hilt_viewmodel
     kapt Deps.hilt_compiler
 
     implementation Deps.kotlin_stdlib

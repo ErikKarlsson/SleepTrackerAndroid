@@ -92,6 +92,9 @@ subprojects {
 
                 kotlinOptions {
                     jvmTarget = Config.javaVersion
+                    freeCompilerArgs += [
+                            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                            "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"]
                 }
 
                 buildFeatures {

@@ -65,7 +65,6 @@ class HomeViewModelTest {
      */
 
     @Test
-    @Ignore("Test fails in terminal but succeeds in IDE")
     fun `clicking toggle sleep button toggles sleep`() = testCoroutineRule.runBlockingTest {
         given(sleepDataSource.getCurrentFlow()).willReturn(flowOf(Sleep.empty()))
         given(sleepDataSource.getCurrent()).willReturn(Sleep.empty())
