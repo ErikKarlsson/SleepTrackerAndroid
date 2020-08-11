@@ -7,8 +7,7 @@ Sleep Tracker is an app which attempts to use the latest cutting edge libraries 
 * Entirely written in [Kotlin](https://kotlinlang.org/)
 * Uses [Kotlin Coroutines](https://kotlinlang.org/docs/reference/coroutines/coroutines-guide.html) 
 * Uses many of the [Architecture Components](https://developer.android.com/topic/libraries/architecture/): Room, Paging, WorkManager, LiveData, Lifecycle and Navigation
-* Uses [dagger-android](https://google.github.io/dagger/android.html) for dependency injection
-* Uses [MvRx](https://github.com/airbnb/MvRx) Android framework
+* Uses [Dagger Hilt](https://dagger.dev/hilt/) for dependency injection
 * Modularized - feature and library modules
 
 ## Running the tests
