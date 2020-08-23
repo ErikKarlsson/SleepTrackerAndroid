@@ -30,6 +30,7 @@ dependencies {
     testImplementation Deps.mockito_kotlin
     testImplementation Deps.arch_core_testing
     testImplementation Deps.mockito_inline
+    testImplementation Deps.threeten_backport
 
     implementation Deps.mpandroidchart
 

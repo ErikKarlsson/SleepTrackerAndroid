@@ -9,5 +9,4 @@ dependencies {
     implementation Deps.guava
     implementation Deps.junit
     implementation Deps.coroutines_test
-    implementation Deps.threeten_backport
 }
