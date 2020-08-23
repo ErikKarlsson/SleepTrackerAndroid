@@ -14,7 +14,7 @@ object Versions {
     val atsl_runner = "1.2.0"
     val bubble_layout = "1.2.0"
     val cardview = "1.0.0"
-    val constraint_layout = "1.1.3"
+    val constraint_layout = "2.0.0"
     val corbind = "1.3.1"
     val core_ktx = "1.2.0"
     val core_test_ktx = "1.2.0"
