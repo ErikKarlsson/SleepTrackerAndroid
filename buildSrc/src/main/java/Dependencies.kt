@@ -44,7 +44,7 @@ object Versions {
     val junit = "4.13"
     val junit_ext = "1.1.1"
     val karumi_shot_plugin = "4.0.0"
-    val kotlin = "1.4.0-rc"
+    val kotlin = "1.4.0"
     val leakcanary = "2.2"
     val lifecycle = "2.2.0"
     val material = "1.0.0"
