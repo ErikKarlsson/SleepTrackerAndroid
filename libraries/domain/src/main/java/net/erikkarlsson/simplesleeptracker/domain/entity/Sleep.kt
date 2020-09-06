@@ -2,6 +2,7 @@ package net.erikkarlsson.simplesleeptracker.domain.entity
 
 import net.erikkarlsson.simplesleeptracker.dateutil.hoursTo
 import net.erikkarlsson.simplesleeptracker.dateutil.midnightOffsetInSeconds
+import net.erikkarlsson.simplesleeptracker.dateutil.offsetDateTime
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
@@ -45,6 +46,9 @@ data class Sleep(val id: Int? = null,
 
             return Sleep(id = id, fromDate = fromDate, toDate = toDate)
         }
+
+        fun from(fromDate: String, toDate: String) =
+                Sleep(fromDate = fromDate.offsetDateTime, toDate = toDate.offsetDateTime)
     }
 
 }

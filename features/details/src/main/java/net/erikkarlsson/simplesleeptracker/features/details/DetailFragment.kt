@@ -3,135 +3,75 @@ package net.erikkarlsson.simplesleeptracker.features.details
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
-import net.erikkarlsson.simplesleeptracker.core.util.*
-import net.erikkarlsson.simplesleeptracker.domain.SleepDataSource
-import net.erikkarlsson.simplesleeptracker.features.details.databinding.FragmentDetailsBinding
+import net.erikkarlsson.simplesleeptracker.core.util.viewModelProviderFactoryOf
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.OffsetDateTime
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     @Inject
-    @JvmField
-    internal var vmFactory: DetailsViewModel.Factory? = null
+    internal lateinit var vmFactory: DetailsViewModel.Factory
 
-    private var _state = DetailsState.empty()
+    private val pendingActions = Channel<DetailsAction>(Channel.BUFFERED)
 
     var timePickerDialog: TimePickerDialog? = null
     var datePickDialog: DatePickerDialog? = null
 
-    @Inject
-    lateinit var sleepRepository: SleepDataSource
-
     private val viewModel: DetailsViewModel by viewModels {
         viewModelProviderFactoryOf {
-            vmFactory!!.create(requireArguments().getInt(ARG_KEY_ID))
+            vmFactory.create(requireArguments().getInt(ARG_KEY_ID))
         }
-    }
-
-    private lateinit var binding: FragmentDetailsBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+        return ComposeView(requireContext()).apply {
+            setContent {
+                val viewState by viewModel.liveData.observeAsState()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val activity = requireActivity() as AppCompatActivity
-
-        activity.setSupportActionBar(binding.toolbar)
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val sleep = sleepRepository.getCurrent()
-            Timber.d("sleep %s", sleep.toString())
+                if (viewState != null) {
+                    Details(viewState!!) {
+                        pendingActions.offer(it)
+                    }
+                }
+            }
         }
-
-        viewModel.liveData.observe(viewLifecycleOwner, ::render)
-    }
-
-    fun render(state: DetailsState) {
-        _state = state
-
-        val sleep = state.sleep
-
-        if (sleep != null) {
-            val fromDateString = sleep.fromDate.formatDateDisplayName2
-            val toDateString = sleep.toDate?.formatDateDisplayName2
-            binding.toolbar.setTitle(toDateString)
-            binding.startDateText.text = fromDateString
-            binding.timeAsleepText.text = sleep.fromDate.formatHHMM
-            binding.timeAwakeText.text = sleep.toDate?.formatHHMM
-            binding.sleptHoursText.text = String.format("%s %s",
-                    getString(R.string.you_have_slept_for),
-                    state.hoursSlept.formatHoursMinutes)
-        }
-
-        if (state.isDeleted) {
-            requireActivity().finish()
-        }
-    }
-
-    private fun showConfirmDeleteDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage(getString(R.string.confirm_delete_sleep))
-        builder.setPositiveButton(getString(R.string.delete)) { _, _ ->
-            onDeleteConfirmClick()
-        }
-
-        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val dialog = builder.create()
-        dialog.show()
-    }
-
-    private fun onDeleteConfirmClick() {
-        viewModel.deleteClick()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.detail_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.delete_sleep) {
-            showConfirmDeleteDialog()
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
         super.onStart()
-        binding.startDateText.clicksDebounce { onStartDateClick() }
-        binding.timeAsleepText.clicksDebounce { onTimeAsleepClick() }
-        binding.timeAwakeText.clicksDebounce { onTimeAwakeClick() }
+
+        viewModel.liveData.observe(this, ::render)
+
+        lifecycleScope.launch {
+            pendingActions.consumeAsFlow().collect { action ->
+                when (action) {
+                    is PickStartDateAction -> onStartDateClick(action.date)
+                    is PickTimeAsleepAction -> onTimeAsleepClick(action.time)
+                    is PickTimeAwakeAction -> onTimeAwakeClick(action.time)
+                    DeleteAction -> viewModel.deleteClick()
+                    NavigateUp -> requireActivity().finish()
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -140,26 +80,29 @@ class DetailFragment : Fragment() {
         timePickerDialog?.dismiss()
     }
 
-    private fun onStartDateClick() {
-        pickDate(_state.sleep!!.fromDate,
-                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    onStartDateSet(year, month, dayOfMonth)
-                })
+    fun render(state: DetailsState) {
+        if (state.isDeleted) {
+            requireActivity().finish()
+        }
     }
 
-    private fun onTimeAsleepClick() {
-        pickTime(_state.sleep!!.fromDate.toLocalTime(),
-                TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                    onTimeAsleepSet(hour, minute)
-                })
+    private fun onStartDateClick(fromDate: OffsetDateTime) {
+        pickDate(fromDate) { _, year, month, dayOfMonth ->
+            onStartDateSet(year, month, dayOfMonth)
+        }
     }
 
-    private fun onTimeAwakeClick() {
-        _state.sleep!!.toDate?.let {
-            pickTime(it.toLocalTime(),
-                    TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                        onTimeAwakeSet(hour, minute)
-                    })
+    private fun onTimeAsleepClick(time: LocalTime) {
+        pickTime(time) { _, hour, minute ->
+            onTimeAsleepSet(hour, minute)
+        }
+    }
+
+    private fun onTimeAwakeClick(time: LocalTime?) {
+        time?.let { localTime ->
+            pickTime(localTime) { _, hour, minute ->
+                onTimeAwakeSet(hour, minute)
+            }
         }
     }
 

@@ -10,6 +10,22 @@ kapt {
 
 apply plugin: 'dagger.hilt.android.plugin'
 
+android {
+    composeOptions {
+        kotlinCompilerVersion Versions.kotlin
+        kotlinCompilerExtensionVersion Versions.compose
+    }
+
+    kotlinOptions {
+        useIR = true
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+}
+
 androidExtensions {
     features = ["parcelize"]
     experimental = true
@@ -48,4 +64,12 @@ dependencies {
     implementation Deps.support_constraint_layout
     implementation Deps.support_v4
     implementation Deps.support_vector_drawable
+
+    implementation Deps.compose_ui
+    implementation Deps.compose_ui_tooling
+    implementation Deps.compose_foundation
+    implementation Deps.compose_material
+    implementation Deps.compose_material_icons
+    implementation Deps.compose_material_icons_extended
+    implementation Deps.compose_livedata
 }
