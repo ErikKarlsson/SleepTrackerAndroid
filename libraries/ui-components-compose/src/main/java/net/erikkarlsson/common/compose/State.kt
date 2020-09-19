@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.erikkarlsson.simplesleeptracker.features.details.common
+package net.erikkarlsson.common.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf

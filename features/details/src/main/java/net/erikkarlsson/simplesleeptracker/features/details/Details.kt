@@ -12,8 +12,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -24,7 +22,9 @@ import net.erikkarlsson.simplesleeptracker.core.util.formatDateDisplayName2
 import net.erikkarlsson.simplesleeptracker.core.util.formatHHMM
 import net.erikkarlsson.simplesleeptracker.core.util.formatHoursMinutes
 import net.erikkarlsson.simplesleeptracker.domain.entity.Sleep
-import net.erikkarlsson.simplesleeptracker.features.details.common.rememberMutableState
+import net.erikkarlsson.common.compose.rememberMutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun Details(state: DetailsState,

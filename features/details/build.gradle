@@ -37,6 +37,7 @@ dependencies {
     implementation project(':libraries:core')
     implementation project(':libraries:domain')
     implementation project(':libraries:ui-components')
+    implementation project(':libraries:ui-components-compose')
     implementation project(':libraries:navigation')
 
     implementation Deps.dagger_hilt
@@ -51,7 +52,6 @@ dependencies {
     implementation Deps.navigation_ui
     androidTestImplementation Deps.navigation_testing
 
-    implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
     implementation Deps.coroutines_core
