@@ -8,9 +8,5 @@ data class DetailsState(
         val isDeleted: Boolean = false
 ) {
     val hoursSlept: Float get() = sleep?.hours ?: 0f
-
-    companion object {
-        fun empty() = DetailsState(0, null, false)
-    }
 }
 
