@@ -7,7 +7,6 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.migration.DisableInstallInCheck
 
 @AssistedModule
-@Module(includes = [AssistedInject_DetailsAssistedModule::class])
-@DisableInstallInCheck
+@Module
 @InstallIn(ApplicationComponent::class)
 abstract class DetailsAssistedModule

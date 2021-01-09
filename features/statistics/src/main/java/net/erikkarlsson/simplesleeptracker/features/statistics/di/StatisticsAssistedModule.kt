@@ -7,7 +7,6 @@ import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.migration.DisableInstallInCheck
 
 @AssistedModule
-@Module(includes = [AssistedInject_StatisticsAssistedModule::class])
-@DisableInstallInCheck
+@Module
 @InstallIn(FragmentComponent::class)
 abstract class StatisticsAssistedModule

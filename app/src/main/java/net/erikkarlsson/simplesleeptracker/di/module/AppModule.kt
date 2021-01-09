@@ -25,8 +25,7 @@ import javax.inject.Singleton
  * to do it via [DisableInstallInCheck], along with the `disableModulesHaveInstallInCheck` compiler option declared in the module's build.gradle.
  */
 @AssistedModule
-@Module(includes = [AssistedInject_AppModule::class])
-@DisableInstallInCheck
+@Module
 @InstallIn(ApplicationComponent::class)
 abstract class AppModule {
 
