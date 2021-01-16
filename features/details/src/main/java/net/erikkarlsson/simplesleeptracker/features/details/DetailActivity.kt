@@ -11,7 +11,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
-            val sleepId = DetailActivityArgs.fromBundle(intent.extras).sleepId
+            val sleepId = DetailActivityArgs.fromBundle(checkNotNull(intent.extras)).sleepId
 
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container1, DetailFragment.newInstance(sleepId))
