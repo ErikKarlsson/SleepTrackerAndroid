@@ -97,8 +97,8 @@ class StatisticsItemFragment : Fragment() {
     }
 
     private fun loadStatistics() {
-        val dateRangeFirst = arguments?.getParcelable(ARGS_DATE_RANGE_FIRST) as DateRange
-        val dateRangeSecond = arguments?.getParcelable(ARGS_DATE_RANGE_SECOND) as DateRange
+        val dateRangeFirst = checkNotNull(arguments?.getParcelable(ARGS_DATE_RANGE_FIRST)) as DateRange
+        val dateRangeSecond = checkNotNull(arguments?.getParcelable(ARGS_DATE_RANGE_SECOND)) as DateRange
         val pair = Pair(dateRangeFirst, dateRangeSecond)
         val filter = arguments?.getSerializable(ARGS_STATISTICS_FILTER) as StatisticsFilter
 
