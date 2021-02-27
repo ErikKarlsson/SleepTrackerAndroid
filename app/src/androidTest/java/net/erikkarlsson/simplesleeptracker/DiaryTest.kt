@@ -23,8 +23,6 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
-// TODO (erikkarlsson): Module uninstall across all tests currently not supported by Hilt, duplicate it for now.
-@UninstallModules(DateTimeModule::class)
 @HiltAndroidTest
 class DiaryTest {
 

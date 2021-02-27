@@ -13,7 +13,6 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
-@UninstallModules(DateTimeModule::class)
 @HiltAndroidTest
 class StatisticsTest {
 
