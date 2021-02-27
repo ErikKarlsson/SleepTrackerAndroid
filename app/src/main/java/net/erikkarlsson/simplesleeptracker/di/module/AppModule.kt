@@ -2,13 +2,12 @@ package net.erikkarlsson.simplesleeptracker.di.module
 
 import android.content.Context
 import android.content.res.Resources
-import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.hilt.migration.DisableInstallInCheck
 import net.erikkarlsson.simplesleeptracker.AndroidAppLifecycle
 import net.erikkarlsson.simplesleeptracker.core.DefaultDispatcherProvider
@@ -24,9 +23,8 @@ import javax.inject.Singleton
  * However, since the included [AssistedInject_AppModule] is auto-generated, for now we need to disable this check. Hilt allows us
  * to do it via [DisableInstallInCheck], along with the `disableModulesHaveInstallInCheck` compiler option declared in the module's build.gradle.
  */
-@AssistedModule
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class AppModule {
 
     @Binds

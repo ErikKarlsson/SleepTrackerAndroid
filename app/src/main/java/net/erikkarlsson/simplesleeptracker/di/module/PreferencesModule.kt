@@ -8,14 +8,14 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import net.erikkarlsson.simplesleeptracker.data.preferences.PreferencesRepository
 import net.erikkarlsson.simplesleeptracker.domain.PreferencesDataSource
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class PreferencesModule {
 
     @Binds

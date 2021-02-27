@@ -3,7 +3,7 @@ package net.erikkarlsson.simplesleeptracker.features.backup.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileReader
 import net.erikkarlsson.simplesleeptracker.domain.BackupCsvFileWriter
 import net.erikkarlsson.simplesleeptracker.domain.FileBackupDataSource
@@ -17,7 +17,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class BackupModule {
 
     @Binds

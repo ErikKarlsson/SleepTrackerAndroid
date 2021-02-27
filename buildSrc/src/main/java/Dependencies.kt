@@ -8,7 +8,7 @@ object Config {
 }
 
 object Versions {
-    val android_gradle_plugin = "7.0.0-alpha04"
+    val android_gradle_plugin = "7.0.0-alpha08"
     val arch_core = "2.1.0"
     val atsl_rules = "1.2.0"
     val atsl_runner = "1.2.0"
@@ -21,9 +21,8 @@ object Versions {
     val core_test_ktx = "1.2.0"
     val coroutines = "1.3.9"
     val crashlytics = "17.0.0-beta04"
-    val hilt = "1.0.0-alpha02"
-    val dagger_hilt = "2.30.1-alpha"
-    val dagger_assisted_injection = "0.6.0"
+    val hilt = "1.0.0-alpha03"
+    val dagger_hilt = "2.33-beta"
     val dexmaker = "2.25.1"
     val espresso = "3.2.0"
     val facebook_screenshot_plugin = "0.13.0"
@@ -92,8 +91,6 @@ object Deps {
     val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     val crashlytics = "com.google.firebase:firebase-crashlytics:${Versions.crashlytics}"
-    val dagger_assisted_injection_annotations = "com.squareup.inject:assisted-inject-annotations-dagger2:${Versions.dagger_assisted_injection}"
-    val dagger_assisted_injection_processor = "com.squareup.inject:assisted-inject-processor-dagger2:${Versions.dagger_assisted_injection}"
     val dagger_hilt = "com.google.dagger:hilt-android:${Versions.dagger_hilt}"
     val dagger_hilt_compiler = "com.google.dagger:hilt-android-compiler:${Versions.dagger_hilt}"
     val dagger_hilt_testing = "com.google.dagger:hilt-android-testing:${Versions.dagger_hilt}"

@@ -154,9 +154,6 @@ dependencies {
 
     implementation Deps.crashlytics
 
-    implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_assisted_injection_processor
-
     implementation Deps.hilt_work
     implementation Deps.dagger_hilt
     kapt Deps.dagger_hilt_compiler

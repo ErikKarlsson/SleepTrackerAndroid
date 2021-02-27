@@ -18,9 +18,6 @@ dependencies {
     implementation project(':libraries:ui-components')
     testImplementation project(':libraries:test-util')
 
-    implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_assisted_injection_processor
-
     implementation Deps.dagger_hilt
     kapt Deps.dagger_hilt_compiler
 

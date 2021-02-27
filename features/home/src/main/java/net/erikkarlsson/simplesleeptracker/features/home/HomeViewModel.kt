@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.features.home
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
@@ -21,9 +21,11 @@ import net.erikkarlsson.simplesleeptracker.domain.task.TaskScheduler
 import net.erikkarlsson.simplesleeptracker.domain.task.ToggleSleepTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.GetHomeTask
 import net.erikkarlsson.simplesleeptracker.features.home.domain.LogoutTask
+import javax.inject.Inject
 import javax.inject.Named
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
         getHomeTask: GetHomeTask,
         private val toggleSleepTask: ToggleSleepTask,
         private val logoutTask: LogoutTask,

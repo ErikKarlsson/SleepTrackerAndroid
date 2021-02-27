@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import net.erikkarlsson.simplesleeptracker.data.sleep.SleepDatabase
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsDao
 import net.erikkarlsson.simplesleeptracker.data.statistics.StatisticsRepository
@@ -12,7 +12,7 @@ import net.erikkarlsson.simplesleeptracker.domain.StatisticsDataSource
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class StatisticsModule {
 
     @Binds

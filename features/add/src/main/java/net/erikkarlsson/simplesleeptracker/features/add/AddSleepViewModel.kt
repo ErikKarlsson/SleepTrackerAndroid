@@ -1,7 +1,7 @@
 package net.erikkarlsson.simplesleeptracker.features.add
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
 import net.erikkarlsson.simplesleeptracker.core.ReduxViewModel
@@ -10,9 +10,11 @@ import net.erikkarlsson.simplesleeptracker.domain.DateTimeProvider
 import net.erikkarlsson.simplesleeptracker.features.add.domain.AddSleepTask
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
+import javax.inject.Inject
 import javax.inject.Named
 
-class AddSleepViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AddSleepViewModel @Inject constructor(
         private val addSleepTask: AddSleepTask,
         dateTimeProvider: DateTimeProvider,
         @Named("sleepAddedEvents") private val sleepAddedEvents: BroadcastChannel<Event<Unit>>

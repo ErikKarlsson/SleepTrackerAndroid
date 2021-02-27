@@ -24,9 +24,6 @@ dependencies {
     implementation Deps.kotlin_stdlib
     implementation Deps.core_ktx
 
-    implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_assisted_injection_processor
-
     implementation Deps.timber
 
     implementation Deps.threeten_backport_android

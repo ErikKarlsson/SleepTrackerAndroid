@@ -19,8 +19,6 @@ dependencies {
     testImplementation project(':libraries:test-util')
 
     implementation Deps.dagger_hilt
-    implementation Deps.dagger_assisted_injection_annotations
-    kapt Deps.dagger_assisted_injection_processor
     kapt Deps.dagger_hilt_compiler
 
     implementation Deps.hilt_viewmodel
