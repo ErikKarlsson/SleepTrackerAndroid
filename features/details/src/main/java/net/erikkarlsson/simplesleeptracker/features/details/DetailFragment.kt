@@ -19,6 +19,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import net.erikkarlsson.simplesleeptracker.core.util.assistedViewModel
 import net.erikkarlsson.simplesleeptracker.core.util.viewModelProviderFactoryOf
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -36,10 +37,8 @@ class DetailFragment : Fragment() {
     var timePickerDialog: TimePickerDialog? = null
     var datePickDialog: DatePickerDialog? = null
 
-    private val viewModel: DetailsViewModel by viewModels {
-        viewModelProviderFactoryOf {
-            vmFactory.create(requireArguments().getInt(ARG_KEY_ID))
-        }
+    private val viewModel: DetailsViewModel by assistedViewModel {
+        vmFactory.create(requireArguments().getInt(ARG_KEY_ID), it)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
