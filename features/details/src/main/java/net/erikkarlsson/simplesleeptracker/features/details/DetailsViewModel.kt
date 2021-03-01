@@ -1,5 +1,6 @@
 package net.erikkarlsson.simplesleeptracker.features.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -16,6 +17,7 @@ import org.threeten.bp.LocalTime
 
 class DetailsViewModel @AssistedInject constructor(
         @Assisted initialState: DetailsState,
+        @Assisted savedStateHandle: SavedStateHandle,
         sleepRepository: SleepDataSource,
         private val updateStartDateTask: UpdateStartDateTask,
         private val updateTimeAsleepTask: UpdateTimeAsleepTask,
@@ -66,12 +68,13 @@ class DetailsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(initialState: DetailsState): DetailsViewModel
+        fun create(initialState: DetailsState, savedStateHandle: SavedStateHandle): DetailsViewModel
     }
 }
 
 internal fun DetailsViewModel.Factory.create(
-        sleepId: Int
+        sleepId: Int,
+        savedStateHandle: SavedStateHandle
 ): DetailsViewModel {
-    return create(DetailsState(sleepId = sleepId))
+    return create(DetailsState(sleepId = sleepId), savedStateHandle)
 }
