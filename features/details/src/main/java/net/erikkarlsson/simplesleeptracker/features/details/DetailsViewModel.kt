@@ -17,7 +17,7 @@ import org.threeten.bp.LocalTime
 
 class DetailsViewModel @AssistedInject constructor(
         @Assisted initialState: DetailsState,
-        @Assisted savedStateHandle: SavedStateHandle,
+        @Assisted savedStateHandle: SavedStateHandle, // Proof of concept
         sleepRepository: SleepDataSource,
         private val updateStartDateTask: UpdateStartDateTask,
         private val updateTimeAsleepTask: UpdateTimeAsleepTask,
